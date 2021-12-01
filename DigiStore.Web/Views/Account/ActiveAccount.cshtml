@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = "ActiveAccount";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="account-box">
+    <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
+    <span class="account-head-line">به دیجی استور خوش آمدید</span>
+    <div class="content-account">
+        @if (ViewBag.IsActive)
+        {
+
+
+            <div class="account-box-message">
+                <div class="user-account-welcome">
+                    <span class="mdi mdi-account-outline user-welcome"></span>
+                </div>
+                <div class="made-account">
+                    <h2>حساب کاربری شما در دیجی استور فعال  شد</h2>
+                    <p>
+                        اکنون می توانید پس از ورود به سایت
+                        حساب کاربری خود را وارد کنید
+                    </p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="account-box-message">
+                <div class="user-account-welcome">
+                    <span class="mdi mdi-account-outline user-welcome"></span>
+                </div>
+                <div class="made-account">
+                    <h2>حساب کاربری شما فعال نشد </h2>
+                    <p>
+                        در صورت مشکل با پشتیبان سایت تماس برقرار کنید
+                    </p>
+                </div>
+            </div>
+        }
+        <ul>
+            <li>
+                <div class="parent-btn">
+                    <button class="dk-btn dk-btn-info">
+                        ورود
+                        <i class="fa fa-user sign-in"></i>
+                    </button>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>
+

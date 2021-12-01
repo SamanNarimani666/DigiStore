@@ -1,0 +1,45 @@
+﻿@model DigiStore.Domain.ViewModels.Account.RegisterUserViewModel
+@{
+    ViewData["Title"] = "ثبت نام کاربر";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+<div class="account-box">
+    <a href="index.html" class="logo-account"><img src="assets/images/logo-login.png" alt="logo"></a>
+    <span class="account-head-line">ثبت نام در دیجی‌استور</span>
+    <div class="content-account">
+        <form method="post" id="register" asp-action="Register" asp-controller="Account">
+            <label for="email-phone"> نام کاربری خود را وارد کنید</label>
+            <input type="text" asp-for="UserName" class="input-email-account" placeholder="">
+          
+            
+            <label for="email-phone"> ایمیل خود را وارد کنید</label>
+            <input type="email" asp-for="Email" class="input-email-account" placeholder="">
+    
+
+            <label for="email-phone">شماره موبایل خود را وارد کنید</label>
+            <input type="text" asp-for="Mobile" class="input-email-account" placeholder="">
+ 
+
+            <label for="password">رمز عبور</label>
+            <input type="password" asp-for="PassWord" id="password" class="input-password" placeholder="">
+
+            <label for="password">تکرار رمز عبور</label>
+            <input type="password" asp-for="ConferimPassWord" id="password" class="input-password" placeholder="">
+    
+
+            <div class="parent-btn">
+                <button type="submit" class="dk-btn dk-btn-info">
+                    ثبت نام به دیجی استور
+                    <i class="mdi mdi-account-plus-outline sign-in"></i>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="account-footer">
+        <span>قبلا در دیجی‌استور ثبت‌نام کرده‌اید؟</span>
+        <a href="login.html" class="btn-link-register">وارد شویــد</a>
+    </div>
+</div>
+

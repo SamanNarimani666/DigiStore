@@ -1,0 +1,29 @@
+﻿
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png"
+          href="https://www.digikala.com/mag/wp-content/themes/digikalamag/assets/common/img/ms-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="144x144"
+          href="https://www.digikala.com/mag/wp-content/themes/digikalamag/assets/common/img/ms-icon-144x144.png">
+    <title>@ViewData["Title"]</title>
+    <partial name="_HeaderReferences" />
+    @RenderSection("Styles", false)
+
+</head>
+
+<body>
+    <div id="main">
+        <div class="col-lg-4 col-md-6 col-xs-12 mx-auto">
+            @RenderBody()
+        </div>
+    </div>
+<partial name="_FooterReferences" />
+<partial name="_SiteMessages"/>
+    @RenderSection("Scripts", false)
+</body>
+
+</html>
