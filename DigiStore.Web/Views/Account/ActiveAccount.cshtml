@@ -5,13 +5,11 @@
 }
 
 <div class="account-box">
-    <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
+    <a asp-action="Index" asp-controller="Home" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
     <span class="account-head-line">به دیجی استور خوش آمدید</span>
     <div class="content-account">
         @if (ViewBag.IsActive)
         {
-
-
             <div class="account-box-message">
                 <div class="user-account-welcome">
                     <span class="mdi mdi-account-outline user-welcome"></span>
@@ -42,10 +40,10 @@
         <ul>
             <li>
                 <div class="parent-btn">
-                    <button class="dk-btn dk-btn-info">
+                    <a class="dk-btn dk-btn-info" asp-action="Login" asp-controller="Account">
                         ورود
                         <i class="fa fa-user sign-in"></i>
-                    </button>
+                    </a>
                 </div>
             </li>
 

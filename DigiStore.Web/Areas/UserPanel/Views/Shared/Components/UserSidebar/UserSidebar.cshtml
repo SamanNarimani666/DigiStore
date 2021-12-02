@@ -1,0 +1,63 @@
+﻿@model DigiStore.Domain.ViewModels.Account.InformationUserForSidebarViewModel
+<div class="col-lg-3 col-md-4 col-xs-12">
+    <div class="sidebar-wrapper">
+        <div class="box-sidebar">
+            <div class="profile-box" style="border: none;">
+                <img src="/assets/images/profile/1.jpg" class="profile-box-img-banner" alt="profile">
+            </div>
+        </div>
+
+        <div class="box-sidebar">
+            <div class="profile-box">
+                <div class="profile-box-avator">
+                    <img src="/Images/User/origin/@Model.UserAvatar" alt="profile">
+                </div>
+
+                <div class="profile-box-content">
+                    <span class="profile-box-nameuser">@User.Identity.Name</span>
+                    <span class="profile-box-phone">@Model.Mobile</span>
+                </div>
+
+                <a href="#" class="profile-box-row-arrow">
+                    <div class="profile-box-title">کیف پول</div>
+                    <div class="profile-box-price">
+                        <div class="wallet-amount">@Model.Wallet.ToString("n0")</div>
+                        <div class="profile-box-currency">تومان</div>
+                        <i class="fa fa-angle-left"></i>
+                    </div>
+                    <p class="profile-box-wallet-link">افزایش موجودی</p>
+                </a>
+
+            </div>
+            <ul class="profile-menu-items">
+                <li><a href="profile.html" class="profile-menu-url active-profile"><span class="mdi mdi-account-outline"></span>پروفایل</a></li>
+                <li>
+                    <a href="profile-order.html" class="profile-menu-url">
+                        <span class="mdi mdi-basket"></span>همه
+                        سفارش ها
+                    </a>
+                </li>
+                <li><a href="profile-order-return.html" class="profile-menu-url"><span class="mdi mdi-autorenew"></span>در خواست مرجوعی</a></li>
+                <li>
+                    <a href="profile-favorites.html" class="profile-menu-url">
+                        <span class="mdi mdi-heart-outline"></span>لیست
+                        علاقه مندی ها
+                    </a>
+                </li>
+                <li><a href="profile-comments.html" class="profile-menu-url"><span class="mdi mdi-comment-multiple-outline"></span>نقد و نظرات</a></li>
+                <li>
+                    <a href="profile-addresses.html" class="profile-menu-url">
+                        <span class="mdi mdi-map-marker-outline"></span>آدرس
+                        ها
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="profile-menu-url"><span class="mdi mdi-history"></span>بازدید های اخیر</a>
+                </li>
+                <li><a href="profile-personal-info.html" class="profile-menu-url"><span class="mdi mdi-account-circle"></span>اطلاعات شخصی</a></li>
+                <li><a asp-action="Logout" asp-controller="Account"  class="profile-menu-url"><span class="mdi mdi-power"></span>خروج</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>

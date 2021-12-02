@@ -11,7 +11,7 @@ namespace DigiStore.Application.Senders
         {
             MailMessage mail = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient("smtp.mail.yahoo.com");
-            mail.From = new MailAddress("Samannarimani666@yahoo.com", "ديجي ماركت");
+            mail.From = new MailAddress("Samannarimani666@yahoo.com", "ديجي استور");
             mail.To.Add(to);
             mail.Subject = subject;
             mail.Body = body;

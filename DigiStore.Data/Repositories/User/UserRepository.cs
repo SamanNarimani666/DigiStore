@@ -46,7 +46,7 @@ namespace DigiStore.Data.Repositories.User
 
         public async Task<Domain.Entities.User> GetUserByActiveCode(string activeCode)
         {
-           return await _context.Users.SingleOrDefaultAsync(u => u.ActiveCode == activeCode);
+           return await _context.Users.FirstOrDefaultAsync(u => u.ActiveCode == activeCode);
         }
 
         public void EditUser(Domain.Entities.User user)
@@ -57,6 +57,11 @@ namespace DigiStore.Data.Repositories.User
         public async Task<Domain.Entities.User> GetUserByMobile(string mobile)
         {
             return await _context.Users.SingleOrDefaultAsync(u => u.Mobile == mobile);
+        }
+
+        public async Task<Domain.Entities.User> GetUserById(int userId)
+        {
+            return await _context.Users.SingleOrDefaultAsync(u => u.UserId == userId);
         }
 
         public async Task Save()

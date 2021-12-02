@@ -9,7 +9,7 @@
     <partial name="_CaptchaScripts"/>
 }
 <div class="account-box">
-    <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
+    <a asp-action="Index" asp-controller="Home" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
     <span class="account-head-line">ورود به دیجی‌استور</span>
     <div class="content-account">
         <form method="post" asp-action="Login" asp-controller="Account">
@@ -19,7 +19,7 @@
                 <span class="text-danger" asp-validation-for="EmailOrMobiel"></span>
 
             </div>
-            <a href="password-forget.html" class="account-link-password">رمز خود را فراموش کرده ام</a>
+            <a asp-action="ForgotPass" asp-controller="Account" class="account-link-password">رمز خود را فراموش کرده ام</a>
             <div class="form-group">
                 <input type="password" asp-for="PassWord" class="form-control" id="password" class="input-password" placeholder="رمز عبور خود را وارد کنید">
                 <span class="text-danger" asp-validation-for="PassWord"></span>

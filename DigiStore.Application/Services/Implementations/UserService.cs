@@ -1,8 +1,11 @@
 ﻿using System.Threading.Tasks;
+using DigiMarket.Application.ViewModels.Account;
 using DigiStore.Application.Convertors;
 using DigiStore.Application.Security;
 using DigiStore.Application.Security.PassWordHashing;
 using DigiStore.Application.Services.Interfaces;
+using DigiStore.Application.Utils;
+using DigiStore.Application.ViewModels.Account;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.User;
 using DigiStore.Domain.ViewModels.Account;
@@ -65,9 +68,9 @@ namespace DigiStore.Application.Services.Implementations
         #region ActiveUserByActiveCode
         public async Task<bool> ActiveUserByActiveCode(string activeCode)
         {
-            if (!await _userRepository.IsExistsUserByActiveCode(activeCode)) return false;
-            if (string.IsNullOrEmpty(activeCode)) return false;
             var user = await _userRepository.GetUserByActiveCode(activeCode);
+            if (user==null || user.IsActive) return false;
+            if (string.IsNullOrEmpty(activeCode)) return false;
             user.IsActive = true;
             user.ActiveCode = Generators.Generators.GeneratorsUniqueCode();
             _userRepository.EditUser(user);
@@ -113,6 +116,64 @@ namespace DigiStore.Application.Services.Implementations
             else if (emailOrMobile.StartsWith("09"))
                 return await _userRepository.GetUserByMobile(emailOrMobile);
             return null;
+        }
+        #endregion
+
+        #region ForgotPassWordUser
+        public async Task<ForgotPassResult> ForgotPassWordUser(ForgotPassViewModel forgotPass)
+        {
+            var user = await _userRepository.GetUserByEmail(FixedText.FixEmail(forgotPass.Email.SanitizeText()));
+            if (user == null) return ForgotPassResult.NotFount;
+            if (user.IsBlock) return ForgotPassResult.UserIsBlock;
+            if (!user.IsActive) return ForgotPassResult.NotActive;
+            return ForgotPassResult.FindUser;
+        }
+
+        public async Task<bool> IsExistsUserByActiveCode(string activeCode)
+        {
+           return await _userRepository.IsExistsUserByActiveCode(activeCode);
+        }
+        #endregion
+
+        #region ResetPsssWordUser
+        public async Task<ResetPsssWordResult> ResetPsssWordUser(ResetPsssWordViewModel resetPsssWord)
+        {
+            var user = await _userRepository.GetUserByActiveCode(resetPsssWord.ActiveCode);
+            if (user == null) return ResetPsssWordResult.NotFound;
+
+            user.PassWord = _passwordHelper.EncodePasswordMd5(resetPsssWord.Password);
+            user.ActiveCode = Generators.Generators.GeneratorsUniqueCode();
+            _userRepository.EditUser(user);
+            await _userRepository.Save();
+            return ResetPsssWordResult.Success;
+        }
+        #endregion
+
+        #region GetInformationUserById
+        public async Task<InformationUserViewModel> GetInformationUserById(int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            return new InformationUserViewModel()
+            {
+                Email = user.Email,
+                Mobile = user.Mobile,
+                FullName = user.FullName,
+          
+                CreateData = user.CreateDate.ToStringShamsiDate()
+            };
+        }
+        #endregion
+
+        #region GetInformationUserForSidebarById
+        public async Task<InformationUserForSidebarViewModel> GetInformationUserForSidebarById(int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            return  new InformationUserForSidebarViewModel
+            {
+                Mobile = user.Mobile,
+                UserAvatar = user.UserAvatar,
+                Wallet = 16000
+            };
         }
         #endregion
 

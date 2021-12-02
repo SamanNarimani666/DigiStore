@@ -1,0 +1,28 @@
+﻿@model DigiMarket.Application.ViewModels.Account.ForgotPassViewModel
+@{
+    ViewData["Title"] = "فراموشی کلمه عبور";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_CaptchaScripts"/>
+}
+<div class="account-box">
+    <a href="/" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
+    <span class="account-head-line">یاد آوری کلمه عبور</span>
+    <div class="content-account pb-5">
+        <form asp-action="ForgotPass" asp-controller="Account" id="password-forget">
+            <partial name="_CaptchaInput"/>
+            <label for="email-phone"> پست الکترونیک خود را وارد کنید</label>
+            <input type="text" id="email-phone" asp-for="Email" class="input-email-account" placeholder=" پست الکترونیک خود را وارد کنید">
+            <span asp-validation-for="Email"></span>
+            <div class="parent-btn">
+                <button type="submit" class="dk-btn dk-btn-info">
+                    بازیابی کلمه عبور
+                    <i class="mdi mdi-lock sign-in"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

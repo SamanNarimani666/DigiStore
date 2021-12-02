@@ -1,0 +1,33 @@
+﻿@model DigiStore.Domain.ViewModels.Account.InformationUserViewModel
+<div class="col-lg-6 col-xs-12 pull-right">
+    <div class="headline-profile">
+        <span>اطلاعات شخصی</span>
+    </div>
+    <div class="profile-stats mt-3">
+        <div class="profile-stats-row">
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span> نام و نام خانوادگی :</span>@(Model.FullName!=null?Model.FullName:"نام و نام خانوادگی وارد نشده است")</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>پست الکترونیک :</span>@Model.Email</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>شماره تلفن همراه :</span>@Model.Mobile</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>تاریخ عضویت :</span>@Model.CreateData</p>
+                </div>
+            </div>
+            <div class="profile-stats-action">
+                <a href="profile-additional-info.html" class="link-spoiler-edit"><i class="fa fa-pencil"></i>ویرایش اطلاعات شخصی</a>
+            </div>
+        </div>
+    </div>
+</div>

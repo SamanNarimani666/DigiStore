@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using DigiMarket.Application.ViewModels.Account;
 using DigiMarket.Web.HttpContext;
 using DigiStore.Application.Senders;
 using DigiStore.Application.Services.Interfaces;
+using DigiStore.Application.ViewModels.Account;
 using DigiStore.Core.Convertors;
 using DigiStore.Domain.ViewModels.Account;
 using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace DigiStore.Web.Controllers
 {
@@ -36,12 +37,12 @@ namespace DigiStore.Web.Controllers
         #region Register
         [RedirectIfLoggedInActionFilter]
         [HttpGet("Register")]
-        public  IActionResult Register()
+        public IActionResult Register()
         {
             return View();
         }
-        [HttpPost("Register"),ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterUserViewModel registerUser)
+        [HttpPost("Register"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel registerUser)
         {
             if (!await _captchaValidator.IsCaptchaPassedAsync(registerUser.Captcha))
             {
@@ -90,14 +91,14 @@ namespace DigiStore.Web.Controllers
         #region Login
         [RedirectIfLoggedInActionFilter]
         [HttpGet("Login")]
-        public  IActionResult Login(string ReturnUrl)
+        public IActionResult Login(string ReturnUrl)
         {
             return View();
         }
-        [HttpPost("Login"),ValidateAntiForgeryToken]
+        [HttpPost("Login"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel login, string ReturnUrl)
         {
-            if(!await _captchaValidator.IsCaptchaPassedAsync(login.Captcha))
+            if (!await _captchaValidator.IsCaptchaPassedAsync(login.Captcha))
             {
                 TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
             }
@@ -134,14 +135,84 @@ namespace DigiStore.Web.Controllers
                         await HttpContext.SignInAsync(principal, properties);
                         if (!string.IsNullOrEmpty(ReturnUrl))
                         {
-                            TempData["data"] = "this is data from login";
-
                             return Redirect(ReturnUrl);
                         }
                         return RedirectToAction("Index", "Home");
                 }
             }
             return View(login);
+        }
+        #endregion
+
+        #region ForgotPass
+        [HttpGet("ForgotPass")]
+        public IActionResult ForgotPass()
+        {
+            return View();
+        }
+        [HttpPost("ForgotPass")]
+        public async Task<IActionResult> ForgotPass(ForgotPassViewModel forgotPass)
+        {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(forgotPass.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
+            }
+            if (ModelState.IsValid)
+            {
+                var res = await _userService.ForgotPassWordUser(forgotPass);
+                switch (res)
+                {
+                    case ForgotPassResult.UserIsBlock:
+                        TempData[WarningMessage] = "حساب کاربری شما بلاک شده است";
+                        break;
+                    case ForgotPassResult.NotActive:
+                        TempData[WarningMessage] = "حساب کاربری شما فعال نشده است";
+                        break;
+                    case ForgotPassResult.NotFount:
+                        TempData[ErrorMessage] = "حساب کاربری با این ایمیل یافت نشد";
+                        break;
+                    case ForgotPassResult.FindUser:
+                        TempData[SuccessMessage] = "ایمیلی جهت بازیابی کلمه عبور به شما ارسال شد ";
+                        var user = await _userService.GetUserByEmail(forgotPass.Email);
+                        var body = _viewRenderService.RenderToStringAsync("Emails/ForgotPassword", user);
+                        _sender.SendEmail(forgotPass.Email, "بازیابی کلمه عبور", body);
+                        return RedirectToAction("Index", "Home");
+                }
+            }
+            return View(forgotPass);
+        }
+        #endregion
+
+        #region ResetPassword 
+        [HttpGet("reset-pass/{activeCode}")]
+        public async Task<IActionResult> ResetPassword(string activeCode)
+        {
+            if ((string.IsNullOrEmpty(activeCode)) &&
+                !await _userService.IsExistsUserByActiveCode(activeCode)) return NotFound();
+            return View(new ResetPsssWordViewModel() { ActiveCode = activeCode });
+        }
+        [HttpPost("reset-pass/{activeCode}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPsssWordViewModel resetPsssWord)
+        {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(resetPsssWord.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
+            }
+
+            if (ModelState.IsValid)
+            {
+                var res = await _userService.ResetPsssWordUser(resetPsssWord);
+                switch (res)
+                {
+                    case ResetPsssWordResult.NotFound:
+                        TempData[ErrorMessage] = "خطا در بازیابی کلمه عبور";
+                        break;
+                    case ResetPsssWordResult.Success:
+                        TempData[SuccessMessage] = "بازبابی کلمه عبور با موفقیت انجام شد";
+                        return RedirectToAction("Login", "Account");
+                }
+            }
+            return View(resetPsssWord);
         }
         #endregion
 

@@ -29,4 +29,8 @@
     <ProjectReference Include="..\DigiStore.IOC\DigiStore.IOC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\User\Thumb\" />
+  </ItemGroup>
+
 </Project>

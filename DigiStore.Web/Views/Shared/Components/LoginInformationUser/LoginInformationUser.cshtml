@@ -1,0 +1,33 @@
+﻿@model DigiStore.Domain.ViewModels.Account.InformationUserForSidebarViewModel
+<div class="header-profile-dropdown-account">
+    <div class="header-profile-dropdown-user">
+        <div class="header-profile-dropdown-user-img">
+            <img src="/Images/User/origin/@Model.UserAvatar" alt="profile">
+        </div>
+        <div class="header-profile-dropdown-user-info">
+            <p class="header-profile-dropdown-user-name">
+                @User.Identity.Name
+                <a asp-action="Dashboard" asp-controller="Home" asp-area="UserPanel">
+                    <span class="header-profile-dropdown-user-profile-link">
+                        مشاهده حساب
+                        کاربری
+                    </span>
+                </a>
+            </p>
+        </div>
+        <div class="header-profile-dropdown-account">
+            <div class="header-profile-dropdown-account-item">
+                <span class="header-profile-dropdown-account-item-title">
+                    کیف
+                    پول
+                </span>
+                <div class="header-profile-dropdown-account-item-amount">
+                    <span class="header-profile-dropdown-account-item-amount-number">
+                        @Model.Wallet.ToString("n0")
+                    </span>
+                    تومان
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -16,6 +16,7 @@ namespace DigiStore.Domain.IRepositories.User
         Task<Entities.User> GetUserByActiveCode(string activeCode);
         void EditUser(Entities.User user);
         Task<Entities.User> GetUserByMobile(string mobile);
+        Task<Entities.User> GetUserById(int userId);
         Task Save();
         Task AddUser(Entities.User user);
     }
