@@ -12,6 +12,8 @@ using System.Text.Unicode;
 using System.Threading.Tasks;
 using DigiStore.Core.Convertors;
 using DigiStore.IOC;
+using GoogleReCaptcha.V3;
+using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +51,7 @@ namespace DigiStore.Web
 
             #region IOC
             services.AddScoped<IViewRenderService, RenderViewToString>();
+            services.AddHttpClient<ICaptchaValidator,GoogleReCaptchaValidator>();
             DependencyContainer.RegisterServices(services,Configuration.GetConnectionString("DigiStoretConnectionStrings"));
             #endregion
 

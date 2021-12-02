@@ -1,31 +1,45 @@
-﻿@model DigiStore.Domain.ViewModels.Account.RegisterUserViewModel
+﻿@model DigiStore.Domain.ViewModels.Account.RegisterViewModel
 @{
     ViewData["Title"] = "ثبت نام کاربر";
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_CaptchaScripts" />
 }
 <div class="account-box">
     <a href="index.html" class="logo-account"><img src="assets/images/logo-login.png" alt="logo"></a>
     <span class="account-head-line">ثبت نام در دیجی‌استور</span>
     <div class="content-account">
         <form method="post" id="register" asp-action="Register" asp-controller="Account">
+            <partial name="_CaptchaInput" />
             <label for="email-phone"> نام کاربری خود را وارد کنید</label>
-            <input type="text" asp-for="UserName" class="input-email-account" placeholder="">
-          
-            
+
+            <div class="form-group">
+                <input type="text" asp-for="UserName" class="form-control input-email-account" placeholder="">
+                <span class="text-danger" asp-validation-for="UserName"></span>
+            </div>
             <label for="email-phone"> ایمیل خود را وارد کنید</label>
-            <input type="email" asp-for="Email" class="input-email-account" placeholder="">
-    
-
+            <div class="form-group">
+                <input type="email" asp-for="Email" class="form-control input-email-account" placeholder="">
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
             <label for="email-phone">شماره موبایل خود را وارد کنید</label>
-            <input type="text" asp-for="Mobile" class="input-email-account" placeholder="">
- 
-
+            <div class="form-group">
+                <input type="text" asp-for="Mobile" class="form-control input-email-account" placeholder="">
+                <span class="text-danger" asp-validation-for="Mobile"></span>
+            </div>
             <label for="password">رمز عبور</label>
-            <input type="password" asp-for="PassWord" id="password" class="input-password" placeholder="">
-
+            <div class="form-group">
+                <input type="password" asp-for="PassWord" id="password" class="form-control" placeholder="">
+                <span class="text-danger" asp-validation-for="PassWord"></span>
+            </div>
             <label for="password">تکرار رمز عبور</label>
-            <input type="password" asp-for="ConferimPassWord" id="password" class="input-password" placeholder="">
-    
+            <div class="form-group">
+                <input type="password" asp-for="ConferimPassWord" id="password" class="form-control" placeholder="">
+                <span class="text-danger" asp-validation-for="ConferimPassWord"></span>
+            </div>
 
             <div class="parent-btn">
                 <button type="submit" class="dk-btn dk-btn-info">

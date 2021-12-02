@@ -6,27 +6,30 @@
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial"/>
+    <partial name="_CaptchaScripts"/>
 }
 <div class="account-box">
     <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
     <span class="account-head-line">ورود به دیجی‌استور</span>
     <div class="content-account">
         <form method="post" asp-action="Login" asp-controller="Account">
+            <partial name="_CaptchaInput"/>
             <div class="form-group">
                 <input type="text" asp-for="EmailOrMobiel" class="form-control" id="email-phone" class="input-email-account" placeholder="شماره موبایل یا پست الکترونیک خود را وارد کنید">
-           
+                <span class="text-danger" asp-validation-for="EmailOrMobiel"></span>
+
             </div>
             <a href="password-forget.html" class="account-link-password">رمز خود را فراموش کرده ام</a>
             <div class="form-group">
                 <input type="password" asp-for="PassWord" class="form-control" id="password" class="input-password" placeholder="رمز عبور خود را وارد کنید">
-       
+                <span class="text-danger" asp-validation-for="PassWord"></span>
             </div>
             <div class="form-auth-row">
                 <label for="remember" class="ui-checkbox">
-                    <input type="checkbox" asp-for="RememberMe"  checked="" id="remember">
+                    <input type="checkbox" asp-for="RememberMe" checked="" id="remember">
                     <span class="ui-checkbox-check"></span>
                 </label>
-                <label for="remember"  class="remember-me">مرا به خاطر داشته باش</label>
+                <label for="remember" class="remember-me">مرا به خاطر داشته باش</label>
             </div>
             <div class="parent-btn">
                 <button type="submit" class="dk-btn dk-btn-info">
@@ -39,7 +42,7 @@
     </div>
     <div class="account-footer">
         <span>کاربر جدید هستید؟</span>
-        <a href="register.html" class="btn-link-register">ثبت‌نام در دیجی‌استور</a>
+        <a asp-action="Register" asp-controller="Account"class="btn-link-register">ثبت‌نام در دیجی‌استور</a>
     </div>
 </div>
 

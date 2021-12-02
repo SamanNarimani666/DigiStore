@@ -10,7 +10,7 @@ namespace DigiStore.Application.Services.Interfaces
 {
     public interface IUserService:IAsyncDisposable
     {
-        Task<RegisterResult> RegisterUser(RegisterUserViewModel registerUser);
+        Task<RegisterResult> RegisterUser(RegisterViewModel registerUser);
         Task<User> GetUserByEmail(string email);
         Task<bool> ActiveUserByActiveCode(string activeCode);
         Task<LoginResult> LoginUser(LoginViewModel login);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DigiStore.Application.Convertors;
 using DigiStore.Application.Security;
 using DigiStore.Application.Security.PassWordHashing;
@@ -15,15 +11,21 @@ namespace DigiStore.Application.Services.Implementations
 {
     public class UserService : IUserService
     {
+        #region Field
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHelper _passwordHelper;
+        #endregion
 
+        #region Constructor
         public UserService(IUserRepository repository, IPasswordHelper passwordHelper)
         {
             _userRepository = repository;
             _passwordHelper = passwordHelper;
         }
-        public async Task<RegisterResult> RegisterUser(RegisterUserViewModel registerUser)
+        #endregion
+
+        #region RegisterUser
+        public async Task<RegisterResult> RegisterUser(RegisterViewModel registerUser)
         {
             if (await _userRepository.IsExistsUserByEmail(FixedText.FixEmail(registerUser.Email)))
                 return RegisterResult.ExistsEmail;
@@ -50,14 +52,17 @@ namespace DigiStore.Application.Services.Implementations
             {
                 return RegisterResult.Failed;
             }
-
         }
+        #endregion
 
+        #region GetUserByEmail
         public async Task<User> GetUserByEmail(string email)
         {
             return await _userRepository.GetUserByEmail(email);
         }
+        #endregion
 
+        #region ActiveUserByActiveCode
         public async Task<bool> ActiveUserByActiveCode(string activeCode)
         {
             if (!await _userRepository.IsExistsUserByActiveCode(activeCode)) return false;
@@ -69,7 +74,9 @@ namespace DigiStore.Application.Services.Implementations
             await _userRepository.Save();
             return true;
         }
+        #endregion
 
+        #region LoginUser
         public async Task<LoginResult> LoginUser(LoginViewModel login)
         {
             if (login.EmailOrMobiel.Contains("@gmail.com") || login.EmailOrMobiel.Contains("@yahoo.com"))
@@ -96,15 +103,18 @@ namespace DigiStore.Application.Services.Implementations
 
             return LoginResult.NotFound;
         }
+        #endregion
 
+        #region GetUserByEmailOrPhone
         public async Task<User> GetUserByEmailOrPhone(string emailOrMobile)
         {
             if (emailOrMobile.Contains("@gmail.com") || emailOrMobile.Contains("@yahoo.com"))
-            return await _userRepository.GetUserByEmail(FixedText.FixEmail(emailOrMobile.SanitizeText()));
+                return await _userRepository.GetUserByEmail(FixedText.FixEmail(emailOrMobile.SanitizeText()));
             else if (emailOrMobile.StartsWith("09"))
                 return await _userRepository.GetUserByMobile(emailOrMobile);
             return null;
         }
+        #endregion
 
         #region Dispose
         public async ValueTask DisposeAsync()

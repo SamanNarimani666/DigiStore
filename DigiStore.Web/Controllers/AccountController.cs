@@ -6,6 +6,7 @@ using DigiStore.Application.Senders;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Core.Convertors;
 using DigiStore.Domain.ViewModels.Account;
+using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +20,16 @@ namespace DigiStore.Web.Controllers
         private readonly IUserService _userService;
         private readonly ISender _sender;
         private readonly IViewRenderService _viewRenderService;
+        private readonly ICaptchaValidator _captchaValidator;
         #endregion
 
         #region Constructor
-        public AccountController(IUserService userService, ISender sender, IViewRenderService viewRenderService)
+        public AccountController(IUserService userService, ISender sender, IViewRenderService viewRenderService, ICaptchaValidator captchaValidator)
         {
             _userService = userService;
             _sender = sender;
             _viewRenderService = viewRenderService;
+            _captchaValidator = captchaValidator;
         }
         #endregion
 
@@ -37,9 +40,13 @@ namespace DigiStore.Web.Controllers
         {
             return View();
         }
-        [HttpPost("Register")]
+        [HttpPost("Register"),ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserViewModel registerUser)
         {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(registerUser.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
+            }
             if (ModelState.IsValid)
             {
                 var res = await _userService.RegisterUser(registerUser);
@@ -87,9 +94,13 @@ namespace DigiStore.Web.Controllers
         {
             return View();
         }
-        [HttpPost("Login")]
+        [HttpPost("Login"),ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel login, string ReturnUrl)
         {
+            if(!await _captchaValidator.IsCaptchaPassedAsync(login.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
+            }
             if (ModelState.IsValid)
             {
                 var res = await _userService.LoginUser(login);
