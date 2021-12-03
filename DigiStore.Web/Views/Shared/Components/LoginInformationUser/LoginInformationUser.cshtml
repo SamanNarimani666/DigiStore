@@ -1,8 +1,9 @@
-﻿@model DigiStore.Domain.ViewModels.Account.InformationUserForSidebarViewModel
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Account.InformationUserForSidebarViewModel
 <div class="header-profile-dropdown-account">
     <div class="header-profile-dropdown-user">
         <div class="header-profile-dropdown-user-img">
-            <img src="/Images/User/origin/@Model.UserAvatar" alt="profile">
+            <img src="@(!string.IsNullOrEmpty(Model.UserAvatar) ?PathExtension.UserAvatarThumb + Model.UserAvatar : PathExtension.DefaultAvatar)" class="rounded-circle" alt="profile">
         </div>
         <div class="header-profile-dropdown-user-info">
             <p class="header-profile-dropdown-user-name">

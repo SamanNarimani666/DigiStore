@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using DigiMarket.Application.ViewModels.Account;
 using DigiStore.Application.Convertors;
+using DigiStore.Application.Extensions;
 using DigiStore.Application.Security;
 using DigiStore.Application.Security.PassWordHashing;
 using DigiStore.Application.Services.Interfaces;
@@ -9,6 +12,7 @@ using DigiStore.Application.ViewModels.Account;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.User;
 using DigiStore.Domain.ViewModels.Account;
+using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Application.Services.Implementations
 {
@@ -42,8 +46,7 @@ namespace DigiStore.Application.Services.Implementations
                 Mobile = registerUser.Mobile.SanitizeText(),
                 Email = registerUser.Email.SanitizeText(),
                 PassWord = _passwordHelper.EncodePasswordMd5(registerUser.PassWord.SanitizeText()),
-                ActiveCode = Generators.Generators.GeneratorsUniqueCode(),
-                UserAvatar = "Default.jpg"
+                ActiveCode = Generators.Generators.GeneratorsUniqueCode()
             };
             try
             {
@@ -69,7 +72,7 @@ namespace DigiStore.Application.Services.Implementations
         public async Task<bool> ActiveUserByActiveCode(string activeCode)
         {
             var user = await _userRepository.GetUserByActiveCode(activeCode);
-            if (user==null || user.IsActive) return false;
+            if (user == null || user.IsActive) return false;
             if (string.IsNullOrEmpty(activeCode)) return false;
             user.IsActive = true;
             user.ActiveCode = Generators.Generators.GeneratorsUniqueCode();
@@ -131,7 +134,7 @@ namespace DigiStore.Application.Services.Implementations
 
         public async Task<bool> IsExistsUserByActiveCode(string activeCode)
         {
-           return await _userRepository.IsExistsUserByActiveCode(activeCode);
+            return await _userRepository.IsExistsUserByActiveCode(activeCode);
         }
         #endregion
 
@@ -158,7 +161,7 @@ namespace DigiStore.Application.Services.Implementations
                 Email = user.Email,
                 Mobile = user.Mobile,
                 FullName = user.FullName,
-          
+
                 CreateData = user.CreateDate.ToStringShamsiDate()
             };
         }
@@ -168,12 +171,63 @@ namespace DigiStore.Application.Services.Implementations
         public async Task<InformationUserForSidebarViewModel> GetInformationUserForSidebarById(int userId)
         {
             var user = await _userRepository.GetUserById(userId);
-            return  new InformationUserForSidebarViewModel
+            return new InformationUserForSidebarViewModel
             {
                 Mobile = user.Mobile,
                 UserAvatar = user.UserAvatar,
                 Wallet = 16000
             };
+        }
+        #endregion
+
+        #region InfoUserForEditProfile
+        public async Task<EditUserProfileViewModel> InfoUserForEditProfile(int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            return new EditUserProfileViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                AvatarName = user.UserAvatar
+            };
+        }
+        #endregion
+
+        #region EditUserProfile
+        public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileViewModel editUserProfile, IFormFile UserAvatar,int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null) return EditUserProfileResult.NotFound;
+            if (!user.IsActive) return EditUserProfileResult.NotActive;
+            if (user.IsBlock) return EditUserProfileResult.UserIsBlock;
+            user.FirstName = editUserProfile.FirstName.SanitizeText();
+            user.LastName = editUserProfile.LastName.SanitizeText();
+            user.ModifiedDate = DateTime.Now;
+            if (UserAvatar != null && UserAvatar.IsImage())
+            {
+                var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(UserAvatar.FileName);
+                UserAvatar.AddImageToServer(imageName, PathExtension.UserAvatarOriginServer, 100, 100, PathExtension.UserAvatarThumbServer, user.UserAvatar);
+                user.UserAvatar = imageName;
+            }
+            _userRepository.EditUser(user);
+            await _userRepository.Save();
+            return EditUserProfileResult.Success;
+        }
+        #endregion
+
+        #region ChangePassWord
+        public async Task<ChangePasswordResult> ChangePassWord(ChangePasswordViewModel changePassword, int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null) return ChangePasswordResult.NotFound;
+            if (user.PassWord != _passwordHelper.EncodePasswordMd5(changePassword.CurrentPassword.SanitizeText()))
+                return ChangePasswordResult.UnCurrentPassword;
+            if (user.PassWord == _passwordHelper.EncodePasswordMd5(changePassword.NewPassword.SanitizeText()))
+                return ChangePasswordResult.Error;
+            user.PassWord = _passwordHelper.EncodePasswordMd5(changePassword.NewPassword.SanitizeText());
+            _userRepository.EditUser(user);
+           await _userRepository.Save();
+            return ChangePasswordResult.Success;
         }
         #endregion
 

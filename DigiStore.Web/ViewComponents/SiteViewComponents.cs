@@ -13,7 +13,7 @@ namespace DigiStore.Web.ViewComponents
         }
     }
 
-    public class SiteFooterViewComponent : ViewComponent
+    public class SiteFooterViewComponent : ViewComponent 
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {

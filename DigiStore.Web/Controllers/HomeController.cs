@@ -1,11 +1,5 @@
-﻿using DigiStore.Web.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+
 
 namespace DigiStore.Web.Controllers
 {
@@ -17,9 +11,7 @@ namespace DigiStore.Web.Controllers
             return View();
         }
 
-        public IActionResult Error404()
-        {
-            return View();
-        }
+        public IActionResult Error404()=> View();
+       
     }
 }

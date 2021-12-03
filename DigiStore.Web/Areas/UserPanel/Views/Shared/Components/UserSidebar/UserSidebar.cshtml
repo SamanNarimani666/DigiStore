@@ -1,4 +1,5 @@
-﻿@model DigiStore.Domain.ViewModels.Account.InformationUserForSidebarViewModel
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Account.InformationUserForSidebarViewModel
 <div class="col-lg-3 col-md-4 col-xs-12">
     <div class="sidebar-wrapper">
         <div class="box-sidebar">
@@ -10,7 +11,7 @@
         <div class="box-sidebar">
             <div class="profile-box">
                 <div class="profile-box-avator">
-                    <img src="/Images/User/origin/@Model.UserAvatar" alt="profile">
+                    <img src="@(!string.IsNullOrEmpty(Model.UserAvatar) ?PathExtension.UserAvatarThumb + Model.UserAvatar : PathExtension.DefaultAvatar)" class="rounded-circle" alt="profile">
                 </div>
 
                 <div class="profile-box-content">
@@ -30,7 +31,8 @@
 
             </div>
             <ul class="profile-menu-items">
-                <li><a href="profile.html" class="profile-menu-url active-profile"><span class="mdi mdi-account-outline"></span>پروفایل</a></li>
+                <li><a asp-action="Dashboard" asp-controller="Home" asp-area="UserPanel" class="profile-menu-url active-profile"><span class="mdi mdi-account-outline"></span>پروفایل</a></li>
+                <li><a asp-action="EditProfile" asp-controller="Account" asp-area="UserPanel" class="profile-menu-url "><span class="fa fa-id-card-o"></span>ویرایش حساب کاربری</a></li>
                 <li>
                     <a href="profile-order.html" class="profile-menu-url">
                         <span class="mdi mdi-basket"></span>همه
@@ -54,10 +56,12 @@
                 <li>
                     <a href="#" class="profile-menu-url"><span class="mdi mdi-history"></span>بازدید های اخیر</a>
                 </li>
-                <li><a href="profile-personal-info.html" class="profile-menu-url"><span class="mdi mdi-account-circle"></span>اطلاعات شخصی</a></li>
-                <li><a asp-action="Logout" asp-controller="Account"  class="profile-menu-url"><span class="mdi mdi-power"></span>خروج</a></li>
+                <li><a asp-action="ChangePassWord" asp-controller="Account" asp-area="UserPanel" class="profile-menu-url"><span class="mdi mdi-lock-plus"></span>تغییر کلمه عبور</a></li>
+                <li><a asp-action="ProfilePersonalInfo" asp-controller="Account" asp-area="UserPanel" class="profile-menu-url"><span class="mdi mdi-account-circle"></span>اطلاعات شخصی</a></li>
+                <li><a asp-action="Logout" asp-controller="Account" class="profile-menu-url"><span class="mdi mdi-power"></span>خروج</a></li>
             </ul>
         </div>
 
     </div>
 </div>
+

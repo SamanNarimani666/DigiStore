@@ -4,6 +4,7 @@ using DigiMarket.Application.ViewModels.Account;
 using DigiStore.Application.ViewModels.Account;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.ViewModels.Account;
+using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Application.Services.Interfaces
 {
@@ -19,5 +20,8 @@ namespace DigiStore.Application.Services.Interfaces
         Task<ResetPsssWordResult> ResetPsssWordUser(ResetPsssWordViewModel resetPsssWord);
         Task<InformationUserViewModel> GetInformationUserById(int userId);
         Task<InformationUserForSidebarViewModel> GetInformationUserForSidebarById(int userId);
+        Task<EditUserProfileViewModel> InfoUserForEditProfile(int userId);
+        Task<EditUserProfileResult> EditUserProfile(EditUserProfileViewModel editUserProfile, IFormFile UserAvatar, int userId);
+        Task<ChangePasswordResult> ChangePassWord(ChangePasswordViewModel changePassword, int userId);
     }
 }

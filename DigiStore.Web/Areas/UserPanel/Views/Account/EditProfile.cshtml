@@ -1,0 +1,83 @@
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Account.EditUserProfileViewModel
+@{
+    ViewData["Title"] = "ویرایش حساب کاربری";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@await Component.InvokeAsync("UserSidebar")
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="profile-navbar">
+            <div class="profile-navbar-back-alignment">
+                <a href="#" class="profile-navbar-btn-back">بازگشت</a>
+                <h4 class="edit-personal">
+                    ویرایش اطلاعات شخصی
+
+                </h4>
+            </div>
+        </div>
+        <div class="profile-stats">
+            <form method="post" asp-action="EditProfile" asp-controller="Account" asp-area="UserPanel" enctype="multipart/form-data">
+                <div class="form-legal-row">
+                    <div class="col-lg-6 col-xs-12 mx-auto">
+                        <div class="form-legal-col">
+                            <fieldset class="form-legal-fieldset">
+                                <h4 class="form-legal-headline">حساب شخصی</h4>
+                                <div class="form-legal-item">
+                                    <label for="name-first">نام</label>
+                                    <input type="text" id="name-first" asp-for="FirstName" class="input-name-first" placeholder="نام خود را وارد کنید">
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-legal-item">
+                                    <label for="name-last">نام خانوادگی</label>
+                                    <input type="text" id="name-last" asp-for="LastName" class="input-name-last" placeholder="نام خانوادگی خود را وارد کنید">
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="UserAvatar" id="imgInp"/>
+                                            <label class="custom-file-label text-left" for="customFile">بار گذاری آواتار پروفایل</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <img src="@(!string.IsNullOrEmpty(Model.AvatarName) ?PathExtension.UserAvatarOrigin + Model.AvatarName : PathExtension.DefaultAvatar)" id="UserImage" style="height: 300px; width: 300px"  class="img-thumbnail img-fluid rounded float-left" alt="...">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-legal-row-submit">
+                    <div class="parent-btn">
+                        <button type="submit" class="dk-btn dk-btn-info">
+                            ثبت اطلاعات کاربری
+                            <i class="fa fa-check sign-in"></i>
+                        </button>
+                    </div>
+                    <a asp-action="Dashboard" asp-controller="Home" asp-area="UserPanel" class="btn-default">انصراف</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="/js/jquery.min.js"></script>
+    <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                UserImage.src = URL.createObjectURL(file)
+            }
+        }
+    </script>
+}
