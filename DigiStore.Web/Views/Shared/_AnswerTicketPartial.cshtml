@@ -1,0 +1,8 @@
+﻿@model DigiStore.Domain.ViewModels.Ticket.AnswerTicketViewModel
+
+<form method="post" asp-action="AnswerTicket" asp-controller="Ticket" asp-area="UserPanel">
+    <input type="hidden" asp-for="TicketId" />
+    <label>پاسخ:</label>
+    <textarea asp-for="Text" ckeditor="1"></textarea>
+    <input type="submit" value="ارسال پاسخ" class="btn btn-info btn-block"/>
+</form>

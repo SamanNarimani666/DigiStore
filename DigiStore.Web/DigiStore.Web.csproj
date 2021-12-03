@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
+    <Folder Include="wwwroot\Images\Upload\" />
     <Folder Include="wwwroot\Images\User\origin\" />
     <Folder Include="wwwroot\Images\User\Thumb\" />
   </ItemGroup>

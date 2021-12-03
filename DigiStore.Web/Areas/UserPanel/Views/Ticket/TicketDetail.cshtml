@@ -1,0 +1,52 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@using DigiStore.Domain.ViewModels.Ticket
+@model DigiStore.Domain.ViewModels.Ticket.TicketDetailViewModel
+@{
+    ViewData["Title"] = Model.Ticket.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles
+{
+    <link rel="stylesheet" type="text/css" href="/css/ChatRoom.css"/>
+}
+@await Component.InvokeAsync("UserSidebar")
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="headline-profile">
+            <span>جزئیات تیکت: @Model.Ticket.Title </span>
+            <partial name="_AnswerTicketPartial" model="@(new AnswerTicketViewModel {TicketId = Model.Ticket.TicketId})"/>
+
+        </div>
+        <div class="profile-stats">
+            <div class="col-12">
+                <ul class="messages" id="messages">
+                        @if (Model.TicketMessage != null && Model.TicketMessage.Any())
+                        {
+                            foreach (var message in Model.TicketMessage)
+                            {
+                                <li class="message @(message.UserId == Model.Ticket.UserId ? "right" : "left") appeared">
+                                    <div class="avatar">
+                                        <img class="rounded-circle img-fluid" src="@(!string.IsNullOrEmpty(Model.Ticket.User.UserAvatar) ? PathExtension.UserAvatarThumb + Model.Ticket.User.UserAvatar : PathExtension.DefaultAvatar)" alt="Alternate Text">
+                                    </div>
+                                    <div class="text_wrapper">
+                                        <div class="time">
+                                            @message.CreatedDate.ToStringShamsiDate() ساعت @message.CreatedDate.ToString("HH:mm")
+                                        </div>
+                                        <div class="text" style="font-size: 16px">
+                                            @Html.Raw(message.Text)
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </div>
+
+            </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,58 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.Enums.Ticket
+@model DigiStore.Domain.ViewModels.Ticket.FilterTicketViewModel
+@{
+    ViewData["Title"] = "لیست تیکت ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    sbyte rowCounter = 1;
+}
+
+@await Component.InvokeAsync("UserSidebar")
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-left">
+    <div class="headline-profile page-profile-order">
+        <span>لیست تیکت ها</span>
+    </div>
+    <div class="profile-stats page-profile-order">
+        <div class="table-orders">
+            @if (Model.Tickets != null && Model.Tickets.Any())
+            {
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>عنوان تیکت</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.Tickets)
+                        {
+                            <tr>
+                                <td>@rowCounter</td>
+                                <td>@item.Title</td>
+                                @{
+                                    TicketPriority ticketPriority = (TicketPriority)item.TicketPriority.Value;
+                                    <td>@ticketPriority.GetDisplayName()</td>
+                                }
+                                <td><a href="/Ticket/tickets/@item.TicketId">جزئیات تیکت</a></td>
+
+                            </tr>
+                            rowCounter++;
+                        }
+                    </tbody>
+
+                </table>
+            }
+            else
+            {
+                <partial name="_NotFoundItem" />
+            }
+        </div>
+    </div>
+
+
+</div>
+

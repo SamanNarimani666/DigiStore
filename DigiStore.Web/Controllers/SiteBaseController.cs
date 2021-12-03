@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace DigiStore.Web.Controllers
 {
-    [AutoValidateAntiforgeryToken]
     public class SiteBaseController : Controller
     {
         protected string ErrorMessage = "ErrorMessage";

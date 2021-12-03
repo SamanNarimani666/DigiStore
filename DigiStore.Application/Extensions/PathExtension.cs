@@ -8,6 +8,11 @@ namespace DigiStore.Application.Extensions
         public static string SiteUrl = "https://localhost:44390";
         #endregion
 
+        #region UploadImage
+        public static string UploadImage = "/Images/Upload/";
+        public static string UploadImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Upload/");
+        #endregion
+
         #region DefaultAvatar
         public static string DefaultAvatar = "/Images/defaults/Default.jpg";
         #endregion

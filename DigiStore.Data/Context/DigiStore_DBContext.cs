@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace DigiStore.Context.Entities
+namespace DigiStore.Data.Context
 {
     public partial class DigiStore_DBContext : DbContext
     {
@@ -24,6 +24,8 @@ namespace DigiStore.Context.Entities
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
         public virtual DbSet<SiteSetting> SiteSettings { get; set; }
         public virtual DbSet<Slider> Sliders { get; set; }
+        public virtual DbSet<Ticket> Tickets { get; set; }
+        public virtual DbSet<TicketMessage> TicketMessages { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
 
@@ -190,6 +192,61 @@ namespace DigiStore.Context.Entities
                 entity.Property(e => e.Rowguid)
                     .HasColumnName("rowguid")
                     .HasDefaultValueSql("(newsequentialid())");
+            });
+
+            modelBuilder.Entity<Ticket>(entity =>
+            {
+                entity.ToTable("Ticket", "Ticket");
+
+                entity.Property(e => e.TicketId).HasColumnName("TicketID");
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.Title).HasMaxLength(200);
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Tickets)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Ticket_Ticket_UserID");
+            });
+
+            modelBuilder.Entity<TicketMessage>(entity =>
+            {
+                entity.ToTable("TicketMessage", "Ticket");
+
+                entity.Property(e => e.TicketMessageId).HasColumnName("TicketMessageID");
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.Text).IsRequired();
+
+                entity.Property(e => e.TicketId).HasColumnName("TicketID");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.Ticket)
+                    .WithMany(p => p.TicketMessages)
+                    .HasForeignKey(d => d.TicketId)
+                    .HasConstraintName("FK_Ticket_TicketMessage_TicketID");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.TicketMessages)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Ticket_TicketMessage_UserID");
             });
 
             modelBuilder.Entity<User>(entity =>

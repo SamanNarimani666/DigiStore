@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DigiStore.Web.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class AccountController : SiteBaseController
     {
         #region Field

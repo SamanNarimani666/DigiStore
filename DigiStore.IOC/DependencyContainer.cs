@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DigiStore.Application.Security.PassWordHashing;
+﻿using DigiStore.Application.Security.PassWordHashing;
 using DigiStore.Application.Senders;
 using DigiStore.Application.Services.Implementations;
 using DigiStore.Application.Services.Interfaces;
-using DigiStore.Context.Entities;
+using DigiStore.Data.Context;
+using DigiStore.Data.Repositories.Ticket;
 using DigiStore.Data.Repositories.User;
+using DigiStore.Domain.IRepositories.Ticket;
 using DigiStore.Domain.IRepositories.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,12 +18,13 @@ namespace DigiStore.IOC
         {
             services.AddDbContext<DigiStore_DBContext>(option => { option.UseSqlServer(connectionString); });
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddScoped<ITicketRepository, TicketRepository>();
+            services.AddScoped<ITicketMessageRepository, TicketMessageRepository>();
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
             services.AddSingleton<ISender, EmailSender>();
 
             services.AddScoped<IUserService, UserService>();
-
+            services.AddScoped<ITicketService,TicketService>();
 
         }
     }
