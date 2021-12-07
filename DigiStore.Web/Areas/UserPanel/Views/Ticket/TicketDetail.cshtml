@@ -1,6 +1,7 @@
 ﻿@using DigiStore.Application.Extensions
 @using DigiStore.Application.Utils
 @using DigiStore.Domain.ViewModels.Ticket
+@using DigiStore.Web.PresentationExtensions
 @model DigiStore.Domain.ViewModels.Ticket.TicketDetailViewModel
 @{
     ViewData["Title"] = Model.Ticket.Title;
@@ -36,6 +37,11 @@
                                         </div>
                                         <div class="text" style="font-size: 16px">
                                             @Html.Raw(message.Text)
+                                            <br/>
+                                            @if(message.UserId==User.GetUserId())
+                                            { 
+                                                <partial name="_DeleteTicketMessage" model="@(new DeleteTicketViewModel(){TicketId = Model.Ticket.TicketId,TicketMessageId = message.TicketMessageId})"/>
+                                            }
                                         </div>
                                     </div>
                                 </li>

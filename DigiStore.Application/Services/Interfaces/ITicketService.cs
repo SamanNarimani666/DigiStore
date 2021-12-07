@@ -11,5 +11,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<FilterTicketViewModel> FilterTickets(FilterTicketViewModel filterTicketViewModel);
         Task<TicketDetailViewModel> TicketDetailsForShow(int ticketId,int userId);
         Task<AnswerTicketResult> AnswerTicket(AnswerTicketViewModel answerTicket,int userId);
+        Task<DeleteTicketResult> DeleteTicket(DeleteTicketViewModel deleteTicket, int userId);
     }
 }

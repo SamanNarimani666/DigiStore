@@ -1,0 +1,70 @@
+﻿@model DigiStore.Domain.ViewModels.Address.AddAddressViewModel
+
+
+
+<form method="post" asp-action="AddAddress" asp-controller="Address" asp-area="UserPanel" class="form-checkout">
+    <div class="form-checkout-headline">افزودن آدرس جدید</div>
+    <div class="form-checkout-row">
+        <div class="form-checkout ir-select">
+            <label for="province">
+                استان <span class="required-star"
+                            style="color:red;"></span>
+            </label>
+
+            <select class="ir-province" asp-for="State" ></select>
+            <span asp-validation-for="State" class="text-danger"></span>
+            <label for="province">
+                شهر <span class="required-star"
+                          style="color:red;"></span>
+            </label>
+            <select class="ir-city" asp-for="City" ></select>
+            <span asp-validation-for="City" class="text-danger"></span>
+
+        </div>
+        <div class="form-checkout-valid-row">
+            <label for="city">
+                کد پستی
+                <span class="required-star" style="color:red;">*</span>
+            </label>
+            <input type="text" asp-for="PostalCode" class="input-name-checkout" placeholder="ده رقمی" style="text-align: right;">
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+        <div class="form-checkout-valid-row">
+            <label for="city">
+                پلاک
+                <span class="required-star" style="color:red;">*</span>
+            </label>
+            <input type="text" asp-for="Zipcode" class="input-name-checkout" style="text-align:right;">
+            <span asp-validation-for="Zipcode" class="text-danger"></span>
+        </div>
+        <div class="form-checkout-valid-row">
+            <label for="city">
+                واحد
+            </label>
+            <input type="text" asp-for="Unit" class="input-name-checkout" style="text-align:right;">
+            <span asp-validation-for="Unit" class="text-danger"></span>
+        </div>
+        <label for="address">
+            آدرس
+            <span class="required-star" style="color:red;">*</span>
+        </label>
+        <input type="text" id="address" asp-for="Address" class="input-name-checkout"
+               placeholder="آدرس خود را وارد نمایید" style="height:80px;">
+        <span asp-validation-for="Address" class="text-danger"></span>
+
+        <div class="form-checkout-valid-row">
+            <div class="parent-btn">
+                <button type="submit" class="dk-btn dk-btn-info">
+                    ثبت آدرس
+                    <i class="fa fa-check sign-in"></i>
+                </button>
+            </div>
+        </div>
+
+        <a href="#" class="cancel-edit-address"
+           onclick="closemodal()">انصراف و بازگشت</a>
+    </div>
+</form>
+
+<partial name="_ValidationScriptsPartial" />
+<script src="/js/ir-city-select.min.js"></script>

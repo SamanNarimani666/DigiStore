@@ -13,6 +13,7 @@
     <span class="account-head-line">ورود به دیجی‌استور</span>
     <div class="content-account">
         <form method="post" asp-action="Login" asp-controller="Account">
+            <input type="hidden" name="ReturnUrl" value="@ViewBag.returnUrl" />
             <partial name="_CaptchaInput"/>
             <div class="form-group">
                 <input type="text" asp-for="EmailOrMobiel" class="form-control" id="email-phone" class="input-email-account" placeholder="شماره موبایل یا پست الکترونیک خود را وارد کنید">

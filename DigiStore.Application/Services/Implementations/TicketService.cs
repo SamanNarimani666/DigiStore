@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using DigiStore.Application.Security;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.Entities;
@@ -81,6 +82,27 @@ namespace DigiStore.Application.Services.Implementations
             _ticketRepository.EditTicket(ticket);
             await _ticketRepository.Save();
             return AnswerTicketResult.Success;
+        }
+        #endregion
+
+        #region DeleteTicket
+        public async Task<DeleteTicketResult> DeleteTicket(DeleteTicketViewModel deleteTicket, int userId)
+        {
+            var ticketMessage = await _ticketMessageRepository.GetTicketMessageById(deleteTicket.TicketMessageId);
+            if (ticketMessage == null) return DeleteTicketResult.NotFoundTicketMessage;
+            if (ticketMessage.TicketId != deleteTicket.TicketId) return DeleteTicketResult.NotFoundTicket;
+            if (ticketMessage.UserId != userId) return DeleteTicketResult.NotFoundUser;
+            try
+            {
+                _ticketMessageRepository.DeleteTicketMessage(ticketMessage);
+                await _ticketMessageRepository.Save();
+                return DeleteTicketResult.Success;
+            }
+            catch
+            {
+
+                return DeleteTicketResult.Error;
+            }
         }
         #endregion
 

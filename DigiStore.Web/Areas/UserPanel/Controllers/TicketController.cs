@@ -63,9 +63,7 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         }
         #endregion
 
-
         #region answer ticket
-
         [HttpPost("answer-ticket"), ValidateAntiForgeryToken]
         public async Task<IActionResult> AnswerTicket(AnswerTicketViewModel answer)
         {
@@ -93,7 +91,36 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
 
             return RedirectToAction("TicketDetail", "Ticket", new { area = "UserPanel", ticketId = answer.TicketId });
         }
+        #endregion
 
+        #region DeleteTicketMessage
+        [HttpPost("delete-ticketMessage"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTicketMessage(DeleteTicketViewModel deleteTicket)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _ticketService.DeleteTicket(deleteTicket, User.GetUserId());
+                switch (res)
+                {
+                    case DeleteTicketResult.Error:
+                        TempData[ErrorMessage] = "خطا در حذف پیام تیکت";
+                        break;
+                    case DeleteTicketResult.NotFoundTicket:
+                        TempData[ErrorMessage] = "تیکتی با این مشخصات یافت نشد";
+                        break;
+                    case DeleteTicketResult.NotFoundTicketMessage:
+                        TempData[ErrorMessage] = "پیامی یافت نشد";
+                        break;
+                    case DeleteTicketResult.NotFoundUser:
+                        TempData[ErrorMessage] = "عدم دسترسی در صورت تکرار  حساب کاربری شما بلک خواهد شد";
+                        break;
+                    case DeleteTicketResult.Success:
+                        TempData[ErrorMessage] = "تیکت با موفقیت قبت شد";
+                       break;
+                }
+            }
+            return RedirectToAction("TicketDetail", "Ticket", new { area = "UserPanel", ticketId = deleteTicket.TicketId });
+        }
         #endregion
     }
 }

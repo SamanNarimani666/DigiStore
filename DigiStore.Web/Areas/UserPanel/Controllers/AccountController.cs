@@ -1,33 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using DigiStore.Application.Extensions;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Account;
 using DigiStore.Web.PresentationExtensions;
-using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Web.Areas.UserPanel.Controllers
 {
     [Route("Account")]
+    [AutoValidateAntiforgeryToken]
     public class AccountController : UserBaseController
     {
+        #region Constructor
         private readonly IUserService _userService;
-
-
         public AccountController(IUserService userService)
         {
             _userService = userService;
-    
         }
+        #endregion
 
-        
-
-        
+        #region EditProfile
         [HttpGet("EditProfile")]
         public async Task<IActionResult> EditProfile()
         {
@@ -57,6 +50,7 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
             }
             return View(editUserProfile);
         }
+        #endregion
 
         #region ChangePassWord
         [HttpGet("ChangePassWord")]
@@ -101,8 +95,6 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         {
             return View(await _userService.GetInformationUserById(User.GetUserId()));
         }
-        
-
         #endregion
     }
 }

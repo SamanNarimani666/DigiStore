@@ -18,10 +18,12 @@ namespace DigiStore.Data.Context
         {
         }
 
+        public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<ContactU> ContactUs { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
+        public virtual DbSet<Seller> Sellers { get; set; }
         public virtual DbSet<SiteSetting> SiteSettings { get; set; }
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
@@ -41,6 +43,67 @@ namespace DigiStore.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Arabic_CI_AS");
+
+            modelBuilder.Entity<Address>(entity =>
+            {
+                entity.ToTable("Address", "Users");
+
+                entity.HasIndex(e => e.City, "I_NC_Users_Address_City");
+
+                entity.HasIndex(e => e.State, "I_NC_Users_Address_State");
+
+                entity.HasIndex(e => e.Zipcode, "I_NC_Users_Address_Zipcode");
+
+                entity.HasIndex(e => e.PostalCode, "I_NC_Users_Address_postalcard");
+
+                entity.Property(e => e.AddressId).HasColumnName("AddressID");
+
+                entity.Property(e => e.Address1)
+                    .IsRequired()
+                    .HasMaxLength(800)
+                    .HasColumnName("Address");
+
+                entity.Property(e => e.City)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PostalCode)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Unit)
+                    .HasMaxLength(5)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.Zipcode)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Users_Address_UserID");
+            });
 
             modelBuilder.Entity<ContactU>(entity =>
             {
@@ -144,6 +207,64 @@ namespace DigiStore.Data.Context
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Users_RolePermission_RoleID");
+            });
+
+            modelBuilder.Entity<Seller>(entity =>
+            {
+                entity.ToTable("Seller", "Store");
+
+                entity.HasIndex(e => e.IsDelete, "I_NC_Store_Seller_IsDelete");
+
+                entity.HasIndex(e => e.Logo, "I_NC_Store_Seller_Logo");
+
+                entity.HasIndex(e => e.Phone, "I_NC_Store_Seller_Phone");
+
+                entity.HasIndex(e => e.StoreName, "I_NC_Store_Seller_StoreName");
+
+                entity.HasIndex(e => e.StoreaceptanceState, "I_NC_Store_Seller_StoreaceptanceState");
+
+                entity.HasIndex(e => e.Mobile, "UQ__Seller__6FAE0782B7DCF914")
+                    .IsUnique();
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(700);
+
+                entity.Property(e => e.AdminDescription).HasMaxLength(200);
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Descriptions)
+                    .IsRequired()
+                    .HasMaxLength(700);
+
+                entity.Property(e => e.Logo).HasMaxLength(200);
+
+                entity.Property(e => e.Mobile).HasMaxLength(50);
+
+                entity.Property(e => e.Phone)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.StoreDoucument).HasMaxLength(200);
+
+                entity.Property(e => e.StoreName)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Sellers)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Store_Seller_UserID");
             });
 
             modelBuilder.Entity<SiteSetting>(entity =>

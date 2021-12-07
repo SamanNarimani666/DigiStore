@@ -94,6 +94,7 @@ namespace DigiStore.Web.Controllers
         [HttpGet("Login")]
         public IActionResult Login(string ReturnUrl)
         {
+            ViewBag.returnUrl = ReturnUrl;
             return View();
         }
         [HttpPost("Login"), ValidateAntiForgeryToken]
@@ -136,6 +137,8 @@ namespace DigiStore.Web.Controllers
                         await HttpContext.SignInAsync(principal, properties);
                         if (!string.IsNullOrEmpty(ReturnUrl))
                         {
+                            TempData["data"] = "this is data from login";
+
                             return Redirect(ReturnUrl);
                         }
                         return RedirectToAction("Index", "Home");

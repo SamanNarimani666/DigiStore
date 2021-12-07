@@ -10,7 +10,7 @@ namespace DigiStore.Domain.ViewModels.Ticket
 
         public string Title { get; set; }
 
-        public long? UserId { get; set; }
+        public int? UserId { get; set; }
 
         public TicketSection? TicketSection { get; set; }
 
