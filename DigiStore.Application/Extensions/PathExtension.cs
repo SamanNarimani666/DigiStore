@@ -13,6 +13,18 @@ namespace DigiStore.Application.Extensions
         public static string UploadImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Upload/");
         #endregion
 
+        #region UploadLogoStore
+        public static string UploadLogo = "/Images/Store/Logo/origin/";
+        public static string UploadLogoServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Store/Logo/origin/");
+
+        public static string UploadLogoThumb = "/Images/Store/Logo/Thumb/";
+        public static string UploadLogoThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Store/Logo/Thumb/");
+        #endregion
+
+        #region DefaultStoreLogo
+        public static string DefaultStoreLogo = "/Images/defaults/logo.png";
+        #endregion
+
         #region DefaultAvatar
         public static string DefaultAvatar = "/Images/defaults/Default.jpg";
         #endregion

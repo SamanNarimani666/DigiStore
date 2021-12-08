@@ -1,0 +1,129 @@
+Codes : http://s15.picofile.com/file/8408559226/PShopCodes.zip.html
+
+Demo : 
+
+00 : http://s15.picofile.com/file/8408601968/00Moghadamati.zip.html
+
+01 : http://s15.picofile.com/file/8408599392/Part_01_Create_Project_Add_Template.mp4.html
+
+02 : http://s15.picofile.com/file/8408603834/Part_02_Create_DB_User_Role_Tables.mp4.html
+
+03 : http://s14.picofile.com/file/8408605918/Part_03_Register_User_1.mp4.html
+
+04 : http://s14.picofile.com/file/8408611868/Part_04_Register_User_2.mp4.html
+
+05 : http://s15.picofile.com/file/8408606634/Part_05_Login_Users.mp4.html
+
+06 : http://s14.picofile.com/file/8408612884/Part_06_Activate_User_Send_Email.mp4.html
+
+07 : http://s14.picofile.com/file/8408614100/Part_07_Authentication_Claim.mp4.html
+
+08 : http://s14.picofile.com/file/8408608668/Part_08_Forget_Reset_Password_With_Send_Email.mp4.html
+
+09 : http://s15.picofile.com/file/8408609918/Part_09_Add_UserPanel_Templatre_ReturnUrl.mp4.html
+
+10 : http://s14.picofile.com/file/8408615342/Part_10_Show_User_Info_ShamsiDate_GetEmail.mp4.html
+
+11 : http://s15.picofile.com/file/8408628834/Part_11_ShowData_For_EditUser_Method_ForEdit.mp4.html
+
+12 : http://s14.picofile.com/file/8408620650/Part_12_Final_Edit_User_Post_Method.mp4.html
+
+13 : http://s14.picofile.com/file/8408622018/Part_13_ChangePassword_in_User_Panel.mp4.html
+
+14 : http://s15.picofile.com/file/8408631368/Part_14_Create_Wallet_ShowUserWallet.mp4.html
+
+15 : http://s14.picofile.com/file/8408623400/Part_15_ShowWalletsForUser.mp4.html
+
+16 : http://s15.picofile.com/file/8408625142/Part_16_Online_Payment_ZarinPal.mp4.html
+
+17 : http://s15.picofile.com/file/8408632418/Part_17_AdminPanel_RazorPage.mp4.html
+
+18 : http://s14.picofile.com/file/8408634042/Part_18_ShowAdmin_Information.mp4.html
+
+19 : http://s14.picofile.com/file/8408640568/Part_19_EditUser_in_AdminPanel.mp4.html
+
+20 : http://s15.picofile.com/file/8408641726/Part_20_ChangeEmail_in_AdminPanel.mp4.html
+
+21 : http://s14.picofile.com/file/8408643750/Part_21_ShowUsersList_And_Filtering_Paging.mp4.html
+
+22 : http://s15.picofile.com/file/8408644818/Part_22_CreateUserByAdmin_ShowRolesList.mp4.html
+
+23 : http://s15.picofile.com/file/8408647918/Part_23_AddUserWithRoles.mp4.html
+
+24 : http://s15.picofile.com/file/8408649242/Part_24_ShowEditUserData.mp4.html
+
+25 : http://s14.picofile.com/file/8408650292/Part_25_Final_Edit_User_By_Admin.mp4.html
+
+26 : http://s15.picofile.com/file/8408675050/Part_26_Delete_Users_By_Ajax_Show_DeletedUsers.mp4.html
+
+27 : http://s15.picofile.com/file/8408678168/Part_27_RolesList_AddNewRole.mp4.html
+
+28 : http://s15.picofile.com/file/8408684542/Part_28_EditRole_DeleteRole_CountOfDeletedRoles.mp4.html
+
+29 : http://s15.picofile.com/file/8408687642/Part_29_Authorizeattribute.mp4.html
+
+30 : http://s14.picofile.com/file/8408692768/Part_30_Users_To_DRole_Add_Categories.mp4.html
+
+31 : http://s14.picofile.com/file/8408694842/Part_31_ViewComponent_For_Show_Categories.mp4.html
+
+32 : http://s14.picofile.com/file/8408702592/Part_32_AddProduct_Image_Company_AndMore.mp4.html
+
+33 : http://s15.picofile.com/file/8408725334/Part_33_CreateProduct_First.mp4.html
+
+34 : http://s14.picofile.com/file/8408736868/Part_34_Show_CategoriesForAddProduct.mp4.html
+
+35 : http://s15.picofile.com/file/8408740250/Part_35_AddProductWithImagesAndCat.mp4.html
+
+36 : http://s14.picofile.com/file/8408748618/Part_36_Final_Add_Product_PreviewAfterUpload.mp4.html
+
+37 : http://s15.picofile.com/file/8408751692/Part_37_ShowProductsList_With_Filtering_Paging.mp4.html
+
+38 : http://s14.picofile.com/file/8409010384/Part_38_EditProduct_First.mp4.html
+
+39 : http://s14.picofile.com/file/8409013468/Part_39_FinalEditProductWithEditGallery.mp4.html
+
+40 : http://s14.picofile.com/file/8409016418/Part_40_CategoryList_AddNewCategories.mp4.html
+
+41 : http://s14.picofile.com/file/8409017968/Part_41_EditCategory_DeleteCategory.mp4.html
+
+42 : http://s15.picofile.com/file/8409019550/Part_42_ShowBestSellersInHomePage.mp4.html
+
+43 : http://s15.picofile.com/file/8409044592/Part_43_ShowProductsAdnFilteringByCategories_And_Search.mp4.html
+
+44 : http://s14.picofile.com/file/8409053150/Part_44_FilteringByPrice_And_Take_OnlyOff.mp4.html
+
+45 : http://s15.picofile.com/file/8409080626/Part_45_Final_Filtering_OrderBy_Paging.mp4.html
+
+46 : http://s14.picofile.com/file/8409083250/Part_46_Cart_Add_Delete_Update.mp4.html
+
+47 : http://s15.picofile.com/file/8409088800/Part_47_ShowCartDetails_By_ViewComponent.mp4.html
+
+48 : http://s14.picofile.com/file/8409100534/Part_48_ShowCartPage_CheckExistOfProduct.mp4.html
+
+49 : http://s14.picofile.com/file/8409103250/Part_49_ShowUserAddresses_in_OrderPage.mp4.html
+
+50 : http://s15.picofile.com/file/8409104776/Part_50_ShowMoreDetailt_in_OrderPage.mp4.html
+
+51 : http://s15.picofile.com/file/8409107176/Part_51_FinalAddOrder_Payment_and.mp4.html
+
+52 : http://s15.picofile.com/file/8409123192/Part_52_ShowOrders_And_OrderDetails_in_UserPanel.mp4.html
+
+53-1 : http://s15.picofile.com/file/8409125492/Part_53_First_Edame_Dar_Part_53_Sec.mp4.html
+
+53-2 : http://s14.picofile.com/file/8409131050/Part_53_Sec_ShowProduct_Details.mp4.html
+
+54 : http://s14.picofile.com/file/8409134018/Part_54_AddComment_Ajax_ShowComments.mp4.html
+
+55 : http://s14.picofile.com/file/8409139134/Part_55_Toast_AddToCartInLayout.mp4.html
+
+56 : http://s14.picofile.com/file/8409141726/Part_56.mp4.html
+
+57 : http://s14.picofile.com/file/8409151042/Part_57_OrderDetails_And_Comments.mp4.html
+
+58 : http://s14.picofile.com/file/8409156868/Part_58_FinalComments_And_ShowDetailsComment.mp4.html
+
+59 : http://s14.picofile.com/file/8409163450/Part_59_Faviorits_And_Offers.mp4.html
+
+60 : http://s15.picofile.com/file/8409165250/Part_60_Admin_Dashboard.mp4.html
+
+61 : http://s14.picofile.com/file/8409168084/Part_61_FinalPart_Interested.mp4.html

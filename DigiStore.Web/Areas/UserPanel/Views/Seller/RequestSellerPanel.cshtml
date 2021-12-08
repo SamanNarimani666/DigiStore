@@ -1,0 +1,98 @@
+﻿@model DigiStore.Domain.ViewModels.Seller.RequestSellerViewModel
+@{
+    ViewData["Title"] = "درخواست روشندگی در دیجی استور";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@await Component.InvokeAsync("UserSidebar")
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="profile-navbar">
+            <div class="profile-navbar-back-alignment">
+                <a asp-action="Dashboard" asp-controller="Home" asp-area="UserPanel" class="profile-navbar-btn-back">بازگشت</a>
+                <h4 class="edit-personal">
+                    در خواست پنل فروشندگی
+
+                </h4>
+            </div>
+        </div>
+        <div class="profile-stats">
+            <form method="post" asp-action="RequestSellerPanel" asp-controller="Seller" asp-area="UserPanel" enctype="multipart/form-data">
+                <div class="form-legal-row">
+                    <div class="col-lg-6 col-xs-12 mx-auto">
+                        <div class="form-legal-col">
+                            <fieldset class="form-legal-fieldset">
+                                <h4 class="form-legal-headline">اطلاعات فروشگاه شما</h4>
+                                <div class="form-legal-item">
+                                    <label for="name-first">نام فروشگاه</label>
+                                    <input type="text" asp-for="StoreName" id="name-first" class="input-name-first" placeholder="نام خود را وارد کنید">
+                                </div>
+
+                                <div class="form-legal-item">
+                                    <label for="code-national">ایمیل</label>
+                                    <input type="email" asp-for="Email" id="code-national" class="input-code-national" placeholder="کد ملی خود را وارد کنید">
+                                </div>
+
+                                <div class="form-legal-item">
+                                    <label for="name-last">تلفن ثابت</label>
+                                    <input type="text" asp-for="Phone" id="name-last" class="input-name-last" placeholder="نام خانوادگی خود را وارد کنید">
+                                </div>
+
+                                <div class="form-legal-item">
+                                    <label for="phone">آدرس</label>
+                                    <textarea class="form-control" asp-for="Address" rows="5" cols="80"></textarea>
+                                </div>
+                                <div class="form-legal-item">
+                                    <label for="phone">توضیحات درباره فروشگاه</label>
+                                    <textarea class="form-control" asp-for="Description" rows="5" cols="80"></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input"  name="Logo" id="imgInp" />
+                                            <label class="custom-file-label text-left" for="customFile">بار گذاری آواتار پروفایل</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <img src="/Images/Store/Logo/Default.jpg" id="UserImage" style="height: 300px; width: 300px" class="img-thumbnail img-fluid rounded float-left" alt="...">
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="SellerDocument"/>
+                                        <label class="custom-file-label text-left">بار گذاری مدارک فروشگاه</label>
+                                    </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-legal-row-submit">
+                    <div class="parent-btn">
+                        <button type="submit" class="dk-btn dk-btn-info">
+                            ثبت اطلاعات فروشگاه
+                            <i class="fa fa-check sign-in"></i>
+                        </button>
+                    </div>
+
+                    <a asp-action="Dashboard" asp-controller="Home" asp-area="UserPanel" class="btn-default">انصراف</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="/js/jquery.min.js"></script>
+    <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                UserImage.src = URL.createObjectURL(file)
+            }
+        }
+    </script>
+}

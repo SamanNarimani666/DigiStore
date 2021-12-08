@@ -1,0 +1,118 @@
+﻿using System;
+using System.Threading.Tasks;
+using DigiStore.Application.Security;
+using DigiStore.Application.Services.Interfaces;
+using DigiStore.Domain.Entities;
+using DigiStore.Domain.Enums.Store;
+using DigiStore.Domain.IRepositories.Seller;
+using DigiStore.Domain.IRepositories.User;
+using DigiStore.Domain.ViewModels.Seller;
+
+namespace DigiStore.Application.Services.Implementations
+{
+    public class SellerService : ISellerService
+    {
+        #region Constructor
+        private readonly ISellerRepository _sellerRepository;
+        private readonly IUserRepository _userRepository;
+        public SellerService(ISellerRepository sellerRepository, IUserRepository userRepository)
+        {
+            _sellerRepository = sellerRepository;
+            _userRepository = userRepository;
+        }
+        #endregion
+
+        #region AddNewSellerRequet
+        public async Task<RequestSellerResult> AddNewSellerRequet(RequestSellerViewModel requestSeller, int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user.IsBlock) return RequestSellerResult.HasNotPermission;
+            var hasUnderPrograssRequest = await _sellerRepository.HasHanderprograssRequestUser(userId);
+            if (hasUnderPrograssRequest) return RequestSellerResult.HasUnderProgressRequest;
+            try
+            {
+                var newSeller = new Seller
+                {
+                    UserId = userId,
+                    StoreName = requestSeller.StoreName.SanitizeText(),
+                    Phone = requestSeller.Phone.SanitizeText(),
+                    Email = requestSeller.Email.SanitizeText(),
+                    Address = requestSeller.Address,
+                    StoreaceptanceState = (byte)StoreAcceptanceState.UnderProgress,
+                    Descriptions = requestSeller.Description.SanitizeText(),
+                    Logo = requestSeller.SellerLogo,
+                    StoreDoucument = requestSeller.SellerDoucemnt
+                };
+                await _sellerRepository.AddSeller(newSeller);
+                await _userRepository.Save();
+                return RequestSellerResult.Success;
+            }
+            catch
+            {
+                return RequestSellerResult.Erorr;
+
+            }
+        }
+        #endregion
+
+        #region FilterSeller
+        public async Task<FilterSellerViewModel> FilterSeller(FilterSellerViewModel filterSeller)
+        {
+            return await _sellerRepository.FilterSeller(filterSeller);
+        }
+        #endregion
+
+        #region GetEditRequestSellerInfo
+        public async Task<EditRequestSellerViewModel> GetEditRequestSellerInfo(int sellerId, int userId)
+        {
+            var seller = await _sellerRepository.GetSellerById(sellerId);
+            if (seller == null || seller.UserId != userId) return null;
+            return new EditRequestSellerViewModel
+            {
+                Email = seller.Email,
+                SellerLogo = seller.Logo,
+                Phone = seller.Phone,
+                Address = seller.Address,
+                Description = seller.Descriptions,
+                StoreName = seller.StoreName,
+                SellerDoucemnt = seller.StoreDoucument,
+                SellerID = seller.SellerId
+            };
+
+        }
+        #endregion
+
+        #region EditSeller
+        public async Task<EditRequestSellerResult> EditSellerRequest(EditRequestSellerViewModel editRequestSeller, int userId)
+        {
+            var seller = await _sellerRepository.GetSellerById(editRequestSeller.SellerID);
+            if (seller == null || seller.UserId != userId) return EditRequestSellerResult.NotFound;
+            try
+            {
+                seller.Address = editRequestSeller.Address;
+                seller.Descriptions = editRequestSeller.Description;
+                seller.Logo = editRequestSeller.SellerLogo;
+                seller.StoreName = editRequestSeller.StoreName;
+                seller.Phone = editRequestSeller.Phone;
+                seller.Email = editRequestSeller.Email;
+                seller.StoreDoucument = editRequestSeller.SellerDoucemnt;
+                seller.StoreaceptanceState = (byte)StoreAcceptanceState.UnderProgress;
+                _sellerRepository.EditSeller(seller);
+                await _sellerRepository.Save();
+                return EditRequestSellerResult.Success;
+            }
+            catch
+            {
+                return EditRequestSellerResult.NotFound;
+            }
+        }
+        #endregion
+
+        #region Dispose
+        public async ValueTask DisposeAsync()
+        {
+            await _sellerRepository.DisposeAsync();
+        }
+        #endregion
+    }
+}

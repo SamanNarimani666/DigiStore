@@ -1,0 +1,65 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.Enums.Store
+@model DigiStore.Domain.ViewModels.Seller.FilterSellerViewModel
+@{
+    ViewData["Title"] = "در خواست های ونل فروشندگی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@await Component.InvokeAsync("UserSidebar")
+<div class="col-lg-9 col-md-8 col-xs-12 pull-left">
+    <div class="headline-profile page-profile-order">
+        <span>لیست تیکت ها</span>
+    </div>
+    <div class="profile-stats page-profile-order">
+        <div class="table-orders">
+            @if (Model.Sellers != null && Model.Sellers.Any())
+            {
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                    
+                        <th>آيکون</th>
+                        <th>نام فروشگاه</th>
+                        <th>ایمیل</th>
+                        <th>تلفن تماس</th>
+                        <th>وضعیت</th>
+                        <th>عملیات</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    @foreach (var item in Model.Sellers)
+                    {
+                        <tr>
+
+                            <td><img src="@(!string.IsNullOrEmpty(item.Logo)?PathExtension.UploadLogoThumb+item.Logo:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری"/></td>
+                            <td>@item.StoreName</td>
+                            <td>@item.Email</td>
+                            <td>@item.Phone</td>
+                            @{
+                                StoreAcceptanceState storeAcceptanceState = (StoreAcceptanceState)item.StoreaceptanceState;
+                                <td>@storeAcceptanceState.GetDisplayName()</td>
+                            }
+                            <td><a asp-controller="Seller" asp-action="EditSellerRequest" asp-area="UserPanel" asp-route-id="@item.SellerId">ویرایش </a></td>
+
+                        </tr>
+                   
+                    }
+                    </tbody>
+
+                </table>
+            }
+            else
+            {
+                <partial name="_NotFoundItem" />
+            }
+        </div>
+    </div>
+
+
+</div>
+
+
+

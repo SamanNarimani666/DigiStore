@@ -223,9 +223,6 @@ namespace DigiStore.Data.Context
 
                 entity.HasIndex(e => e.StoreaceptanceState, "I_NC_Store_Seller_StoreaceptanceState");
 
-                entity.HasIndex(e => e.Mobile, "UQ__Seller__6FAE0782B7DCF914")
-                    .IsUnique();
-
                 entity.Property(e => e.Address)
                     .IsRequired()
                     .HasMaxLength(700);
@@ -239,6 +236,10 @@ namespace DigiStore.Data.Context
                 entity.Property(e => e.Descriptions)
                     .IsRequired()
                     .HasMaxLength(700);
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(200);
 
                 entity.Property(e => e.Logo).HasMaxLength(200);
 
@@ -263,7 +264,6 @@ namespace DigiStore.Data.Context
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Sellers)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Store_Seller_UserID");
             });
 

@@ -115,7 +115,7 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
                         TempData[ErrorMessage] = "عدم دسترسی در صورت تکرار  حساب کاربری شما بلک خواهد شد";
                         break;
                     case DeleteTicketResult.Success:
-                        TempData[ErrorMessage] = "تیکت با موفقیت قبت شد";
+                        TempData[SuccessMessage] = "تیکت با موفقیت قبت شد";
                        break;
                 }
             }
