@@ -7,6 +7,11 @@ namespace DigiStore.Domain.Entities
 {
     public partial class Seller
     {
+        public Seller()
+        {
+            Products = new HashSet<Product>();
+        }
+
         public int SellerId { get; set; }
         public int? UserId { get; set; }
         public string StoreName { get; set; }
@@ -25,5 +30,6 @@ namespace DigiStore.Domain.Entities
         public Guid Rowguid { get; set; }
 
         public virtual User User { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

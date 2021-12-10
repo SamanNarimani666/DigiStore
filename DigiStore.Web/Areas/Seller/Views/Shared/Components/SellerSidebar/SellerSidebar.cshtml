@@ -1,0 +1,45 @@
+﻿<div class="col-lg-3 col-md-4 col-xs-12">
+    <div class="sidebar-wrapper">
+        <div class="box-sidebar">
+            <div class="profile-box" style="border: none;">
+                <img src="/assets/images/profile/1.jpg" class="profile-box-img-banner" alt="profile">
+            </div>
+        </div>
+
+        <div class="box-sidebar">
+            <div class="profile-box">
+              
+
+                <div class="profile-box-content">
+                    <span class="profile-box-nameuser">@User.Identity.Name</span>
+                </div>
+
+                <a href="#" class="profile-box-row-arrow">
+                    <div class="profile-box-title">کیف پول</div>
+                    <div class="profile-box-price">
+                        <div class="wallet-amount">0</div>
+                        <div class="profile-box-currency">تومان</div>
+                        <i class="fa fa-angle-left"></i>
+                    </div>
+                    <p class="profile-box-wallet-link">افزایش موجودی</p>
+                </a>
+
+            </div>
+            <ul class="profile-menu-items">
+                <li><a asp-action="Index" asp-controller="Home" asp-area="Seller" class="profile-menu-url active-profile"><span class="mdi mdi-account-outline"></span>داشبورد</a></li>
+                <li><a asp-action="AddTicket" asp-controller="Ticket" asp-area="UserPanel" class="profile-menu-url "><span class="fa fa-ticket"></span>ثبت تیکت جدید</a></li>
+                <li><a asp-action="ListTicket" asp-controller="Ticket" asp-area="UserPanel" class="profile-menu-url "><span class="fa fa-sticky-note"></span>لیست تیکت ها</a></li>
+
+                <li>
+                    <a href="profile-order.html" class="profile-menu-url">
+                        <span class="mdi mdi-basket"></span>همه
+                        سفارش ها
+                    </a>
+                </li>
+                <li><a href="profile-comments.html" class="profile-menu-url"><span class="mdi mdi-comment-multiple-outline"></span>نقد و نظرات</a></li>
+                <li><a asp-action="Logout" asp-controller="Account" class="profile-menu-url"><span class="mdi mdi-power"></span>خروج</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
