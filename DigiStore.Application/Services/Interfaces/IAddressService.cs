@@ -9,5 +9,6 @@ namespace DigiStore.Application.Services.Interfaces
        Task<AddAddressResult> AddAddressUser(AddAddressViewModel addAddress,int userId);
        Task<FilterAddressVieweModel> FilterAddress(FilterAddressVieweModel filterAddress);
        Task<EditAddressResult> EditAddress(EditAddressViewModel editAddress, int userId);
+       Task<bool> DeleteAddress(int addressId,int userId);
    }
 }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Address;
+using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
 
 namespace DigiStore.Web.Areas.UserPanel.Controllers
@@ -51,6 +52,26 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         }
         #endregion
 
-      
+        #region DeleteAddress
+        public async Task<IActionResult> DeleteAddress(int id)
+        {
+            var result = await _addressService.DeleteAddress(id, User.GetUserId());
+            if (result)
+            {
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Success,
+                    "آدرس مورد نظر با موفقیت ثبت حذف شد",
+                    null
+                );
+            }
+            return JsonResponseStatus.SendStatus(
+                JsonResponseStatusType.Danger,
+                "اطلاعاتی با این مشخصات یافت نشد",
+                null
+            );
+
+        }
+        #endregion
+
     }
 }

@@ -23,14 +23,11 @@
                     {
                         foreach (var item in Model.Addresses)
                         {
-                            <div class="profile-address-item">
+                            <div id="ajax-url-item-@item.AddressId" class="profile-address-item"  >
                                 <div class="profile-address-item-top">
                                     <div class="profile-address-item-title">@item.Address1</div>
                                     <div class="ui-more">
-                                        <form method="post" asp-controller="Address" asp-action="DeleteAddress" class="float-left">
-                                            <button onclick="Tests(@item.AddressId)" class="btn-remove-address btn btn-danger" type="submit">حذف</button>
-                                            <input type="hidden" name="id" value="@item.AddressId" />
-                                        </form>
+                                        <a ajax-url-button="@item.AddressId" asp-controller="Address" asp-action="DeleteAddress" asp-area="UserPanel" asp-route-id="@item.AddressId" class="btn-remove-address btn btn-danger">حذف</a>
                                     </div>
                                 </div>
 

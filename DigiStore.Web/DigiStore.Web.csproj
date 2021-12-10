@@ -30,12 +30,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Admin\assets\plugins\jstree\themes\default\" />
     <Folder Include="wwwroot\Files\Store\SellerDocument\" />
     <Folder Include="wwwroot\Images\Store\Logo\Thumb\" />
     <Folder Include="wwwroot\Images\Store\Logo\origin\" />
     <Folder Include="wwwroot\Images\Upload\" />
     <Folder Include="wwwroot\Images\User\origin\" />
     <Folder Include="wwwroot\Images\User\Thumb\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
   </ItemGroup>
 
 </Project>

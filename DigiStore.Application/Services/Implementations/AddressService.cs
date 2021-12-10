@@ -5,6 +5,7 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.Address;
 using DigiStore.Domain.ViewModels.Address;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DigiStore.Application.Services.Implementations
 {
@@ -74,6 +75,20 @@ namespace DigiStore.Application.Services.Implementations
             {
                 return EditAddressResult.Error;
             }
+        }
+        #endregion
+
+        #region DeleteAddress
+        public async Task<bool> DeleteAddress(int addressId, int userId)
+        {
+            var address = await _addressRepository.GetTicketById(addressId);
+            if (address == null) return false;
+            if (address.UserId != userId) return false;
+            address.IsDelete = true;
+            address.ModifiedDate=DateTime.Now;
+            _addressRepository.EditAddress(address);
+            await _addressRepository.Save();
+            return true;
         }
         #endregion
 

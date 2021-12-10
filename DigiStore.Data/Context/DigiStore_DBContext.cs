@@ -227,7 +227,7 @@ namespace DigiStore.Data.Context
                     .IsRequired()
                     .HasMaxLength(700);
 
-                entity.Property(e => e.AdminDescription).HasMaxLength(200);
+                entity.Property(e => e.AdminDescription).HasMaxLength(700);
 
                 entity.Property(e => e.CreatedDate)
                     .HasColumnType("datetime")
@@ -252,6 +252,8 @@ namespace DigiStore.Data.Context
                 entity.Property(e => e.Rowguid)
                     .HasColumnName("rowguid")
                     .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.StoreAceptanceStateDescription).HasMaxLength(500);
 
                 entity.Property(e => e.StoreDoucument).HasMaxLength(200);
 

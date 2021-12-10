@@ -2,7 +2,7 @@
 @using DigiStore.Domain.Enums.Store
 @model DigiStore.Domain.ViewModels.Seller.FilterSellerViewModel
 @{
-    ViewData["Title"] = "در خواست های ونل فروشندگی";
+    ViewData["Title"] = "در خواست های پنل فروشندگی";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -42,7 +42,7 @@
                                 StoreAcceptanceState storeAcceptanceState = (StoreAcceptanceState)item.StoreaceptanceState;
                                 <td>@storeAcceptanceState.GetDisplayName()</td>
                             }
-                            <td><a asp-controller="Seller" asp-action="EditSellerRequest" asp-area="UserPanel" asp-route-id="@item.SellerId">ویرایش </a></td>
+                            <td><a  asp-controller="Seller" asp-action="EditSellerRequest" asp-area="UserPanel" asp-route-id="@item.SellerId">ویرایش </a></td>
 
                         </tr>
                    

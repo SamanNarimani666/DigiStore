@@ -108,10 +108,37 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region AcceptSellerRequest
+        public async Task<bool> AcceptSellerRequest(int sellerId)
+        {
+            var seller = await _sellerRepository.GetSellerById(sellerId);
+            if (seller == null) return false;
+            seller.StoreaceptanceState = (byte) StoreAcceptanceState.Accepted;
+            seller.StoreAceptanceStateDescription = "اطلاعات پنل فروشگاهی شما با موفقیت تایید شده است";
+            _sellerRepository.EditSeller(seller);
+            await _sellerRepository.Save();
+            return true;
+        }
+        #endregion
+
+        #region RejectItem
+        public async Task<bool> RejectItem(RejectItemViewModel rejectItem)
+        {
+            var seller = await _sellerRepository.GetSellerById(rejectItem.SellerId);
+            if (seller == null) return false;
+            seller.StoreAceptanceStateDescription = rejectItem.RejectMessage;
+            seller.StoreaceptanceState = (byte) StoreAcceptanceState.Rejected;
+             _sellerRepository.EditSeller(seller);
+             await _sellerRepository.Save();
+             return true;
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {
             await _sellerRepository.DisposeAsync();
+            await _userRepository.DisposeAsync();
         }
         #endregion
     }

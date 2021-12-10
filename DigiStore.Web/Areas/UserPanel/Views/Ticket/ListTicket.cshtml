@@ -34,8 +34,8 @@
                                 <td>@rowCounter</td>
                                 <td>@item.Title</td>
                                 @{
-                                    TicketPriority ticketPriority = (TicketPriority)item.TicketPriority.Value;
-                                    <td>@ticketPriority.GetDisplayName()</td>
+                                    TicketState ticketState = (TicketState)item.TicketState.Value;
+                                    <td>@ticketState.GetDisplayName()</td>
                                 }
                                 <td><a href="/Ticket/tickets/@item.TicketId">جزئیات تیکت</a></td>
 

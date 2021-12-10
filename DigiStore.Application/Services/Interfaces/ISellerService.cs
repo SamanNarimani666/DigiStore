@@ -9,7 +9,8 @@ namespace DigiStore.Application.Services.Interfaces
         Task<RequestSellerResult> AddNewSellerRequet(RequestSellerViewModel requestSeller,int userId);
         Task<FilterSellerViewModel> FilterSeller(FilterSellerViewModel filterSeller);
         Task<EditRequestSellerViewModel> GetEditRequestSellerInfo(int sellerId,int userId);
-       
         Task<EditRequestSellerResult> EditSellerRequest(EditRequestSellerViewModel editRequestSeller,int userId);
+        Task<bool> AcceptSellerRequest(int sellerId);
+        Task<bool> RejectItem(RejectItemViewModel rejectItem);
     }
 }

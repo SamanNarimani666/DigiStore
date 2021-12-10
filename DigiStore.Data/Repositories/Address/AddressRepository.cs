@@ -43,7 +43,7 @@ namespace DigiStore.Data.Repositories.Address
         public async Task<FilterAddressVieweModel> FilterAddress(FilterAddressVieweModel filterAddress)
         {
             var adddress = _context.Addresses
-                .Where(a=>!a.IsDelete)
+                .Where(a=>a.IsDelete==false)
                 .OrderByDescending(a=>a.ModifiedDate)
                 .AsQueryable();
 

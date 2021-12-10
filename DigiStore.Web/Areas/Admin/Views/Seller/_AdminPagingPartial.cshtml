@@ -1,0 +1,21 @@
+﻿@model DigiStore.Domain.ViewModels.Paging.BasePaging
+
+
+<ul class="pagination">
+    @if (Model.StartPage < Model.PageId)
+    {
+        <li class="btn"><a onclick="FillPageId(@(Model.PageId - 1))">«</a></li>
+    }
+
+    @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+    {
+        <li class="@(Model.PageId == i ? "active":"")"><a class="btn" onclick="FillPageId(@i)">@i<span class="sr-only">(current)</span></a></li>
+    }
+
+    @if (Model.EndPage > Model.PageId)
+    {
+        <li class="btn" ><a class="btn"  onclick="FillPageId(@(Model.PageId + 1))">»</a></li>
+    }
+</ul>
+
+
