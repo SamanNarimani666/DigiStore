@@ -19,7 +19,10 @@ namespace DigiStore.Data.Context
         }
 
         public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<Color> Colors { get; set; }
         public virtual DbSet<ContactU> ContactUs { get; set; }
+        public virtual DbSet<Guarantee> Guarantees { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
@@ -52,6 +55,8 @@ namespace DigiStore.Data.Context
                 entity.ToTable("Address", "Users");
 
                 entity.HasIndex(e => e.City, "I_NC_Users_Address_City");
+
+                entity.HasIndex(e => e.IsDelete, "I_NC_Users_Address_IsDelete");
 
                 entity.HasIndex(e => e.State, "I_NC_Users_Address_State");
 
@@ -108,6 +113,56 @@ namespace DigiStore.Data.Context
                     .HasConstraintName("FK_Users_Address_UserID");
             });
 
+            modelBuilder.Entity<Brand>(entity =>
+            {
+                entity.ToTable("Brand", "Brands");
+
+                entity.Property(e => e.BrandName)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Logo).HasMaxLength(200);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+            });
+
+            modelBuilder.Entity<Color>(entity =>
+            {
+                entity.ToTable("Color", "Production");
+
+                entity.HasIndex(e => e.ColorName, "I_NC_Production_Color_ColorName");
+
+                entity.HasIndex(e => e.Price, "I_NC_Production_Color_Price");
+
+                entity.HasIndex(e => e.Price, "I_NC_Production_Guarantee_GuaranteeName");
+
+                entity.HasIndex(e => e.Price, "I_NC_Production_Guarantee_Price");
+
+                entity.Property(e => e.ColorName)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Colors)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Production_Color_ProductId");
+            });
+
             modelBuilder.Entity<ContactU>(entity =>
             {
                 entity.HasKey(e => e.ContactUsid)
@@ -144,6 +199,29 @@ namespace DigiStore.Data.Context
                 entity.Property(e => e.UserIp)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Guarantee>(entity =>
+            {
+                entity.ToTable("Guarantee", "Production");
+
+                entity.Property(e => e.GuaranteeName)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Guarantees)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Production_Guarantee_ProductId");
             });
 
             modelBuilder.Entity<Permission>(entity =>
@@ -194,6 +272,8 @@ namespace DigiStore.Data.Context
                     .IsRequired()
                     .HasMaxLength(300);
 
+                entity.Property(e => e.Price).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Rowguid)
                     .HasColumnName("rowguid")
                     .HasDefaultValueSql("(newsequentialid())");
@@ -201,6 +281,11 @@ namespace DigiStore.Data.Context
                 entity.Property(e => e.ShortDescription)
                     .IsRequired()
                     .HasMaxLength(500);
+
+                entity.HasOne(d => d.Brand)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.BrandId)
+                    .HasConstraintName("FK_Production_Product_BrandId");
 
                 entity.HasOne(d => d.Seller)
                     .WithMany(p => p.Products)
@@ -493,7 +578,10 @@ namespace DigiStore.Data.Context
                 entity.HasIndex(e => e.UserName, "UQ_Users_User_UserName")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Mobile, "UQ__User__6FAE0782FD948D88")
+                entity.HasIndex(e => e.Mobile, "UQ__User__6FAE0782F028AE0B")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.NationalId, "UQ__User__E9AA321A113C30A9")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
@@ -521,6 +609,12 @@ namespace DigiStore.Data.Context
                 entity.Property(e => e.ModifiedDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.NationalId)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("NationalID")
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.PassWord)
                     .IsRequired()

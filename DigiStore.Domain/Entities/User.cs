@@ -26,6 +26,7 @@ namespace DigiStore.Domain.Entities
         public string ActiveCode { get; set; }
         public string UserAvatar { get; set; }
         public string Mobile { get; set; }
+        public string NationalId { get; set; }
         public bool IsActive { get; set; }
         public bool IsBlock { get; set; }
         public bool IsDelete { get; set; }

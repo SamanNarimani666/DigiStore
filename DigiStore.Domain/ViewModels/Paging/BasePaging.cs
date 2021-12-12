@@ -1,4 +1,6 @@
-﻿namespace DigiStore.Domain.ViewModels.Paging
+﻿using System;
+
+namespace DigiStore.Domain.ViewModels.Paging
 {
     public class BasePaging
     {
@@ -25,6 +27,7 @@
 
         public int HowManyShowPageAfterAndBefore { get; set; }
 
+     
         public BasePaging GetCurrentPaging()
         {
             return this;

@@ -15,9 +15,9 @@ namespace DigiStore.Domain.Entities
         public string PostalCode { get; set; }
         public string Unit { get; set; }
         public string Address1 { get; set; }
+        public bool IsDelete { get; set; }
         public Guid Rowguid { get; set; }
         public DateTime ModifiedDate { get; set; }
-        public bool IsDelete { get; set; }
 
         public virtual User User { get; set; }
     }

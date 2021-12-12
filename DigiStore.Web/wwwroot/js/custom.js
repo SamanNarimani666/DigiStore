@@ -65,10 +65,10 @@ $(document).ready(function () {
 
 
 function FillPageId(pageId) {
+    console.log(pageId);
     $("#PageId").val(pageId);
     $("#filter-form").submit();
 }
-
 
 
 $('[ajax-url-button]').on('click', function (e) {

@@ -1,9 +1,62 @@
-﻿
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.Enums.Product
+@model DigiStore.Domain.ViewModels.Product.FilterProductViewModel
 @{
     ViewData["Title"] = "لیست محصولات";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    Layout = "_Layout";
 }
 
 
 @await Component.InvokeAsync("SellerSidebar")
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-left">
+    <div class="headline-profile page-profile-order">
+        <span>لیست محصولات ها</span>
+    </div>
+    <div class="profile-stats page-profile-order">
+        <div class="table-orders">
+            @if (Model.Products != null && Model.Products.Any())
+            {
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+
+                            <th>تضویر</th>
+                            <th>نام محصول</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr>
+
+                                <td><img src="@(!string.IsNullOrEmpty(item.ImageName)?PathExtension.UploadLogoThumb+item.ImageName:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                <td>@item.Name</td>
+                                @if (item.ProductAcceptanceState != null)
+                                {
+
+                                    ProductAcceptanceState acceptanceState =(ProductAcceptanceState)item.ProductAcceptanceState.Value;
+                                    <td>@acceptanceState.GetDisplayName()</td>
+                                }
+
+                            </tr>
+
+                        }
+                    </tbody>
+
+                </table>
+            }
+            else
+            {
+                <partial name="_NotFoundItem" />
+            }
+        </div>
+    </div>
+</div>
+
+
+
 

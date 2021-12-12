@@ -98,6 +98,15 @@ namespace DigiStore.Data.Repositories.Seller
         }
         #endregion
 
+        #region GetLastActiveSellerByUserId
+        public async Task<Domain.Entities.Seller> GetLastActiveSellerByUserId(int userId)
+        {
+            return await _context.Sellers.OrderByDescending(s => s.CreatedDate)
+                .FirstOrDefaultAsync(s =>
+                    s.UserId == userId && s.StoreaceptanceState == (byte) StoreAcceptanceState.Accepted);
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {

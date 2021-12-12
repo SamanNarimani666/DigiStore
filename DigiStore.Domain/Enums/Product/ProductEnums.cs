@@ -1,10 +1,14 @@
-﻿namespace DigiStore.Domain.Enums.Product
-{
+﻿using System.ComponentModel.DataAnnotations;
 
-    public enum ProductAcceptanceState:byte
+namespace DigiStore.Domain.Enums.Product
+{
+    public enum ProductAcceptanceState
     {
+        [Display(Name = "در حال بررسی")]
         UnderProgress,
+        [Display(Name = "تایید شده")]
         Accepted,
+        [Display(Name = "رد شده")]
         Rejected
     }
 }

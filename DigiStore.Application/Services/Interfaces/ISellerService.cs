@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DigiStore.Domain.Entities;
 using DigiStore.Domain.ViewModels.Seller;
 
 namespace DigiStore.Application.Services.Interfaces
@@ -12,5 +13,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<EditRequestSellerResult> EditSellerRequest(EditRequestSellerViewModel editRequestSeller,int userId);
         Task<bool> AcceptSellerRequest(int sellerId);
         Task<bool> RejectItem(RejectItemViewModel rejectItem);
+        Task<Seller> GetLastActiveSellerByUserId(int userId);
     }
 }

@@ -134,6 +134,13 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region GetLastActiveSellerByUserId
+        public async Task<Seller> GetLastActiveSellerByUserId(int userId)
+        {
+            return await _sellerRepository.GetLastActiveSellerByUserId(userId);
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {

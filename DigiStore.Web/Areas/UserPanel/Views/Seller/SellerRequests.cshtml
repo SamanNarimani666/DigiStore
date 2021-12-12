@@ -5,21 +5,43 @@
     ViewData["Title"] = "در خواست های پنل فروشندگی";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section Scripts
+{
+    <script>
+        function FillPageId(pageId) {
+         
+            $("#PageId").val(pageId);
+            $("#filter-form").submit();
+        }
+    </script>
+}
 
 @await Component.InvokeAsync("UserSidebar")
 <div class="col-lg-9 col-md-8 col-xs-12 pull-left">
     <div class="headline-profile page-profile-order">
-        <span>لیست تیکت ها</span>
+        <span>لیست درخواست های پنل فروشندگی</span>
     </div>
     <div class="profile-stats page-profile-order">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form style="padding: 20px;" asp-controller="Seller" asp-action="SellerRequests" asp-area="UserPanel" method="get">
+                    <input type="hidden" asp-for="PageId"/>
+                    <div class="form-group">
+                        <label>شماره تماس</label>
+                        <input type="text" asp-for="Phone" class="form-control"/>
+                        <label>ایمیل</label>
+                        <input type="text" asp-for="Email" class="form-control"/>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="table-orders">
             @if (Model.Sellers != null && Model.Sellers.Any())
             {
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
-                    
+
                         <th>آيکون</th>
                         <th>نام فروشگاه</th>
                         <th>ایمیل</th>
@@ -34,26 +56,28 @@
                     {
                         <tr>
 
-                            <td><img src="@(!string.IsNullOrEmpty(item.Logo)?PathExtension.UploadLogoThumb+item.Logo:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری"/></td>
+                            <td><img src="@(!string.IsNullOrEmpty(item.Logo) ? PathExtension.UploadLogoThumb + item.Logo : PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری"/></td>
                             <td>@item.StoreName</td>
                             <td>@item.Email</td>
                             <td>@item.Phone</td>
                             @{
-                                StoreAcceptanceState storeAcceptanceState = (StoreAcceptanceState)item.StoreaceptanceState;
+                                StoreAcceptanceState storeAcceptanceState = (StoreAcceptanceState) item.StoreaceptanceState;
                                 <td>@storeAcceptanceState.GetDisplayName()</td>
                             }
-                            <td><a  asp-controller="Seller" asp-action="EditSellerRequest" asp-area="UserPanel" asp-route-id="@item.SellerId">ویرایش </a></td>
+                            <td><a asp-controller="Seller" asp-action="EditSellerRequest" asp-area="UserPanel" asp-route-id="@item.SellerId">ویرایش </a></td>
 
                         </tr>
-                   
+
                     }
                     </tbody>
 
                 </table>
+                <partial name="_PagingPartial" model="@Model.GetCurrentPaging()"/>
+             
             }
             else
             {
-                <partial name="_NotFoundItem" />
+                <partial name="_NotFoundItem"/>
             }
         </div>
     </div>

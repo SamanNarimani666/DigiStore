@@ -4,11 +4,15 @@ using DigiStore.Application.Services.Implementations;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Data.Context;
 using DigiStore.Data.Repositories.Address;
+using DigiStore.Data.Repositories.Brand;
+using DigiStore.Data.Repositories.Category;
 using DigiStore.Data.Repositories.Product;
 using DigiStore.Data.Repositories.Seller;
 using DigiStore.Data.Repositories.Ticket;
 using DigiStore.Data.Repositories.User;
 using DigiStore.Domain.IRepositories.Address;
+using DigiStore.Domain.IRepositories.Brand;
+using DigiStore.Domain.IRepositories.Category;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.Seller;
 using DigiStore.Domain.IRepositories.Ticket;
@@ -31,6 +35,8 @@ namespace DigiStore.IOC
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<ISellerRepository, SellerRepository>();
             services.AddScoped<IProductRepository,ProductRepository>();
+            services.AddScoped<IProductCategoryRepository,ProductCategoryRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
 
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
             services.AddSingleton<ISender, EmailSender>();
@@ -40,6 +46,7 @@ namespace DigiStore.IOC
             services.AddScoped<IAddressService,AddressService>();
             services.AddScoped<ISellerService, SellerService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IBranadService, BranadService>();
 
         }
     }

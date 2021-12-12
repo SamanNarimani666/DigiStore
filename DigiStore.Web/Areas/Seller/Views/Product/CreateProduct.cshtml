@@ -1,0 +1,204 @@
+﻿@using DigiStore.Domain.Entities
+@model DigiStore.Domain.ViewModels.Product.CreateProductViewModel
+@{
+    ViewData["Title"] = "ایجاد محصول جدید";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var categories = ViewBag.MainCategory as List<ProductCategory>;
+}
+@section Styles
+{
+    <style>
+        /* The container */
+        .container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+            /* Hide the browser's default checkbox */
+            .container input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+            }
+
+        /* Create a custom checkbox */
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 60%;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+        }
+
+        /* On mouse-over, add a grey background color */
+        .container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        /* When the checkbox is checked, add a blue background */
+        .container input:checked ~ .checkmark {
+            background-color: #2196F3;
+        }
+
+        /* Create the checkmark/indicator (hidden when not checked) */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show the checkmark when checked */
+        .container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Style the checkmark/indicator */
+        .container .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    </style>
+}
+
+@await Component.InvokeAsync("SellerSidebar")
+
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="profile-navbar">
+            <div class="profile-navbar-back-alignment">
+                <a asp-action="Index" asp-controller="Home" asp-area="Seller" class="profile-navbar-btn-back">بازگشت</a>
+                <h4 class="edit-personal">
+                    افزودن محصول جدید
+
+                </h4>
+            </div>
+        </div>
+        <div class="profile-stats">
+            <form method="post" asp-action="CreateProduct" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
+                <div class="form-legal-row">
+                    <div class="col-lg-6 col-xs-12 mx-auto">
+                        <div class="form-legal-col">
+                            <fieldset class="form-legal-fieldset">
+                                <h4 class="form-legal-headline">افزودن محصول جدید</h4>
+                                <div class="form-legal-item">
+                                    <label>نام محصول</label>
+                                    <input type="text" asp-for="Title" class="input-name-first" placeholder="نام محصول را وارد نمایید">
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-legal-item">
+                                    <label>قیمت</label>
+                                    <input type="number" asp-for="Price" placeholder="قیمت محصول را وارد نمایید">
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-legal-item">
+                                    <label>توضیحات کوتاه</label>
+                                    <textarea asp-for="ShortDescription" class="form-control" cols="75" rows="10" placeholder="توضیحات کوتاه محصول"></textarea>
+                                    <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-legal-item">
+                                    <label>توضیحات کوتاه</label>
+                                    <textarea asp-for="Description" ckeditor="1" placeholder="توضیحات کامل محصول"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                                <div class="form-legal-item has-diviter-item">
+                                    <div class="form-auth-row">
+                                        <label class="ui-checkbox has-diviter">
+                                            <input type="checkbox" asp-for="IsActive">
+                                            <span class="ui-checkbox-check"></span>
+                                        </label>
+                                        <label for="remember1" class="remember-me has-diviter-remember-me">
+                                            فعال / غیر فعال
+                                            وضعیت
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="ProductImage" id="imgInp" accept=".png,.jpeg" />
+                                            <label class="custom-file-label text-left" for="customFile">بار گذاری  تصویر محصول</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <img src="/Images/Product/Default/ProductDemo.png" id="ProductImage" style="height: 300px; width: 300px" class="img-thumbnail img-fluid rounded float-left" alt="...">
+                                    </div>
+                                </div>
+                                <label><h4>  دسته </h4></label>
+                                @if (categories != null && categories.Any())
+                                {
+                                    @foreach (var category in categories.Where(s => s.ParentId == null))
+                                    {
+                                        <ul>
+                                            <li>
+                                                <label class="container">
+                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@category.ProductCategoryId" /> @category.Title
+                                                    <span class="checkmark"></span>
+
+                                                    @if (categories.Any(s => s.ParentId == category.ProductCategoryId))
+                                                    {
+                                                        <br />
+                                                        @foreach (var subCategory in categories.Where(s => s.ParentId == category.ProductCategoryId))
+                                                        {
+                                                            <div>
+                                                                <label class="container" style="right: 10%">
+                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subCategory.ProductCategoryId" /> @subCategory.Title
+                                                                    <span class="checkmark"></span>
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </label>
+                                            </li>
+                                        </ul>
+                                        <hr />
+                                    }
+                                }
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-legal-row-submit">
+                    <div class="parent-btn">
+                        <button type="submit" class="dk-btn dk-btn-info">
+                            ایجاد محصول جدید
+                            <i class="fa fa-check sign-in"></i>
+                        </button>
+                    </div>
+                    <a asp-action="Dashboard" asp-controller="Home" asp-area="UserPanel" class="btn-default">انصراف</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="/js/jquery.min.js"></script>
+    <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                ProductImage.src = URL.createObjectURL(file)
+            }
+        }
+    </script>
+}
+

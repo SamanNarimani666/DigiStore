@@ -11,6 +11,7 @@ namespace DigiStore.Domain.IRepositories.Seller
         Task<FilterSellerViewModel> FilterSeller(FilterSellerViewModel filterSeller);
         Task<Entities.Seller> GetSellerById(int sellerId);
         void EditSeller(Entities.Seller seller);
+        Task<Entities.Seller> GetLastActiveSellerByUserId(int userId);
         Task Save();
     }
 }
