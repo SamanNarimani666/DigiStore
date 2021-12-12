@@ -7,70 +7,7 @@
 }
 @section Styles
 {
-    <style>
-        /* The container */
-        .container {
-            display: block;
-            position: relative;
-            padding-left: 35px;
-            margin-bottom: 12px;
-            cursor: pointer;
-        }
-
-            /* Hide the browser's default checkbox */
-            .container input {
-                position: absolute;
-                opacity: 0;
-                cursor: pointer;
-                height: 0;
-                width: 0;
-            }
-
-        /* Create a custom checkbox */
-        .checkmark {
-            position: absolute;
-            top: 0;
-            left: 60%;
-            height: 20px;
-            width: 20px;
-            background-color: #eee;
-        }
-
-        /* On mouse-over, add a grey background color */
-        .container:hover input ~ .checkmark {
-            background-color: #ccc;
-        }
-
-        /* When the checkbox is checked, add a blue background */
-        .container input:checked ~ .checkmark {
-            background-color: #2196F3;
-        }
-
-        /* Create the checkmark/indicator (hidden when not checked) */
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-
-        /* Show the checkmark when checked */
-        .container input:checked ~ .checkmark:after {
-            display: block;
-        }
-
-        /* Style the checkmark/indicator */
-        .container .checkmark:after {
-            left: 9px;
-            top: 5px;
-            width: 5px;
-            height: 10px;
-            border: solid white;
-            border-width: 0 3px 3px 0;
-            -webkit-transform: rotate(45deg);
-            -ms-transform: rotate(45deg);
-            transform: rotate(45deg);
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/css/Custom.css" />
 }
 
 @await Component.InvokeAsync("SellerSidebar")
@@ -88,7 +25,7 @@
             </div>
         </div>
         <div class="profile-stats">
-            <form method="post" asp-action="CreateProduct" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
+            <form method="post" asp-action="CreateProduct" asp-controller="Product" asp-area="Seller" id="create_product_form" enctype="multipart/form-data">
                 <div class="form-legal-row">
                     <div class="col-lg-6 col-xs-12 mx-auto">
                         <div class="form-legal-col">
@@ -148,28 +85,80 @@
                                         <ul>
                                             <li>
                                                 <label class="container">
-                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@category.ProductCategoryId" /> @category.Title
+                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@category.ProductCategoryId" Main_Category_Chekbox="@category.ProductCategoryId" /> @category.Title
                                                     <span class="checkmark"></span>
 
                                                     @if (categories.Any(s => s.ParentId == category.ProductCategoryId))
                                                     {
                                                         <br />
-                                                        @foreach (var subCategory in categories.Where(s => s.ParentId == category.ProductCategoryId))
-                                                        {
-                                                            <div>
+                                                        <div id="sub_categories_@category.ProductCategoryId" style="display: none;">
+
+                                                            @foreach (var subCategory in categories.Where(s => s.ParentId == category.ProductCategoryId))
+                                                            {
+
                                                                 <label class="container" style="right: 10%">
-                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subCategory.ProductCategoryId" /> @subCategory.Title
+                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subCategory.ProductCategoryId" Main_Category_Chekbox="@subCategory.ProductCategoryId" parent-category-id="@subCategory.ParentId" /> @subCategory.Title
                                                                     <span class="checkmark"></span>
+                                                                    @if (categories.Any(s => s.ParentId == subCategory.ProductCategoryId))
+                                                                    {
+                                                                        <br />
+                                                                        <div id="sub_categories_@subCategory.ProductCategoryId" style="display: none;">
+                                                                            @foreach (var subSubCategory in categories.Where(s => s.ParentId == subCategory.ProductCategoryId))
+                                                                            {
+                                                                                <label class="container" style="right: 10%">
+                                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subSubCategory.ProductCategoryId" parent-category-id="@subCategory.ParentId" /> @subSubCategory.Title
+                                                                                    <span class="checkmark"></span>
+                                                                                </label>
+                                                                            }
+                                                                        </div>
+                                                                    }
                                                                 </label>
-                                                            </div>
-                                                        }
+
+                                                            }
+                                                        </div>
                                                     }
+
                                                 </label>
                                             </li>
                                         </ul>
                                         <hr />
                                     }
                                 }
+
+                                <label><h4>  رنگ </h4></label>
+                                <div class="form-legal-item">
+                                    <label>نام رنگ</label>
+                                    <input type="text" placeholder="نام  رنگ محصول را وارد نمایید" id="Product_color_Name_input" />
+                                </div>
+                                <div class="form-legal-item">
+                                    <label>قیمت مضاف رنگ محصول</label>
+                                    <input type="number" placeholder="قیمت مضاف رنگ محصول را وارد نمایید" id="Product_color_Price_input" />
+                                </div>
+                                <div class="parent-btn">
+                                    <button id="addColorButton" type="button" class="btn btn-success">
+                                        افزودن رنگ
+                                    </button>
+                                </div>
+                                <div class="profile-stats page-profile-order">
+                                    <div class="table-orders">
+
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                                <tr>
+
+                                                    <th style="text-align: center">نام رنک</th>
+                                                    <th style="text-align: center">قیمت</th>
+                                                    <th style="text-align: center">عملیات</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="list_of_product_colors">
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <input type="hidden" value="" />
                             </fieldset>
                         </div>
                     </div>
@@ -190,9 +179,51 @@
 </div>
 @section scripts
 {
-    <partial name="_ValidationScriptsPartial" />
-    <script src="/js/jquery.min.js"></script>
+    <partial name="_ValidationScriptsPartial"/>
     <script>
+        $("[Main_Category_Chekbox]").on('change',
+            function(e) {
+                var isChecked = ($(this).is(':checked'));
+                var selectedCategoryId = $(this).attr('Main_Category_Chekbox');
+                if (isChecked) {
+                    $('#sub_categories_' + selectedCategoryId).slideDown(300);
+                } else {
+                    $('#sub_categories_' + selectedCategoryId).hide(300);
+                    $('[parent-category-id="' + selectedCategoryId + '"]').prop('checked', false);
+                }
+            });
+
+        $('#addColorButton').on('click',
+            (e) => {
+                e.preventDefault();
+                var colorName = $('#Product_color_Name_input').val();
+                var colorPrice = $('#Product_color_Price_input').val();
+                if (colorName !== '' && colorPrice !== '') {
+                    var currentColorCount = $("#list_of_product_colors tr");
+                    var index = currentColorCount.length;
+                    var colorNameNode =
+                        `<input type="hidden" value="${colorName}" name="ProductColors[${index
+                        }].ColorName"  color-name-hidden-input="${index}" />`;
+                    var colorPriceNode =
+                        `<input type="hidden" value="${colorPrice}" name="ProductColors[${index
+                        }].Price" color-name-hidden-input="${index}" />`;
+                    console.log(colorName);
+                    console.log(colorNameNode);
+                    $('#create_product_form').append(colorNameNode);
+                    $('#create_product_form').append(colorPriceNode);
+
+                    var colorNameTableNode = `<tr> <td>${colorName}</td> <td>${colorPrice}</td>  </tr>`;
+                    $("#list_of_product_colors").append(colorNameTableNode);
+
+                    $('#Product_color_Name_input').val('');
+                    $('#Product_color_Price_input').val('');
+                } else {
+                    ShowMessage('اخطار', 'لطفا نام رنگ و قیمت آن را به درستی وارد نمایید', 'warning');
+                }
+
+            });
+
+
         imgInp.onchange = evt => {
             const [file] = imgInp.files
             if (file) {

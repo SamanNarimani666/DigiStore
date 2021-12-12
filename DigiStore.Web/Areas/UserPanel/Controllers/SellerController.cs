@@ -27,8 +27,7 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         public async Task<IActionResult> SellerRequests(FilterSellerViewModel filterSeller)
         {
             filterSeller.UserId = User.GetUserId();
-            filterSeller.TakeEntity = 1;
-            filterSeller.State = FilterSellerState.All;
+            filterSeller.TakeEntity = 5;
             return View(await _sellerService.FilterSeller(filterSeller));
         }
 

@@ -2,6 +2,7 @@
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Product;
 using DigiStore.Domain.ViewModels.Seller;
+using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         #endregion
 
         #region ProductList
-        [HttpGet("ProductsSeller")]
+        [HttpGet("Products-list")]
         public async Task<IActionResult> Index(FilterProductViewModel filterProduct)
         {
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
@@ -47,12 +48,14 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                //Todo Add Product
             }
             ViewBag.MainCategory = await _productService.GetAllProductCategoriesByParentId(null);
           
             return View(createProduct);
         }
         #endregion
+
+      
     }
 }

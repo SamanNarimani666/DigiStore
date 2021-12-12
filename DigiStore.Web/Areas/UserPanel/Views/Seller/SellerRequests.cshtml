@@ -1,21 +1,11 @@
 ﻿@using DigiStore.Application.Extensions
 @using DigiStore.Domain.Enums.Store
+@using DigiStore.Domain.ViewModels.Seller
 @model DigiStore.Domain.ViewModels.Seller.FilterSellerViewModel
 @{
     ViewData["Title"] = "در خواست های پنل فروشندگی";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section Scripts
-{
-    <script>
-        function FillPageId(pageId) {
-         
-            $("#PageId").val(pageId);
-            $("#filter-form").submit();
-        }
-    </script>
-}
-
 @await Component.InvokeAsync("UserSidebar")
 <div class="col-lg-9 col-md-8 col-xs-12 pull-left">
     <div class="headline-profile page-profile-order">
@@ -24,13 +14,42 @@
     <div class="profile-stats page-profile-order">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form style="padding: 20px;" asp-controller="Seller" asp-action="SellerRequests" asp-area="UserPanel" method="get">
+                <form style="padding: 20px;" asp-controller="Seller" asp-action="SellerRequests" id="filter-form" asp-area="UserPanel" method="get">
                     <input type="hidden" asp-for="PageId"/>
                     <div class="form-group">
                         <label>شماره تماس</label>
                         <input type="text" asp-for="Phone" class="form-control"/>
                         <label>ایمیل</label>
                         <input type="text" asp-for="Email" class="form-control"/>
+                        <label>آدرس</label>
+                        <input type="text" asp-for="Address" class="form-control"/>
+                        <label>موبایل</label>
+                        <input type="text" asp-for="Mobile" class="form-control"/>
+                        @foreach (var item in Html.GetEnumSelectList<FilterSellerState>())
+                            {
+
+                                <div class="form-check">
+                                    <label class="form-check-label" >
+                                        @if (Convert.ToByte(item.Value) == Convert.ToByte(Model.State))
+                                        {
+
+                                            <input   type="radio" value="@item.Value" name="@nameof(Model.State)" checked="checked" />
+
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" value="@item.Value" name="@nameof(Model.State)" />
+
+                                        }
+
+                                        <span class="text">@item.Text</span>
+                                    </label>
+                                </div>
+
+                            }
+                        <div class="form-control">
+                            <button type="submit" class="btn btn-block btn-xs btn-purple waves-effect waves-light">فیلتر</button>
+                        </div>
                     </div>
                 </form>
             </div>
