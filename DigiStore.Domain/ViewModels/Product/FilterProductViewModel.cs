@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using DigiStore.Domain.ViewModels.Paging;
 
 namespace DigiStore.Domain.ViewModels.Product
@@ -35,10 +36,17 @@ namespace DigiStore.Domain.ViewModels.Product
     }
     public enum FilterProductState : byte
     {
+        [Display(Name = "همه")]
+        All,
+        [Display(Name = "فعال")]
         Active,
+        [Display(Name = "غیر فعال")]
         NotActive,
+        [Display(Name = "در حال برسی")]
         UnderProgress,
+        [Display(Name = "تایید شده")]
         Accepted,
+        [Display(Name = "تایید نشده")]
         Rejected
     }
 }

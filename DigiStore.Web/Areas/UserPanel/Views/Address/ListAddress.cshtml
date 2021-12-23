@@ -23,11 +23,11 @@
                     {
                         foreach (var item in Model.Addresses)
                         {
-                            <div id="ajax-url-item-@item.AddressId" class="profile-address-item"  >
+                            <div id="ajax-url-item-@item.AddressId" class="profile-address-item">
                                 <div class="profile-address-item-top">
                                     <div class="profile-address-item-title">@item.Address1</div>
                                     <div class="ui-more">
-                                        <a ajax-url-button="@item.AddressId" asp-controller="Address" asp-action="DeleteAddress" asp-area="UserPanel" asp-route-id="@item.AddressId" class="btn-remove-address btn btn-danger">حذف</a>
+                                        <a ajax-url-button="@item.AddressId" asp-action="DeleteAddress" asp-controller="Address" asp-area="UserPanel" asp-route-id="@item.AddressId" class="btn-remove-address btn btn-danger">حذف</a>
                                     </div>
                                 </div>
 
@@ -36,7 +36,7 @@
                                         <li>
                                             <div class="profile-address-info-item location">
                                                 <i class="mdi mdi-map-outline"></i>
-                                                @(item.State+" "+item.City)
+                                                @(item.State.StateName+" "+item.City.CityName)
                                             </div>
                                         </li>
                                         <li>
@@ -59,18 +59,18 @@
 
                                             </div>
                                         </li>
-                                        <li class="location-link">
-                                            <a href="#" class="edit-address-link" onclick="document.getElementById('modal').style.display='block'">
+                                        <li>
+                                            <button class="btn " onclick="EditAddress(@item.AddressId)">
                                                 ویرایش
                                                 نشانی
-                                            </a>
+                                            </button>
                                         </li>
                                     </ul>
+                                    <hr />
                                 </div>
                             </div>
                         }
                     }
-                    <hr />
                     <div class="card bg-light text-dark">
                         <div class="card-body">
                             <i class="fa fa-map-marker" style="color: blue" aria-hidden="true"></i>
@@ -101,20 +101,32 @@
 
 @section Scripts
 {
+    <partial name="_ValidationScriptsPartial" />
     <script>
-        function AddAddress() {
-            $.ajax({
-                url: "/Address/AddAddress",
-                type: "Get"
-            }).done(function (result) {
-                $("#modal").modal('show');
-                $("#modalbody").html(result);
-            });
+    function AddAddress() {
+        $.ajax({
+            url: "/Address/AddAddress",
+            type: "Get"
+        }).done(function (result) {
+            $("#modal").modal('show');
+            $("#modalbody").html(result);
+        });
+    }
+    function EditAddress(id) {
+        $.ajax({
+            url: "/Address/EditAddress/"+id,
+            type: "Get"
+        }).done(function (result) {
+            $("#modal").modal('show');
+            $("#modalbody").html(result);
+        });
+    }
+    function closemodal() {
+        $("#modal").modal('hide');
         }
-        function closemodal() {
-            $("#modal").modal('hide');
-        }
+
+       
     </script>
 
-    
+
 }

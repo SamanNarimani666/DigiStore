@@ -7,6 +7,7 @@ namespace DigiStore.Domain.Entities
 {
     public partial class ProductSelectedCategory
     {
+        public int ProductSelectedCategoryId { get; set; }
         public int? ProductId { get; set; }
         public int? ProductCategoryId { get; set; }
         public DateTime ModifiedDate { get; set; }

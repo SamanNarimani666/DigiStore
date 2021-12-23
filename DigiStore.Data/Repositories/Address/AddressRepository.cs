@@ -25,10 +25,13 @@ namespace DigiStore.Data.Repositories.Address
         }
         #endregion
 
-        #region GetTicketById
-        public async Task<Domain.Entities.Address> GetTicketById(int addressId)
+        #region GetAddressById
+        public async Task<Domain.Entities.Address> GetAddressById(int addressId)
         {
-            return await _context.Addresses.FindAsync(addressId);
+            return await _context.Addresses
+                .Include(p=>p.State)
+                .Include(p=>p.City)
+                .SingleOrDefaultAsync(p=>p.AddressId==addressId);
         }
         #endregion
 
@@ -44,6 +47,8 @@ namespace DigiStore.Data.Repositories.Address
         {
             var adddress = _context.Addresses
                 .Where(a=>a.IsDelete==false)
+                .Include(p => p.State)
+                .Include(p => p.City)
                 .OrderByDescending(a=>a.ModifiedDate)
                 .AsQueryable();
 

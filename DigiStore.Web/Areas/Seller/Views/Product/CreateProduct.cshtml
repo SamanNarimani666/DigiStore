@@ -4,6 +4,7 @@
     ViewData["Title"] = "ایجاد محصول جدید";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var categories = ViewBag.MainCategory as List<ProductCategory>;
+    var brands = ViewBag.Brand as List<Brand>;
 }
 @section Styles
 {
@@ -124,7 +125,14 @@
                                         <hr />
                                     }
                                 }
-
+                            <select asp-for="BradnId" class="form-control">
+                                <option selected>نام برند محصول را انتخاب نمایید</option>
+                                @foreach (var Brand in brands)
+                                {
+                                    <option value="@Brand.BrandId">@Brand.BrandName</option>
+                                }
+                            </select>
+                                <br/>
                                 <label><h4>  رنگ </h4></label>
                                 <div class="form-legal-item">
                                     <label>نام رنگ</label>
@@ -158,7 +166,8 @@
 
                                     </div>
                                 </div>
-                                <input type="hidden" value="" />
+                               
+                              
                             </fieldset>
                         </div>
                     </div>
@@ -179,10 +188,10 @@
 </div>
 @section scripts
 {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <script>
         $("[Main_Category_Chekbox]").on('change',
-            function(e) {
+            function (e) {
                 var isChecked = ($(this).is(':checked'));
                 var selectedCategoryId = $(this).attr('Main_Category_Chekbox');
                 if (isChecked) {
@@ -206,13 +215,15 @@
                         }].ColorName"  color-name-hidden-input="${index}" />`;
                     var colorPriceNode =
                         `<input type="hidden" value="${colorPrice}" name="ProductColors[${index
-                        }].Price" color-name-hidden-input="${index}" />`;
+                        }].Price" color-Price-hidden-input="${index}" />`;
                     console.log(colorName);
                     console.log(colorNameNode);
                     $('#create_product_form').append(colorNameNode);
                     $('#create_product_form').append(colorPriceNode);
 
-                    var colorNameTableNode = `<tr> <td>${colorName}</td> <td>${colorPrice}</td>  </tr>`;
+                    var colorNameTableNode =
+                        `<tr color-table-item="${index}"> <td>${colorName}</td> <td>${colorPrice
+                        }</td> <td><a class="btn btn-danger" onclick="RemoveProductColor(${index})">حذف</a></td> </tr>`;
                     $("#list_of_product_colors").append(colorNameTableNode);
 
                     $('#Product_color_Name_input').val('');
@@ -223,9 +234,16 @@
 
             });
 
+        function RemoveProductColor(index) {
+            $('[color-name-hidden-input="' + index + '"]').remove();
+            $('[color-Price-hidden-input="' + index + '"]').remove();
+            $('[color-table-item="' + index + '"]').remove();
+
+
+        }
 
         imgInp.onchange = evt => {
-            const [file] = imgInp.files
+            const [file] = imgInp.files;
             if (file) {
                 ProductImage.src = URL.createObjectURL(file)
             }

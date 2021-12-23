@@ -6,6 +6,8 @@ using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 namespace DigiStore.Web.Areas.Seller.Controllers
 {
     [AutoValidateAntiforgeryToken]
@@ -29,7 +31,7 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         {
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
             filterProduct.SellerId = seller.SellerId;
-            filterProduct.FilterProductState = FilterProductState.Active;
+            filterProduct.TakeEntity = 10;
             var result = await _productService.FilterProduct(filterProduct);
             return View(result);
         }
@@ -40,22 +42,35 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         public async Task<IActionResult> CreateProduct()
         {
             ViewBag.MainCategory = await _productService.GetAllProductCategoriesByParentId(null);
-           
+            ViewBag.Brand = await _branadService.GetAllBrands();
             return View();
         }
-        [HttpPost("create-product"),ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProduct(CreateProductViewModel createProduct,IFormFile ProductImage)
+        [HttpPost("create-product"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProduct(CreateProductViewModel createProduct, IFormFile ProductImage)
         {
             if (ModelState.IsValid)
             {
-                //Todo Add Product
+                var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+                var res = await _productService.CreateProduc(createProduct, seller.SellerId, ProductImage);
+                switch (res)
+                {
+                    case CreateProductResult.Error:
+                        TempData[ErrorMessage] = "خطا در ثبت محصول";
+                        break;
+                    case CreateProductResult.HasNoImage:
+                        TempData[WarningMessage] = "تصویر محصول جدید را وارد نمایید";
+                        break;
+                    case CreateProductResult.Success:
+                        TempData[SuccessMessage] = $"محصول {createProduct.Title}  با موفقیت ثبت شد";
+                        return RedirectToAction("Index");
+                }
             }
             ViewBag.MainCategory = await _productService.GetAllProductCategoriesByParentId(null);
-          
+            ViewBag.Brand = await _branadService.GetAllBrands();
             return View(createProduct);
         }
         #endregion
 
-      
+
     }
 }

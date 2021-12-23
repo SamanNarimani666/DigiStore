@@ -7,7 +7,7 @@ namespace DigiStore.Domain.IRepositories.Address
     public interface IAddressRepository : IAsyncDisposable
     {
         Task AddAddress(Entities.Address address);
-        Task<Entities.Address> GetTicketById(int addressId);
+        Task<Entities.Address> GetAddressById(int addressId);
         void EditAddress(Entities.Address address);
         Task<FilterAddressVieweModel> FilterAddress(FilterAddressVieweModel filterAddress);
         Task Save();

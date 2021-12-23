@@ -1,11 +1,39 @@
 ﻿@using DigiStore.Application.Extensions
 @using DigiStore.Domain.Enums.Product
+@using DigiStore.Domain.ViewModels.Product
 @model DigiStore.Domain.ViewModels.Product.FilterProductViewModel
 @{
     ViewData["Title"] = "لیست محصولات";
     Layout = "_Layout";
 }
+@section Styles
+{
+    <style>
+        fieldset {
+            overflow: hidden
+        }
+    
+        .some-class {
+            float: left;
+            clear: none;
+        }
+    
+        label {
+            float: right;
+            clear: none;
+            display: block;
+            padding: 0px 1em 0px 8px;
+        }
 
+        input[type=radio],
+        input.radio {
+            float: left;
+            clear: none;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
+}
 
 @await Component.InvokeAsync("SellerSidebar")
 
@@ -13,6 +41,48 @@
     <div class="headline-profile page-profile-order">
         <span>لیست محصولات ها</span>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form style="padding: 20px;" asp-controller="Product" asp-action="Index" id="filter-form" asp-area="Seller" method="get">
+                <input type="hidden" asp-for="PageId" />
+                <div class="form-group">
+                    <label>نام محصول</label>
+                    <input type="text" asp-for="Name" class="form-control" placeholder="نام محصول را وارد نمایید" />
+                    <br/>
+                        @foreach (var item in Html.GetEnumSelectList<FilterProductState>())
+                    {
+
+                        <div class="form-check" >
+                            <label class="form-check-label">
+                                @if (Convert.ToByte(item.Value) == Convert.ToByte(Model.FilterProductState))
+                                {
+                                    <br/>
+
+                                    <input type="radio" class="radio" value="@item.Value" name="@nameof(Model.FilterProductState)" checked="checked"/>
+
+                                }
+                                else
+                                {
+                                    <br/>
+
+                                    <input type="radio"class="radio" value="@item.Value" name="@nameof(Model.FilterProductState)"/>
+
+                                }
+
+                                <span class="text">@item.Text</span>
+                            </label>
+                        </div>
+
+                    }
+
+                    <div class="form-control">
+                        <button type="submit" class="btn btn-block btn-xs btn-purple waves-effect waves-light">فیلتر</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="profile-stats page-profile-order">
         <div class="table-orders">
             @if (Model.Products != null && Model.Products.Any())
@@ -21,7 +91,7 @@
                     <thead class="thead-dark">
                         <tr>
 
-                            <th>تضویر</th>
+                            <th>تصویر</th>
                             <th>نام محصول</th>
                             <th>وضعیت</th>
                             <th>عملیات</th>
@@ -33,12 +103,12 @@
                         {
                             <tr>
 
-                                <td><img src="@(!string.IsNullOrEmpty(item.ImageName)?PathExtension.UploadLogoThumb+item.ImageName:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                <td><img src="@(!string.IsNullOrEmpty(item.ImageName)?PathExtension.ProductImageThumb+item.ImageName:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
                                 <td>@item.Name</td>
                                 @if (item.ProductAcceptanceState != null)
                                 {
 
-                                    ProductAcceptanceState acceptanceState =(ProductAcceptanceState)item.ProductAcceptanceState.Value;
+                                    ProductAcceptanceState acceptanceState = (ProductAcceptanceState)item.ProductAcceptanceState.Value;
                                     <td>@acceptanceState.GetDisplayName()</td>
                                 }
 
@@ -48,6 +118,7 @@
                     </tbody>
 
                 </table>
+                <partial name="_PagingPartial" model="@Model.GetCurrentPaging()" />
             }
             else
             {

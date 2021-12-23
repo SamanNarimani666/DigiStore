@@ -6,10 +6,10 @@ namespace DigiStore.Domain.ViewModels.Address
     {
         [Display(Name = "استان")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string State { get; set; }
+        public int StateId { get; set; }
         [Display(Name = "شهر")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string City { get; set; }
+        public int CityId { get; set; }
         [Display(Name = "پلاک")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(5, ErrorMessage = "{0} نمی تواند کمتر از {1} کاراکتر باشد .")]

@@ -28,13 +28,17 @@ namespace DigiStore.Domain.ViewModels.Product
         [Display(Name = "برند")]
         public int? BradnId { get; set; }
 
+        public string FileName { get; set; }
+
         public List<CreateProductColorViewModel> ProductColors { get; set; }
         public List<int> SelectedCategories { get; set; }
+
     }
 
     public enum CreateProductResult
     {
         Success,
-        Error
+        Error,
+        HasNoImage
     }
 }

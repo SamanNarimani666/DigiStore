@@ -9,8 +9,8 @@ namespace DigiStore.Domain.Entities
     {
         public int AddressId { get; set; }
         public int UserId { get; set; }
-        public string State { get; set; }
-        public string City { get; set; }
+        public int StateId { get; set; }
+        public int CityId { get; set; }
         public string Zipcode { get; set; }
         public string PostalCode { get; set; }
         public string Unit { get; set; }
@@ -19,6 +19,8 @@ namespace DigiStore.Domain.Entities
         public Guid Rowguid { get; set; }
         public DateTime ModifiedDate { get; set; }
 
+        public virtual City City { get; set; }
+        public virtual State State { get; set; }
         public virtual User User { get; set; }
     }
 }

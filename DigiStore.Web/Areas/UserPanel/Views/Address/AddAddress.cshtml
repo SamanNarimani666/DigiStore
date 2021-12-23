@@ -1,24 +1,36 @@
-﻿@model DigiStore.Domain.ViewModels.Address.AddAddressViewModel
-
+﻿@using DigiStore.Domain.Entities
+@model DigiStore.Domain.ViewModels.Address.AddAddressViewModel
+@{
+    var state = ViewBag.State as List<State>;
+}
 
 
 <form method="post" asp-action="AddAddress" asp-controller="Address" asp-area="UserPanel" class="form-checkout">
     <div class="form-checkout-headline">افزودن آدرس جدید</div>
     <div class="form-checkout-row">
-        <div class="form-checkout ir-select">
+        <div class="form-checkout ">
             <label for="province">
                 استان <span class="required-star"
                             style="color:red;"></span>
             </label>
 
-            <select class="ir-province" asp-for="State" ></select>
-            <span asp-validation-for="State" class="text-danger"></span>
-            <label for="province">
+            <select id="StateId" asp-for="StateId">
+                <option>لطفا استان خود را وارد نمایید</option>
+                @if (state != null && state.Any())
+                {
+                    @foreach (var states in state)
+                    {
+                        <option value="@states.StateId">@states.StateName</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="StateId" class="text-danger"></span>
+            <label>
                 شهر <span class="required-star"
                           style="color:red;"></span>
             </label>
-            <select class="ir-city" asp-for="City" ></select>
-            <span asp-validation-for="City" class="text-danger"></span>
+            <select asp-for="CityId"></select>
+            <span asp-validation-for="CityId" class="text-danger"></span>
 
         </div>
         <div class="form-checkout-valid-row">
@@ -68,3 +80,21 @@
 
 <partial name="_ValidationScriptsPartial" />
 <script src="/js/ir-city-select.min.js"></script>
+<script>
+
+    $("#StateId").change(function () {
+       
+
+        $("#CityId").empty();
+        $.getJSON("/Address/GetCity/" + $("#StateId :selected").val(),
+            function(data) {
+                console.log(data);
+                $.each(data,
+                    function() {
+                        $("#CityId").append('<option value=' + this.cityId + '>' + this.cityName + '</option>');
+
+                    });
+
+            });
+    });
+</script>

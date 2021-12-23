@@ -10,6 +10,7 @@ namespace DigiStore.Domain.Entities
         public ProductCategory()
         {
             InverseParent = new HashSet<ProductCategory>();
+            ProductSelectedCategories = new HashSet<ProductSelectedCategory>();
         }
 
         public int ProductCategoryId { get; set; }
@@ -23,5 +24,6 @@ namespace DigiStore.Domain.Entities
 
         public virtual ProductCategory Parent { get; set; }
         public virtual ICollection<ProductCategory> InverseParent { get; set; }
+        public virtual ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
     }
 }

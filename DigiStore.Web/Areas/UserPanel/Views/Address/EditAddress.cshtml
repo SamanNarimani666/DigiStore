@@ -1,0 +1,116 @@
+﻿@using DigiStore.Domain.Entities
+@model DigiStore.Domain.ViewModels.Address.EditAddressViewModel
+@{
+    var state = ViewBag.State as List<State>;
+    var SelectedState = ViewBag.SelectedState as State;
+    
+
+}
+<form method="post" asp-action="EditAddress" asp-controller="Address" asp-area="UserPanel" class="form-checkout">
+    <input type="hidden" asp-for="AddressId" />
+    <div class="form-checkout-headline">ویرایش آدرس جدید</div>
+    <div class="form-checkout-row">
+        <div class="form-checkout ">
+            <label>
+                استان 
+            </label>
+            <select id="StateId" asp-for="StateId">
+            <option value="@SelectedState.StateId">@SelectedState.StateName</option>
+                @if (state != null && state.Any())
+                {
+                    @foreach (var states in state)
+                    {
+                        <option value="@states.StateId">@states.StateName</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="StateId" class="text-danger"></span>
+            <label>
+                شهر 
+            </label>
+            <select id="CityId" asp-for="CityId">
+                
+
+            </select>
+            <span asp-validation-for="CityId" class="text-danger"></span>
+
+        </div>
+        <div class="form-checkout-valid-row">
+            <label for="city">
+                کد پستی
+                <span class="required-star" style="color: red;">*</span>
+            </label>
+            <input type="text" asp-for="PostalCode" class="input-name-checkout" placeholder="ده رقمی" style="text-align: right;">
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+        <div class="form-checkout-valid-row">
+            <label for="city">
+                پلاک
+                <span class="required-star" style="color: red;">*</span>
+            </label>
+            <input type="text" asp-for="Zipcode" class="input-name-checkout" style="text-align: right;">
+            <span asp-validation-for="Zipcode" class="text-danger"></span>
+        </div>
+        <div class="form-checkout-valid-row">
+            <label for="city">
+                واحد
+            </label>
+            <input type="text" asp-for="Unit" class="input-name-checkout" style="text-align: right;">
+            <span asp-validation-for="Unit" class="text-danger"></span>
+        </div>
+        <label for="address">
+            آدرس
+            <span class="required-star" style="color: red;">*</span>
+        </label>
+        <input type="text" id="address" asp-for="Address" class="input-name-checkout"
+               placeholder="آدرس خود را وارد نمایید" style="height: 80px;">
+        <span asp-validation-for="Address" class="text-danger"></span>
+
+        <div class="form-checkout-valid-row">
+            <div class="parent-btn">
+                <button type="submit" class="dk-btn dk-btn-info">
+                    ویرایش آدرس
+                    <i class="fa fa-check sign-in"></i>
+                </button>
+            </div>
+        </div>
+
+        <a href="#" class="cancel-edit-address"
+           onclick="closemodal()">انصراف و بازگشت</a>
+    </div>
+</form>
+
+<partial name="_ValidationScriptsPartial" />
+<script src="/js/ir-city-select.min.js"></script>
+
+<script>
+
+    $("#StateId").change(function () {
+
+
+        $("#CityId").empty();
+        $.getJSON("/Address/GetCity/" + $("#StateId :selected").val(),
+            function (data) {
+                $.each(data,
+                    function () {
+                        $("#CityId").append('<option value=' + this.cityId + '>' + this.cityName + '</option>');
+
+                    });
+
+            });
+    });
+    $(document).ready(function () {
+        $("#CityId").empty();
+
+        $.getJSON("/Address/GetCity/" + $("#StateId :selected").val(),
+            function (data) {
+                $.each(data,
+                    function () {
+                        $("#CityId").append('<option value=' + this.cityId + '>' + this.cityName + '</option>');
+
+                    });
+
+            });
+    });
+    
+</script>

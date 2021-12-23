@@ -20,6 +20,7 @@ namespace DigiStore.Data.Context
 
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Color> Colors { get; set; }
         public virtual DbSet<ContactU> ContactUs { get; set; }
         public virtual DbSet<Guarantee> Guarantees { get; set; }
@@ -32,6 +33,7 @@ namespace DigiStore.Data.Context
         public virtual DbSet<Seller> Sellers { get; set; }
         public virtual DbSet<SiteSetting> SiteSettings { get; set; }
         public virtual DbSet<Slider> Sliders { get; set; }
+        public virtual DbSet<State> States { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
         public virtual DbSet<TicketMessage> TicketMessages { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -54,11 +56,7 @@ namespace DigiStore.Data.Context
             {
                 entity.ToTable("Address", "Users");
 
-                entity.HasIndex(e => e.City, "I_NC_Users_Address_City");
-
                 entity.HasIndex(e => e.IsDelete, "I_NC_Users_Address_IsDelete");
-
-                entity.HasIndex(e => e.State, "I_NC_Users_Address_State");
 
                 entity.HasIndex(e => e.Zipcode, "I_NC_Users_Address_Zipcode");
 
@@ -71,9 +69,7 @@ namespace DigiStore.Data.Context
                     .HasMaxLength(800)
                     .HasColumnName("Address");
 
-                entity.Property(e => e.City)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.CityId).HasColumnName("CityID");
 
                 entity.Property(e => e.ModifiedDate)
                     .HasColumnType("datetime")
@@ -89,9 +85,7 @@ namespace DigiStore.Data.Context
                     .HasColumnName("rowguid")
                     .HasDefaultValueSql("(newsequentialid())");
 
-                entity.Property(e => e.State)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.StateId).HasColumnName("StateID");
 
                 entity.Property(e => e.Unit)
                     .HasMaxLength(5)
@@ -105,6 +99,18 @@ namespace DigiStore.Data.Context
                     .HasMaxLength(5)
                     .IsUnicode(false)
                     .IsFixedLength(true);
+
+                entity.HasOne(d => d.City)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.CityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Users_Address_CityID");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Users_Address_StateID");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Addresses)
@@ -130,6 +136,33 @@ namespace DigiStore.Data.Context
                 entity.Property(e => e.Rowguid)
                     .HasColumnName("rowguid")
                     .HasDefaultValueSql("(newsequentialid())");
+            });
+
+            modelBuilder.Entity<City>(entity =>
+            {
+                entity.ToTable("City", "Addresses");
+
+                entity.Property(e => e.CityId).HasColumnName("CityID");
+
+                entity.Property(e => e.CityName)
+                    .IsRequired()
+                    .HasMaxLength(300);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.StateId).HasColumnName("StateID");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.Cities)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Addresses_City_StateID");
             });
 
             modelBuilder.Entity<Color>(entity =>
@@ -328,8 +361,6 @@ namespace DigiStore.Data.Context
 
             modelBuilder.Entity<ProductSelectedCategory>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("ProductSelectedCategory", "Production");
 
                 entity.Property(e => e.ModifiedDate)
@@ -341,12 +372,12 @@ namespace DigiStore.Data.Context
                     .HasDefaultValueSql("(newsequentialid())");
 
                 entity.HasOne(d => d.ProductCategory)
-                    .WithMany()
+                    .WithMany(p => p.ProductSelectedCategories)
                     .HasForeignKey(d => d.ProductCategoryId)
                     .HasConstraintName("FK_Production_ProductSelectedCategory_ProductCategoryId");
 
                 entity.HasOne(d => d.Product)
-                    .WithMany()
+                    .WithMany(p => p.ProductSelectedCategories)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_Production_ProductSelectedCategory_ProductId");
             });
@@ -505,6 +536,25 @@ namespace DigiStore.Data.Context
                     .HasDefaultValueSql("(newsequentialid())");
             });
 
+            modelBuilder.Entity<State>(entity =>
+            {
+                entity.ToTable("State", "Addresses");
+
+                entity.Property(e => e.StateId).HasColumnName("StateID");
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.StateName)
+                    .IsRequired()
+                    .HasMaxLength(300);
+            });
+
             modelBuilder.Entity<Ticket>(entity =>
             {
                 entity.ToTable("Ticket", "Ticket");
@@ -578,10 +628,10 @@ namespace DigiStore.Data.Context
                 entity.HasIndex(e => e.UserName, "UQ_Users_User_UserName")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Mobile, "UQ__User__6FAE0782F028AE0B")
+                entity.HasIndex(e => e.Mobile, "UQ__User__6FAE0782C2BBDCED")
                     .IsUnique();
 
-                entity.HasIndex(e => e.NationalId, "UQ__User__E9AA321A113C30A9")
+                entity.HasIndex(e => e.NationalId, "UQ__User__E9AA321A986F884B")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

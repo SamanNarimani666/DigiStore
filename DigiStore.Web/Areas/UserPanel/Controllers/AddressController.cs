@@ -4,6 +4,7 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Address;
 using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DigiStore.Web.Areas.UserPanel.Controllers
 {
@@ -28,9 +29,25 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         }
         #endregion
 
+        #region GetCity
+        [HttpGet("GetCity/{stateId}")]
+        public async Task<IActionResult> GetCity(int stateId)
+        {
+            var cities = await _addressService.GetListCityByStateId(stateId);
+            return Json(cities);
+        }
+
+
+        #endregion
+
         #region AddAddress
+
         [HttpGet("AddAddress")]
-        public IActionResult AddAddress() => PartialView();
+        public async Task<IActionResult> AddAddress()
+        {
+            ViewBag.State = await _addressService.GetAllState();
+            return PartialView();
+        }
 
         [HttpPost("AddAddress"), ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAddress(AddAddressViewModel addAddress)
@@ -70,6 +87,44 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
                 null
             );
 
+        }
+        #endregion
+
+        #region EditAddress
+        [HttpGet("EditAddress/{id}")]
+        public async Task<IActionResult> EditAddress(int id)
+        {
+            var address = await _addressService.EditInfoAddress(User.GetUserId(), id);
+            ViewBag.State = await _addressService.GetAllState();
+            ViewBag.SelectedState = await _addressService.GetStateById(address.StateId);
+
+            return PartialView(address);
+        }
+        [HttpPost("EditAddress/{id}")]
+        public async Task<IActionResult> EditAddress(EditAddressViewModel editAddress)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _addressService.EditAddress(editAddress, User.GetUserId());
+                switch (res)
+                {
+                    case EditAddressResult.Error:
+                        TempData[ErrorMessage] = "خطا در ویرایش آدرس ";
+                        return RedirectToAction("ListAddress", "Address");
+                    case EditAddressResult.NotFound:
+                        TempData[ErrorMessage] = "آدرسی با این مشخصات یافت نشد";
+                        return RedirectToAction("ListAddress", "Address");
+                    case EditAddressResult.NotFoundUser:
+                        TempData[ErrorMessage] = "کاربری با این مشخصات یافت نشد";
+                        return RedirectToAction("ListAddress", "Address");
+                    case EditAddressResult.Success:
+                        TempData[SuccessMessage] = "آدرس شما با موفقیت ویرایش شد";
+                        return RedirectToAction("ListAddress", "Address");
+                }
+            }
+            ViewBag.State = await _addressService.GetAllState();
+            ViewBag.SelectedState = await _addressService.GetStateById(editAddress.StateId);
+            return PartialView(editAddress);
         }
         #endregion
 

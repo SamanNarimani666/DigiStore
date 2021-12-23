@@ -27,6 +27,8 @@ namespace DigiStore.Data.Repositories.Product
             #region State
             switch (filterProduct.FilterProductState)
             {
+                case FilterProductState.All:
+                    break;
                 case FilterProductState.Active:
                     product = product.Where(s => s.IsActive && s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted);
                     break;
@@ -48,14 +50,28 @@ namespace DigiStore.Data.Repositories.Product
             #region filter
             if (!string.IsNullOrEmpty(filterProduct.Name))
                 product = product.Where(p => EF.Functions.Like(p.Name, ($"%{filterProduct.Name}%")));
-            if (filterProduct.SellerId != null || filterProduct.SellerId != 0)
-                product = product.Where(p => p.SellerId == filterProduct.SellerId);
+            if (filterProduct.SellerId != null && filterProduct.SellerId != 0)
+                product = product.Where(p => p.SellerId == filterProduct.SellerId.Value);
             #endregion
 
             var pager = Pager.Build(filterProduct.PageId, await product.CountAsync(), filterProduct.TakeEntity,
                 filterProduct.HowManyShowPageAfterAndBefore);
             var allProduct = product.Paging(pager).ToList();
             return filterProduct.SetPaging(pager).SetProduct(allProduct);
+        }
+        #endregion
+
+        #region AddProduct
+        public async Task AddProduct(Domain.Entities.Product product)
+        {
+            await _context.Products.AddAsync(product);
+        }
+        #endregion
+
+        #region Save
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
         }
         #endregion
 

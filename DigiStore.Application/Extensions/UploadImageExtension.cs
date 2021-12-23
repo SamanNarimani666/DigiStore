@@ -5,7 +5,7 @@ namespace DigiStore.Application.Extensions
 {
     public static class UploadImageExtension
     {
-        public static void AddImageToServer(this IFormFile image, string fileName, string orginalPath, int? width, int? height, string thumbPath = null, string deletefileName = null)
+        public static bool AddImageToServer(this IFormFile image, string fileName, string orginalPath, int? width, int? height, string thumbPath = null, string deletefileName = null)
         {
             if (image != null && image.IsImage())
             {
@@ -42,7 +42,11 @@ namespace DigiStore.Application.Extensions
                     if (width != null && height != null)
                         resizer.ImageResizer(orginalPath + fileName, thumbPath + fileName, width, height);
                 }
+
+                return true;
             }
+
+            return false;
         }
 
         public static void DeleteImage(this string imageName, string OriginPath, string ThumbPath)

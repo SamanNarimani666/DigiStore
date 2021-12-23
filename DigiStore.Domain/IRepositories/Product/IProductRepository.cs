@@ -7,5 +7,7 @@ namespace DigiStore.Domain.IRepositories.Product
     public interface IProductRepository : IAsyncDisposable
     {
         Task<FilterProductViewModel> FilterProduct(FilterProductViewModel filterProduct);
+        Task AddProduct(Entities.Product product);
+        Task Save();
     }
 }

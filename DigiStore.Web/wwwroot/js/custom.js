@@ -105,3 +105,4 @@ function OnSuccessRejectItem(res) {
         $('#ajax-url-item-' + res.data.sellerId).hide(1500);
     }
 }
+

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.ViewModels.Product;
+using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Application.Services.Interfaces
 {
@@ -11,6 +12,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<FilterProductViewModel> FilterProduct(FilterProductViewModel filterProduct);
         Task<List<ProductCategory>> GetAllActiveProductCategory();
         Task<List<ProductCategory>> GetAllProductCategoriesByParentId(int? parentId);
-        Task<CreateProductResult> CreateProduc(CreateProductViewModel createProduct,string imageName,int sellerId);
+        Task<CreateProductResult> CreateProduc(CreateProductViewModel createProduct,int sellerId,IFormFile productImage);
     }
 }
