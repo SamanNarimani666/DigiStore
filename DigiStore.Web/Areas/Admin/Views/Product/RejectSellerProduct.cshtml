@@ -1,0 +1,10 @@
+﻿@model DigiStore.Domain.ViewModels.Product.RejectProductViewModel
+<h1>@Model.ProductName</h1>
+<form asp-controller="Product" asp-action="RejectSellerProduct" asp-area="Admin" method="post">
+    <div class="form-group">
+        <input type="hidden" asp-for="Id"/>
+        <textarea asp-for="RejectMessage" class="form-control" rows="10"></textarea>
+        <span asp-validation-for="RejectMessage" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-danger">عدم تایید محصول</button>
+</form>

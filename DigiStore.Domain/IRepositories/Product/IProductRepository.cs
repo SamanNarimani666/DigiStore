@@ -8,6 +8,10 @@ namespace DigiStore.Domain.IRepositories.Product
     {
         Task<FilterProductViewModel> FilterProduct(FilterProductViewModel filterProduct);
         Task AddProduct(Entities.Product product);
+        Task<Entities.Product> GetProductById(int productId);
+        void EditProduct(Entities.Product product);
+        Task<Entities.Product> GetProductWithSellerById(int productId);
+
         Task Save();
     }
 }

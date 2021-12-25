@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Application.Extensions;
 using DigiStore.Application.Services.Interfaces;
+using DigiStore.Application.Utils;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.Enums.Product;
 using DigiStore.Domain.IRepositories.Category;
+using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
@@ -22,12 +25,14 @@ namespace DigiStore.Application.Services.Implementations
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly ISelectedProductCategoryRepository _selectedProductCategoryRepository;
         private readonly IProductColorRepository _colorRepository;
-        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository)
+        private readonly IProductGuaranteeRepository _guaranteeRepository;
+        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
             _selectedProductCategoryRepository = selectedProductCategoryRepository;
             _colorRepository = colorRepository;
+            _guaranteeRepository = guaranteeRepository;
         }
         #endregion
 
@@ -77,31 +82,11 @@ namespace DigiStore.Application.Services.Implementations
                     await _productRepository.AddProduct(product);
                     await _productRepository.Save();
                     //Add Product Category
-                    var productSelectedCategories = new List<ProductSelectedCategory>();
-                    foreach (var categoryId in createProduct.SelectedCategories)
-                    {
-                        productSelectedCategories.Add(
-                           new ProductSelectedCategory()
-                           {
-                               ProductId = product.ProductId,
-                               ProductCategoryId = categoryId
-                           });
-                    }
-                    await _selectedProductCategoryRepository.AddSelectedProductCategory(productSelectedCategories);
-                    await _selectedProductCategoryRepository.Save();
+                    await AddProductSelectedCategories(product.ProductId, createProduct.SelectedCategories);
                     //Add Product Color
-                    var productColor = new List<Color>();
-                    foreach (var colors in createProduct.ProductColors)
-                    {
-                        productColor.Add(new Color()
-                        {
-                            Price = colors.Price,
-                            ColorName = colors.ColorName,
-                            ProductId = product.ProductId
-                        });
-                    }
-                    await _colorRepository.AddColor(productColor);
-                    await _colorRepository.Save();
+                    await AddProductSelectedColors(product.ProductId, createProduct.ProductColors);
+                    // Add Product Guarantee
+                    await AddAllProductSelectedGuarantee(product.ProductId, createProduct.ProductGuarantee);
                     return CreateProductResult.Success;
                 }
                 catch
@@ -113,6 +98,225 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region AcceptSellerProduct
+        public async Task<bool> AcceptSellerProduct(int productId)
+        {
+            var product = await _productRepository.GetProductById(productId);
+            if (product != null)
+            {
+                product.ProductAcceptanceState = (byte)ProductAcceptanceState.Accepted;
+                product.ProductAcceptOrRejectDescription = $"محصول مورد نظر در تاریخ {DateTime.Now.ToShamsiDate()} در سایت قرار گرفت";
+                _productRepository.EditProduct(product);
+                await _productRepository.Save();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<RejectProductViewModel> GetPorductInfoForReject(int productId)
+        {
+            var product = await _productRepository.GetProductById(productId);
+            return new RejectProductViewModel()
+            {
+                ProductName = product.Name,
+                Id = productId
+            };
+        }
+
+        #endregion
+
+        #region RejectSellerProduct
+        public async Task<bool> RejectSellerProduct(RejectProductViewModel rejectProduct)
+        {
+            var product = await _productRepository.GetProductById(rejectProduct.Id);
+            if (product != null)
+            {
+                product.ProductAcceptanceState = (byte)ProductAcceptanceState.Rejected;
+                product.ProductAcceptOrRejectDescription = rejectProduct.RejectMessage;
+                _productRepository.EditProduct(product);
+                await _productRepository.Save();
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
+        #region GetProductForEdit
+        public async Task<EditProductViewModel> GetProductForEdit(int productId)
+        {
+            var product = await _productRepository.GetProductById(productId);
+            return new EditProductViewModel()
+            {
+                Title = product.Name,
+                BradnId = product.BrandId,
+                Description = product.Description,
+                IsActive = product.IsActive,
+                Price = product.Price.Value,
+                ShortDescription = product.ShortDescription,
+                ProductImage = product.ImageName,
+                ProductId = product.ProductId,
+                ProductColors = _colorRepository.GetColorProductByProductId(productId).Select(c => new CreateProductColorViewModel()
+                {
+                    ColorName = c.ColorName,
+                    Price = c.Price.Value
+                }).ToList(),
+                SelectedCategories = _selectedProductCategoryRepository.GetProductSelectedCategoryByProductId(productId).Select(p => p.ProductCategoryId.Value).ToList()
+                ,
+                ProductGuarantee = _guaranteeRepository.GetProductGuaranteesByProductId(productId).Select(g => new CreateProductGuaranteeViewModel()
+                {
+                    GuaranteeName = g.GuaranteeName,
+                    Price = g.Price.Value
+                }).ToList(),
+            };
+        }
+        #endregion
+
+        #region EditProduct
+        public async Task<EditProductResult> EditProduct(EditProductViewModel editProduct, int userId, IFormFile ProductImage)
+        {
+            var mainProduct = await _productRepository.GetProductWithSellerById(editProduct.ProductId);
+            if (mainProduct == null) return EditProductResult.NotFoundProduct;
+            if (mainProduct.Seller.UserId != userId) return EditProductResult.NotFoundUser;
+
+            try
+            {
+                mainProduct.Name = editProduct.Title;
+                mainProduct.Price = editProduct.Price;
+                mainProduct.BrandId = editProduct.BradnId;
+                mainProduct.Description = editProduct.Description;
+                mainProduct.ShortDescription = editProduct.ShortDescription;
+                mainProduct.IsActive = editProduct.IsActive;
+                mainProduct.ProductAcceptanceState = (byte) ProductAcceptanceState.UnderProgress;
+                if (ProductImage != null)
+                {
+                    var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(ProductImage.FileName);
+                    var res = ProductImage.AddImageToServer(imageName, PathExtension.ProductImageOriginServer, 100, 100, PathExtension.ProductImageThumbServer, mainProduct.ImageName);
+                    if (res)
+                    {
+                        mainProduct.ImageName = imageName;
+                    }
+                }
+
+
+                //Remove Color Product
+                RemoveAllProductSelectedColors(editProduct.ProductId);
+                //Add Product Color
+                await AddProductSelectedColors(editProduct.ProductId, editProduct.ProductColors);
+
+
+
+                //Remove Product Selected Categoty
+                RemoveAllProductSelectedCategories(editProduct.ProductId);
+                //Add Product Selected Categoty
+                await AddProductSelectedCategories(editProduct.ProductId, editProduct.SelectedCategories);
+
+
+
+                // Remove Product Selected guarantee
+                RemoveAllProductSelectedGuarantee(editProduct.ProductId);
+                // Add Product Guarantee
+                await AddAllProductSelectedGuarantee(editProduct.ProductId, editProduct.ProductGuarantee);
+
+
+
+                _productRepository.EditProduct(mainProduct);
+                await _productRepository.Save();
+                return EditProductResult.Success;
+            }
+            catch
+            {
+                return EditProductResult.Erorr;
+            }
+
+
+        }
+        #endregion
+
+        #region RemoveAllProductSelectedCategories
+        public void RemoveAllProductSelectedCategories(int productId)
+        {
+            _selectedProductCategoryRepository.DeleteProductSelectedCategory(_selectedProductCategoryRepository.GetProductSelectedCategoryByProductId(productId));
+        }
+        #endregion
+
+        #region RemoveAllProductSelectedColors
+        public void RemoveAllProductSelectedColors(int productId)
+        {
+            _colorRepository.DeleteProductColor(_colorRepository.GetColorProductByProductId(productId));
+        }
+        #endregion
+
+        #region RemoveAllProductSelectedGuarantee
+        public void RemoveAllProductSelectedGuarantee(int productId)
+        {
+            _guaranteeRepository.DeleteProductGuarantee(_guaranteeRepository.GetProductGuaranteesByProductId(productId));
+        }
+        #endregion
+
+        #region AddProductSelectedCategories
+        public async Task AddProductSelectedCategories(int productId, List<int> CategoriesId)
+        {
+            if (CategoriesId != null)
+            {
+                var productSelectedCategories = new List<ProductSelectedCategory>();
+                foreach (var categoryId in CategoriesId)
+                {
+                    productSelectedCategories.Add(
+                        new ProductSelectedCategory()
+                        {
+                            ProductId = productId,
+                            ProductCategoryId = categoryId
+                        });
+                }
+                await _selectedProductCategoryRepository.AddSelectedProductCategory(productSelectedCategories);
+            }
+            await _selectedProductCategoryRepository.Save();
+        }
+        #endregion
+
+        #region AddProductSelectedColors
+        public async Task AddProductSelectedColors(int productId, List<CreateProductColorViewModel> createProductColor)
+        {
+            if (createProductColor != null)
+            {
+                var productColor = new List<Color>();
+                foreach (var colors in createProductColor)
+                {
+                    productColor.Add(new Color()
+                    {
+                        Price = colors.Price,
+                        ColorName = colors.ColorName,
+                        ProductId = productId
+                    });
+                }
+                await _colorRepository.AddColor(productColor);
+            }
+            await _colorRepository.Save();
+        }
+        #endregion
+
+        #region AddAllProductSelectedGuarantee
+        public async Task AddAllProductSelectedGuarantee(int productId, List<CreateProductGuaranteeViewModel> createProductGuarantee)
+        {
+            if (createProductGuarantee != null)
+            {
+                var productguarantee = new List<Guarantee>();
+                foreach (var guarantees in createProductGuarantee)
+                {
+                    productguarantee.Add(new Guarantee()
+                    {
+                        ProductId = productId,
+                        Price = guarantees.Price,
+                        GuaranteeName = guarantees.GuaranteeName
+                    });
+                }
+
+                await _guaranteeRepository.AddProductGuarantee(productguarantee);
+            }
+            await _guaranteeRepository.Save();
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {
@@ -120,6 +324,7 @@ namespace DigiStore.Application.Services.Implementations
             await _productCategoryRepository.DisposeAsync();
             await _selectedProductCategoryRepository.DisposeAsync();
             await _colorRepository.DisposeAsync();
+            await _guaranteeRepository.DisposeAsync();
         }
         #endregion
     }

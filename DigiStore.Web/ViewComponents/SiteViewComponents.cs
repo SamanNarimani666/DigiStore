@@ -7,8 +7,14 @@ namespace DigiStore.Web.ViewComponents
 {
     public class SiteHeaderViewComponent : ViewComponent
     {
+        private readonly IProductService _productService;
+        public SiteHeaderViewComponent(IProductService productService)
+        {
+            _productService = productService;
+        }
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            ViewBag.ProductCategories = await _productService.GetAllActiveProductCategory();
             return View("SiteHeader");
         }
     }

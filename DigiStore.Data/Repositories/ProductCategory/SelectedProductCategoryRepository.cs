@@ -27,6 +27,17 @@ namespace DigiStore.Data.Repositories.SelectedProductCategory
             }
             
         }
+
+        public List<ProductSelectedCategory> GetProductSelectedCategoryByProductId(int productId)
+        {
+            return _context.ProductSelectedCategories.Where(p => p.ProductId == productId).ToList();
+        }
+
+        public void DeleteProductSelectedCategory(List<ProductSelectedCategory> selectedCategory)
+        {
+            _context.ProductSelectedCategories.RemoveRange(selectedCategory);
+        }
+
         #endregion
 
         #region Save

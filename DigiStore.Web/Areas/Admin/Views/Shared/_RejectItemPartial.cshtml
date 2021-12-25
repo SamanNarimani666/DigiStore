@@ -1,6 +1,6 @@
-﻿@model DigiStore.Domain.ViewModels.Seller.RejectItemViewModel
+﻿@model DigiStore.Domain.ViewModels.Common.RejectItemViewModel
 <div class="form-group">
-    <input type="hidden" asp-for="SellerId"/>
+    <input type="hidden" asp-for="Id"/>
     <textarea asp-for="RejectMessage" class="form-control" rows="10"></textarea>
     <span asp-validation-for="RejectMessage" class="text-danger"></span>
 </div>

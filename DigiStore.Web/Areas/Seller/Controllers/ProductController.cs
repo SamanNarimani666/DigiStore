@@ -1,12 +1,10 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Product;
-using DigiStore.Domain.ViewModels.Seller;
-using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace DigiStore.Web.Areas.Seller.Controllers
 {
@@ -71,6 +69,47 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         }
         #endregion
 
+        #region EditProduct
+
+        [HttpGet("edit-product/{id}")]
+        public async Task<IActionResult> EditProduct(int id)
+        {
+            var product = await _productService.GetProductForEdit(id);
+            if (product == null) return NotFound();
+            ViewBag.MainCategory = await _productService.GetAllProductCategoriesByParentId(null);
+            ViewBag.Brand = await _branadService.GetAllBrands();
+            return View(product);
+        }
+        [HttpPost("edit-product/{id}"),ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProduct(int id,EditProductViewModel editProduct, IFormFile ProductImage )
+        {
+
+            if (ModelState.IsValid)
+            {
+               var res= await _productService.EditProduct(editProduct, User.GetUserId(), ProductImage);
+               switch (res)
+               {
+                    case EditProductResult.Erorr:
+                        TempData[ErrorMessage] = "خطا در ویرایش محصول مورد نظر";
+                        break;
+
+                    case EditProductResult.NotFoundProduct:
+                        TempData[ErrorMessage] = "محصولی با این مشحصات یافت نشد";
+                        break;
+
+                    case EditProductResult.NotFoundUser:
+                        TempData[ErrorMessage] = "فروشگاهی با این کاربر یافت نشد";
+                        break;
+                    case EditProductResult.Success:
+                        TempData[SuccessMessage] = "محصول مورد نظر با موفقیت ثبت شد";
+                        return RedirectToAction("Index");
+                }
+            }
+            ViewBag.MainCategory = await _productService.GetAllProductCategoriesByParentId(null);
+            ViewBag.Brand = await _branadService.GetAllBrands();
+            return View(editProduct);
+        }
+        #endregion
 
     }
 }

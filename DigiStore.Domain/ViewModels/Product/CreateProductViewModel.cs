@@ -27,10 +27,8 @@ namespace DigiStore.Domain.ViewModels.Product
         public bool IsActive { get; set; }
         [Display(Name = "برند")]
         public int? BradnId { get; set; }
-
-        public string FileName { get; set; }
-
         public List<CreateProductColorViewModel> ProductColors { get; set; }
+        public List<CreateProductGuaranteeViewModel> ProductGuarantee { get; set; }
         public List<int> SelectedCategories { get; set; }
 
     }

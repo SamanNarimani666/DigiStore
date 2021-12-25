@@ -12,6 +12,7 @@ namespace DigiStore.Domain.IRepositories.Seller
         Task<Entities.Seller> GetSellerById(int sellerId);
         void EditSeller(Entities.Seller seller);
         Task<Entities.Seller> GetLastActiveSellerByUserId(int userId);
+        Task<bool> HasUserActiveSellerPanel(int userId);
         Task Save();
     }
 }

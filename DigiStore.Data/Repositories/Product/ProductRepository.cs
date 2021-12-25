@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.Enums.Product;
@@ -65,6 +66,30 @@ namespace DigiStore.Data.Repositories.Product
         public async Task AddProduct(Domain.Entities.Product product)
         {
             await _context.Products.AddAsync(product);
+        }
+        #endregion
+
+        #region GetProductById
+        public async Task<Domain.Entities.Product> GetProductById(int productId)
+        {
+            return await _context.Products.SingleOrDefaultAsync(p=>p.ProductId==productId);
+        }
+        #endregion
+
+        #region EditProduct
+        public void EditProduct(Domain.Entities.Product product)
+        {
+            product.ModifiedDate=DateTime.Now;
+            _context.Products.Update(product);
+        }
+        #endregion
+
+        #region GetProductWithSellerById
+        public async Task<Domain.Entities.Product> GetProductWithSellerById(int productId)
+        {
+            return await _context.Products.AsQueryable()
+                .Include(p => p.Seller)
+                .SingleOrDefaultAsync(p => p.ProductId == productId);
         }
         #endregion
 

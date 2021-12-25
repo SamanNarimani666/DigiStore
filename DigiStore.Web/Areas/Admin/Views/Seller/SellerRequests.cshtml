@@ -1,5 +1,6 @@
 ﻿@using DigiStore.Application.Extensions
 @using DigiStore.Domain.Enums.Store
+@using DigiStore.Domain.ViewModels.Common
 @using DigiStore.Domain.ViewModels.Seller
 @model DigiStore.Domain.ViewModels.Seller.FilterSellerViewModel
 @{
@@ -175,7 +176,7 @@
                         <form asp-controller="Seller" asp-action="RejectSellerRequest" asp-area="Admin"
                               asp-antiforgery="true"
                               data-ajax="true" data-method="post" data-ajax-success="OnSuccessRejectItem">
-                            <partial name="_RejectItemPartial" model="@(new RejectItemViewModel(){SellerId = item.SellerId})" />
+                            <partial name="_RejectItemPartial" model="@(new RejectItemViewModel(){Id = item.SellerId})" />
                             <button class="btn btn-danger" type="submit">عدم تایید</button>
                         </form>
                     </div>

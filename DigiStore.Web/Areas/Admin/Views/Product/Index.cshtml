@@ -1,5 +1,6 @@
 ﻿@using DigiStore.Application.Extensions
 @using DigiStore.Domain.Enums.Product
+@using DigiStore.Domain.ViewModels.Common
 @using DigiStore.Domain.ViewModels.Product
 @model DigiStore.Domain.ViewModels.Product.FilterProductViewModel
 @{
@@ -17,7 +18,7 @@
             <div class="panel-body">
                 <form asp-controller="Product" asp-action="Index" asp-area="Admin" method="get" id="filter-form" class="form-horizontal" role="form">
                     <input type="hidden" asp-for="PageId" />
-                    <label class="control-label">نام فروشگاه</label>
+                    <label class="control-label">نام محصول</label>
                     <div class="form-group">
                         <input type="text" asp-for="Name" class="form-control" placeholder="بر اساس نام">
                     </div>
@@ -93,8 +94,7 @@
                                 <tbody>
                                     @foreach (var item in Model.Products)
                                     {
-                                        <tr>
-
+                                        <tr id="ajax-url-item-@item.ProductId">
                                             <td><img src="@(!string.IsNullOrEmpty(item.ImageName)?PathExtension.ProductImageThumb+item.ImageName:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
                                             <td>@item.Name</td>
                                             @if (item.ProductAcceptanceState != null)
@@ -107,14 +107,13 @@
                                                 @if (item.ProductAcceptanceState != (byte)ProductAcceptanceState.Accepted)
                                                 {
 
-                                                    <a ajax-url-button="@item.SellerId" class="btn btn-success btn-sm">تایید محصول</a>
+                                                    <a ajax-url-button="@item.ProductId" asp-controller="Product" asp-action="AcceptSellerProduct" asp-area="Admin" asp-route-id="@item.ProductId" class="btn btn-success btn-sm">تایید محصول</a>
 
                                                 }
                                                 @if (item.ProductAcceptanceState != (byte)ProductAcceptanceState.Rejected)
                                                 {
 
-                                                    <a class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target=".reject-modal-@item.SellerId">عدم تایید محصول</a>
-
+                                                    <a class="btn btn-danger waves-effect waves-light" onclick="RejectProduct(@item.ProductId)">عدم تایید محصول</a>
                                                 }
                                             </td>
                                         </tr>
@@ -144,3 +143,37 @@
 </div>
 
 
+
+<div id="modal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">عدم تایید فروشگاه</h4>
+            </div>
+            <div id="modalbody" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+@section Scripts
+{
+    <script>
+        function RejectProduct(id) {
+            $.ajax({
+                url: "/Product/RejectSellerProduct/" + id,
+                type: "Get"
+            }).done(function (result) {
+                $("#modal").modal('show');
+                $("#modalbody").html(result);
+            });
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

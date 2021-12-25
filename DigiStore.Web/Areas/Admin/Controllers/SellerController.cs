@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
+using DigiStore.Domain.ViewModels.Common;
 using DigiStore.Domain.ViewModels.Seller;
 using DigiStore.Web.Http;
 using Microsoft.AspNetCore.Mvc;

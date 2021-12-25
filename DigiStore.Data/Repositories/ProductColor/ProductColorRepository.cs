@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.ViewModels.Product;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigiStore.Data.Repositories.ProductColor
 {
@@ -19,11 +22,21 @@ namespace DigiStore.Data.Repositories.ProductColor
         #region AddColor
         public async Task AddColor(List<Color> colors)
         {
-            foreach (var color in colors)
-            {
-                await _context.Colors.AddAsync(color);
+            await _context.Colors.AddRangeAsync(colors);
+        }
+        #endregion
 
-            }
+        #region GetColorProductByProductId
+        public List<Color> GetColorProductByProductId(int productId)
+        {
+            return _context.Colors.AsQueryable().Where(c => !c.IsDelete && c.ProductId == productId).ToList();
+        }
+        #endregion
+
+        #region DeleteProductColor
+        public void DeleteProductColor(List<Color> colors)
+        {
+             _context.Colors.RemoveRange(colors);
         }
         #endregion
 

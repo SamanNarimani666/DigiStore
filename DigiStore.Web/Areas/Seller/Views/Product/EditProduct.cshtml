@@ -1,11 +1,12 @@
 ﻿@using DigiStore.Domain.Entities
-@model DigiStore.Domain.ViewModels.Product.CreateProductViewModel
+@model DigiStore.Domain.ViewModels.Product.EditProductViewModel
 @{
-    ViewData["Title"] = "ایجاد محصول جدید";
+    ViewData["Title"] = "ویرایش محصول"+"\t" + Model.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var categories = ViewBag.MainCategory as List<ProductCategory>;
     var brands = ViewBag.Brand as List<Brand>;
 }
+
 @section Styles
 {
     <link rel="stylesheet" type="text/css" href="/css/Custom.css" />
@@ -26,7 +27,29 @@
             </div>
         </div>
         <div class="profile-stats">
-            <form method="post" asp-action="CreateProduct" asp-controller="Product" asp-area="Seller" id="create_product_form" enctype="multipart/form-data">
+            <form method="post" asp-action="EditProduct" asp-controller="Product" asp-area="Seller" id="create_product_form" enctype="multipart/form-data">
+            <input type="hidden" asp-for="ProductId" />
+            <input type="hidden" asp-for="ProductImage"/>
+                @if (Model.ProductColors != null && Model.ProductColors.Any())
+                {
+                    var index = 0;
+                    foreach (var color in Model.ProductColors)
+                    {
+                        <input type="hidden" value="@color.ColorName" name="ProductColors[@index].ColorName"  color-name-hidden-input="@color.ColorName-@color.Price" />
+                        <input type="hidden" value="@color.Price" name="ProductColors[@index].Price" color-Price-hidden-input="@color.ColorName-@color.Price" />
+                        index += 1;
+                    }
+                }
+                @if (Model.ProductGuarantee != null && Model.ProductGuarantee.Any())
+                {
+                    var index = 0;
+                    foreach (var guarantee in Model.ProductGuarantee)
+                    {
+                        <input type="hidden" value="@guarantee.GuaranteeName" name="ProductGuarantee[@index].GuaranteeName"  guarantee-Name-hidden-input="@guarantee.GuaranteeName-@guarantee.Price" />
+                        <input type="hidden" value="@guarantee.Price" name="ProductGuarantee[@index].Price" guarantee-Price-hidden-input="@guarantee.GuaranteeName-@guarantee.Price" />
+                        index += 1;
+                    }
+                }
                 <div class="form-legal-row">
                     <div class="col-lg-6 col-xs-12 mx-auto">
                         <div class="form-legal-col">
@@ -71,43 +94,47 @@
                                     <div class="col-6">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" name="ProductImage" id="imgInp" accept=".png,.jpeg" />
-                                            <label class="custom-file-label text-left" for="customFile">بار گذاری  تصویر محصول</label>
+                                            <label class="custom-file-label text-left" for="customFile">بار گذاری تصویر محصول</label>
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <img src="/Images/Product/Default/ProductDemo.png" id="ProductImage" style="height: 300px; width: 300px" class="img-thumbnail img-fluid rounded float-left" alt="...">
+                                        <img src="/Images/Product/origin/@Model.ProductImage" id="ProductImage" style="height: 300px; width: 300px" class="img-thumbnail img-fluid rounded float-left" alt="...">
                                     </div>
                                 </div>
-                                <label><h4>  دسته </h4></label>
+                                <label><h4> دسته </h4></label>
                                 @if (categories != null && categories.Any())
                                 {
                                     @foreach (var category in categories.Where(s => s.ParentId == null))
                                     {
+                                        var isParentCategorySelected = Model.SelectedCategories.Any(c => c == category.ProductCategoryId);
                                         <ul>
                                             <li>
                                                 <label class="container">
-                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@category.ProductCategoryId" Main_Category_Chekbox="@category.ProductCategoryId" /> @category.Title
+                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@category.ProductCategoryId" Main_Category_Chekbox="@category.ProductCategoryId" @(isParentCategorySelected ? "checked" : "") /> @category.Title
                                                     <span class="checkmark"></span>
 
                                                     @if (categories.Any(s => s.ParentId == category.ProductCategoryId))
                                                     {
                                                         <br />
-                                                        <div id="sub_categories_@category.ProductCategoryId" style="display: none;">
+                                                        <div id="sub_categories_@category.ProductCategoryId" style="display: @(isParentCategorySelected?"block":"none");">
 
                                                             @foreach (var subCategory in categories.Where(s => s.ParentId == category.ProductCategoryId))
                                                             {
+                                                                var isSubCategorySelected = Model.SelectedCategories.Any(c => c == subCategory.ProductCategoryId);
 
                                                                 <label class="container" style="right: 10%">
-                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subCategory.ProductCategoryId" Main_Category_Chekbox="@subCategory.ProductCategoryId" parent-category-id="@subCategory.ParentId" /> @subCategory.Title
+                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subCategory.ProductCategoryId" Main_Category_Chekbox="@subCategory.ProductCategoryId" parent-category-id="@subCategory.ParentId" @(isSubCategorySelected ? "checked" : "") /> @subCategory.Title
                                                                     <span class="checkmark"></span>
                                                                     @if (categories.Any(s => s.ParentId == subCategory.ProductCategoryId))
                                                                     {
                                                                         <br />
-                                                                        <div id="sub_categories_@subCategory.ProductCategoryId" style="display: none;">
+                                                                        <div id="sub_categories_@subCategory.ProductCategoryId" style="@(isSubCategorySelected?"block":"none")">
                                                                             @foreach (var subSubCategory in categories.Where(s => s.ParentId == subCategory.ProductCategoryId))
                                                                             {
+                                                                                var isSubSubCategorySelected = Model.SelectedCategories.Any(c => c == subSubCategory.ProductCategoryId);
+
                                                                                 <label class="container" style="right: 10%">
-                                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subSubCategory.ProductCategoryId" parent-category-id="@subCategory.ParentId" /> @subSubCategory.Title
+                                                                                    <input type="checkbox" name="@nameof(Model.SelectedCategories)" value="@subSubCategory.ProductCategoryId" parent-category-id="@subCategory.ParentId" @(isSubSubCategorySelected ? "checked" : "") /> @subSubCategory.Title
                                                                                     <span class="checkmark"></span>
                                                                                 </label>
                                                                             }
@@ -125,15 +152,15 @@
                                         <hr />
                                     }
                                 }
-                            <select asp-for="BradnId" class="form-control">
-                                <option selected>نام برند محصول را انتخاب نمایید</option>
-                                @foreach (var Brand in brands)
-                                {
-                                    <option value="@Brand.BrandId">@Brand.BrandName</option>
-                                }
-                            </select>
-                                <br/>
-                                <label><h4>  رنگ </h4></label>
+                                <select asp-for="BradnId" class="form-control">
+                                    <option selected>نام برند محصول را انتخاب نمایید</option>
+                                    @foreach (var Brand in brands)
+                                    {
+                                        <option value="@Brand.BrandId">@Brand.BrandName</option>
+                                    }
+                                </select>
+                                <br />
+                                <label><h4> رنگ </h4></label>
                                 <div class="form-legal-item">
                                     <label>نام رنگ</label>
                                     <input type="text" placeholder="نام  رنگ محصول را وارد نمایید" id="Product_color_Name_input" />
@@ -160,14 +187,27 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="list_of_product_colors">
+                                                @if (Model.ProductColors != null && Model.ProductColors.Any())
+                                                {
+                                                    @foreach (var item in Model.ProductColors)
+                                                    {
+                                                        <tr color-table-item="@item.ColorName-@item.Price">
+                                                            <td>@item.ColorName</td>
+                                                            <td>
+                                                                @item.Price
+                                                            </td>
+                                                            <td><a class="btn btn-danger" onclick="RemoveProductColor('@item.ColorName-@item.Price')">حذف</a></td>
+                                                        </tr>
+                                                    }
+                                                }
                                             </tbody>
 
                                         </table>
 
                                     </div>
                                 </div>
-                               
-                                <br/><br/>
+
+                                <br /><br />
                                 <label><h4>  گارانتی </h4></label>
                                 <div class="form-legal-item">
                                     <label>نام گارانتی</label>
@@ -187,21 +227,32 @@
 
                                         <table class="table">
                                             <thead class="thead-dark">
-                                            <tr>
+                                                <tr>
 
-                                                <th style="text-align: center">نام گارانتی</th>
-                                                <th style="text-align: center">قیمت</th>
-                                                <th style="text-align: center">عملیات</th>
-                                            </tr>
+                                                    <th style="text-align: center">نام گارانتی</th>
+                                                    <th style="text-align: center">قیمت</th>
+                                                    <th style="text-align: center">عملیات</th>
+                                                </tr>
                                             </thead>
                                             <tbody id="list_of_product_guarantee">
+                                            @if (Model.ProductGuarantee != null && Model.ProductGuarantee.Any())
+                                            {
+                                                @foreach (var item in Model.ProductGuarantee)
+                                                 {
+                                                     <tr Guarantee-table-item="@item.GuaranteeName-@item.Price">
+                                                         <td>@item.GuaranteeName</td>
+                                                         <td>
+                                                             @item.Price
+                                                         </td>
+                                                         <td><a class="btn btn-danger" onclick="RemoveProductGuarantee('@item.GuaranteeName-@item.Price')">حذف</a></td>
+                                                     </tr>
+                                                 }
+                                            }
                                             </tbody>
-
                                         </table>
 
                                     </div>
                                 </div>
-                              
                             </fieldset>
                         </div>
                     </div>
@@ -210,11 +261,11 @@
                 <div class="form-legal-row-submit">
                     <div class="parent-btn">
                         <button type="submit" class="dk-btn dk-btn-info">
-                            ایجاد محصول جدید
-                            <i  class="fa fa-plus"></i>
+                         ویرایش محصول
+                            <i class="fa fa-pencil-square-o"></i>
                         </button>
                     </div>
-                      <a asp-action="Index" asp-controller="Product" asp-area="Seller" class="btn-default">انصراف</a>
+                    <a asp-action="Index" asp-controller="Product" asp-area="Seller" class="btn-default">انصراف</a>
                 </div>
             </form>
         </div>
@@ -222,10 +273,10 @@
 </div>
 @section scripts
 {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <script>
         $("[Main_Category_Chekbox]").on('change',
-            function(e) {
+            function (e) {
                 var isChecked = ($(this).is(':checked'));
                 var selectedCategoryId = $(this).attr('Main_Category_Chekbox');
                 if (isChecked) {
@@ -235,6 +286,7 @@
                     $('[parent-category-id="' + selectedCategoryId + '"]').prop('checked', false);
                 }
             });
+
         $('#addGuaranteeButton').on('click',
             (e) => {
                 e.preventDefault();
@@ -246,17 +298,17 @@
                     console.log(index);
                     var guaranteeNameNameNode =
                         `<input type="hidden" value="${guaranteeName}" name="ProductGuarantee[${index
-                        }].GuaranteeName" guarantee-Name-hidden-input="${guaranteeName}-${guaranteePrice}" />`;
+                            }].GuaranteeName" guarantee-Name-hidden-input="${guaranteeName}-${guaranteePrice}" />`;
                     var guaranteePriceNode =
                         `<input type="hidden" value="${guaranteePrice}" name="ProductGuarantee[${index
-                        }].Price" guarantee-Price-hidden-input="${guaranteeName}-${guaranteePrice}" />`;
+                            }].Price" guarantee-Price-hidden-input="${guaranteeName}-${guaranteePrice}" />`;
 
                     $('#create_product_form').append(guaranteeNameNameNode);
                     $('#create_product_form').append(guaranteePriceNode);
 
                     var guaranteeNameTableNode =
                         `<tr Guarantee-table-item="${guaranteeName}-${guaranteePrice}"> <td>${guaranteeName}</td> <td>${guaranteePrice
-                        }</td> <td><a class="btn btn-danger" onclick="RemoveProductGuarantee('${guaranteeName}-${guaranteePrice}')">حذف</a></td> </tr>`;
+                            }</td> <td><a class="btn btn-danger" onclick="RemoveProductGuarantee('${guaranteeName}-${guaranteePrice}')">حذف</a></td> </tr>`;
                     $("#list_of_product_guarantee").append(guaranteeNameTableNode);
 
                     $('#Product_Guarantee_Name_input').val('');
@@ -266,6 +318,7 @@
                 }
 
             });
+
         $('#addColorButton').on('click',
             (e) => {
                 e.preventDefault();
@@ -276,11 +329,12 @@
                     var index = currentColorCount.length;
                     var colorNameNode =
                         `<input type="hidden" value="${colorName}" name="ProductColors[${index
-                            }].ColorName"  color-name-hidden-input="${colorName}-${colorPrice}" />`;
+                        }].ColorName"  color-name-hidden-input="${colorName}-${colorPrice}" />`;
                     var colorPriceNode =
                         `<input type="hidden" value="${colorPrice}" name="ProductColors[${index
                         }].Price" color-Price-hidden-input="${colorName}-${colorPrice}" />`;
-              
+                    console.log(colorName);
+                    console.log(colorNameNode);
                     $('#create_product_form').append(colorNameNode);
                     $('#create_product_form').append(colorPriceNode);
 
@@ -301,8 +355,8 @@
             $('[color-name-hidden-input="' + index + '"]').remove();
             $('[color-Price-hidden-input="' + index + '"]').remove();
             $('[color-table-item="' + index + '"]').remove();
-
         }
+
         function RemoveProductGuarantee(index) {
             $('[guarantee-Name-hidden-input="' + index + '"]').remove();
             $('[guarantee-Price-hidden-input="' + index + '"]').remove();

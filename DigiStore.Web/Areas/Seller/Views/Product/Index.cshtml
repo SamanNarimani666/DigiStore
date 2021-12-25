@@ -12,12 +12,12 @@
         fieldset {
             overflow: hidden
         }
-    
+
         .some-class {
             float: left;
             clear: none;
         }
-    
+
         label {
             float: right;
             clear: none;
@@ -48,24 +48,24 @@
                 <div class="form-group">
                     <label>نام محصول</label>
                     <input type="text" asp-for="Name" class="form-control" placeholder="نام محصول را وارد نمایید" />
-                    <br/>
-                        @foreach (var item in Html.GetEnumSelectList<FilterProductState>())
+                    <br />
+                    @foreach (var item in Html.GetEnumSelectList<FilterProductState>())
                     {
 
-                        <div class="form-check" >
+                        <div class="form-check">
                             <label class="form-check-label">
                                 @if (Convert.ToByte(item.Value) == Convert.ToByte(Model.FilterProductState))
                                 {
-                                    <br/>
+                                    <br />
 
-                                    <input type="radio" class="radio" value="@item.Value" name="@nameof(Model.FilterProductState)" checked="checked"/>
+                                    <input type="radio" class="radio" value="@item.Value" name="@nameof(Model.FilterProductState)" checked="checked" />
 
                                 }
                                 else
                                 {
-                                    <br/>
+                                    <br />
 
-                                    <input type="radio"class="radio" value="@item.Value" name="@nameof(Model.FilterProductState)"/>
+                                    <input type="radio" class="radio" value="@item.Value" name="@nameof(Model.FilterProductState)" />
 
                                 }
 
@@ -109,9 +109,21 @@
                                 {
 
                                     ProductAcceptanceState acceptanceState = (ProductAcceptanceState)item.ProductAcceptanceState.Value;
-                                    <td>@acceptanceState.GetDisplayName()</td>
-                                }
+                                    <td>
+                                        @acceptanceState.GetDisplayName()
+                                    @if(item.ProductAcceptanceState==(byte)ProductAcceptanceState.Rejected)
+                                    {
+                                    <hr />
+                                    <div class="text-danger">
+                                        @Html.Raw(item.ProductAcceptOrRejectDescription)
+                                    </div>
+                                    }
+                                </td>
+                            }
+                            <td>
+                                <a asp-controller="Product" asp-action="EditProduct" asp-area="Seller" asp-route-id="@item.ProductId" class="btn btn-sm btn-warning">ویرایش محصول</a>
 
+                            </td>
                             </tr>
 
                         }

@@ -6,6 +6,7 @@ using DigiStore.Domain.Entities;
 using DigiStore.Domain.Enums.Store;
 using DigiStore.Domain.IRepositories.Seller;
 using DigiStore.Domain.IRepositories.User;
+using DigiStore.Domain.ViewModels.Common;
 using DigiStore.Domain.ViewModels.Seller;
 
 namespace DigiStore.Application.Services.Implementations
@@ -124,7 +125,7 @@ namespace DigiStore.Application.Services.Implementations
         #region RejectItem
         public async Task<bool> RejectItem(RejectItemViewModel rejectItem)
         {
-            var seller = await _sellerRepository.GetSellerById(rejectItem.SellerId);
+            var seller = await _sellerRepository.GetSellerById(rejectItem.Id);
             if (seller == null) return false;
             seller.StoreAceptanceStateDescription = rejectItem.RejectMessage;
             seller.StoreaceptanceState = (byte) StoreAcceptanceState.Rejected;
@@ -138,6 +139,13 @@ namespace DigiStore.Application.Services.Implementations
         public async Task<Seller> GetLastActiveSellerByUserId(int userId)
         {
             return await _sellerRepository.GetLastActiveSellerByUserId(userId);
+        }
+        #endregion
+
+        #region HasUserActiveSellerPanel
+        public async Task<bool> HasUserActiveSellerPanel(int userId)
+        {
+           return await _sellerRepository.HasUserActiveSellerPanel(userId);
         }
         #endregion
 

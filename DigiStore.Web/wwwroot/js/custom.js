@@ -100,9 +100,29 @@ $('[ajax-url-button]').on('click', function (e) {
 });
 
 function OnSuccessRejectItem(res) {
-    if (res.status === "Success") {
-        ShowMessage('موفقیت', result.message);
-        $('#ajax-url-item-' + res.data.sellerId).hide(1500);
-    }
+
+    swal({
+        title: 'اخطار',
+        text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "بله",
+        cancelButtonText: "خیر",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.value) {
+            if (res.status === 'Success') {
+                ShowMessage('موفقیت', res.message);
+                $('#ajax-url-item-' + res.data.Id).hide(1500);
+                $('.close').click();
+
+            }
+        } else if (res.dismiss === swal.DismissReason.cancel) {
+            swal('اعلام', 'عملیات لغو شد', 'error');
+        }
+    });
 }
+
 

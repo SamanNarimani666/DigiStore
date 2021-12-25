@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DigiStore.Domain.ViewModels.Seller
+namespace DigiStore.Domain.ViewModels.Common
 {
     public class RejectItemViewModel
     {
         [Required]
-        public int SellerId { get; set; }
+        public int Id { get; set; }
         [Display(Name = "علت عدم تایید")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string RejectMessage { get; set; }

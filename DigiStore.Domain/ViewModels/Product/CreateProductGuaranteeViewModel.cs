@@ -2,12 +2,12 @@
 
 namespace DigiStore.Domain.ViewModels.Product
 {
-    public class CreateProductColorViewModel
+    public class CreateProductGuaranteeViewModel
     {
-        [Display(Name = "رنگ")]
+        [Display(Name = "نام گارانتی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string ColorName { get; set; }
+        public string GuaranteeName { get; set; }
 
         [Display(Name = "قیمت")]
         public int Price { get; set; }

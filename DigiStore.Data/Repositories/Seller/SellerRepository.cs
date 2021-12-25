@@ -107,6 +107,15 @@ namespace DigiStore.Data.Repositories.Seller
         }
         #endregion
 
+        #region HasUserActiveSellerPanel
+        public async Task<bool> HasUserActiveSellerPanel(int userId)
+        {
+            return await _context.Sellers.OrderByDescending(s => s.CreatedDate)
+                .AnyAsync(s =>
+                    s.UserId == userId && s.StoreaceptanceState == (byte)StoreAcceptanceState.Accepted);
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {

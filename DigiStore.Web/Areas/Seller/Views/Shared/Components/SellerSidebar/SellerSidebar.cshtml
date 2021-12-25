@@ -26,18 +26,19 @@
 
             </div>
             <ul class="profile-menu-items">
-                <li><a asp-action="Index" asp-controller="Home" asp-area="Seller" class="profile-menu-url active-profile"><span class="mdi mdi-account-outline"></span>داشبورد</a></li>
-                <li><a asp-action="AddTicket" asp-controller="Ticket" asp-area="UserPanel" class="profile-menu-url "><span class="fa fa-ticket"></span>ثبت تیکت جدید</a></li>
-                <li><a asp-action="ListTicket" asp-controller="Ticket" asp-area="UserPanel" class="profile-menu-url "><span class="fa fa-sticky-note"></span>لیست تیکت ها</a></li>
-                <li><a asp-action="Index" asp-controller="Product" asp-area="Seller" class="profile-menu-url "><span class="glyphicon glyphicon-tag"></span>مدیریت محصولات</a></li>
+                <li><a asp-action="Index" asp-controller="Home" asp-area="Seller" class="profile-menu-url active-profile">داشبورد</a></li>
+                <li><a asp-action="AddTicket" asp-controller="Ticket" asp-area="UserPanel" class="profile-menu-url ">ثبت تیکت جدید</a></li>
+                <li><a asp-action="ListTicket" asp-controller="Ticket" asp-area="UserPanel" class="profile-menu-url ">لیست تیکت ها</a></li>
+                <li><a asp-action="Index" asp-controller="Product" asp-area="Seller" class="profile-menu-url ">مدیریت محصولات</a></li>
+                <li><a asp-action="CreateProduct" asp-controller="Product" asp-area="Seller" class="profile-menu-url ">افزودن محصولات</a></li>
                 <li>
                     <a href="profile-order.html" class="profile-menu-url">
-                        <span class="mdi mdi-basket"></span>همه
+                       همه
                         سفارش ها
                     </a>
                 </li>
-                <li><a href="profile-comments.html" class="profile-menu-url"><span class="mdi mdi-comment-multiple-outline"></span>نقد و نظرات</a></li>
-                <li><a asp-action="Logout" asp-controller="Account" class="profile-menu-url"><span class="mdi mdi-power"></span>خروج</a></li>
+                <li><a href="profile-comments.html" class="profile-menu-url">نقد و نظرات</a></li>
+                <li><a asp-action="Logout" asp-controller="Account" class="profile-menu-url"></a></li>
             </ul>
         </div>
 

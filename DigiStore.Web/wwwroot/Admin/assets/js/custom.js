@@ -100,8 +100,7 @@ $('[ajax-url-button]').on('click', function (e) {
 });
 
 function OnSuccessRejectItem(res) {
-   
-      swal({
+    swal({
         title: 'اخطار',
         text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
         type: "warning",
@@ -115,9 +114,8 @@ function OnSuccessRejectItem(res) {
           if (result.value) {
               if (res.status === 'Success') {
                   ShowMessage('موفقیت', res.message);
-                  $('#ajax-url-item-' + res.data.sellerId).hide(1500);
-                  console.log(res);
-                  console.log(res.data.id);
+                  console.log(data);
+                  $('#ajax-url-item-' + res.data.Id).hide(1500);
                   $('.close').click();
                   
               }
