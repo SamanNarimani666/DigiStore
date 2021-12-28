@@ -12,6 +12,7 @@ using DigiStore.Domain.IRepositories.Category;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
 using DigiStore.Domain.ViewModels.Product;
 using Microsoft.AspNetCore.Http;
@@ -26,13 +27,15 @@ namespace DigiStore.Application.Services.Implementations
         private readonly ISelectedProductCategoryRepository _selectedProductCategoryRepository;
         private readonly IProductColorRepository _colorRepository;
         private readonly IProductGuaranteeRepository _guaranteeRepository;
-        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository)
+        private readonly IProductGalleryRepository _galleryRepository;
+        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository, IProductGalleryRepository galleryRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
             _selectedProductCategoryRepository = selectedProductCategoryRepository;
             _colorRepository = colorRepository;
             _guaranteeRepository = guaranteeRepository;
+            _galleryRepository = galleryRepository;
         }
         #endregion
 
@@ -186,7 +189,7 @@ namespace DigiStore.Application.Services.Implementations
                 mainProduct.Description = editProduct.Description;
                 mainProduct.ShortDescription = editProduct.ShortDescription;
                 mainProduct.IsActive = editProduct.IsActive;
-                mainProduct.ProductAcceptanceState = (byte) ProductAcceptanceState.UnderProgress;
+                mainProduct.ProductAcceptanceState = (byte)ProductAcceptanceState.UnderProgress;
                 if (ProductImage != null)
                 {
                     var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(ProductImage.FileName);
@@ -282,12 +285,16 @@ namespace DigiStore.Application.Services.Implementations
                 var productColor = new List<Color>();
                 foreach (var colors in createProductColor)
                 {
-                    productColor.Add(new Color()
+                    if (productColor.All(c => c.ColorName != colors.ColorName))
                     {
-                        Price = colors.Price,
-                        ColorName = colors.ColorName,
-                        ProductId = productId
-                    });
+                        productColor.Add(new Color()
+                        {
+                            Price = colors.Price,
+                            ColorName = colors.ColorName,
+                            ProductId = productId
+                        });
+                    }
+
                 }
                 await _colorRepository.AddColor(productColor);
             }
@@ -317,6 +324,143 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region GetAllProductGallery
+        public async Task<List<ProductGallery>> GetAllProductGallery(int productId)
+        {
+            return await _galleryRepository.GetAllProductGallery(productId);
+        }
+        #endregion
+
+        #region GetAllProductGalleryForSellerpanel
+        public async Task<List<ProductGallery>> GetAllProductGalleryForSellerpanel(int productId, int sellerId)
+        {
+            return await _galleryRepository.GetAllProductGalleryForSellerpanel(productId, sellerId);
+        }
+        #endregion
+
+        #region GetProductWithSellerById
+        public async Task<Product> GetProductBySellerOwnerId(int productId, int userId)
+        {
+            return await _productRepository.GetProductBySellerOwnerId(productId, userId);
+        }
+        #endregion
+
+        #region CreateProductGallery
+        public async Task<CreateProductGalleryResult> CreateProductGallery(CreateProductGalleryViewModel createProductGallery, int productId, int sellerId, IFormFile ProductImage)
+        {
+            var product = await _productRepository.GetProductById(productId);
+            if (product == null) return CreateProductGalleryResult.ProductNotFound;
+            if (product.SellerId != sellerId) return CreateProductGalleryResult.NotForUserProduct;
+            if (ProductImage == null || !ProductImage.IsImage()) return CreateProductGalleryResult.ImageIsNull;
+            try
+            {
+                var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(ProductImage.FileName);
+                var res = ProductImage.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100, PathExtension.ProductGalleryThumbServer);
+                if (res)
+                {
+                    await _galleryRepository.AddProductGallery(new ProductGallery()
+                    {
+                        ProductId = product.ProductId,
+                        ImageName = imageName,
+                        DisplayPrority = createProductGallery.DisplayPrority
+                    });
+                    await _galleryRepository.Save();
+                }
+                return CreateProductGalleryResult.Success;
+            }
+            catch
+            {
+                return CreateProductGalleryResult.Error;
+            }
+        }
+        #endregion
+
+        #region GetEditProductGalleryForEdit
+        public async Task<EditOrDeleteProductGalleryViewModel> GetEditProductGalleryForEdit(int galleryId, int sellerId)
+        {
+            var gallery = await _galleryRepository.GetProductGalleryByGalleryIdAndSellerId(galleryId, sellerId);
+            if (gallery == null) return null;
+            return new EditOrDeleteProductGalleryViewModel()
+            {
+                DisplayPrority = gallery.DisplayPrority.Value,
+                ImageName = gallery.ImageName,
+                GalleryId = gallery.ProductGalleryId,
+                ProductId = gallery.ProductId
+            };
+        }
+        #endregion
+
+        #region EditProductGallery
+        public async Task<EditOrDeleteProductGalleryResult> EditProductGallery(EditOrDeleteProductGalleryViewModel editProductGallery, int galleryId, int sellerId,
+            IFormFile ProductImage)
+        {
+            var maingallery = await _galleryRepository.GetProductGalleryByGalleryIdAndSellerId(galleryId, sellerId);
+            if (maingallery == null) return EditOrDeleteProductGalleryResult.GalleryNotFound;
+            if (maingallery.Product.SellerId != sellerId) return EditOrDeleteProductGalleryResult.NotForUserProduct;
+            try
+            {
+                if (ProductImage != null && ProductImage.IsImage())
+                {
+                    var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(ProductImage.FileName);
+                    var res = ProductImage.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100, PathExtension.ProductGalleryThumbServer, maingallery.ImageName);
+                    if (res)
+                    {
+                        maingallery.ImageName = imageName;
+
+                    }
+                }
+                maingallery.DisplayPrority = editProductGallery.DisplayPrority;
+                _galleryRepository.EditProductGallery(maingallery);
+                await _galleryRepository.Save();
+                return EditOrDeleteProductGalleryResult.Success;
+            }
+            catch
+            {
+                return EditOrDeleteProductGalleryResult.Error;
+            }
+        }
+        #endregion
+
+        #region DeleteProductGallery
+        public async Task<EditOrDeleteProductGalleryResult> DeleteProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGallery, int galleryId, int sellerId)
+        {
+            var maingallery = await _galleryRepository.GetProductGalleryByGalleryIdAndSellerId(galleryId, sellerId);
+            if (maingallery == null) return EditOrDeleteProductGalleryResult.GalleryNotFound;
+            if (maingallery.Product.SellerId != sellerId) return EditOrDeleteProductGalleryResult.NotForUserProduct;
+            try
+            {
+                maingallery.IsDelete = true;
+                _galleryRepository.EditProductGallery(maingallery);
+                await _galleryRepository.Save();
+                return EditOrDeleteProductGalleryResult.Success;
+            }
+            catch
+            {
+                return EditOrDeleteProductGalleryResult.Error;
+            }
+        }
+        #endregion
+
+        #region ResotrProductGallery
+        public async Task<EditOrDeleteProductGalleryResult> ResotrProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGallery, int galleryId, int sellerId)
+        {
+            var maingallery = await _galleryRepository.GetProductGalleryByGalleryIdAndSellerId(galleryId, sellerId);
+            if (maingallery == null) return EditOrDeleteProductGalleryResult.GalleryNotFound;
+            if (maingallery.Product.SellerId != sellerId) return EditOrDeleteProductGalleryResult.NotForUserProduct;
+            try
+            {
+                maingallery.IsDelete = false;
+                _galleryRepository.EditProductGallery(maingallery);
+                await _galleryRepository.Save();
+                return EditOrDeleteProductGalleryResult.Success;
+            }
+            catch
+            {
+                return EditOrDeleteProductGalleryResult.Error;
+            }
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {
@@ -325,6 +469,7 @@ namespace DigiStore.Application.Services.Implementations
             await _selectedProductCategoryRepository.DisposeAsync();
             await _colorRepository.DisposeAsync();
             await _guaranteeRepository.DisposeAsync();
+            await _galleryRepository.DisposeAsync();
         }
         #endregion
     }

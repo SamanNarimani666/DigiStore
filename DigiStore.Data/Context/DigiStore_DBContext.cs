@@ -27,6 +27,7 @@ namespace DigiStore.Data.Context
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<ProductGallery> ProductGalleries { get; set; }
         public virtual DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
@@ -359,6 +360,29 @@ namespace DigiStore.Data.Context
                     .HasConstraintName("FK_Production_ProductCategory_ParentId");
             });
 
+            modelBuilder.Entity<ProductGallery>(entity =>
+            {
+                entity.ToTable("ProductGallery", "Production");
+
+                entity.Property(e => e.ImageName)
+                    .IsRequired()
+                    .HasMaxLength(400);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductGalleries)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Production_ProductGallery_ProductId");
+            });
+
             modelBuilder.Entity<ProductSelectedCategory>(entity =>
             {
                 entity.ToTable("ProductSelectedCategory", "Production");
@@ -628,10 +652,7 @@ namespace DigiStore.Data.Context
                 entity.HasIndex(e => e.UserName, "UQ_Users_User_UserName")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Mobile, "UQ__User__6FAE0782C2BBDCED")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.NationalId, "UQ__User__E9AA321A986F884B")
+                entity.HasIndex(e => e.Mobile, "UQ__User__6FAE0782AD1F72EE")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
@@ -659,12 +680,6 @@ namespace DigiStore.Data.Context
                 entity.Property(e => e.ModifiedDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.NationalId)
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("NationalID")
-                    .IsFixedLength(true);
 
                 entity.Property(e => e.PassWord)
                     .IsRequired()

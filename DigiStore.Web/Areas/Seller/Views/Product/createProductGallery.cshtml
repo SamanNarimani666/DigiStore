@@ -1,0 +1,78 @@
+﻿@model DigiStore.Domain.ViewModels.Product.CreateProductGalleryViewModel
+@{
+    ViewData["Title"] = "ثبت گالری جدید برای محصول " + ViewBag.product.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@await Component.InvokeAsync("SellerSidebar")
+
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="profile-navbar">
+            <div class="profile-navbar-back-alignment">
+                <a asp-action="Index" asp-controller="Home" asp-area="Seller" class="profile-navbar-btn-back">بازگشت</a>
+                <h4 class="edit-personal">
+                   @ViewData["Title"]
+
+                </h4>
+            </div>
+        </div>
+        <div class="profile-stats">
+            <form method="post" asp-action="createProductGallery" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
+                <div class="form-legal-row">
+                    <div class="col-lg-6 col-xs-12 mx-auto">
+                        <div class="form-legal-col">
+                            <fieldset class="form-legal-fieldset">
+
+                                <div class="form-legal-item">
+                                    <label>اولویت تصویر</label>
+                                    <input type="number" asp-for="DisplayPrority" class="input-name-first" placeholder="اولویت تصویر را وارد نمایید">
+                                    <span asp-validation-for="DisplayPrority" class="text-danger"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="ProductImage" id="imgInp" accept=".png,.jpeg" />
+                                            <label class="custom-file-label text-left" for="customFile">بار گذاری  تصویر محصول</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <img src="/Images/Product/Default/ProductDemo.png" id="ProductImage" style="height: 300px; width: 300px" class="img-thumbnail img-fluid rounded float-left" alt="...">
+                                    </div>
+                                </div>
+
+                                <div class="form-legal-row-submit">
+                                    <div class="parent-btn">
+                                        <button type="submit" class="dk-btn dk-btn-info">
+                                            ایجاد گالری جدید
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <a asp-action="Index" asp-controller="Product" asp-area="Seller" class="btn-default">انصراف</a>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        imgInp.onchange = evt => {
+                const [file] = imgInp.files;
+                if (file) {
+                    ProductImage.src = URL.createObjectURL(file)
+                }
+            }
+    </script>
+}
+
+
+

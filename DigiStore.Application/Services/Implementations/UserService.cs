@@ -46,7 +46,8 @@ namespace DigiStore.Application.Services.Implementations
                 Mobile = registerUser.Mobile.SanitizeText(),
                 Email = registerUser.Email.SanitizeText(),
                 PassWord = _passwordHelper.EncodePasswordMd5(registerUser.PassWord.SanitizeText()),
-                ActiveCode = Generators.Generators.GeneratorsUniqueCode()
+                ActiveCode = Generators.Generators.GeneratorsUniqueCode(),
+                
             };
             try
             {

@@ -1,0 +1,90 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.ViewModels.Product
+@model List<DigiStore.Domain.Entities.ProductGallery>
+@{
+    ViewData["Title"] = "گالری  تصاویر محصول";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@await Component.InvokeAsync("SellerSidebar")
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-left">
+    <div class="headline-profile page-profile-order">
+        <span>لیست  گالری محصولات </span>
+    </div>
+    <div class="panel panel-default">
+        <a class="btn btn-light border-dark m-3" asp-controller="Product" asp-action="createProductGallery" asp-area="Seller" asp-route-id="@ViewBag.ProductId">ثبت تصویر جدید</a>
+    </div>
+
+    <div class="profile-stats page-profile-order">
+        <div class="table-orders">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+
+                            <th>تصویر</th>
+                            <th>اولویت نمایش</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td><img src="@(!string.IsNullOrEmpty(item.ImageName)?PathExtension.ProductGalleryThumb+item.ImageName:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                <td>
+                                    <h4>
+                                        @item.DisplayPrority
+
+                                    </h4>
+                                </td>
+                                <td>
+                                    <a asp-controller="Product" asp-action="EditGallery" asp-area="Seller" asp-route-productId="@item.ProductId" asp-route-id="@item.ProductGalleryId" class="btn btn-sm btn-warning">ویرایش تصویر</a>
+                                    @if (!item.IsDelete)
+                                    {
+                                        <partial name="DeleteProductGallery" model="@(new EditOrDeleteProductGalleryViewModel(){GalleryId = item.ProductGalleryId,ProductId = item.ProductId})"/>
+                                    }
+                                    @if (item.IsDelete)
+                                    {
+                                        <partial name="RestoreProductGallery" model="@(new EditOrDeleteProductGalleryViewModel(){GalleryId = item.ProductGalleryId,ProductId = item.ProductId})"/>
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+
+                </table>
+            }
+            else
+            {
+                <partial name="_NotFoundItem" />
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files;
+            if (file) {
+                ProductImage.src = URL.createObjectURL(file)
+            }
+        }
+    </script>
+}
+
+
+

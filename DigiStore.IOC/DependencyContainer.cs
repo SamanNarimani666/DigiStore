@@ -11,6 +11,7 @@ using DigiStore.Data.Repositories.Category;
 using DigiStore.Data.Repositories.Guarantee;
 using DigiStore.Data.Repositories.Product;
 using DigiStore.Data.Repositories.ProductColor;
+using DigiStore.Data.Repositories.ProductGallery;
 using DigiStore.Data.Repositories.SelectedProductCategory;
 using DigiStore.Data.Repositories.Seller;
 using DigiStore.Data.Repositories.Ticket;
@@ -23,6 +24,7 @@ using DigiStore.Domain.IRepositories.Category;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
 using DigiStore.Domain.IRepositories.Seller;
 using DigiStore.Domain.IRepositories.Ticket;
@@ -52,6 +54,7 @@ namespace DigiStore.IOC
             services.AddScoped<ISelectedProductCategoryRepository,SelectedProductCategoryRepository>();
             services.AddScoped<IProductColorRepository, ProductColorRepository>();
             services.AddScoped<IProductGuaranteeRepository,ProductGuaranteeRepository>();
+            services.AddScoped<IProductGalleryRepository, ProductGalleryRepository>();
 
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
             services.AddSingleton<ISender, EmailSender>();

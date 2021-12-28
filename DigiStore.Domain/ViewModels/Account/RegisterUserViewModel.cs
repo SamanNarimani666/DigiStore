@@ -36,6 +36,7 @@ namespace DigiStore.Domain.ViewModels.Account
         [MinLength(8, ErrorMessage = "{0} نمی تواند كمتر از {1} کاراکتر باشد .")]
         [Compare("PassWord", ErrorMessage = "کلمه های عبور مغایرت دارند")]
         public string ConferimPassWord { get; set; }
+
     }
    public enum RegisterResult
    {

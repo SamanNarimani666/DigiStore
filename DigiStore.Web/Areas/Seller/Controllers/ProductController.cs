@@ -70,7 +70,6 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         #endregion
 
         #region EditProduct
-
         [HttpGet("edit-product/{id}")]
         public async Task<IActionResult> EditProduct(int id)
         {
@@ -80,15 +79,15 @@ namespace DigiStore.Web.Areas.Seller.Controllers
             ViewBag.Brand = await _branadService.GetAllBrands();
             return View(product);
         }
-        [HttpPost("edit-product/{id}"),ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProduct(int id,EditProductViewModel editProduct, IFormFile ProductImage )
+        [HttpPost("edit-product/{id}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProduct(int id, EditProductViewModel editProduct, IFormFile ProductImage)
         {
 
             if (ModelState.IsValid)
             {
-               var res= await _productService.EditProduct(editProduct, User.GetUserId(), ProductImage);
-               switch (res)
-               {
+                var res = await _productService.EditProduct(editProduct, User.GetUserId(), ProductImage);
+                switch (res)
+                {
                     case EditProductResult.Erorr:
                         TempData[ErrorMessage] = "خطا در ویرایش محصول مورد نظر";
                         break;
@@ -111,5 +110,154 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         }
         #endregion
 
+        #region ProductGallery
+        [HttpGet("product-galleries/{id}")]
+        public async Task<IActionResult> GetProductGalleries(int id)
+        {
+            ViewBag.ProductId = id;
+            var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+            return View(await _productService.GetAllProductGalleryForSellerpanel(id, seller.SellerId));
+        }
+        #endregion
+
+        #region CreateProductGallery
+
+        [HttpGet("create-product-gallery/{id}")]
+        public async Task<IActionResult> createProductGallery(int id)
+        {
+            var product = await _productService.GetProductBySellerOwnerId(id, User.GetUserId());
+            if (product == null) return NotFound();
+            ViewBag.product = product;
+            return View();
+        }
+        [HttpPost("create-product-gallery/{id}")]
+        public async Task<IActionResult> createProductGallery(int id, CreateProductGalleryViewModel createProductGallery, IFormFile ProductImage)
+        {
+            if (ModelState.IsValid)
+            {
+                var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+                var res = await _productService.CreateProductGallery(createProductGallery, id, seller.SellerId, ProductImage);
+                switch (res)
+                {
+                    case CreateProductGalleryResult.Error:
+                        TempData[ErrorMessage] = "خطا در فرایند ثبت تصویر";
+                        break;
+                    case CreateProductGalleryResult.ProductNotFound:
+                        TempData[ErrorMessage] = "محصول مورد نظر یافت نشد.";
+                        break;
+                    case CreateProductGalleryResult.ImageIsNull:
+                        TempData[ErrorMessage] = "تصویر مربوطه را وارد نمایید";
+                        break;
+                    case CreateProductGalleryResult.NotForUserProduct:
+                        TempData[ErrorMessage] = "این محصول مربوط به فروشگاه شما نمی باشد";
+                        break;
+                    case CreateProductGalleryResult.Success:
+                        TempData[SuccessMessage] = "عملیات ثبت گالری با موفقیت انجام شد";
+                        return RedirectToAction("GetProductGalleries", "Product", new { id = id });
+
+                }
+            }
+            var product = await _productService.GetProductBySellerOwnerId(id, User.GetUserId());
+            if (product == null) return NotFound();
+            ViewBag.product = product;
+            return View(createProductGallery);
+        }
+        #endregion
+
+        #region EditProductGallery
+        [HttpGet("product_{productId}/edit-gallery/{id}")]
+        public async Task<IActionResult> EditGallery(int productId, int id)
+        {
+            var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+            var mainGallery = await _productService.GetEditProductGalleryForEdit(id, seller.SellerId);
+            if (mainGallery == null) return NotFound();
+            return View(mainGallery);
+        }
+        [HttpPost("product_{productId}/edit-gallery/{id}")]
+        public async Task<IActionResult> EditGallery(int productId, int id, EditOrDeleteProductGalleryViewModel editProductGallery, IFormFile ProductImage)
+        {
+            if (ModelState.IsValid)
+            {
+                var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+                var res = await _productService.EditProductGallery(editProductGallery, id, seller.SellerId, ProductImage);
+                switch (res)
+                {
+                    case EditOrDeleteProductGalleryResult.Error:
+                        TempData[ErrorMessage] = "خطا در ویرایش تصویر گالری";
+                        break;
+                    case EditOrDeleteProductGalleryResult.GalleryNotFound:
+                        TempData[ErrorMessage] = "تصویر مورد نظر یافت نشد";
+                        break;
+                    case EditOrDeleteProductGalleryResult.NotForUserProduct:
+                        TempData[ErrorMessage] = "این محصول مربوط به فروشگاه شما نمی باشد";
+                        break;
+                    case EditOrDeleteProductGalleryResult.Success:
+                        TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت ویرایش شد";
+                        return RedirectToAction("GetProductGalleries", "Product", new { id = productId });
+                }
+            }
+            return View(editProductGallery);
+        }
+        #endregion
+
+        #region DeleteProductGallery
+        [HttpPost]
+        public async Task<IActionResult> DeleteProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGaller)
+        {
+            if (ModelState.IsValid)
+            {
+                var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+                var res = await _productService.DeleteProductGallery(deleteProductGaller, deleteProductGaller.GalleryId,
+                    seller.SellerId);
+                switch (res)
+                {
+                    case EditOrDeleteProductGalleryResult.Error:
+                        TempData[ErrorMessage] = "خطا در ویرایش تصویر گالری";
+                        break;
+                    case EditOrDeleteProductGalleryResult.GalleryNotFound:
+                        TempData[ErrorMessage] = "تصویر مورد نظر یافت نشد";
+                        break;
+                    case EditOrDeleteProductGalleryResult.NotForUserProduct:
+                        TempData[ErrorMessage] = "این محصول مربوط به فروشگاه شما نمی باشد";
+                        break;
+                    case EditOrDeleteProductGalleryResult.Success:
+                        TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت  بازگردانده شذ شد";
+                        return RedirectToAction("GetProductGalleries", "Product", new { id = deleteProductGaller.ProductId });
+
+                }
+            }
+            return RedirectToAction("GetProductGalleries", "Product", new { id = deleteProductGaller.ProductId });
+        }
+        #endregion
+
+        #region RestoreProductGallery
+        [HttpPost]
+        public async Task<IActionResult> RestoreProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGaller)
+        {
+            if (ModelState.IsValid)
+            {
+                var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+                var res = await _productService.ResotrProductGallery(deleteProductGaller, deleteProductGaller.GalleryId,
+                    seller.SellerId);
+                switch (res)
+                {
+                    case EditOrDeleteProductGalleryResult.Error:
+                        TempData[ErrorMessage] = "خطا در ویرایش تصویر گالری";
+                        break;
+                    case EditOrDeleteProductGalleryResult.GalleryNotFound:
+                        TempData[ErrorMessage] = "تصویر مورد نظر یافت نشد";
+                        break;
+                    case EditOrDeleteProductGalleryResult.NotForUserProduct:
+                        TempData[ErrorMessage] = "این محصول مربوط به فروشگاه شما نمی باشد";
+                        break;
+                    case EditOrDeleteProductGalleryResult.Success:
+                        TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت حذف شد";
+                        return RedirectToAction("GetProductGalleries", "Product", new { id = deleteProductGaller.ProductId });
+
+                }
+            }
+            return RedirectToAction("GetProductGalleries", "Product", new { id = deleteProductGaller.ProductId });
+        }
+        #endregion
     }
 }

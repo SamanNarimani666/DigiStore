@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
@@ -90,6 +91,15 @@ namespace DigiStore.Data.Repositories.Product
             return await _context.Products.AsQueryable()
                 .Include(p => p.Seller)
                 .SingleOrDefaultAsync(p => p.ProductId == productId);
+        }
+        #endregion
+
+        #region GetProductBySellerOwnerId
+        public async Task<Domain.Entities.Product> GetProductBySellerOwnerId(int productId, int userId)
+        {
+            return await _context.Products.AsQueryable()
+                .Include(p => p.Seller)
+                .SingleOrDefaultAsync(p => p.ProductId == productId && p.Seller.UserId == userId);
         }
         #endregion
 

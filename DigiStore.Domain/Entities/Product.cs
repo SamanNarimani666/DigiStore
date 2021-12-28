@@ -11,6 +11,7 @@ namespace DigiStore.Domain.Entities
         {
             Colors = new HashSet<Color>();
             Guarantees = new HashSet<Guarantee>();
+            ProductGalleries = new HashSet<ProductGallery>();
             ProductSelectedCategories = new HashSet<ProductSelectedCategory>();
         }
 
@@ -34,6 +35,7 @@ namespace DigiStore.Domain.Entities
         public virtual Seller Seller { get; set; }
         public virtual ICollection<Color> Colors { get; set; }
         public virtual ICollection<Guarantee> Guarantees { get; set; }
+        public virtual ICollection<ProductGallery> ProductGalleries { get; set; }
         public virtual ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
     }
 }

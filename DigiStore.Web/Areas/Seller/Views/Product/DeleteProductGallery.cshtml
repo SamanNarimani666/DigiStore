@@ -1,0 +1,6 @@
+﻿@model DigiStore.Domain.ViewModels.Product.EditOrDeleteProductGalleryViewModel
+<form asp-controller="Product" asp-action="DeleteProductGallery" asp-area="Seller" method="post">
+    <input type="hidden" asp-for="GalleryId" />
+    <input type="hidden" asp-for="ProductId" />
+    <button type="submit" class="btn btn-danger m-4">حذف تصویر</button>
+</form>
