@@ -27,7 +27,25 @@ namespace DigiStore.Domain.ViewModels.Paging
 
         public int HowManyShowPageAfterAndBefore { get; set; }
 
-     
+        public string GetCurrentPagingStatus()
+        {
+            var startItem = 1;
+            var endItem = AllEntitiesCount;
+
+            if (EndPage > 1)
+            {
+                startItem = (PageId - 1) * TakeEntity + 1;
+                endItem = PageId * TakeEntity>AllEntitiesCount?AllEntitiesCount:PageId*TakeEntity;
+            }
+
+            return $"نمایش {startItem}-{endItem} از {AllEntitiesCount}";
+        }
+
+        public int GetLastPage()
+        {
+
+            return (int) Math.Ceiling(AllEntitiesCount/(double)TakeEntity);
+        }
         public BasePaging GetCurrentPaging()
         {
             return this;

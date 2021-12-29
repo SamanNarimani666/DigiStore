@@ -6,11 +6,20 @@ namespace DigiStore.Domain.ViewModels.Product
 {
     public class FilterProductViewModel:BasePaging
     {
+        #region Constructor
+        public FilterProductViewModel()
+        {
+            FilterProductOrderBy = FilterProductOrderBy.Create_Date_Desc;
+        }
+        #endregion
+
         public string Name { get; set; }
         public int?  SellerId { get; set; }
 
         public List<Entities.Product> Products { get; set; }
+        public List<int> SelectedPrductCategories { get; set; }
         public FilterProductState FilterProductState { get; set; }
+        public FilterProductOrderBy FilterProductOrderBy { get; set; }
         #region Methods
 
         public FilterProductViewModel SetProduct(List<Entities.Product> products)
@@ -48,5 +57,17 @@ namespace DigiStore.Domain.ViewModels.Product
         Accepted,
         [Display(Name = "تایید نشده")]
         Rejected
+    }
+
+    public enum FilterProductOrderBy
+    {
+        [Display(Name = "جدید ")]
+        Create_Date_Desc,
+        [Display(Name = " قدیمی")]
+        Create_Date_Asc,
+        [Display(Name = "قیمت نزولی")]
+        Price_Desc,
+        [Display(Name = "قیمت صعودی")]
+        Price_Asc
     }
 }

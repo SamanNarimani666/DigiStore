@@ -231,7 +231,7 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         #endregion
 
         #region RestoreProductGallery
-        [HttpPost]
+        [HttpPost("RestoreProductGallery")]
         public async Task<IActionResult> RestoreProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGaller)
         {
             if (ModelState.IsValid)

@@ -7,10 +7,9 @@ namespace DigiStore.Domain.ViewModels.Paging
         public static BasePaging Build(int pageId, int allEntitiesCount, int take, int howManyShowPageAfterAndBefore)
         {
             var pageCount = Convert.ToInt32(Math.Ceiling(allEntitiesCount / (double)take));
-
             return new BasePaging
             {
-                PageId = pageId,
+                PageId = pageId, 
                 AllEntitiesCount = allEntitiesCount,
                 TakeEntity = take,
                 SkipEntity = (pageId - 1) * take,

@@ -63,12 +63,16 @@ $(document).ready(function () {
     }
 });
 
-
+$('#orderFilter').on('change',
+    function () {
+        $("#filter-form").submit();
+    });
 function FillPageId(pageId) {
     console.log(pageId);
     $("#PageId").val(pageId);
     $("#filter-form").submit();
 }
+
 
 
 $('[ajax-url-button]').on('click', function (e) {
@@ -183,18 +187,18 @@ $('#addColorButton').on('click',
 
                 var colorNameNode =
                     `<input type="hidden" value="${colorName}" name="ProductColors[${index
-                        }].ColorName"  color-name-hidden-input="${colorName}-${colorPrice}" />`;
+                    }].ColorName"  color-name-hidden-input="${colorName}-${colorPrice}" />`;
                 var colorPriceNode =
                     `<input type="hidden" value="${colorPrice}" name="ProductColors[${index
-                        }].Price" color-Price-hidden-input="${colorName}-${colorPrice}" />`;
+                    }].Price" color-Price-hidden-input="${colorName}-${colorPrice}" />`;
 
                 $('#create_product_form').append(colorNameNode);
                 $('#create_product_form').append(colorPriceNode);
 
                 var colorNameTableNode =
                     `<tr color-table-item="${colorName}-${colorPrice}"> <td>${colorName}</td> <td>${colorPrice
-                        }</td> <td><a class="btn btn-danger" onclick="RemoveProductColor('${colorName}-${colorPrice
-                        }')">حذف</a></td> </tr>`;
+                    }</td> <td><a class="btn btn-danger" onclick="RemoveProductColor('${colorName}-${colorPrice
+                    }')">حذف</a></td> </tr>`;
                 $("#list_of_product_colors").append(colorNameTableNode);
 
                 $('#Product_color_Name_input').val('');
@@ -239,7 +243,7 @@ function reOrderProductGuaranteeHiddenInputs() {
 function reOrderProductColorHiddenInputs() {
     var hiddenColors = $('[color-name-hidden-input]');
     $.each(hiddenColors,
-        function(index, value) {
+        function (index, value) {
             var hiddenColor = $(value);
             var colorId = $(value).attr('color-name-hidden-input');
             var hiddenPrice = $('[color-Price-hidden-input="' + colorId + '"]');

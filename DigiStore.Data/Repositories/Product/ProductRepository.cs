@@ -24,7 +24,7 @@ namespace DigiStore.Data.Repositories.Product
         #region FilterProduct
         public async Task<FilterProductViewModel> FilterProduct(FilterProductViewModel filterProduct)
         {
-            var product = _context.Products.AsQueryable();
+            var product = _context.Products.Include(p=>p.Seller).AsQueryable();
 
             #region State
             switch (filterProduct.FilterProductState)
@@ -54,6 +54,27 @@ namespace DigiStore.Data.Repositories.Product
                 product = product.Where(p => EF.Functions.Like(p.Name, ($"%{filterProduct.Name}%")));
             if (filterProduct.SellerId != null && filterProduct.SellerId != 0)
                 product = product.Where(p => p.SellerId == filterProduct.SellerId.Value);
+            #endregion
+
+            #region Order
+
+            switch (filterProduct.FilterProductOrderBy)
+            {
+                case FilterProductOrderBy.Create_Date_Asc:
+                    product = product.OrderBy(p => p.CreatedDate);
+                    break;
+                case FilterProductOrderBy.Create_Date_Desc:
+                    product = product.OrderByDescending(p => p.CreatedDate);
+                    break;
+                case FilterProductOrderBy.Price_Asc:
+                    product = product.OrderBy(p => p.Price);
+                    break;
+                case FilterProductOrderBy.Price_Desc:
+                    product = product.OrderByDescending(p => p.Price);
+                    break;
+            }
+            
+
             #endregion
 
             var pager = Pager.Build(filterProduct.PageId, await product.CountAsync(), filterProduct.TakeEntity,

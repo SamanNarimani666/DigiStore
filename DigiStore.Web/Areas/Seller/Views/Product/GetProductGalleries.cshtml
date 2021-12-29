@@ -45,7 +45,7 @@
                                     </h4>
                                 </td>
                                 <td>
-                                    <a asp-controller="Product" asp-action="EditGallery" asp-area="Seller" asp-route-productId="@item.ProductId" asp-route-id="@item.ProductGalleryId" class="btn btn-sm btn-warning">ویرایش تصویر</a>
+                                    <a asp-controller="Product" asp-action="EditGallery" asp-area="Seller" asp-route-productId="@item.ProductId" asp-route-id="@item.ProductGalleryId" class="btn btn-sm btn-info">ویرایش تصویر</a>
                                     @if (!item.IsDelete)
                                     {
                                         <partial name="DeleteProductGallery" model="@(new EditOrDeleteProductGalleryViewModel(){GalleryId = item.ProductGalleryId,ProductId = item.ProductId})"/>

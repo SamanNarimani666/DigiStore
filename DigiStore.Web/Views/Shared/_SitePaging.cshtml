@@ -1,0 +1,25 @@
+﻿@model DigiStore.Domain.ViewModels.Paging.BasePaging
+
+<div class="pager">
+    <ul class="page-item">
+        
+        @if (Model.StartPage < Model.PageId)
+        {
+            <li class="btn"><a onclick="FillPageId(@(Model.PageId - 1))">«</a></li>
+        }
+        @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+        {
+            <li class="pagination-item"><a class="@(Model.PageId == i ? "pager-item-active" : "")" onclick="FillPageId(@i)" href="#">@i</a></li>
+        }
+
+        @if (Model.EndPage > Model.PageId)
+        {
+            <li class="btn"><a class="btn" onclick="FillPageId(@(Model.PageId + 1))">»</a></li>
+        }
+       
+
+    </ul>
+</div>
+
+
+
