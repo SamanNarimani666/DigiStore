@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace DigiStore.Domain.Entities
 {
-    public partial class Color
+    public partial class ProductVisited
     {
-        public int ColorId { get; set; }
+        public int VisiteId { get; set; }
         public int ProductId { get; set; }
-        public string ColorCode { get; set; }
-        public int? Price { get; set; }
-        public bool IsDelete { get; set; }
+        public int? UserId { get; set; }
+        public string UserIp { get; set; }
         public DateTime ModifiedDate { get; set; }
         public Guid Rowguid { get; set; }
 
         public virtual Product Product { get; set; }
+        public virtual User User { get; set; }
     }
 }

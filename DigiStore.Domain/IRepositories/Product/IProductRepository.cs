@@ -13,6 +13,7 @@ namespace DigiStore.Domain.IRepositories.Product
         void EditProduct(Entities.Product product);
         Task<Entities.Product> GetProductWithSellerById(int productId);
         Task<Entities.Product> GetProductBySellerOwnerId(int productId,int userId);
+        Task<ProductDetailViewModel> GetProductDetail(int productId);
         Task Save();
     }
 }

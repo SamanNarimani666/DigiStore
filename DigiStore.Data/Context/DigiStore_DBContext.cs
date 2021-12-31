@@ -29,6 +29,7 @@ namespace DigiStore.Data.Context
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductGallery> ProductGalleries { get; set; }
         public virtual DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+        public virtual DbSet<ProductVisited> ProductVisiteds { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
         public virtual DbSet<Seller> Sellers { get; set; }
@@ -170,15 +171,11 @@ namespace DigiStore.Data.Context
             {
                 entity.ToTable("Color", "Production");
 
-                entity.HasIndex(e => e.ColorName, "I_NC_Production_Color_ColorName");
+                entity.HasIndex(e => e.ColorCode, "I_NC_Production_Color_ColorCode");
 
                 entity.HasIndex(e => e.Price, "I_NC_Production_Color_Price");
 
-                entity.HasIndex(e => e.Price, "I_NC_Production_Guarantee_GuaranteeName");
-
-                entity.HasIndex(e => e.Price, "I_NC_Production_Guarantee_Price");
-
-                entity.Property(e => e.ColorName)
+                entity.Property(e => e.ColorCode)
                     .IsRequired()
                     .HasMaxLength(200);
 
@@ -404,6 +401,39 @@ namespace DigiStore.Data.Context
                     .WithMany(p => p.ProductSelectedCategories)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_Production_ProductSelectedCategory_ProductId");
+            });
+
+            modelBuilder.Entity<ProductVisited>(entity =>
+            {
+                entity.HasKey(e => e.VisiteId)
+                    .HasName("PK_Production_ProductVisited_VisiteId");
+
+                entity.ToTable("ProductVisited", "Production");
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.UserIp)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductVisiteds)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Production_ProductVisited_ProductId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ProductVisiteds)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Production_ProductVisited_UserID");
             });
 
             modelBuilder.Entity<Role>(entity =>

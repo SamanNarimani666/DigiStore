@@ -187,7 +187,7 @@ $('#addColorButton').on('click',
 
                 var colorNameNode =
                     `<input type="hidden" value="${colorName}" name="ProductColors[${index
-                    }].ColorName"  color-name-hidden-input="${colorName}-${colorPrice}" />`;
+                    }].ColorCode"  color-name-hidden-input="${colorName}-${colorPrice}" />`;
                 var colorPriceNode =
                     `<input type="hidden" value="${colorPrice}" name="ProductColors[${index
                     }].Price" color-Price-hidden-input="${colorName}-${colorPrice}" />`;
@@ -196,7 +196,7 @@ $('#addColorButton').on('click',
                 $('#create_product_form').append(colorPriceNode);
 
                 var colorNameTableNode =
-                    `<tr color-table-item="${colorName}-${colorPrice}"> <td>${colorName}</td> <td>${colorPrice
+                    `<tr color-table-item="${colorName}-${colorPrice}"> <td style="background-color:${colorName}">${colorName}</td> <td>${colorPrice
                     }</td> <td><a class="btn btn-danger" onclick="RemoveProductColor('${colorName}-${colorPrice
                     }')">حذف</a></td> </tr>`;
                 $("#list_of_product_colors").append(colorNameTableNode);
@@ -247,7 +247,17 @@ function reOrderProductColorHiddenInputs() {
             var hiddenColor = $(value);
             var colorId = $(value).attr('color-name-hidden-input');
             var hiddenPrice = $('[color-Price-hidden-input="' + colorId + '"]');
-            $(hiddenColor).attr('name', 'ProductColors[' + index + '].ColorName')
+            $(hiddenColor).attr('name', 'ProductColors[' + index + '].ColorCode');
             $(hiddenPrice).attr('name', 'ProductColors[' + index + '].Price');
         });
 }
+
+
+$(document).ready(function () {
+    var productId = $('#ProductVisited').attr('ProductVisite');
+    $.ajax({
+        url: '/visited/' + productId,
+        type: "Get"
+    });
+
+});

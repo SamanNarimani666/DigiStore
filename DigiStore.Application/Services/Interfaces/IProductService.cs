@@ -32,7 +32,8 @@ namespace DigiStore.Application.Services.Interfaces
         Task<EditOrDeleteProductGalleryResult> EditProductGallery(EditOrDeleteProductGalleryViewModel editProductGallery, int galleryId, int sellerId, IFormFile ProductImage);
         Task<EditOrDeleteProductGalleryResult> DeleteProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGallery, int galleryId, int sellerId);
         Task<EditOrDeleteProductGalleryResult> ResotrProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGallery, int galleryId, int sellerId);
-
+        Task<ProductDetailViewModel> GetProductDetail(int productId);
+        Task<bool> AddProductVisited(int productId,string userIp,int? userId);
 
     }
 }

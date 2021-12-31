@@ -14,8 +14,9 @@ namespace DigiStore.Domain.ViewModels.Product
         #endregion
 
         public string Name { get; set; }
+        public string Category { get; set; }
         public int?  SellerId { get; set; }
-
+        public int Selectedbrands { get; set; }
         public List<Entities.Product> Products { get; set; }
         public List<int> SelectedPrductCategories { get; set; }
         public FilterProductState FilterProductState { get; set; }

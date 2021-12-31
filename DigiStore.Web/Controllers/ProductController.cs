@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Mvc;
+using HttpExtensions = DigiStore.Web.HttpContext.HttpExtensions;
 
 namespace DigiStore.Web.Controllers
 {
@@ -9,23 +11,47 @@ namespace DigiStore.Web.Controllers
     {
         #region Constructor
         private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        private readonly IBranadService _branadService;
+        public ProductController(IProductService productService, IBranadService branadService)
         {
             _productService = productService;
+            _branadService = branadService;
         }
         #endregion
 
-        #region FilterProduct
-
-        public async Task<IActionResult> FilterProduct(FilterProductViewModel filterProduct)
+        #region ProductSearch
+        [HttpGet("ProductSearch")]
+        [HttpGet("ProductSearch/{Category}")]
+        public async Task<IActionResult> ProductSearch(FilterProductViewModel filterProduct)
         {
+
             filterProduct.TakeEntity = 12;
-            filterProduct = await _productService.FilterProduct(filterProduct);
+            filterProduct.FilterProductState = FilterProductState.Accepted;
             ViewBag.ProductCategories = await _productService.GetAllActiveProductCategory();
-            if (filterProduct.PageId > filterProduct.GetLastPage()) return NotFound();
+            ViewBag.ProductBrands = await _branadService.GetAllBrands();
+            filterProduct = await _productService.FilterProduct(filterProduct);
+
             return View(filterProduct);
         }
-
         #endregion
+
+        #region Show Product Detials
+        [HttpGet("products/{productId}/{title}")]
+        public async Task<IActionResult> ProductDetail(int productId,string title)
+        {
+            var product = await _productService.GetProductDetail(productId);
+            if (product==null) return NotFound();
+            return View(product);
+        }
+        #endregion
+        [HttpGet("visited/{produtId}")]
+        public async Task Visited(int produtId)
+        {
+            if (produtId!=null&& produtId!=0)
+            {
+                await _productService.AddProductVisited(produtId, HttpExtensions.GetUserIp(HttpContext),
+                    IdentityExtensions.GetUserId(User));
+            }
+        }
     }
 }

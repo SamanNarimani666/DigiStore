@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
@@ -11,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DigiStore.Data.Repositories.Product
 {
-    public class ProductRepository: IProductRepository
+    public class ProductRepository : IProductRepository
     {
         #region Constructor
         private readonly DigiStore_DBContext _context;
@@ -24,7 +23,11 @@ namespace DigiStore.Data.Repositories.Product
         #region FilterProduct
         public async Task<FilterProductViewModel> FilterProduct(FilterProductViewModel filterProduct)
         {
-            var product = _context.Products.Include(p=>p.Seller).AsQueryable();
+            var product = _context.Products
+                .Include(p => p.Seller)
+                .Include(p => p.ProductSelectedCategories)
+                .ThenInclude(p => p.ProductCategory)
+                .AsQueryable();
 
             #region State
             switch (filterProduct.FilterProductState)
@@ -38,7 +41,7 @@ namespace DigiStore.Data.Repositories.Product
                     product = product.Where(s => !s.IsActive && s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted);
                     break;
                 case FilterProductState.Accepted:
-                    product = product.Where(s => s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted);
+                    product = product.Where(s =>s.IsActive &&s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted);
                     break;
                 case FilterProductState.Rejected:
                     product = product.Where(s => s.ProductAcceptanceState == (byte)ProductAcceptanceState.Rejected);
@@ -54,6 +57,12 @@ namespace DigiStore.Data.Repositories.Product
                 product = product.Where(p => EF.Functions.Like(p.Name, ($"%{filterProduct.Name}%")));
             if (filterProduct.SellerId != null && filterProduct.SellerId != 0)
                 product = product.Where(p => p.SellerId == filterProduct.SellerId.Value);
+            if (!string.IsNullOrEmpty(filterProduct.Category))
+                product = product.Where(s =>
+                    s.ProductSelectedCategories.Any(f => f.ProductCategory.UrlName == filterProduct.Category));
+            if (filterProduct.Selectedbrands != 0 && filterProduct.Selectedbrands != null)
+                product = product.Where(p => p.BrandId == filterProduct.Selectedbrands);
+            
             #endregion
 
             #region Order
@@ -73,7 +82,6 @@ namespace DigiStore.Data.Repositories.Product
                     product = product.OrderByDescending(p => p.Price);
                     break;
             }
-            
 
             #endregion
 
@@ -94,14 +102,14 @@ namespace DigiStore.Data.Repositories.Product
         #region GetProductById
         public async Task<Domain.Entities.Product> GetProductById(int productId)
         {
-            return await _context.Products.SingleOrDefaultAsync(p=>p.ProductId==productId);
+            return await _context.Products.SingleOrDefaultAsync(p => p.ProductId == productId);
         }
         #endregion
 
         #region EditProduct
         public void EditProduct(Domain.Entities.Product product)
         {
-            product.ModifiedDate=DateTime.Now;
+            product.ModifiedDate = DateTime.Now;
             _context.Products.Update(product);
         }
         #endregion
@@ -121,6 +129,37 @@ namespace DigiStore.Data.Repositories.Product
             return await _context.Products.AsQueryable()
                 .Include(p => p.Seller)
                 .SingleOrDefaultAsync(p => p.ProductId == productId && p.Seller.UserId == userId);
+        }
+        #endregion
+
+        #region GetProductDetail
+        public async Task<ProductDetailViewModel> GetProductDetail(int productId)
+        {
+            var product = await _context.Products.AsQueryable()
+                .Include(p=>p.ProductGalleries)
+                .Include(p=>p.Guarantees)
+                .Include(p => p.Colors)
+                .Include(p=>p.ProductGalleries)
+                .Include(p => p.Seller)
+                .ThenInclude(p => p.User)
+                .Include(p => p.ProductSelectedCategories)
+                .ThenInclude(p => p.ProductCategory)
+                .SingleOrDefaultAsync(p => p.ProductId == productId);
+            return new ProductDetailViewModel()
+            {
+                ProductId= product.ProductId,
+                Title = product.Name,
+                ImageName = product.ImageName,
+                Price = product.Price.Value,
+                ShortDescription = product.ShortDescription,
+                Description = product.Description,
+                ProductCategories = product.ProductSelectedCategories.Select(s=>s.ProductCategory).ToList(),
+                ProductGalleries = product.ProductGalleries.ToList(),
+                ProductColors = product.Colors.ToList(),
+                SellerId = product.SellerId,
+                Seller = product.Seller,
+                Guarantees = product.Guarantees.ToList()
+            };
         }
         #endregion
 

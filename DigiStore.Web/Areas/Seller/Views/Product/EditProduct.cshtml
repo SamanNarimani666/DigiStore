@@ -35,8 +35,8 @@
                     var index = 0;
                     foreach (var color in Model.ProductColors)
                     {
-                        <input type="hidden" value="@color.ColorName" name="ProductColors[@index].ColorName"  color-name-hidden-input="@color.ColorName-@color.Price" />
-                        <input type="hidden" value="@color.Price" name="ProductColors[@index].Price" color-Price-hidden-input="@color.ColorName-@color.Price" />
+                        <input type="hidden" value="@color.ColorCode" name="ProductColors[@index].ColorCode"  color-name-hidden-input="@color.ColorCode-@color.ColorCode" />
+                        <input type="hidden" value="@color.Price" name="ProductColors[@index].Price" color-Price-hidden-input="@color.ColorCode-@color.Price" />
                         index += 1;
                     }
                 }
@@ -162,8 +162,8 @@
                                 <br />
                                 <label><h4> رنگ </h4></label>
                                 <div class="form-legal-item">
-                                    <label>نام رنگ</label>
-                                    <input type="text" placeholder="نام  رنگ محصول را وارد نمایید" id="Product_color_Name_input" />
+                                    <label>مقدار رنگ</label>
+                                    <input type="color" placeholder="نام  رنگ محصول را وارد نمایید" id="Product_color_Name_input" />
                                 </div>
                                 <div class="form-legal-item">
                                     <label>قیمت مضاف رنگ محصول</label>
@@ -191,12 +191,12 @@
                                                 {
                                                     @foreach (var item in Model.ProductColors)
                                                     {
-                                                        <tr color-table-item="@item.ColorName-@item.Price">
-                                                            <td>@item.ColorName</td>
+                                                        <tr color-table-item="@item.ColorCode-@item.Price">
+                                                            <td style="background-color:@item.ColorCode">@item.ColorCode</td>
                                                             <td>
                                                                 @item.Price
                                                             </td>
-                                                            <td><a class="btn btn-danger" onclick="RemoveProductColor('@item.ColorName-@item.Price')">حذف</a></td>
+                                                            <td><a class="btn btn-danger" onclick="RemoveProductColor('@item.ColorCode-@item.Price')">حذف</a></td>
                                                         </tr>
                                                     }
                                                 }
