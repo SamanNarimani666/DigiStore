@@ -10,7 +10,9 @@ namespace DigiStore.Domain.Entities
         public User()
         {
             Addresses = new HashSet<Address>();
+            ProductDiscountUses = new HashSet<ProductDiscountUse>();
             ProductVisiteds = new HashSet<ProductVisited>();
+            SalesOrderHeaders = new HashSet<SalesOrderHeader>();
             Sellers = new HashSet<Seller>();
             TicketMessages = new HashSet<TicketMessage>();
             Tickets = new HashSet<Ticket>();
@@ -35,7 +37,9 @@ namespace DigiStore.Domain.Entities
         public Guid Rowguid { get; set; }
 
         public virtual ICollection<Address> Addresses { get; set; }
+        public virtual ICollection<ProductDiscountUse> ProductDiscountUses { get; set; }
         public virtual ICollection<ProductVisited> ProductVisiteds { get; set; }
+        public virtual ICollection<SalesOrderHeader> SalesOrderHeaders { get; set; }
         public virtual ICollection<Seller> Sellers { get; set; }
         public virtual ICollection<TicketMessage> TicketMessages { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }

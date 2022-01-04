@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Domain.ViewModels.ProductVisited;
 using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Application.Services.Interfaces
@@ -34,6 +35,8 @@ namespace DigiStore.Application.Services.Interfaces
         Task<EditOrDeleteProductGalleryResult> ResotrProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGallery, int galleryId, int sellerId);
         Task<ProductDetailViewModel> GetProductDetail(int productId);
         Task<bool> AddProductVisited(int productId,string userIp,int? userId);
-
+        Task AddProductFeatures(int productId,List<CreateProductFeatureViewModel> createProductFeature);
+        void RemoveAllProductFeatures(int productId);
+        Task<FilterProductVisitedViewModel> GetLastProductVisited(FilterProductVisitedViewModel filterProductVisited);
     }
 }

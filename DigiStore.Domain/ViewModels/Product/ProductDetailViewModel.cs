@@ -41,5 +41,7 @@ namespace DigiStore.Domain.ViewModels.Product
 
         public List<ProductCategory> ProductCategories { get; set; }
         public List<Guarantee> Guarantees { get; set; }
+        public List<ProductFeature> ProductFeatures { get; set; }
+        public List<Entities.Product> RelatedProducts { get; set; }
     }
 }

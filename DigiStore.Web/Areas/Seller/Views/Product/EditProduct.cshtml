@@ -1,7 +1,7 @@
 ﻿@using DigiStore.Domain.Entities
 @model DigiStore.Domain.ViewModels.Product.EditProductViewModel
 @{
-    ViewData["Title"] = "ویرایش محصول"+"\t" + Model.Title;
+    ViewData["Title"] = "ویرایش محصول" + "\t" + Model.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var categories = ViewBag.MainCategory as List<ProductCategory>;
     var brands = ViewBag.Brand as List<Brand>;
@@ -28,14 +28,14 @@
         </div>
         <div class="profile-stats">
             <form method="post" asp-action="EditProduct" asp-controller="Product" asp-area="Seller" id="create_product_form" enctype="multipart/form-data">
-            <input type="hidden" asp-for="ProductId" />
-            <input type="hidden" asp-for="ProductImage"/>
+                <input type="hidden" asp-for="ProductId" />
+                <input type="hidden" asp-for="ProductImage" />
                 @if (Model.ProductColors != null && Model.ProductColors.Any())
                 {
                     var index = 0;
                     foreach (var color in Model.ProductColors)
                     {
-                        <input type="hidden" value="@color.ColorCode" name="ProductColors[@index].ColorCode"  color-name-hidden-input="@color.ColorCode-@color.ColorCode" />
+                        <input type="hidden" value="@color.ColorCode" name="ProductColors[@index].ColorCode" color-name-hidden-input="@color.ColorCode-@color.Price" />
                         <input type="hidden" value="@color.Price" name="ProductColors[@index].Price" color-Price-hidden-input="@color.ColorCode-@color.Price" />
                         index += 1;
                     }
@@ -45,11 +45,21 @@
                     var index = 0;
                     foreach (var guarantee in Model.ProductGuarantee)
                     {
-                        <input type="hidden" value="@guarantee.GuaranteeName" name="ProductGuarantee[@index].GuaranteeName"  guarantee-Name-hidden-input="@guarantee.GuaranteeName-@guarantee.Price" />
+                        <input type="hidden" value="@guarantee.GuaranteeName" name="ProductGuarantee[@index].GuaranteeName" guarantee-Name-hidden-input="@guarantee.GuaranteeName-@guarantee.Price" />
                         <input type="hidden" value="@guarantee.Price" name="ProductGuarantee[@index].Price" guarantee-Price-hidden-input="@guarantee.GuaranteeName-@guarantee.Price" />
                         index += 1;
                     }
                 }
+            @if (Model.ProductFeature != null && Model.ProductFeature.Any())
+            {
+                var index = 0;
+                foreach (var feature in Model.ProductFeature)
+                {
+                    <input type="hidden" value="@feature.FeatureTitle" name="ProductFeature[@index].FeatureTitle" feature-Name-hidden-input="@feature.FeatureTitle-@feature.FeatureValue" />
+                    <input type="hidden" value="@feature.FeatureValue" name="ProductFeature[@index].FeatureValue" feature-value-hidden-input="@feature.FeatureTitle-@feature.FeatureValue" />
+                    index += 1;
+                }
+            }
                 <div class="form-legal-row">
                     <div class="col-lg-6 col-xs-12 mx-auto">
                         <div class="form-legal-col">
@@ -161,9 +171,9 @@
                                 </select>
                                 <br />
                                 <label><h4> رنگ </h4></label>
-                                <div class="form-legal-item">
+                                <div class="form-group">
                                     <label>مقدار رنگ</label>
-                                    <input type="color" placeholder="نام  رنگ محصول را وارد نمایید" id="Product_color_Name_input" />
+                                    <input type="color" placeholder="نام  رنگ محصول را وارد نمایید" class="form-control"  id="Product_color_Name_input" />
                                 </div>
                                 <div class="form-legal-item">
                                     <label>قیمت مضاف رنگ محصول</label>
@@ -206,16 +216,63 @@
 
                                     </div>
                                 </div>
+                                <br /><br />
+                                <label><h4>  ویژگی های محصول </h4></label>
+                                <div class="form-legal-item">
+                                    <label>نام ویژگی</label>
+                                    <input type="text" placeholder="نام ویژگی  محصول را وارد نمایید" id="Product_feature_Name_input" />
+                                </div>
+                                <div class="form-legal-item">
+                                    <label>مقدار ویژگی</label>
+                                    <input type="text" placeholder="مقدار ویژگی محصول را وارد نمایید" id="Product_feature_value_input" />
+                                </div>
+                                <div class="parent-btn">
+                                    <button id="addfeatureButton" type="button" class="btn btn-success">
+                                        افزودن ویژگی
+                                    </button>
+                                </div>
+                                <div class="profile-stats page-profile-order">
+                                    <div class="table-orders">
+
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                                <tr>
+
+                                                    <th style="text-align: center">نام ويژگی</th>
+                                                    <th style="text-align: center">مقدار</th>
+                                                    <th style="text-align: center">عملیات</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="list_of_product_features">
+                                            @if (Model.ProductFeature != null && Model.ProductFeature.Any())
+                                            {
+                                                @foreach (var feature in Model.ProductFeature)
+                                                 {
+                                                     <tr featureName-table-item="@feature.FeatureTitle-@feature.FeatureValue">
+                                                         <td>@feature.FeatureTitle</td>
+                                                         <td>
+                                                             @feature.FeatureValue
+                                                         </td>
+                                                         <td><a class="btn btn-danger" onclick="RemoveProductfeatures('@feature.FeatureTitle-@feature.FeatureValue')">حذف</a></td>
+                                                     </tr>
+                                                 }
+                                            }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
 
                                 <br /><br />
                                 <label><h4>  گارانتی </h4></label>
                                 <div class="form-legal-item">
                                     <label>نام گارانتی</label>
-                                    <input type="text" placeholder="نام  رنگ محصول را وارد نمایید" id="Product_Guarantee_Name_input" />
+                                    <input type="text" placeholder="نام  گارانتی محصول را وارد نمایید" id="Product_Guarantee_Name_input" />
                                 </div>
                                 <div class="form-legal-item">
-                                    <label>قیمت مضافگارانتی محصول</label>
-                                    <input type="number" placeholder="قیمت مضاف رنگ محصول را وارد نمایید" id="Product_Guarantee_Price_input" />
+                                    <label>قیمت مضاف گارانتی محصول</label>
+                                    <input type="number" placeholder="قیمت مضافگارانتی محصول را وارد نمایید" id="Product_Guarantee_Price_input" />
                                 </div>
                                 <div class="parent-btn">
                                     <button id="addGuaranteeButton" type="button" class="btn btn-success">
@@ -235,19 +292,19 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="list_of_product_guarantee">
-                                            @if (Model.ProductGuarantee != null && Model.ProductGuarantee.Any())
-                                            {
-                                                @foreach (var item in Model.ProductGuarantee)
-                                                 {
-                                                     <tr Guarantee-table-item="@item.GuaranteeName-@item.Price">
-                                                         <td>@item.GuaranteeName</td>
-                                                         <td>
-                                                             @item.Price
-                                                         </td>
-                                                         <td><a class="btn btn-danger" onclick="RemoveProductGuarantee('@item.GuaranteeName-@item.Price')">حذف</a></td>
-                                                     </tr>
-                                                 }
-                                            }
+                                                @if (Model.ProductGuarantee != null && Model.ProductGuarantee.Any())
+                                                {
+                                                    @foreach (var item in Model.ProductGuarantee)
+                                                    {
+                                                        <tr Guarantee-table-item="@item.GuaranteeName-@item.Price">
+                                                            <td>@item.GuaranteeName</td>
+                                                            <td>
+                                                                @item.Price
+                                                            </td>
+                                                            <td><a class="btn btn-danger" onclick="RemoveProductGuarantee('@item.GuaranteeName-@item.Price')">حذف</a></td>
+                                                        </tr>
+                                                    }
+                                                }
                                             </tbody>
                                         </table>
 
@@ -261,7 +318,7 @@
                 <div class="form-legal-row-submit">
                     <div class="parent-btn">
                         <button type="submit" class="dk-btn dk-btn-info">
-                         ویرایش محصول
+                            ویرایش محصول
                             <i class="fa fa-pencil-square-o"></i>
                         </button>
                     </div>

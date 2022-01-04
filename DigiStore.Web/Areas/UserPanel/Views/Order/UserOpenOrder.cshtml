@@ -1,0 +1,180 @@
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Order.UserOpenOrderViewModel
+
+@{
+    ViewData["Title"] = "سبد خرید " + User.Identity.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var totalPrice = 0;
+    if (Model != null)
+    {
+        totalPrice = Model.GetTotalPrice();
+    }
+
+}
+
+@if (Model != null)
+{
+    <div class="col-12">
+        <div class="page-content">
+            <div class="col-lg-4 col-md-4 col-xs-12 pull-right">
+                <div class="checkout-tab">
+                    <div class="checkout-tab-pill listing-active-cart">
+                        سبد خرید
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="cart-tab-main" id="user-open-order-wapper">
+            <div class="col-lg-9 col-md-9 col-xs-12 pull-right">
+                <div class="page-content-cart">
+                    <form action="#">
+                        @if (Model.Details != null && Model.Details.Any())
+                        {
+                            <div class="header-express">
+                                <span class="checkout-header-title"><i class="fa fa-truck"></i>ارسال عادی</span>
+                                <span class="header-extra-info">
+                                    (@Model.Details.Sum(p => p.Qty)
+                                    کالا)
+                                </span>
+                                <span class="checkout-header-delivery-cost">هزینه ارسال:رایگان</span>
+                            </div>
+                            foreach (var orderDetail in Model.Details)
+                            {
+                                <div class="checkout-body">
+
+                                    <a onclick="RemoveProductFromOrder(@orderDetail.DetialId)" href="#" class="remove-from-cart"><i class="mdi mdi-close"></i></a>
+                                    <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@orderDetail.ProductId" asp-route-title="@orderDetail.ProductTitle.FixTextForUrl()" class="col-thumb img-fluid img-thumbnail"><img src="@(PathExtension.ProductImageThumb + orderDetail.ProductImageName)" alt="img-slider"></a>
+
+                                    <div class="checkout-col-desc m-2 ">
+                                        <a href="#">
+                                            <h3>
+                                                @orderDetail.ProductTitle
+                                            </h3>
+                                        </a>
+                                        <div class="checkout-variant-color">
+                                            <div class="checkout-dealer">@(orderDetail.ProductPrice.ToString("#,0"))</div>
+                                            @if (orderDetail.ColorCode != null && orderDetail.ColorCode.Any())
+                                            {
+                                                <div class="checkout-guarantee">
+                                                    قیمت مضاف رنگ :@(orderDetail.ProductColorPrice.ToString("#,0")) تومان
+                                                    <br />
+                                                    <i class="fa fa-color" style="height: 30px; width: 40px; border: 1px solid black; background-color: @orderDetail.ColorCode"></i>
+                                                </div>
+                                            }
+                                            @*@if (orderDetail.Product.Guarantees != null && orderDetail.Product.Guarantees.Any())
+                                                {
+                                                    <div class="checkout-guarantee">
+                                                        <i class="fa fa-check"></i>گارانتی: @orderDetail.Product.Guarantees.FirstOrDefault().GuaranteeName
+                                                    </div>
+                                                }*@
+                                        </div>
+
+                                        <div class="quantity">
+                                            <input type="number" onchange="ChangeOpenOrderDetialCount(@orderDetail.DetialId,event)"  step="1" value="@orderDetail.Qty">
+                                            <div class="quantity-nav">
+                                                <div class="quantity-button quantity-up">+</div>
+                                                <div class="quantity-button quantity-down">-</div>
+                                            </div>
+                                        </div>
+
+                                        <a href="#" class="add-to-sfl">
+                                            <div class="cart-item-product-price">
+                                                قیمت کل :
+                                                @((orderDetail.Qty*(orderDetail.ProductPrice+ orderDetail.ProductColorPrice)).ToString("#,0"))
+                                                <span>
+                                                    تومان
+                                                </span>
+                                            </div>
+
+                                        </a>
+
+
+
+                                    </div>
+                                </div>
+
+                            }
+
+
+                        }
+
+                    </form>
+                </div>
+
+                <div class="checkout-to-shipping-sticky">
+                    <a href="#" class="selenium-next-step-shipping">ادامه فرآیند خرید</a>
+                    <div class="checkout-to-shipping-price-report">
+                        <p>مبلغ قابل پرداخت</p>
+                        <div class="cart-item-product-price">
+                            @(totalPrice.ToString("#,0"))
+                            <span>
+                                تومان
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-12 pull-left">
+                <div class="page-aside">
+                    <div class="checkout-summary">
+                        <ul class="checkout-summary-summary">
+                            <li>
+                                <span>تعداد کالا</span>
+                                <span>@Model.Details.Sum(p => p.Qty)</span>
+                            </li>
+                            <li>
+                                <span>جمع</span>
+                                <span> @(totalPrice.ToString("#,0")) تومان</span>
+                            </li>
+                            <li>
+                                <span>تخغیف</span>
+                                <span>۳,۴۲۰,۰۰۰ تومان</span>
+                            </li>
+                            <li>
+                                <span>مبلغ قابل پرداخت</span>
+                                <span>              @(totalPrice.ToString("#,0")) تومان</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+}
+else
+{
+    <div class="col-12">
+        <div class="cart-page">
+            <div class="container">
+                <div class="checkout-empty">
+                    <div class="checkout-empty-empty-cart-icon"></div>
+                    <div class="checkout-empty-title">سبد خرید شما خالی است!</div>
+                    <div class="col-lg-6 col-md-6!important col-xs-12 mx-auto">
+                        <div class="checkout-empty-links">
+
+                            <p>
+                                می‌توانید برای مشاهده محصولات بیشتر به صفحات زیر بروید
+                            </p>
+                            <div class="checkout-empty-link-urls">
+                                <a href="#">
+                                    تخفیف‌ها و پیشنهادها
+                                </a>
+                                <a href="#">
+                                    محصولات پرفروش روز
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+

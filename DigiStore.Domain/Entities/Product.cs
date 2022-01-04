@@ -11,16 +11,19 @@ namespace DigiStore.Domain.Entities
         {
             Colors = new HashSet<Color>();
             Guarantees = new HashSet<Guarantee>();
+            ProductDiscounts = new HashSet<ProductDiscount>();
+            ProductFeatures = new HashSet<ProductFeature>();
             ProductGalleries = new HashSet<ProductGallery>();
             ProductSelectedCategories = new HashSet<ProductSelectedCategory>();
             ProductVisiteds = new HashSet<ProductVisited>();
+            SalesOrderDetails = new HashSet<SalesOrderDetail>();
         }
 
         public int ProductId { get; set; }
         public int SellerId { get; set; }
         public int? BrandId { get; set; }
         public string Name { get; set; }
-        public int? Price { get; set; }
+        public int Price { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }
         public string ProductAcceptOrRejectDescription { get; set; }
@@ -31,13 +34,17 @@ namespace DigiStore.Domain.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public Guid Rowguid { get; set; }
+        public int? SiteProfile { get; set; }
 
         public virtual Brand Brand { get; set; }
         public virtual Seller Seller { get; set; }
         public virtual ICollection<Color> Colors { get; set; }
         public virtual ICollection<Guarantee> Guarantees { get; set; }
+        public virtual ICollection<ProductDiscount> ProductDiscounts { get; set; }
+        public virtual ICollection<ProductFeature> ProductFeatures { get; set; }
         public virtual ICollection<ProductGallery> ProductGalleries { get; set; }
         public virtual ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public virtual ICollection<ProductVisited> ProductVisiteds { get; set; }
+        public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; }
     }
 }

@@ -27,12 +27,18 @@ namespace DigiStore.Data.Context
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<ProductDiscount> ProductDiscounts { get; set; }
+        public virtual DbSet<ProductDiscountUse> ProductDiscountUses { get; set; }
+        public virtual DbSet<ProductFeature> ProductFeatures { get; set; }
         public virtual DbSet<ProductGallery> ProductGalleries { get; set; }
         public virtual DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public virtual DbSet<ProductVisited> ProductVisiteds { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
+        public virtual DbSet<SalesOrderDetail> SalesOrderDetails { get; set; }
+        public virtual DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
         public virtual DbSet<Seller> Sellers { get; set; }
+        public virtual DbSet<SellerWallet> SellerWallets { get; set; }
         public virtual DbSet<SiteSetting> SiteSettings { get; set; }
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -303,8 +309,6 @@ namespace DigiStore.Data.Context
                     .IsRequired()
                     .HasMaxLength(300);
 
-                entity.Property(e => e.Price).HasDefaultValueSql("((0))");
-
                 entity.Property(e => e.Rowguid)
                     .HasColumnName("rowguid")
                     .HasDefaultValueSql("(newsequentialid())");
@@ -312,6 +316,8 @@ namespace DigiStore.Data.Context
                 entity.Property(e => e.ShortDescription)
                     .IsRequired()
                     .HasMaxLength(500);
+
+                entity.Property(e => e.SiteProfile).HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.Brand)
                     .WithMany(p => p.Products)
@@ -355,6 +361,79 @@ namespace DigiStore.Data.Context
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
                     .HasConstraintName("FK_Production_ProductCategory_ParentId");
+            });
+
+            modelBuilder.Entity<ProductDiscount>(entity =>
+            {
+                entity.ToTable("ProductDiscount", "Discount");
+
+                entity.Property(e => e.ExpierDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductDiscounts)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Discount_ProductDiscount_ProductId");
+            });
+
+            modelBuilder.Entity<ProductDiscountUse>(entity =>
+            {
+                entity.ToTable("ProductDiscountUse", "Discount");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ProductDiscountUses)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Discount_ProductDiscountUse_UserID");
+            });
+
+            modelBuilder.Entity<ProductFeature>(entity =>
+            {
+                entity.ToTable("ProductFeature", "Production");
+
+                entity.Property(e => e.FeatureTitle)
+                    .IsRequired()
+                    .HasMaxLength(300);
+
+                entity.Property(e => e.FeatureValue)
+                    .IsRequired()
+                    .HasMaxLength(300);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductFeatures)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Production_ProductFeature_ProductId");
             });
 
             modelBuilder.Entity<ProductGallery>(entity =>
@@ -482,6 +561,73 @@ namespace DigiStore.Data.Context
                     .HasConstraintName("FK_Users_RolePermission_RoleID");
             });
 
+            modelBuilder.Entity<SalesOrderDetail>(entity =>
+            {
+                entity.ToTable("SalesOrderDetail", "Sales");
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Color)
+                    .WithMany(p => p.SalesOrderDetails)
+                    .HasForeignKey(d => d.ColorId)
+                    .HasConstraintName("FK_Sales_SalesOrderDetail_ColorId");
+
+                entity.HasOne(d => d.Guarantee)
+                    .WithMany(p => p.SalesOrderDetails)
+                    .HasForeignKey(d => d.GuaranteeId)
+                    .HasConstraintName("FK_Sales_SalesOrderDetail_GuaranteeId");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.SalesOrderDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Sales_SalesOrderDetail_ProductId");
+
+                entity.HasOne(d => d.SalesOrder)
+                    .WithMany(p => p.SalesOrderDetails)
+                    .HasForeignKey(d => d.SalesOrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Sales_SalesOrderDetail_SalesOrderId");
+            });
+
+            modelBuilder.Entity<SalesOrderHeader>(entity =>
+            {
+                entity.HasKey(e => e.SalesOrderId)
+                    .HasName("PK_Sales_SalesOrderHeader_SalesOrderId");
+
+                entity.ToTable("SalesOrderHeader", "Sales");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Descriptions).HasMaxLength(500);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PaymentDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.Property(e => e.TracingCode).HasMaxLength(300);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SalesOrderHeaders)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Sales_SalesOrderHeader_UserID");
+            });
+
             modelBuilder.Entity<Seller>(entity =>
             {
                 entity.ToTable("Seller", "Store");
@@ -540,6 +686,31 @@ namespace DigiStore.Data.Context
                     .WithMany(p => p.Sellers)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Store_Seller_UserID");
+            });
+
+            modelBuilder.Entity<SellerWallet>(entity =>
+            {
+                entity.ToTable("SellerWallet", "Store");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Descriptions).HasMaxLength(500);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Seller)
+                    .WithMany(p => p.SellerWallets)
+                    .HasForeignKey(d => d.SellerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Store_SellerWallet_SellerId");
             });
 
             modelBuilder.Entity<SiteSetting>(entity =>

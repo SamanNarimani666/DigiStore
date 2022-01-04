@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 
+
 namespace DigiStore.Domain.ViewModels.Product
 {
     public class CreateProductViewModel
@@ -30,6 +31,8 @@ namespace DigiStore.Domain.ViewModels.Product
         public List<CreateProductColorViewModel> ProductColors { get; set; }
         public List<CreateProductGuaranteeViewModel> ProductGuarantee { get; set; }
         public List<int> SelectedCategories { get; set; }
+        public List<CreateProductFeatureViewModel> ProductFeature { get; set; }
+
 
     }
 

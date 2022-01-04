@@ -1,4 +1,5 @@
 ﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.ViewModels.Order
 @using DigiStore.Web.PresentationExtensions
 @model DigiStore.Domain.ViewModels.Product.ProductDetailViewModel
 @{
@@ -6,8 +7,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <div class="col-12" style="transform: none;">
     <div class="product-page" style="transform: none;">
+
+        <div>
+            <partial name="_AddProductToCartPartial" model="@(new AddProductToOrderViewModel(){ OrderQty = 1,ProductId = Model.ProductId})" />
+        </div>
+
         <article class="js-product" style="transform: none;">
             <div class="product-nav-container">
                 <nav aria-label="breadcrumb">
@@ -24,16 +31,16 @@
             </div>
             <div class="col-lg-4 col-md-12 col-xs-12 pull-right">
                 <div class="product-gallery">
-                    <div class="zoomWrapper" style="height: 411px; width: 411px;"><img class="zoom-img" id="img-product-zoom" src="@(PathExtension.ProductImageOrigin+Model.ImageName)" data-zoom-image="@(PathExtension.ProductImageOrigin+Model.ImageName)" alt="img-slider" style="position: absolute; width: 411px; height: 411px;"></div>
-                    <div id="gallery_01f" style="width:420px;float:right;">
+                    <div class="zoomWrapper" style="height: 411px; width: 411px;"><img class="zoom-img" id="img-product-zoom" src="@(PathExtension.ProductImageOrigin + Model.ImageName)" data-zoom-image="@(PathExtension.ProductImageOrigin + Model.ImageName)" alt="img-slider" style="position: absolute; width: 411px; height: 411px;"></div>
+                    <div id="gallery_01f" style="width: 420px; float: right;">
                         <ul class="gallery-items owl-carousel owl-theme owl-rtl owl-loaded owl-drag" id="gallery-slider">
 
                             <div class="owl-stage-outer">
                                 <div class="owl-stage" style="transform: translate3d(201px, 0px, 0px); transition: all 0s ease 0s; width: 1005px;">
                                     <div class="owl-item" style="width: 191px; margin-left: 10px;">
                             <li class="item">
-                                <a href="#" class="elevatezoom-gallery" data-update="" data-image="@(PathExtension.ProductImageOrigin+Model.ImageName)" data-zoom-image="@(PathExtension.ProductImageOrigin+Model.ImageName)">
-                                    <img src="@(PathExtension.ProductImageThumb+Model.ImageName)" width="100" alt="img-slider">
+                                <a href="#" class="elevatezoom-gallery" data-update="" data-image="@(PathExtension.ProductImageOrigin + Model.ImageName)" data-zoom-image="@(PathExtension.ProductImageOrigin + Model.ImageName)">
+                                    <img src="@(PathExtension.ProductImageThumb + Model.ImageName)" width="100" alt="img-slider">
                                 </a>
                             </li>
                     </div>
@@ -43,8 +50,8 @@
                         {
                             <div class="owl-item active" style="width: 191px; margin-left: 10px;">
                                 <li class="item">
-                                    <a href="#" class="elevatezoom-gallery" data-update="" data-image="@(PathExtension.ProductGalleryOrigin+gallery.ImageName)" data-zoom-image="@(PathExtension.ProductGalleryOrigin+gallery.ImageName)">
-                                        <img src="@(PathExtension.ProductGalleryThumb+gallery.ImageName)" width="100" alt="img-slider">
+                                    <a href="#" class="elevatezoom-gallery" data-update="" data-image="@(PathExtension.ProductGalleryOrigin + gallery.ImageName)" data-zoom-image="@(PathExtension.ProductGalleryOrigin + gallery.ImageName)">
+                                        <img src="@(PathExtension.ProductGalleryThumb + gallery.ImageName)" width="100" alt="img-slider">
                                     </a>
                                 </li>
                             </div>
@@ -54,7 +61,8 @@
 
                 </div>
             </div>
-            <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next disabled"><i class="fa fa-angle-left"></i></button></div><div class="owl-dots disabled"></div></ul>
+            <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next disabled"><i class="fa fa-angle-left"></i></button></div>
+            <div class="owl-dots disabled"></div></ul>
     </div>
     <div class="gallery-item">
         <ul class="gallery-options">
@@ -85,7 +93,7 @@
         </ul>
     </div>
 </div>
-                </div>
+</div>
 
 <!-- Modal social-->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -271,18 +279,19 @@
                         </div>
                     </div>
                     <div class="product-config-wrapper">
+                        <input type="hidden" name="product_Price" value="@Model.Price" id="productBasePrice" />
                         @if (Model.ProductColors != null && Model.ProductColors.Any())
                         {
                             <div class="product-variants">
                                 <span>انتخاب رنگ: </span>
                                 <ul>
-                                    @foreach (var colors in Model.ProductColors)
+                                    @foreach (var colors in Model.ProductColors.OrderByDescending(p=>p.ColorId))
                                     {
 
                                         <li class="js-c-ui-variant">
                                             <label class="ui-variant-color">
                                                 <span class="ui-variant-shape" style="background-color: @colors.ColorCode"></span>
-                                                <input type="radio" value="4" name="color" id="variant" class="js-variant-selector" checked="">
+                                                <input type="radio" onclick="changeProductPriceBaseOnColor(@colors.ColorId,@colors.Price)" name="color" class="js-variant-selector" checked="">
                                                 <span class="ui-variant-check"></span>
                                             </label>
                                         </li>
@@ -294,60 +303,21 @@
                             </div>
                         }
                         <div class="product-params">
-                            <ul>
-                                <li class="title-product-features">
-                                    ویژگی‌های محصول
-                                </li>
-                                <li>
-                                    <span>حافظه داخلی: </span>
-                                    <span>128 گیگابایت</span>
-                                </li>
-                                <li>
-                                    <span>شبکه های ارتباطی: </span>
-                                    <span>2G،3G،4G</span>
-                                </li>
-                                <li>
-                                    <span>حس‌گرها: </span>
-                                    <span>
-                                        قطب‌نما (Compass)،شتاب‌سنج (Accelerometer)،مجاورت
-                                        (Proximity)،ژیروسکوپ (Gyro)،اثرانگشت زیر صفحه نمایش
-                                        (FingerPrint|Under-Display)
-                                    </span>
-                                </li>
-                                <li class="product-params-more" style="display: list-item;">
-                                    <span>مقدار RAM:</span>
-                                    <span> 6 گیگابایت</span>
-                                </li>
-                                <li class="product-params-more" style="display: list-item;">
-                                    <span>رزولوشن عکس: </span>
-                                    <span>48 مگاپیکسل</span>
-                                </li>
-                                <li class="product-params-more" style="display: list-item;">
-                                    <span>باتری قابل تعویض: </span>
-                                    <span>خیر</span>
-                                </li>
-                                <li class="product-params-more" style="display: list-item;">
-                                    <span>بازه‌ی اندازه صفحه نمایش: </span>
-                                    <span>6.43 اینچ و بزرگتر</span>
-                                </li>
-                                <li class="product-params-more" style="display: list-item;">
-                                    <span>ویژگی‌های خاص: </span>
-                                    <span>
-                                        مناسب عکاسی فبلت مجهز به حس‌گر اثرانگشت مناسب عکاسی
-                                        سلفی
-                                    </span>
-                                </li>
-                                <li class="product-params-more" style="display: list-item;">
-                                    <span>نسخه سیستم عامل: </span>
-                                    <span>Android 11</span>
-                                </li>
-                                <li class="product-params-more-handler">
-                                    <a href="#" class="link-border">
-                                        <span class="show-more" style="display: none;">موارد بیشتر</span>
-                                        <span class="show-less" style="display: inline;">بستن</span>
-                                    </a>
-                                </li>
-                            </ul>
+                            @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                            {
+                                <ul>
+                                    <li class="title-product-features">
+                                        ویژگی‌های محصول
+                                    </li>
+                                    @foreach (var feature in Model.ProductFeatures.Take(5))
+                                    {
+                                        <li class="product-params-more" style="display: list-item;">
+                                            <span>@feature.FeatureTitle</span>
+                                            <span>@feature.FeatureValue</span>
+                                        </li>
+                                    }
+                                </ul>
+                            }
                             <div class="product-additional-info">
                                 <div class="product-additional-item">
                                     <p>
@@ -374,7 +344,7 @@
                                         <div class="js-guarantee-text">
                                             @if (guarantees.Price == 0 || guarantees.Price == null)
                                             {
-                                                @($"{guarantees.GuaranteeName} قیمت  :"+" رایگان")
+                                                @(guarantees.GuaranteeName)
 
                                             }
                                             else
@@ -394,19 +364,31 @@
                                     <div class="product-seller-price-label">
                                         قیمت فروشنده
                                     </div>
-                                    <div class="product-seller-price-real">
-                                        <div class="product-seller-price-prev">@Model.Price.ToString("n0") </div>
-                                        تومان
-                                    </div>
+
+                                    @if (Model.ProductColors != null && Model.ProductColors.Any())
+                                    {
+                                        var firstColor = Model.ProductColors.FirstOrDefault();
+                                        <div class="product-seller-price-real">
+                                            <div class="product-seller-price-prev current_Price">@((Model.Price + firstColor.Price).ToString("n0")) </div>
+                                            تومان
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="product-seller-price-real">
+                                            <div class="product-seller-price-prev current_Price">@((Model.Price).ToString("n0")) </div>
+                                            تومان
+                                        </div>
+                                    }
+
                                 </div>
-                                <div class="product-remaining-in-stock-parent">
-                                    <div class="cart-view-count">
-                                        <i class="mdi mdi-eye-outline"></i>
-                                        ۱۰+
-                                        نفر در حال بازدید این کالا می‌باشند.
-                                    </div>
+                          
+                                <div class="product_variant quantity">
+                                    <label>تعداد</label>
+                                    <input min="1" max="100" value="1" type="number" id="number_of_Products_in_Order">
+
                                 </div>
-                                <a href="#" class="btn-add-to-cart">
+                                <a id="submitToOrderForm" class="btn-add-to-cart">
                                     <span class="btn-add-to-cart-txt">
                                         افزودن
                                         به سبد خرید
@@ -434,7 +416,7 @@
 
                     <div class="product-feature-col">
                         <a href="#" class="product-feature-item">
-                            <img src="/assets/images/footer-svg/contact-us.svg" alt="contact-us" style="width:35px;">
+                            <img src="/assets/images/footer-svg/contact-us.svg" alt="contact-us" style="width: 35px;">
                             <span>
                                 ۷ روز هفته
                                 <br>
@@ -445,7 +427,7 @@
 
                     <div class="product-feature-col">
                         <a href="#" class="product-feature-item">
-                            <img src="/assets/images/footer-svg/payment-terms.svg" alt="payment-terms" style="width:35px;">
+                            <img src="/assets/images/footer-svg/payment-terms.svg" alt="payment-terms" style="width: 35px;">
                             <span>
                                 امکان
                                 <br>
@@ -456,7 +438,7 @@
 
                     <div class="product-feature-col">
                         <a href="#" class="product-feature-item">
-                            <img src="/assets/images/footer-svg/origin-guarantee.svg" alt="origin-guarantee" style="width:35px;">
+                            <img src="/assets/images/footer-svg/origin-guarantee.svg" alt="origin-guarantee" style="width: 35px;">
                             <span>
                                 ضمانت
                                 <br>
@@ -469,137 +451,48 @@
         </div>
     </section>
 </div>
-            </article>
-<div class="col-lg-12 col-md-12 col-xs-12 pull-right p-0">
-    <div class="row">
-        <div class="col-12">
-            <div class="widget widget-product card">
-                <header class="card-header">
-                    <span class="title-one">محصولات مرتبط</span>
-                </header>
-                <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                    <div class="owl-stage-outer">
-                        <div class="owl-stage" style="transform: translate3d(844px, 0px, 0px); transition: all 0s ease 0s; width: 1970px;">
-                            <div class="owl-item" style="width: 271.333px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/111460776.jpg" class="img-fluid" alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            گوشی موبایل سامسونگ مدل Galaxy A50 SM-A505F/DS دو ...
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
+</article>
+@if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
+{
+    <div class="col-lg-12 col-md-12 col-xs-12 pull-right p-0">
+        <div class="row">
+            <div class="col-12">
+                <div class="widget widget-product card">
+                    <header class="card-header">
+                        <span class="title-one">محصولات مرتبط</span>
+                    </header>
+                    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                        <div class="owl-stage-outer">
+                            <div class="owl-stage" style="transform: translate3d(844px, 0px, 0px); transition: all 0s ease 0s; width: 1970px;">
+                                @foreach (var relatedProduct in Model.RelatedProducts)
+                                {
+                                    <div class="owl-item" style="width: 271.333px; margin-left: 10px;">
+                                        <div class="item">
+                                            <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@relatedProduct.ProductId" asp-route-title="@relatedProduct.Name.FixTextForUrl()" class="promotion-box-image">
+                                                <img src="@(PathExtension.ProductImageOrigin + relatedProduct.ImageName)" class="img-fluid" alt="img-slider">
+                                            </a>
+                                            <h2 class="post-title">
+                                                <a href="#">
+                                                    @Model.Title
+                                                </a>
+                                            </h2>
+                                            <div class="price">
+                                                <ins><span>@(relatedProduct.Price)<span>تومان</span></span></ins>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="owl-item" style="width: 271.333px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/111474228.jpg" class="img-fluid" alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            گوشی موبایل سامسونگ مدل Galaxy A10 SM-A105F/DS دو ...
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item" style="width: 271.333px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/112145268.jpg" class="img-fluid" alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            گوشی موبایل سامسونگ مدل Galaxy A70 SM-A705FN/DS دو...
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item active" style="width: 271.333px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/111475300.jpg" class="img-fluid" alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            گوشی موبایل سامسونگ مدل Galaxy A30 SM-A305F/DS دو ...
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item active" style="width: 271.333px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/113542184.jpg" class="img-fluid" alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            گوشی موبایل اپل مدل iPhone 11 Pro Max A2218 دو سیم...
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item active" style="width: 271.333px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/111469793.jpg" class="img-fluid" alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            گوشی موبایل سامسونگ مدل Galaxy A20 SM-A205F/DS دو ...
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item active" style="width: 271.333px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/111472656.jpg" class="img-fluid" alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            گوشی موبایل سامسونگ مدل Samsung Galaxy S10 Plus SM...
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
+                                }
+
                             </div>
                         </div>
+                        <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa fa-angle-left"></i></button></div>
+                        <div class="owl-dots disabled"></div>
                     </div>
-                    <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa fa-angle-left"></i></button></div><div class="owl-dots disabled"></div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
 
 <div class="p-tabs" style="transform: none;">
     <div class="col-lg-12 col-md-12 col-xs-12 pull-right p-0 res-w" style="transform: none;">
@@ -649,7 +542,7 @@
                         <div class="col-8 pull-right">
                             <div class="content-expert-stats-left">
                                 <div class="content-expert-evaluation">
-                                    <div class="col-lg-5 col-md-5 col-xs-12 pull-right" style="padding:0;">
+                                    <div class="col-lg-5 col-md-5 col-xs-12 pull-right" style="padding: 0;">
                                         <div class="content-expert-evaluation-positive">
                                             <span>نقاط قوت</span>
                                             <ul>
@@ -660,7 +553,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-lg-5 col-md-5 col-xs-12 pull-right" style="padding:0;">
+                                    <div class="col-lg-5 col-md-5 col-xs-12 pull-right" style="padding: 0;">
                                         <div class="content-expert-evaluation-negative">
                                             <span>نقاط ضعف</span>
                                             <ul>
@@ -677,320 +570,39 @@
 
                 <div class="tab params" style="display: none;">
                     <article>
-                        <h2 class="params-headline">
-                            مشخصات فنی
-                            <span>
-                                Xiaomi Redmi Note 10 M2101K7AG Dual SIM 128GB And 6GB RAM Mobile
-                                Phone
-                            </span>
-                        </h2>
-                        <section>
-                            <h3 class="params-title">مشخصات کلی</h3>
-                            <ul class="params-list">
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">ابعاد</span>
-                                        </div>
-                                    </div>
+                        @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                        {
+                            <h2 class="params-headline">
+                                مشخصات فنی
+                                <span>
+                                    @Model.Title
+                                </span>
+                            </h2>
+                            <section>
+                                <h3 class="params-title">مشخصات کلی</h3>
+                                <ul class="params-list">
+                                    @foreach (var features in Model.ProductFeatures)
+                                    {
 
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">7.7 × 74.7 × 158.5 میلی‌متر</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">توضیحات سیم کارت</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">سایز نانو (8.8 × 12.3 میلی‌متر)</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">وزن</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">166 گرم</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">ساختار بدنه</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">قاب جلو شیشه</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block" style="background:#fff;"></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">قاب پشت پلاستیک</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">ویژگی‌های خاص</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">
-                                                مناسب عکاسی , فبلت , مجهز به حس‌گر اثرانگشت
-                                                ,
-                                                مناسب عکاسی سلفی
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">تعداد سیم کارت</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">دو سیم کارت </span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                            </ul>
-                        </section>
-                        <section>
-                            <h3 class="params-title">پردازنده</h3>
-                            <ul class="params-list">
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">تراشه</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">Exynos 9610 (10nm) CPU</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <div class="js-dk-wiki-trigger">
-                                                <a href="#" class="link-border">پردازنده‌ی مرکزی</a>
-                                                <div class="wiki-container">
-                                                    <p class="c-wiki__text">
-                                                        سی‌پی‌یو (به انگلیسی Central Processing Unit یا CPU)
-                                                        یا
-                                                        پردازنده (به انگلیسی Processor)، یکی از اجزاء رایانه
-                                                        می‌باشد که فرامین و اطلاعات را مورد پردازش قرار
-                                                        می‌دهد.
-                                                        واحدهای پردازش مرکزی ویژگی پایه‌ای قابل برنامه‌ریزی
-                                                        شدن
-                                                        را در رایانه‌های رقمی فراهم می‌کنند، و یکی از
-                                                        مهم‌ترین
-                                                        اجزا رایانه‌ها هستند. یک پردازنده مرکزی، مداری
-                                                        یکپارچه
-                                                        می‌باشد که معمولا به عنوان ریزپردازنده شناخته
-                                                        می‌شود.
-                                                        امروزه عبارت CPU معمولا برای ریزپردازنده‌ها به کار
-                                                        می‌رود. مدت زمان انجام یک کار به وسیله رایانه، به
-                                                        عوامل
-                                                        متعددی بستگی دارد که اولین آن‌ها، سرعت پردازشگر
-                                                        رایانه
-                                                        است. پردازشگر یک تراشه الکترونیکی کوچک در قلب
-                                                        کامپیوتر
-                                                        است و سرعت آن بر حسب مگاهرتز یا گیگاهرتز سنجیده
-                                                        می‌شود.
-                                                        هر چه مقدار این پارامتر بیشتر باشد، پردازشگر سریع‌تر
-                                                        خواهد بود و در نتیجه قادر خواهد بود، محاسبات بیشتری
-                                                        را
-                                                        در هر ثانیه انجام دهد. در اصطلاح عامیانه CPU به
-                                                        عنوان
-                                                        مغز رایانه شناخته می‌شود.
-                                                    </p>
+                                        <li>
+                                            <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding: 0;">
+                                                <div class="params-list-key">
+                                                    <span class="block">@features.FeatureTitle</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">7.7 × 74.7 × 158.5 میلی‌متر</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">نوع پردازنده</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">64 بیت </span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">فرکانس پردازنده‌ی مرکزی</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">2.3 و 1.7 گیگاهرتز</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="js-dk-wiki-trigger">
-                                                <a href="#" class="link-border">پردازنده‌ی گرافیکی</a>
-                                                <div class="wiki-container">
-                                                    <p class="c-wiki__text">
-                                                        پردازشگر گرافیکی (به انگلیسی Graphics Processing
-                                                        Unit)‏
-                                                        که با نام GPU نیز شناخته می‌شود، یک مدار الکتریکی
-                                                        پیشرفته است که تصاویر خروجی را برای نمایشگر تولید
-                                                        می‌کند. اکثر پردازشگرهای گرافیکی، توابع مختلفی مانند
-                                                        شتاب دهنده‌ی رندر صحنه‌های سه‌بعدی و دوبعدی، رمز
-                                                        گشایی
-                                                        کردن MPEG-2/MPEG-4، خروجی تلویزیون و حتی قابلیت
-                                                        اتصال
-                                                        چند مانیتور را ارائه می‌کنند.
-                                                    </p>
+                                            <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding: 0;">
+                                                <div class="params-list-value">
+                                                    <span class="block">@features.FeatureValue</span>
                                                 </div>
-                                            </span>
-                                        </div>
-                                    </div>
+                                            </div>
 
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">Mali-G72 MP3 GPU</span>
-                                        </div>
-                                    </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </section>
+                        }
 
-                                </li>
-                            </ul>
-                        </section>
-                        <section>
-                            <h3 class="params-title">حافظه</h3>
-                            <ul class="params-list">
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">حافظه داخلی</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">128 گیگابایت </span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">مقدار RAM</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">4 گیگابایت</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">پشتیبانی از کارت حافظه جانبی</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">microSD</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                                <li>
-                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding:0;">
-                                        <div class="params-list-key">
-                                            <span class="block">حداکثر ظرفیت کارت حافظه</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding:0;">
-                                        <div class="params-list-value">
-                                            <span class="block">1 ترابایت</span>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </section>
                     </article>
                 </div>
                 <div class="tab comments" style="transform: none; display: none;">
@@ -1085,7 +697,8 @@
                                         </li>
 
                                     </ul>
-                                </div><div class="comments-summary-note">
+                                </div>
+                                <div class="comments-summary-note">
                                     <span>دیدگاه خود را درباره این کالا بیان کنید</span>
                                     <div class="parent-btn">
                                         <button class="dk-btn dk-btn-info">
@@ -2263,7 +1876,7 @@
     </div>
 
 </div>
-        </div>
+</div>
     </div>
 
 @section Scripts
@@ -2271,12 +1884,24 @@
 
     <script src="/assets/js/jquery.ez-plus.js"></script>
     <script src="/assets/js/owl.carousel.min.js"></script>
-
     <script src="/assets/js/theia-sticky-sidebar.min.js"></script>
-    <script>
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.ProductColors != null && Model.ProductColors.Any())
+    {
+        var firstColor = Model.ProductColors.FirstOrDefault();
 
- 
+        <script>
+            $(document).ready(function() {
+            
+                changeProductPriceBaseOnColor(@firstColor.ColorId,@firstColor.Price);
+            });
 
+        </script>
 
-    </script>
+        <script>
+            
+       
+        </script>
+    }
+
 }

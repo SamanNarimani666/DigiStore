@@ -1,0 +1,119 @@
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Order.UserOpenOrderViewModel
+
+@{
+    var totalPrice = 0;
+    if(Model.Details != null && Model.Details.Any())
+     {
+          totalPrice = Model.GetTotalPrice();
+     }
+}
+@if (Model.Details != null && Model.Details.Any())
+{
+    <div class="mini-cart-header-responsive">
+        <span class="mdi mdi-basket"></span>
+        <div class="mini-cart-dropdown">
+            <div class="header-cart-info-header">
+                <div class="header-cart-info-count">
+                    <a asp-action="UserOpenOrder" asp-controller="Order" asp-area="UserPanel" class="header-cart-info-link">
+                        <span>مشاهده سبد خرید</span>
+                    </a>
+                </div>
+                <div class="wrapper">
+                    <div class="scrollbar" id="style-1">
+                        <div class="force-overflow">
+                            @if (Model.Details != null && Model.Details.Any())
+                            {
+                                <ul class="header-basket-list">
+                                    @foreach (var orderDetails in Model.Details)
+                                    {
+                                        <li class="js-mini-cart-item">
+                                            <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@orderDetails.ProductId" asp-route-title="@orderDetails.ProductTitle.FixTextForUrl()" class="header-basket-list-item">
+                                                <div class="header-basket-list-item-image">
+                                                    <img src="@(PathExtension.ProductImageThumb+orderDetails.ProductImageName)"
+                                                         alt="img-slider">
+                                                </div>
+                                                <div class="header-basket-list-item-content">
+                                                    <h1 class="header-basket-list-item-title">
+                                                        @orderDetails.ProductTitle
+                                                    </h1>
+                                                    <div class="header-basket-list-item-footer">
+                                                        <div class="header-basket-list-item-props">
+
+                                                            <span class="header-basket-list-item-props-item">
+                                                                @orderDetails.Qty * @(orderDetails.ProductPrice+ orderDetails.ProductColorPrice)
+                                                            </span>
+
+
+                                                            @if (orderDetails.ColorCode != null && orderDetails.ColorCode.Any())
+                                                            {
+                                                                <span class="header-basket-list-item-props-item">
+                                                                    <span class="header-basket-list-item-color-badge"
+                                                                          style="background: @orderDetails.ColorCode">
+                                                                    </span>
+                                                                </span>
+                                                            }
+                                                            <span class="header-basket-list-item-remove">
+                                                                <i class="mdi mdi-delete"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="header-cart-info-footer">
+                    <div class="header-cart-info-total">
+                        <span class="header-cart-info-total-text">مبلغ قابل پرداخت</span>
+                        <p class="header-cart-info-total-amount">
+                            <span class="header-cart-info-total-amount-number"> @(totalPrice.ToString("#,0"))</span>
+                            <span> تومان</span>
+                        </p>
+                    </div>
+                    <div>
+                        <a href="#" class="header-cart-info-submit btn btn-danger">ثبت سفارش</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="mini-cart-header">
+        <div class="mini-cart-dropdown">
+            <div class="header-cart-info-header">
+                <div class="header-cart-info-count">@Model.Details.Count کالا</div>
+                <a asp-action="UserOpenOrder" asp-controller="Order" asp-area="UserPanel" class="header-cart-info-link">
+                    <span>مشاهده سبد خرید</span>
+                </a>
+            </div>
+            <div class="wrapper">
+                <div class="scrollbar" id="style-1">
+                    <div class="force-overflow">
+                        سبد خرید شما خالی می باشد
+
+                    </div>
+                </div>
+            </div>
+            <div class="header-cart-info-footer">
+                <div class="header-cart-info-total">
+                    <span class="header-cart-info-total-text">مبلغ قابل پرداخت</span>
+                    <p class="header-cart-info-total-amount">
+                        <span class="header-cart-info-total-amount-number"> 0</span>
+                        <span> تومان</span>
+                    </p>
+                </div>
+                <div>
+                    <a href="#" class="header-cart-info-submit btn btn-danger">ثبت سفارش</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

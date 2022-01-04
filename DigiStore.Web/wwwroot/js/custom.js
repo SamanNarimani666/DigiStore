@@ -1,4 +1,22 @@
-﻿function ShowMessage(title, text, theme) {
+﻿function open_waiting(selector = 'body') {
+    $(selector).waitMe({
+        effect: 'facebook',
+        text: 'لطفا صبر کنید ...',
+        bg: 'rgba(255,255,255,0.7)',
+        color: '#000'
+    });
+    setTimeout(function () {
+        location.reload();
+    }, 3000);
+
+}
+
+function close_waiting(selector = 'body') {
+    $(selector).waitMe('hide');
+}
+
+
+function ShowMessage(title, text, theme) {
     window.createNotification({
         closeOnClick: true,
         displayCloseButton: false,
@@ -141,6 +159,7 @@ $("[Main_Category_Chekbox]").on('change',
             $('[parent-category-id="' + selectedCategoryId + '"]').prop('checked', false);
         }
     });
+
 $('#addGuaranteeButton').on('click',
     (e) => {
         e.preventDefault();
@@ -149,7 +168,6 @@ $('#addGuaranteeButton').on('click',
         if (guaranteeName !== '' && guaranteePrice !== '') {
             var currentGuaranteeCount = $("#list_of_product_guarantee tr");
             var index = currentGuaranteeCount.length;
-            console.log(index);
             var guaranteeNameNameNode =
                 `<input type="hidden" value="${guaranteeName}" name="ProductGuarantee[${index
                 }].GuaranteeName" guarantee-Name-hidden-input="${guaranteeName}-${guaranteePrice}" />`;
@@ -172,6 +190,7 @@ $('#addGuaranteeButton').on('click',
         }
 
     });
+
 $('#addColorButton').on('click',
     (e) => {
         e.preventDefault();
@@ -215,6 +234,61 @@ $('#addColorButton').on('click',
 
     });
 
+function reOrderProductFeaturesHiddenInputs() {
+    var hiddenFeature = $('[feature-Name-hidden-input]');
+    $.each(hiddenFeature,
+        function (index, value) {
+            var hiddenFeature = $(value);
+            var FeatureId = $(value).attr('feature-Name-hidden-input');
+            var hiddenValue = $('[feature-value-hidden-input="' + FeatureId + '"]');
+            $(hiddenFeature).attr('name', 'ProductFeature[' + index + '].FeatureTitle');
+            $(hiddenValue).attr('name', 'ProductFeature[' + index + '].FeatureValue');
+        });
+}
+
+$('#addfeatureButton').on('click',
+    (e) => {
+        e.preventDefault();
+        var featureName = $('#Product_feature_Name_input').val();
+        var featureValue = $('#Product_feature_value_input').val();
+        if (featureName !== '' && featureValue !== '') {
+            var currentfeatureCount = $("#list_of_product_features tr");
+            var index = currentfeatureCount.length;
+            var isExistsSelectedfeature = $('[feature-Name-hidden-input][value="' + featureName + '"]');
+            if (isExistsSelectedfeature.length === 0) {
+
+
+                var featureNameNode =
+                    `<input type="hidden" value="${featureName}" name="ProductFeature[${index
+                    }].FeatureTitle" feature-Name-hidden-input="${featureName}-${featureValue}" />`;
+                var featureValueNode =
+                    `<input type="hidden" value="${featureValue}" name="ProductFeature[${index
+                    }].FeatureValue" feature-value-hidden-input="${featureName}-${featureValue}" />`;
+
+                $('#create_product_form').append(featureNameNode);
+                $('#create_product_form').append(featureValueNode);
+
+                var featureNameTableNode =
+                    `<tr featureName-table-item="${featureName}-${featureValue}"> <td>${featureName}</td> <td>${featureValue
+                    }</td> <td><a class="btn btn-danger" onclick="RemoveProductfeatures('${featureName}-${featureValue}')">حذف</a></td> </tr>`;
+                $("#list_of_product_features").append(featureNameTableNode);
+
+                $('#Product_feature_Name_input').val('');
+                $('#Product_feature_value_input').val('');
+            } else {
+                ShowMessage('اخطار', 'ویژگی وارد شده تکراری می باشد', 'warning');
+                $('#Product_feature_Name_input').val('').focus();
+                $('#Product_feature_value_input').val('').focus();
+            }
+        }
+        else {
+            ShowMessage('اخطار', 'لطفا نام ویژگی و مقدار آن را به درستی وارد نمایید', 'warning');
+        }
+
+    });
+
+
+
 function RemoveProductGuarantee(index) {
     $('[guarantee-Name-hidden-input="' + index + '"]').remove();
     $('[guarantee-Price-hidden-input="' + index + '"]').remove();
@@ -229,6 +303,15 @@ function RemoveProductColor(index) {
     reOrderProductColorHiddenInputs();
 
 }
+
+function RemoveProductfeatures(index) {
+    $('[feature-Name-hidden-input="' + index + '"]').remove();
+    $('[feature-value-hidden-input="' + index + '"]').remove();
+    $('[featureName-table-item="' + index + '"]').remove();
+    reOrderProductFeaturesHiddenInputs();
+
+}
+
 function reOrderProductGuaranteeHiddenInputs() {
     var hiddenColors = $('[guarantee-Name-hidden-input]');
     $.each(hiddenColors,
@@ -261,3 +344,81 @@ $(document).ready(function () {
     });
 
 });
+
+function changeProductPriceBaseOnColor(ColorId, price) {
+    var basePrice = parseInt($('#productBasePrice').val());
+    $('.current_Price').html(basePrice + price);
+    $('#add_product_to_order_ProductColorId').val(ColorId);
+
+}
+
+$('#number_of_Products_in_Order').on('change',
+    function (e) {
+        console.log(e);
+
+    });
+
+
+$('#number_of_Products_in_Order').on('change',
+    function (e) {
+        var numberOfProduct = parseInt(e.target.value, 0);
+        $('#add_product_to_order_Count').val(numberOfProduct);
+    });
+
+$('#submitToOrderForm').on('click',
+    function () {
+        $('#addProductToOrdrForm').submit();
+        open_waiting();
+
+    });
+
+function onSuccessAddProductToOrder(res) {
+    if (res.status === 'Success') {
+        ShowMessage('اعلان', res.message, res);
+
+    } else {
+        ShowMessage('اعلان', res.message, 'danger');
+    }
+    setTimeout(function () {
+        close_waiting();
+    }, 3000);
+}
+
+function RemoveProductFromOrder(detailId) {
+    swal({
+        title: 'اخطار',
+        text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "بله",
+        cancelButtonText: "خیر",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.value) {
+            $.get("/UserPanel/remove-order-item/" + detailId).then(res => {
+                if (res.status === 'Success') {
+                    open_waiting();
+                    ShowMessage('اعلان', res.message, res);
+                } else {
+                    ShowMessage('اعلان', res.message, 'danger');
+                }
+                setTimeout(function () {
+                    close_waiting();
+                }, 3000);
+
+            });
+        } else if (res.dismiss === swal.DismissReason.cancel) {
+            swal('اعلام', 'عملیات لغو شد', 'error');
+        }
+    });
+}
+
+function ChangeOpenOrderDetialCount(detialId, event) {
+    console.log(detialId);
+    $.get("/UserPanel/change-detialCount/" + detialId + "/" + event.target.value).then(res => {
+        location.reload();
+    });
+
+}

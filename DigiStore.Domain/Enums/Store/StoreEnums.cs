@@ -11,4 +11,12 @@ namespace DigiStore.Domain.Enums.Store
         [Display(Name = "رد شده")]
         Rejected
     }
+
+    public enum TransactionType
+    {
+        [Display(Name = "واریز")]
+        Deposit,
+        [Display(Name = "برداشت")]
+        Withdrawal
+    }
 }

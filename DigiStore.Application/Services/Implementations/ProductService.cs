@@ -12,10 +12,12 @@ using DigiStore.Domain.IRepositories.Category;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.IRepositories.ProductFeature;
 using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.ProductVisited;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Domain.ViewModels.ProductVisited;
 using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Application.Services.Implementations
@@ -30,7 +32,8 @@ namespace DigiStore.Application.Services.Implementations
         private readonly IProductGuaranteeRepository _guaranteeRepository;
         private readonly IProductGalleryRepository _galleryRepository;
         private readonly IProductVisitedRepository _productVisitedRepository;
-        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository)
+        private readonly IProductFeatureRepository _productFeatureRepository;
+        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
@@ -39,6 +42,7 @@ namespace DigiStore.Application.Services.Implementations
             _guaranteeRepository = guaranteeRepository;
             _galleryRepository = galleryRepository;
             _productVisitedRepository = productVisitedRepository;
+            _productFeatureRepository = productFeatureRepository;
         }
         #endregion
 
@@ -91,6 +95,8 @@ namespace DigiStore.Application.Services.Implementations
                     await AddProductSelectedCategories(product.ProductId, createProduct.SelectedCategories);
                     //Add Product Color
                     await AddProductSelectedColors(product.ProductId, createProduct.ProductColors);
+                    //Add Product Features
+                    await AddProductFeatures(product.ProductId, createProduct.ProductFeature);
                     // Add Product Guarantee
                     await AddAllProductSelectedGuarantee(product.ProductId, createProduct.ProductGuarantee);
                     return CreateProductResult.Success;
@@ -157,14 +163,14 @@ namespace DigiStore.Application.Services.Implementations
                 BradnId = product.BrandId,
                 Description = product.Description,
                 IsActive = product.IsActive,
-                Price = product.Price.Value,
+                Price = product.Price,
                 ShortDescription = product.ShortDescription,
                 ProductImage = product.ImageName,
                 ProductId = product.ProductId,
                 ProductColors = _colorRepository.GetColorProductByProductId(productId).Select(c => new CreateProductColorViewModel()
                 {
                     ColorCode = c.ColorCode,
-                    Price = c.Price.Value
+                    Price = c.Price
                 }).ToList(),
                 SelectedCategories = _selectedProductCategoryRepository.GetProductSelectedCategoryByProductId(productId).Select(p => p.ProductCategoryId.Value).ToList()
                 ,
@@ -173,6 +179,11 @@ namespace DigiStore.Application.Services.Implementations
                     GuaranteeName = g.GuaranteeName,
                     Price = g.Price.Value
                 }).ToList(),
+                ProductFeature = _productFeatureRepository.GetProductFeatureByProductId(productId).Select(f=>new CreateProductFeatureViewModel()
+                {
+                    FeatureTitle = f.FeatureTitle,
+                    FeatureValue = f.FeatureValue
+                }).ToList()
             };
         }
         #endregion
@@ -216,7 +227,10 @@ namespace DigiStore.Application.Services.Implementations
                 //Add Product Selected Categoty
                 await AddProductSelectedCategories(editProduct.ProductId, editProduct.SelectedCategories);
 
-
+                //Remove Product Features
+                RemoveAllProductFeatures(editProduct.ProductId);
+                //Add Product Features
+                await AddProductFeatures(editProduct.ProductId,editProduct.ProductFeature);
 
                 // Remove Product Selected guarantee
                 RemoveAllProductSelectedGuarantee(editProduct.ProductId);
@@ -242,6 +256,7 @@ namespace DigiStore.Application.Services.Implementations
         public void RemoveAllProductSelectedCategories(int productId)
         {
             _selectedProductCategoryRepository.DeleteProductSelectedCategory(_selectedProductCategoryRepository.GetProductSelectedCategoryByProductId(productId));
+            
         }
         #endregion
 
@@ -262,7 +277,7 @@ namespace DigiStore.Application.Services.Implementations
         #region AddProductSelectedCategories
         public async Task AddProductSelectedCategories(int productId, List<int> CategoriesId)
         {
-            if (CategoriesId != null)
+            if (CategoriesId != null && CategoriesId.Any())
             {
                 var productSelectedCategories = new List<ProductSelectedCategory>();
                 foreach (var categoryId in CategoriesId)
@@ -283,7 +298,7 @@ namespace DigiStore.Application.Services.Implementations
         #region AddProductSelectedColors
         public async Task AddProductSelectedColors(int productId, List<CreateProductColorViewModel> createProductColor)
         {
-            if (createProductColor != null)
+            if (createProductColor != null && createProductColor.Any())
             {
                 var productColor = new List<Color>();
                 foreach (var colors in createProductColor)
@@ -308,7 +323,7 @@ namespace DigiStore.Application.Services.Implementations
         #region AddAllProductSelectedGuarantee
         public async Task AddAllProductSelectedGuarantee(int productId, List<CreateProductGuaranteeViewModel> createProductGuarantee)
         {
-            if (createProductGuarantee != null)
+            if (createProductGuarantee != null && createProductGuarantee.Any())
             {
                 var productguarantee = new List<Guarantee>();
                 foreach (var guarantees in createProductGuarantee)
@@ -481,13 +496,29 @@ namespace DigiStore.Application.Services.Implementations
             {
                 try
                 {
-                    var newProductVisted = new ProductVisited()
+                    if (userId != null && await _productVisitedRepository.IsVisitedUserThisProduct(productId, userId.Value))
                     {
-                        ProductId = productId,
-                        UserId = userId,
-                        UserIp = userIp
-                    };
-                    await _productVisitedRepository.AddProductVisited(newProductVisted);
+                        var IsVisitedUserThisProduct = await _productVisitedRepository.GetProductVisitedByProductIdAndUserId(productId, userId.Value);
+                        IsVisitedUserThisProduct.ModifiedDate=DateTime.Now;
+                        _productVisitedRepository.UpdateProductVisited(IsVisitedUserThisProduct);
+                        var newProductVisted = new ProductVisited()
+                        {
+                            ProductId = productId,
+                            UserId = null,
+                            UserIp = userIp
+                        };
+                        await _productVisitedRepository.AddProductVisited(newProductVisted);
+                    }
+                    else
+                    {
+                        var newProductVisted = new ProductVisited()
+                        {
+                            ProductId = productId,
+                            UserId = userId,
+                            UserIp = userIp
+                        };
+                        await _productVisitedRepository.AddProductVisited(newProductVisted);
+                    }
                     await _productVisitedRepository.Save();
                     return true;
                 }
@@ -496,8 +527,43 @@ namespace DigiStore.Application.Services.Implementations
                     return false;
                 }
             }
-
             return false;
+        }
+        #endregion
+
+        #region AddProductFeatures
+        public async Task AddProductFeatures(int productId,List<CreateProductFeatureViewModel> createProductFeature)
+        {
+            var newFeatures = new List<ProductFeature>();
+            if (createProductFeature != null && createProductFeature.Any())
+            {
+                foreach (var features in createProductFeature)
+                {
+                    newFeatures.Add(new ProductFeature()
+                    {
+                        ProductId = productId,
+                        FeatureTitle = features.FeatureTitle,
+                        FeatureValue = features.FeatureValue
+                    });
+                }
+
+                await _productFeatureRepository.AddProductFeature(newFeatures);
+                await _productFeatureRepository.Save();
+            }
+        }
+        #endregion
+
+        #region RemoveAllProductFeatures
+        public void RemoveAllProductFeatures(int productId)
+        {
+           _productFeatureRepository.RemoveProductFeature(_productFeatureRepository.GetProductFeatureByProductId(productId));
+        }
+        #endregion
+
+        #region GetLastProductVisited
+        public async Task<FilterProductVisitedViewModel> GetLastProductVisited(FilterProductVisitedViewModel filterProductVisited)
+        {
+           return await _productVisitedRepository.filterFilterProductVisited(filterProductVisited);
         }
         #endregion
 
@@ -511,6 +577,7 @@ namespace DigiStore.Application.Services.Implementations
             await _guaranteeRepository.DisposeAsync();
             await _galleryRepository.DisposeAsync();
             await _productVisitedRepository.DisposeAsync();
+            await _productFeatureRepository.DisposeAsync();
         }
         #endregion
     }

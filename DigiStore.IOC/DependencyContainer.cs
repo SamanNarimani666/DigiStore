@@ -11,10 +11,14 @@ using DigiStore.Data.Repositories.Category;
 using DigiStore.Data.Repositories.Guarantee;
 using DigiStore.Data.Repositories.Product;
 using DigiStore.Data.Repositories.ProductColor;
+using DigiStore.Data.Repositories.ProductFeature;
 using DigiStore.Data.Repositories.ProductGallery;
 using DigiStore.Data.Repositories.ProductVisited;
+using DigiStore.Data.Repositories.SalesOrder;
+using DigiStore.Data.Repositories.SalesOrderDetail;
 using DigiStore.Data.Repositories.SelectedProductCategory;
 using DigiStore.Data.Repositories.Seller;
+using DigiStore.Data.Repositories.SellerWallet;
 using DigiStore.Data.Repositories.Ticket;
 using DigiStore.Data.Repositories.User;
 using DigiStore.Domain.IRepositories.Address;
@@ -25,10 +29,14 @@ using DigiStore.Domain.IRepositories.Category;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.IRepositories.ProductFeature;
 using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.ProductVisited;
+using DigiStore.Domain.IRepositories.SalesOrder;
+using DigiStore.Domain.IRepositories.SalesOrderDetail;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
 using DigiStore.Domain.IRepositories.Seller;
+using DigiStore.Domain.IRepositories.SellerWallet;
 using DigiStore.Domain.IRepositories.Ticket;
 using DigiStore.Domain.IRepositories.User;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +66,11 @@ namespace DigiStore.IOC
             services.AddScoped<IProductGuaranteeRepository,ProductGuaranteeRepository>();
             services.AddScoped<IProductGalleryRepository, ProductGalleryRepository>();
             services.AddScoped<IProductVisitedRepository, ProductVisitedRepository>();
+            services.AddScoped<IProductFeatureRepository, ProductFeatureRepository>();
+            services.AddScoped<ISalesOrderHeaderRepository, SalesOrderHeaderRepository>();
+            services.AddScoped<ISalesOrderDetailRepository, SalesOrderDetailRepository>();
+            services.AddScoped<ISellerWalletRepository, SellerWalletRepository>();
+
 
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
             services.AddSingleton<ISender, EmailSender>();
@@ -68,6 +81,8 @@ namespace DigiStore.IOC
             services.AddScoped<ISellerService, SellerService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBranadService, BranadService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ISellerWalletService, SellerWalletService>();
 
         }
     }

@@ -1,0 +1,71 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@using DigiStore.Domain.Enums.Product
+@using DigiStore.Domain.Enums.Store
+@using DigiStore.Domain.ViewModels.Product
+@model DigiStore.Domain.ViewModels.SellerWallet.FilterSellerWalletViewModel
+    ViewData["Title"] = "کیف پول فروشنده";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@await Component.InvokeAsync("SellerSidebar")
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-left">
+    <div class="headline-profile page-profile-order">
+        <span>@ViewData["Title"]</span>
+    </div>
+
+    <div class="profile-stats page-profile-order">
+        <form asp-action="Index" asp-controller="SellerWallet" asp-area="Seller" id="filter-form" method="get">
+            <input type="hidden" asp-for="PageId" />
+            <div class="table-orders">
+                @if (Model.SellerWallets != null && Model.SellerWallets.Any())
+                {
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+
+                                <th>مبلغ</th>
+                                <th>واریز برداشت</th>
+                                <th>تاریخ</th>
+                                <th>توضیحات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model.SellerWallets)
+                            {
+                                <tr>
+
+                                    <td>@(item.Price.Value.ToString("#,0"))</td>
+                                    @if (item.TransactionType != null)
+                                    {
+
+                                        TransactionType acceptanceState = (TransactionType)item.TransactionType.Value;
+                                        <td>
+                                            @acceptanceState.GetDisplayName()
+                                        
+                                            
+                                            
+                                        </td>
+                                    }
+                                    <td>@item.CreateDate.ToShamsiDate()</td>
+
+                                    <td>@item.Descriptions</td>
+                                </tr>
+
+                            }
+                        </tbody>
+
+                    </table>
+                    <partial name="_PagingPartial" model="@Model.GetCurrentPaging()" />
+                }
+                else
+                {
+                    <partial name="_NotFoundItem" />
+                }
+            </div>
+        </form>
+    </div>
+</div>
+

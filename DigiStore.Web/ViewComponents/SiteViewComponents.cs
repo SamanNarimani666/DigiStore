@@ -48,4 +48,32 @@ namespace DigiStore.Web.ViewComponents
             return View("LoginInformationUser",await _userService.GetInformationUserForSidebarById(User.GetUserId()));
         }
     }
+    public class UserOrderViewComponent : ViewComponent
+    {
+        private readonly IOrderService _orderService;
+        public UserOrderViewComponent(IOrderService orderService)
+        {
+            _orderService = orderService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var openOrder = await _orderService.GetUserOpenOrderDetials(User.GetUserId());
+            return View("UserOrder", openOrder);
+        }
+    }
+    public class UserOrderResponsiveViewComponent : ViewComponent
+    {
+        private readonly IOrderService _orderService;
+        public UserOrderResponsiveViewComponent(IOrderService orderService)
+        {
+            _orderService = orderService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var openOrder = await _orderService.GetUserOpenOrderDetials(User.GetUserId());
+            return View("UserOrderResponsive", openOrder);
+        }
+    }
 }

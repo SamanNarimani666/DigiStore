@@ -7,6 +7,11 @@ namespace DigiStore.Domain.Entities
 {
     public partial class Guarantee
     {
+        public Guarantee()
+        {
+            SalesOrderDetails = new HashSet<SalesOrderDetail>();
+        }
+
         public int GuaranteeId { get; set; }
         public int ProductId { get; set; }
         public string GuaranteeName { get; set; }
@@ -16,5 +21,6 @@ namespace DigiStore.Domain.Entities
         public Guid Rowguid { get; set; }
 
         public virtual Product Product { get; set; }
+        public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; }
     }
 }

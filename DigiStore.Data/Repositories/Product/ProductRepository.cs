@@ -140,17 +140,21 @@ namespace DigiStore.Data.Repositories.Product
                 .Include(p=>p.Guarantees)
                 .Include(p => p.Colors)
                 .Include(p=>p.ProductGalleries)
+                .Include(p=>p.ProductSelectedCategories)
+                .Include(p=>p.ProductFeatures)
                 .Include(p => p.Seller)
                 .ThenInclude(p => p.User)
                 .Include(p => p.ProductSelectedCategories)
                 .ThenInclude(p => p.ProductCategory)
                 .SingleOrDefaultAsync(p => p.ProductId == productId);
+            if (product == null) return null;
+            var selectedCategotiesId = product.ProductSelectedCategories.Select(f => f.ProductCategoryId).ToList();
             return new ProductDetailViewModel()
             {
                 ProductId= product.ProductId,
                 Title = product.Name,
                 ImageName = product.ImageName,
-                Price = product.Price.Value,
+                Price = product.Price,
                 ShortDescription = product.ShortDescription,
                 Description = product.Description,
                 ProductCategories = product.ProductSelectedCategories.Select(s=>s.ProductCategory).ToList(),
@@ -158,7 +162,11 @@ namespace DigiStore.Data.Repositories.Product
                 ProductColors = product.Colors.ToList(),
                 SellerId = product.SellerId,
                 Seller = product.Seller,
-                Guarantees = product.Guarantees.ToList()
+                Guarantees = product.Guarantees.ToList(),
+                ProductFeatures = product.ProductFeatures.ToList(),
+                RelatedProducts = await _context.Products.AsQueryable()
+                    .Include(s=>s.ProductSelectedCategories)
+                    .Where(s=>s.ProductSelectedCategories.Any(f=>selectedCategotiesId.Contains(f.ProductCategoryId))&& s.ProductId!=productId&& s.ProductAcceptanceState==(byte)ProductAcceptanceState.Accepted).ToListAsync()
             };
         }
         #endregion
