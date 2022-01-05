@@ -12,7 +12,7 @@
 
 }
 
-@if (Model != null)
+@if (Model.Details != null && Model.Details.Any())
 {
     <div class="col-12">
         <div class="page-content">
@@ -53,13 +53,22 @@
                                             </h3>
                                         </a>
                                         <div class="checkout-variant-color">
-                                            <div class="checkout-dealer">@(orderDetail.ProductPrice.ToString("#,0"))</div>
+                                            @if (orderDetail.ColorCode != null && orderDetail.ColorCode.Any())
+                                            {
+                                                <div class="checkout-dealer"><h6>@((orderDetail.ProductPrice + orderDetail.ProductColorPrice).ToString("#,0")) تومان</h6></div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="checkout-dealer"><h6>@(orderDetail.ProductPrice.ToString("#,0")) تومان</h6></div>
+
+                                            }
                                             @if (orderDetail.ColorCode != null && orderDetail.ColorCode.Any())
                                             {
                                                 <div class="checkout-guarantee">
                                                     قیمت مضاف رنگ :@(orderDetail.ProductColorPrice.ToString("#,0")) تومان
                                                     <br />
-                                                    <i class="fa fa-color" style="height: 30px; width: 40px; border: 1px solid black; background-color: @orderDetail.ColorCode"></i>
+                                                    <i class="fa fa-color" style="height: 30px; width: 40px; border: 1px solid black; background-color: @orderDetail.ColorCode;"></i>
                                                 </div>
                                             }
                                             @*@if (orderDetail.Product.Guarantees != null && orderDetail.Product.Guarantees.Any())
@@ -68,15 +77,32 @@
                                                         <i class="fa fa-check"></i>گارانتی: @orderDetail.Product.Guarantees.FirstOrDefault().GuaranteeName
                                                     </div>
                                                 }*@
+                                            @if (orderDetail.DiscountPercentage != null && orderDetail.DiscountPercentage != 0)
+                                            {
+                                                <div class="checkout-guarantee">
+                                                    <h6> درصد تخفیف :@(orderDetail.DiscountPercentage) ٪</h6>
+                                                    <br />
+                                                    <i class="fa fa-color"></i>
+                                                </div>
+                                            }
+                                            @if (orderDetail.DiscountPercentage != null && orderDetail.DiscountPercentage != 0)
+                                            {
+                                                <div class="checkout-guarantee">
+                                                    <h6> مقدار تخفیف @(((((orderDetail.ProductPrice + orderDetail.ProductColorPrice)) * (orderDetail.DiscountPercentage.Value) / 100) * orderDetail.Qty).ToString("#,0")) تومان</h6>
+                                                    <br />
+                                                    <i class="fa fa-color"></i>
+                                                </div>
+                                            }
                                         </div>
 
                                         <div class="quantity">
-                                            <input type="number" onchange="ChangeOpenOrderDetialCount(@orderDetail.DetialId,event)"  step="1" value="@orderDetail.Qty">
+                                            <input type="number" onchange="ChangeOpenOrderDetialCount(@orderDetail.DetialId,event)" step="1" value="@orderDetail.Qty">
                                             <div class="quantity-nav">
                                                 <div class="quantity-button quantity-up">+</div>
                                                 <div class="quantity-button quantity-down">-</div>
                                             </div>
                                         </div>
+
 
                                         <a href="#" class="add-to-sfl">
                                             <div class="cart-item-product-price">
@@ -89,13 +115,12 @@
 
                                         </a>
 
-
-
                                     </div>
                                 </div>
 
-                            }
 
+                            }
+                            <hr />
 
                         }
 

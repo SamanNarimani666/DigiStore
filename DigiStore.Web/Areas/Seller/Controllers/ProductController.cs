@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -259,5 +260,6 @@ namespace DigiStore.Web.Areas.Seller.Controllers
             return RedirectToAction("GetProductGalleries", "Product", new { id = deleteProductGaller.ProductId });
         }
         #endregion
+
     }
 }

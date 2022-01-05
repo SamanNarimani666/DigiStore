@@ -34,6 +34,8 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
                     return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success,
                         SuccessMessage = "محصول مورد نظر با موقیت ثبت شد", null);
                 }
+
+                TempData[ErrorMessage] = "جهت ثبت محصول در سبد خرید ابتدا وارد سایت شوید";
                 return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger,
                         "جهت ثبت محصول در سبد خرید ابتدا وارد سایت شوید"
                         , null);

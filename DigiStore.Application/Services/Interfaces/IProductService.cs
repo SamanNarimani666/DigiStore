@@ -38,5 +38,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task AddProductFeatures(int productId,List<CreateProductFeatureViewModel> createProductFeature);
         void RemoveAllProductFeatures(int productId);
         Task<FilterProductVisitedViewModel> GetLastProductVisited(FilterProductVisitedViewModel filterProductVisited);
+       
     }
 }

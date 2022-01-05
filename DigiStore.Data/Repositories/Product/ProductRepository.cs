@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
@@ -168,6 +169,13 @@ namespace DigiStore.Data.Repositories.Product
                     .Include(s=>s.ProductSelectedCategories)
                     .Where(s=>s.ProductSelectedCategories.Any(f=>selectedCategotiesId.Contains(f.ProductCategoryId))&& s.ProductId!=productId&& s.ProductAcceptanceState==(byte)ProductAcceptanceState.Accepted).ToListAsync()
             };
+        }
+        #endregion
+
+        #region FilterProductsForSellerByPorductName
+        public async Task<List<Domain.Entities.Product>> FilterProductsForSellerByPorductName(int selleId, string productName)
+        {
+            return await _context.Products.AsQueryable().Where(p=>p.SellerId==selleId&& EF.Functions.Like(p.Name, $"%{productName}%")).ToListAsync();
         }
         #endregion
 

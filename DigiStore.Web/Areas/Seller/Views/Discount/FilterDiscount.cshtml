@@ -1,0 +1,59 @@
+﻿@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.ProductDiscount.FilterProductDiscountViewModel
+@{
+    ViewData["Title"] = "فیلتر کد های تخفیف";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Component.InvokeAsync("SellerSidebar")
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-left">
+    <div class="headline-profile page-profile-order">
+        <span>@ViewData["Title"]</span>
+    </div>
+
+    <div class="profile-stats page-profile-order">
+        <form asp-action="FilterDiscount" asp-controller="Discount" asp-area="Seller" id="filter-form" method="get">
+            <input type="hidden" asp-for="PageId"/>
+            <div class="table-orders">
+                @if (Model.ProductDiscounts != null && Model.ProductDiscounts.Any())
+                {
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+
+                            <th>شناسه</th>
+                            <th>مقدار </th>
+                            <th>تاریخ انقضا</th>
+                            <th>تعداد مجاز استفاده کاربران</th>
+                            <th>دستورات</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        @foreach (var item in Model.ProductDiscounts)
+                        {
+                            <tr>
+
+                                <td>@(item.ProductDiscountId)</td>
+                                <td>@(item.Percentage)%</td>
+                                <td>@(item.ExpierDate.ToShamsiDate())</td>
+                                <td>@(item.DiscountNumber)</td>
+                            </tr>
+
+                        }
+                        </tbody>
+
+                    </table>
+                    <partial name="_PagingPartial" model="@Model.GetCurrentPaging()"/>
+                }
+                else
+                {
+                    <partial name="_NotFoundItem"/>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

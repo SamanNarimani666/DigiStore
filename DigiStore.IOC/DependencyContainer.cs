@@ -11,6 +11,8 @@ using DigiStore.Data.Repositories.Category;
 using DigiStore.Data.Repositories.Guarantee;
 using DigiStore.Data.Repositories.Product;
 using DigiStore.Data.Repositories.ProductColor;
+using DigiStore.Data.Repositories.ProductDiscount;
+using DigiStore.Data.Repositories.ProductDiscountUse;
 using DigiStore.Data.Repositories.ProductFeature;
 using DigiStore.Data.Repositories.ProductGallery;
 using DigiStore.Data.Repositories.ProductVisited;
@@ -29,6 +31,8 @@ using DigiStore.Domain.IRepositories.Category;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.IRepositories.ProductDiscount;
+using DigiStore.Domain.IRepositories.ProductDiscountUse;
 using DigiStore.Domain.IRepositories.ProductFeature;
 using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.ProductVisited;
@@ -70,6 +74,8 @@ namespace DigiStore.IOC
             services.AddScoped<ISalesOrderHeaderRepository, SalesOrderHeaderRepository>();
             services.AddScoped<ISalesOrderDetailRepository, SalesOrderDetailRepository>();
             services.AddScoped<ISellerWalletRepository, SellerWalletRepository>();
+            services.AddScoped<IProductDiscountRepository, ProductDiscountRepository>();
+            services.AddScoped<IProductDiscountUseRepository, ProductDiscountUseRepository>();
 
 
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
@@ -83,6 +89,7 @@ namespace DigiStore.IOC
             services.AddScoped<IBranadService, BranadService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ISellerWalletService, SellerWalletService>();
+            services.AddScoped<IProductDiscountService, ProductDiscountService>();
 
         }
     }

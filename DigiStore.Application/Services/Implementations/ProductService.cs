@@ -565,6 +565,7 @@ namespace DigiStore.Application.Services.Implementations
         {
            return await _productVisitedRepository.filterFilterProductVisited(filterProductVisited);
         }
+
         #endregion
 
         #region Dispose

@@ -110,7 +110,8 @@ namespace DigiStore.Application.Services.Implementations
                         ProductId = s.ProductId,
                         ProductPrice = s.Product.Price,
                         ProductTitle = s.Product.Name,
-                        ProductImageName = s.Product.ImageName
+                        ProductImageName = s.Product.ImageName,
+                        DiscountPercentage = s.Product.ProductDiscounts.OrderByDescending(p=>p.ModifiedDate).FirstOrDefault(s=>s.ExpierDate>DateTime.Now)?.Percentage
                     };
                 }).ToList()
             };
@@ -170,6 +171,10 @@ namespace DigiStore.Application.Services.Implementations
                 var oneProductPrice = detial.Color != null ? detial.Product.Price + detial.Color.Price : detial.Product.Price;
                 totalPrice += oneProductPrice * detial.OrderQty;
             }
+
+            openOrder.OrderSum = totalPrice;
+            _orderHeaderRepository.UpdateSalesOrderHeader(openOrder);
+            await _orderHeaderRepository.Save();
             return totalPrice;
         }
         #endregion
