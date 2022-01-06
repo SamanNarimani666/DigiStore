@@ -228,7 +228,7 @@
                                             <a href="#" class="filter-label">
                                                 <div class="form-auth-row">
                                                     <label for="remembersumsung" class="ui-checkbox">
-                                                        <input type="checkbox" onchange="changeFilter()" name="Selectedbrands"  value="@brands.BrandId">
+                                                        <input type="checkbox" onchange="changeFilter()" name="Selectedbrands" value="@brands.BrandId">
                                                         <span class="ui-checkbox-check"></span>
                                                     </label>
                                                     <label for="remembersumsung" class="remember-me">@brands.BrandName</label>
@@ -241,39 +241,35 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="box-sidebar">
-                    <div class="filter-switch">
-                        <div class="switch-box">
-                            <div class="centered hidden-xs">
-                                <div class="card">
-                                    <a href="#">
-                                        <label for="switch1">
-                                            <input type="checkbox" id="switch1">
-                                            <span class="switch">
-                                                <h1 class="switch-title">فقط کالای موجود</h1>
-                                            </span>
-                                            <span class="toggle"></span>
-                                        </label>
-                                    </a>
-                                </div>
-                                <br>
-                            </div>
+                    <button class="btn btn-light btn-box-sidebar" type="button" data-toggle="collapse" data-target="#collapseExampleSeller" aria-expanded="false" aria-controls="collapseExampleSeller">
+                        <i class="fa fa-chevron-down arrow"></i>برند
+                    </button>
+                    <div class="collapse show" id="collapseExampleSeller">
+                        <div class="catalog">
+
+                            @if (procutCategories != null && procutCategories.Any())
+                            {
+                                <ul>
+                                    @foreach (var category in procutCategories)
+                                    {
+                                        <li>
+                                            <a href="#" class="filter-label">
+                                                <div class="form-auth-row">
+                                                    <label for="remembersumsung" class="ui-checkbox">
+                                                        <input type="checkbox" name="SelectedPrductCategories" value="@category.ProductCategoryId">
+                                                        <span class="ui-checkbox-check"></span>
+                                                    </label>
+                                                    <label for="remembersumsung" class="remember-me">@category.Title</label>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
                         </div>
                     </div>
                 </div>
-
-
-
-                <!--   adplacement -------------------->
-                <div class="adplacement">
-                    <div class="col-12 col-lg-12 pull-right" style="padding: 0;">
-                        <a href="#" class="item-adplacement">
-                            <img src="/assets/images/post-adplacement/1000012860.jpg" title="صوتی و تصویری" alt="صوتی و تصویری">
-                        </a>
-                    </div>
-                </div>
-                <!--   adplacement -------------------->
 
             </div>
         </div>
@@ -281,14 +277,7 @@
 
     <div class="col-lg-9 col-md-8 col-xs-12 pull-left">
         <div class="js-products">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">فروشگاه اینترنتی دیجی استور</a></li>
-                    <li class="breadcrumb-item"><a href="#">کالای دیجیتال</a></li>
-                    <li class="breadcrumb-item"><a href="#">موبایل</a></li>
-                    <li class="breadcrumb-item active open" aria-current="page">گوشی موبایل</li>
-                </ol>
-            </nav>
+         
 
             <div class="listing-listing col">
                 <div class="listing-counter"> @($"{Model.GetCurrentPagingStatus()} \t تعداد کالا\t{Model.AllEntitiesCount}")</div>
@@ -329,7 +318,7 @@
                                                 </div>
 
                                                 <div class="product-box-rate">
-                                                    <span>۲,۶۵۰ نفر</span>
+                                                    <span>@product.Productcomments.Count نفر</span>
 
                                                     <div class="product-star mb-3">
                                                         <i class="fa fa-star active"></i>

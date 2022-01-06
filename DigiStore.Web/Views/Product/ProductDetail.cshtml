@@ -1,4 +1,5 @@
 ﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.ViewModels.FavoriteProductUser
 @using DigiStore.Domain.ViewModels.Order
 @using DigiStore.Web.PresentationExtensions
 @model DigiStore.Domain.ViewModels.Product.ProductDetailViewModel
@@ -151,7 +152,6 @@
 </div>
 <!-- Modal social-->
 <!-- Modal alarm -->
-
 <!-- Modal alarm -->
 <div class="col-lg-8 col-md-12 col-xs-12 pull-left px-0" style="transform: none;" id="ProductVisited" ProductVisite="@Model.ProductId">
     <section class="product-info" style="transform: none;">
@@ -206,7 +206,7 @@
                             <div class="product-variants">
                                 <span>انتخاب رنگ: </span>
                                 <ul>
-                                    @foreach (var colors in Model.ProductColors.OrderByDescending(p=>p.ColorId))
+                                    @foreach (var colors in Model.ProductColors.OrderByDescending(p => p.ColorId))
                                     {
 
                                         <li class="js-c-ui-variant">
@@ -303,7 +303,7 @@
                                     }
 
                                 </div>
-                          
+
                                 <div class="product_variant quantity">
                                     <label>تعداد</label>
                                     <input min="1" max="100" value="1" type="number" id="number_of_Products_in_Order">
@@ -324,49 +324,14 @@
         <div class="product-feature-body">
             <div class="product-feature">
                 <div class="row">
-                    <div class="product-feature-col">
-                        <a href="#" class="product-feature-item">
-                            <img src="/assets/images/footer-svg/delivery.svg" alt="delivery">
-                            <span>
-                                امکان تحویل
-                                <br>
-                                اکسپرس
-                            </span>
-                        </a>
-                    </div>
-
-                    <div class="product-feature-col">
-                        <a href="#" class="product-feature-item">
-                            <img src="/assets/images/footer-svg/contact-us.svg" alt="contact-us" style="width: 35px;">
-                            <span>
-                                ۷ روز هفته
-                                <br>
-                                ۲۴ ساعته
-                            </span>
-                        </a>
-                    </div>
-
-                    <div class="product-feature-col">
-                        <a href="#" class="product-feature-item">
-                            <img src="/assets/images/footer-svg/payment-terms.svg" alt="payment-terms" style="width: 35px;">
-                            <span>
-                                امکان
-                                <br>
-                                پرداخت در محل
-                            </span>
-                        </a>
-                    </div>
-
-                    <div class="product-feature-col">
-                        <a href="#" class="product-feature-item">
-                            <img src="/assets/images/footer-svg/origin-guarantee.svg" alt="origin-guarantee" style="width: 35px;">
-                            <span>
-                                ضمانت
-                                <br>
-                                اصل بودن کالا
-                            </span>
-                        </a>
-                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (!@ViewBag.IsExistThisProductInUserfavortitList)
+                        {
+                            <partial name="AddProductToFavorit" model="@(new CreateIFavoriteProductUserViewModel(){ProductId = Model.ProductId})" />
+                            <button type="submit" class="btn btn-outline-danger btn-block" id="AddProductToFavorit"><span class="mdi mdi-heart-outline">افزودن به لیست محصولات محبوب</span></button>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -1553,15 +1518,15 @@
 
         <script>
             $(document).ready(function() {
-            
+
                 changeProductPriceBaseOnColor(@firstColor.ColorId,@firstColor.Price);
             });
 
         </script>
 
         <script>
-            
-       
+
+
         </script>
     }
 

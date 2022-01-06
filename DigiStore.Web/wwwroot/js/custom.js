@@ -416,9 +416,59 @@ function RemoveProductFromOrder(detailId) {
 }
 
 function ChangeOpenOrderDetialCount(detialId, event) {
-    console.log(detialId);
     $.get("/UserPanel/change-detialCount/" + detialId + "/" + event.target.value).then(res => {
         location.reload();
     });
 
+}
+
+
+$('#AddProductToFavorit').on('click',
+    function () {
+        $('#addProductFavorite').submit();
+        open_waiting();
+
+    });
+
+function onSuccessAddProductFavorite(res) {
+    if (res.status === 'Success') {
+        ShowMessage('اعلان', res.message, res);
+
+    } else {
+        ShowMessage('اعلان', res.message, 'danger');
+    }
+    setTimeout(function () {
+        close_waiting();
+    }, 3000);
+}
+
+function RemoveProductFromFavoritList(favoritId, productId) {
+    swal({
+        title: 'اخطار',
+        text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "بله",
+        cancelButtonText: "خیر",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.value) {
+            $.get("/UserPanel/delete-product-favorit/" + favoritId + "/" + productId).then(res => {
+                if (res.status === 'Success') {
+                    open_waiting();
+                    ShowMessage('اعلان', res.message, res);
+                } else {
+                    ShowMessage('اعلان', res.message, 'danger');
+                }
+                setTimeout(function () {
+                    close_waiting();
+                }, 3000);
+
+            });
+        } else if (res.dismiss === swal.DismissReason.cancel) {
+            swal('اعلام', 'عملیات لغو شد', 'error');
+        }
+    });
 }

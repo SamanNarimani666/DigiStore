@@ -1,0 +1,13 @@
+﻿@model DigiStore.Domain.ViewModels.FavoriteProductUser.CreateIFavoriteProductUserViewModel
+<form method="post" 
+      asp-controller="Product"
+      asp-action="AddProductToFavorit"
+      asp-area=""
+      data-ajax="true"
+      data-ajax-success="onSuccessAddProductFavorite"
+      data-ajax-method="post"
+      id="addProductFavorite"
+>
+    <input type="hidden" asp-for="ProductId" />
+</form>
+

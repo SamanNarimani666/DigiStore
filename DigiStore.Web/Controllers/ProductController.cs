@@ -1,7 +1,10 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
+using DigiStore.Domain.ViewModels.FavoriteProductUser;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HttpExtensions = DigiStore.Web.HttpContext.HttpExtensions;
 
@@ -37,21 +40,49 @@ namespace DigiStore.Web.Controllers
 
         #region Show Product Detials
         [HttpGet("products/{productId}/{title}")]
-        public async Task<IActionResult> ProductDetail(int productId,string title)
+        public async Task<IActionResult> ProductDetail(int productId, string title)
         {
             var product = await _productService.GetProductDetail(productId);
-            if (product==null) return NotFound();
+            if (product == null) return NotFound();
+            ViewBag.IsExistThisProductInUserfavortitList =
+                await _productService.IsExistThisProductInUserFavoritList(productId, User.GetUserId());
             return View(product);
         }
         #endregion
+
+        #region Visited
         [HttpGet("visited/{produtId}")]
         public async Task Visited(int produtId)
         {
-            if (produtId!=null&& produtId!=0)
+            if (produtId != null && produtId != 0)
             {
                 await _productService.AddProductVisited(produtId, HttpExtensions.GetUserIp(HttpContext),
                     IdentityExtensions.GetUserId(User));
             }
         }
+        #endregion
+
+        #region add to favorit Product
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> AddProductToFavorit(CreateIFavoriteProductUserViewModel createIFavoriteProductUser)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _productService.CreateIFavoriteProductUser(createIFavoriteProductUser,
+                    User.GetUserId());
+
+                if (res)
+                {
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success,
+                        SuccessMessage = "محصول مورد نظر با موقیت ثبت شد", null);
+                }
+                return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger,
+                    SuccessMessage = "خطا در ثبت اطلاعات", null);
+            }
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger,
+                SuccessMessage = "خطا در ثبت اطلاعات", null);
+        }
+        #endregion
     }
 }

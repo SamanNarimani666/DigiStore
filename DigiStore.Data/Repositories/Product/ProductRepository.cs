@@ -28,8 +28,8 @@ namespace DigiStore.Data.Repositories.Product
                 .Include(p => p.Seller)
                 .Include(p => p.ProductSelectedCategories)
                 .ThenInclude(p => p.ProductCategory)
+                .Include(p=>p.Productcomments)
                 .AsQueryable();
-
             #region State
             switch (filterProduct.FilterProductState)
             {
@@ -63,7 +63,15 @@ namespace DigiStore.Data.Repositories.Product
                     s.ProductSelectedCategories.Any(f => f.ProductCategory.UrlName == filterProduct.Category));
             if (filterProduct.Selectedbrands != 0 && filterProduct.Selectedbrands != null)
                 product = product.Where(p => p.BrandId == filterProduct.Selectedbrands);
-            
+            if (filterProduct.SelectedPrductCategories != null && filterProduct.SelectedPrductCategories.Any())
+            {
+                foreach (var selected in filterProduct.SelectedPrductCategories)
+                {
+                product = product.Where(s=>s.ProductSelectedCategories.Any(f=>f.ProductCategoryId.Value==selected));
+
+                }
+            }
+
             #endregion
 
             #region Order

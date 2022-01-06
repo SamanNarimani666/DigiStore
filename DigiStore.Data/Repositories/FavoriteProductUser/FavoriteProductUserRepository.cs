@@ -1,7 +1,11 @@
-﻿
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.IRepositories.FavoriteProductUser;
+using DigiStore.Domain.ViewModels.FavoriteProductUser;
+using DigiStore.Domain.ViewModels.Paging;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigiStore.Data.Repositories.FavoriteProductUser
 {
@@ -12,6 +16,13 @@ namespace DigiStore.Data.Repositories.FavoriteProductUser
         public FavoriteProductUserRepository(DigiStore_DBContext context)
         {
             _context = context;
+        }
+        #endregion
+
+        #region GetFavoriteProductUserById
+        public async Task<Domain.Entities.FavoriteProductUser> GetFavoriteProductUserById(int favoritId)
+        {
+            return await _context.FavoriteProductUsers.FirstOrDefaultAsync(p => p.FavoriteProductUserId == favoritId);
         }
         #endregion
 
@@ -26,6 +37,26 @@ namespace DigiStore.Data.Repositories.FavoriteProductUser
         public void UpdateFavoriteProductUser(Domain.Entities.FavoriteProductUser favoriteProductUser)
         {
             _context.FavoriteProductUsers.Update(favoriteProductUser);
+        }
+        #endregion
+
+        #region IsExistThisProductInUserFavoritList
+        public async Task<bool> IsExistThisProductInUserFavoritList(int productId, int userId)
+        {
+            return await _context.FavoriteProductUsers.AnyAsync(p=>p.ProductId==productId&&p.UserId==userId&&!p.IsDelete);
+        }
+        #endregion
+
+        #region GetFavoriteProductUserByUserId
+        public async Task<FilterFavoritViewModel> GetFavoriteProductUserByUserId(FilterFavoritViewModel filterFavorit)
+        {
+            var product =  _context.FavoriteProductUsers.Include(p => p.Product)
+                .Where(p => p.UserId == filterFavorit.UserId&& !p.IsDelete).OrderByDescending(p=>p.CreateDate);
+            
+            var pager = Pager.Build(filterFavorit.PageId, await product.CountAsync(), filterFavorit.TakeEntity,
+                filterFavorit.HowManyShowPageAfterAndBefore);
+           var allProduct = product.Paging(pager).ToList();
+           return filterFavorit.SetPaging(pager).SetProduct(allProduct);
         }
         #endregion
 

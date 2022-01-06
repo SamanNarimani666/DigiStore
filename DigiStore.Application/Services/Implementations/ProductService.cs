@@ -9,14 +9,15 @@ using DigiStore.Application.Utils;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.Enums.Product;
 using DigiStore.Domain.IRepositories.Category;
+using DigiStore.Domain.IRepositories.FavoriteProductUser;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
-using DigiStore.Domain.IRepositories.ProductDiscount;
 using DigiStore.Domain.IRepositories.ProductFeature;
 using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.ProductVisited;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
+using DigiStore.Domain.ViewModels.FavoriteProductUser;
 using DigiStore.Domain.ViewModels.Product;
 using DigiStore.Domain.ViewModels.ProductVisited;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +35,8 @@ namespace DigiStore.Application.Services.Implementations
         private readonly IProductGalleryRepository _galleryRepository;
         private readonly IProductVisitedRepository _productVisitedRepository;
         private readonly IProductFeatureRepository _productFeatureRepository;
-        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository)
+        private readonly IFavoriteProductUserRepository _favoriteProductUserRepository;
+        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository, IFavoriteProductUserRepository favoriteProductUserRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
@@ -44,6 +46,7 @@ namespace DigiStore.Application.Services.Implementations
             _galleryRepository = galleryRepository;
             _productVisitedRepository = productVisitedRepository;
             _productFeatureRepository = productFeatureRepository;
+            _favoriteProductUserRepository = favoriteProductUserRepository;
         }
         #endregion
 
@@ -575,6 +578,67 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region CreateIFavoriteProductUser
+        public async Task<bool> CreateIFavoriteProductUser(CreateIFavoriteProductUserViewModel createIFavoriteProductUser, int userId)
+        {
+            var product = await _productRepository.GetProductById(createIFavoriteProductUser.ProductId);
+            if (product == null) return false;
+            try
+            {
+                await _favoriteProductUserRepository.AddFavoriteProductUser(new FavoriteProductUser()
+                {
+                    UserId = userId,
+                    ProductId = createIFavoriteProductUser.ProductId
+                });
+                await _favoriteProductUserRepository.Save();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region IsExistThisProductInUserFavoritList
+        public async Task<bool> IsExistThisProductInUserFavoritList(int productId, int userId)
+        {
+            return await _favoriteProductUserRepository.IsExistThisProductInUserFavoritList(productId, userId);
+        }
+        #endregion
+
+        #region GetFavoriteProductUserByUserId
+        public async Task<FilterFavoritViewModel> GetFavoriteProductUserByUserId(FilterFavoritViewModel filterFavorit)
+        {
+            return await _favoriteProductUserRepository.GetFavoriteProductUserByUserId(filterFavorit);
+        }
+        #endregion
+
+        #region DeleteFavoritProduct
+        public async Task<bool> DeleteFavoritProduct(int favoritId,int productId, int userId)
+        {
+            var favoritProduct = await _favoriteProductUserRepository.GetFavoriteProductUserById(favoritId);
+            if (favoritProduct == null) return false;
+            if (favoritProduct.UserId != userId) return false;
+            if (favoritProduct.ProductId != productId) return false;
+            {
+                
+            }
+            try
+            {
+                favoritProduct.IsDelete = true;
+                _favoriteProductUserRepository.UpdateFavoriteProductUser(favoritProduct);
+                await _favoriteProductUserRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {
@@ -586,6 +650,7 @@ namespace DigiStore.Application.Services.Implementations
             await _galleryRepository.DisposeAsync();
             await _productVisitedRepository.DisposeAsync();
             await _productFeatureRepository.DisposeAsync();
+            await _favoriteProductUserRepository.Save();
         }
         #endregion
     }
