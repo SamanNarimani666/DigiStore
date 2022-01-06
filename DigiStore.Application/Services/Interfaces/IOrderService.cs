@@ -14,6 +14,7 @@ namespace DigiStore.Application.Services.Interfaces
         Task<bool> RemoveOrderDetial(int detialId,int userId);
         Task ChangeOrderQty(int detialId,int userId, int qty);
         Task<int> GetTotalOrderPriceForPayment(int userId);
-        Task PayOrderProductPriceToSeller(int userId);
+        Task PayOrderProductPriceToSeller(int userId, long trackingCode);
+        
     }
 }

@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace DigiStore.Domain.Entities
 {
-    public partial class Guarantee
+    public partial class FavoriteProductUser
     {
-        public int GuaranteeId { get; set; }
+        public int FavoriteProductUserId { get; set; }
         public int ProductId { get; set; }
-        public string GuaranteeName { get; set; }
-        public int? Price { get; set; }
+        public int UserId { get; set; }
         public bool IsDelete { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public Guid Rowguid { get; set; }
 
         public virtual Product Product { get; set; }
+        public virtual User User { get; set; }
     }
 }

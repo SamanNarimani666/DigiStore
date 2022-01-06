@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Application.Utils;
@@ -11,7 +12,7 @@ using DigiStore.Domain.ViewModels.ProductDiscount;
 
 namespace DigiStore.Application.Services.Implementations
 {
-    public class ProductDiscountService: IProductDiscountService
+    public class ProductDiscountService : IProductDiscountService
     {
         #region Constructor
         private readonly IProductDiscountRepository _discountRepository;
@@ -45,24 +46,31 @@ namespace DigiStore.Application.Services.Implementations
                     ProductId = createProductDiscount.ProductId,
                     DiscountNumber = createProductDiscount.DiscountNumber,
                     Percentage = createProductDiscount.Percentage,
-                    ExpierDate =createProductDiscount.ExpierDate.ToMiladiDateTime()
+                    ExpierDate = createProductDiscount.ExpierDate.ToMiladiDateTime()
                 };
                 await _discountRepository.AddProductDiscount(newDiscount);
                 await _discountRepository.Save();
                 return CreateProductDiscountResult.Success;
-        }
+            }
             catch
             {
                 return CreateProductDiscountResult.Error;
             }
-}
+        }
+        #endregion
+
+        #region GetAlloffProducs
+        public async Task<List<ProductDiscount>> GetAlloffProducs(int take)
+        {
+            return await _discountRepository.GetAlloffProducs(take);
+        }
         #endregion
 
         #region Dispose
         public async ValueTask DisposeAsync()
         {
             await _discountRepository.DisposeAsync();
-            await _discountUseRepository.DisposeAsync();;
+            await _discountUseRepository.DisposeAsync(); ;
         }
         #endregion
     }

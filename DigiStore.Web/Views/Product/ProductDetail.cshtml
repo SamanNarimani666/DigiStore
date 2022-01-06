@@ -151,79 +151,7 @@
 </div>
 <!-- Modal social-->
 <!-- Modal alarm -->
-<div class="modal fade" id="exampleModalCenteralarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">
-                    به من اطلاع بده
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="#" class="form-notification">
-                    <div class="form-notification-title">اطلاع به من در زمان:</div>
-                    <div class="form-notification-row">
-                        <div class="form-notification-col">
-                            <div class="form-notification-status">
-                                پیشنهاد شگفت‌انگیز
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-notification-title">از طریق:</div>
-                    <div class="form-notification-row">
-                        <div class="form-notification-col">
-                            <ul class="form-notification-params">
-                                <li>
-                                    <div class="form-auth-row">
-                                        <label class="ui-checkbox">
-                                            <input type="checkbox" value="1" name="login" id="remember1">
-                                            <span class="ui-checkbox-check"></span>
-                                        </label>
-                                        <label for="remember1" class="remember-me">
-                                            ایمیل به
-                                            <span class="js-observed-user-email">09911234567</span>
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="form-auth-row">
-                                        <label class="ui-checkbox">
-                                            <input type="checkbox" value="1" name="login" id="remember2">
-                                            <span class="ui-checkbox-check"></span>
-                                        </label>
-                                        <label for="remember2" class="remember-me">
-                                            پیامک به
-                                            <span class="js-observed-user-email">09911234567</span>
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="form-auth-row">
-                                        <label class="ui-checkbox">
-                                            <input type="checkbox" value="1" name="login" id="remember3">
-                                            <span class="ui-checkbox-check"></span>
-                                        </label>
-                                        <label for="remember3" class="remember-me">
-                                            سیستم پیام شخصی
-                                            دیجی‌کالا
-                                        </label>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer d-block text-right">
-                <button type="button" class="btn btn-primary ml-2">ثبت</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- Modal alarm -->
 <div class="col-lg-8 col-md-12 col-xs-12 pull-left px-0" style="transform: none;" id="ProductVisited" ProductVisite="@Model.ProductId">
     <section class="product-info" style="transform: none;">
@@ -268,13 +196,6 @@
                             <div class="product-engagement-link" data-activate-tab="comments">
                                 ۸۱
                                 دیدگاه کاربران
-                            </div>
-                        </div>
-                        <div class="product-engagement-item">
-                            <div class="product-engagement-set"></div>
-                            <div class="product-engagement-link" data-activate-tab="questions">
-                                ۱۴
-                                پرسش و پاسخ
                             </div>
                         </div>
                     </div>
@@ -498,17 +419,14 @@
     <div class="col-lg-12 col-md-12 col-xs-12 pull-right p-0 res-w" style="transform: none;">
         <div class="box-tabs-main">
             <ul class="box-tabs">
-                <li class="box-tabs-tab">
+                <li class="box-tabs-tab active-tabs">
                     <a href="#"> نقد و بررسی</a>
                 </li>
                 <li class="box-tabs-tab">
                     <a href="#"> مشخصات</a>
                 </li>
-                <li class="box-tabs-tab">
+                <li class="box-tabs-tab ">
                     <a href="#">نظرات کاربران</a>
-                </li>
-                <li class="box-tabs-tab active-tabs">
-                    <a href="#">پرسش و پاسخ</a>
                 </li>
             </ul>
         </div>
@@ -519,8 +437,7 @@
                         <h2 class="params-headline">
                             نقد و بررسی اجمالی
                             <span>
-                                Xiaomi Redmi Note 10 M2101K7AG Dual SIM 128GB And 6GB RAM Mobile
-                                Phone
+                                @Model.Title
                             </span>
                         </h2>
                         <section class="content-expert-summary">
@@ -610,8 +527,7 @@
                         امتیاز کاربران به:
                         <span>
                             <span>
-                                Xiaomi Redmi Note 10 M2101K7AG Dual SIM 128GB And 6GB RAM Mobile
-                                Phone
+                                @Model.Title
                             </span>
                         </span>
                     </h2>
@@ -1616,268 +1532,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab js-faq-container" style="transform: none;">
-                    <div class="faq-headline">
-                        پرسش و پاسخ
-                        <span>
-                            Xiaomi Redmi Note 10 M2101K7AG Dual SIM 128GB And 6GB RAM Mobile
-                            Phone
-                        </span>
-                    </div>
-                    <form action="#" class="form-faq">
-                        <div class="form-faq-row">
-                            <div class="form-faq-col">
-                                <div class="ui-textarea">
-                                    <textarea name="Question-Text" title="متن سوال" class="ui-textarea-field"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-faq-row">
-                            <div class="form-faq-col form-faq-col-submit">
-                                <button class="btn-tertiary">ثبت پرسش</button>
-                            </div>
-                            <div class="account-agree">
-                                <label class="checkbox-primary">
-                                    <span class="checkbox-check checkbox-custom-pic"></span>
-                                    <input type="checkbox" id="accountAutoLogin" class="remember-checkbox">
-                                </label>
-                                <label for="accountAutoLogin" class="remember-me">
-                                </label>
-
-                            </div>
-                            <div class="form-auth-row form-auth-row-product">
-                                <label class="ui-checkbox">
-                                    <input type="checkbox" value="1" name="login" checked="" id="remember">
-                                    <span class="ui-checkbox-check"></span>
-                                </label>
-                                <label for="remember" class="remember-me">
-                                    اولین پاسخی که به پرسش من داده شد، از طریق ایمیل به من اطلاع دهید.
-                                    <br>
-                                    با انتخاب دکمه “ثبت پرسش”، موافقت خود را با
-                                    <a href="#" class="link-border">قوانین انتشار محتوا</a>
-                                    در دیجی
-                                    کالا اعلام می کنم.
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left">
-                        <div class="faq-filter">
-                            <div class="filter-item-main">
-                                <ul class="filter-items nav nav-tabs" id="myTab1" role="tablist">
-                                    <li>
-                                        <span class="sort-row-text">
-                                            <i class="mdi mdi-sort"></i> مرتب‌سازی
-                                            دیدگاه‌ها
-                                            بر اساس:
-                                        </span>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active show" id="Usefulfaqs-tab" data-toggle="tab" href="#Usefulfaqs" role="tab" aria-controls="Usefulfaqs" aria-selected="true">مفیدترین پرسش</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="Newsfaqs-tab" data-toggle="tab" href="#Newsfaqs" role="tab" aria-controls="Newsfaqs" aria-selected="false">جدیدترین پرسش</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div id="product-questions-list">
-                            <div class="tab-content" id="myTabfaqContent">
-                                <div class="tab-pane fade active show" id="Usefulfaqs" role="tabpanel" aria-labelledby="Usefulfaqs-tab">
-                                    <ul class="faq-list">
-                                        <li class="is-question">
-                                            <div class="section">
-                                                <div class="faq-header-question">
-                                                    <span class="fa fa-question-circle-o"></span>
-                                                    <p>
-                                                        پرسش
-                                                        <span>حسن شجاعی</span>
-                                                    </p>
-                                                </div>
-                                                <p>
-                                                    اين دستگاه قابليت استفاده از شارژر هاي بلوتوثي رو هم
-                                                    داره؟<br>
-                                                    مطابق با سيستم Qr هست؟
-                                                </p>
-                                                <div class="footer">
-                                                    <em>۶ آذر ۱۳۹۸</em>
-                                                    <a href="#" class="link-border js-add-answer-btn">
-                                                        به این
-                                                        پرسش پاسخ
-                                                        دهید
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="section">
-                                                <div class="faq-header-question">
-                                                    <span class="fa fa-question-circle-o"></span>
-                                                    <p>
-                                                        پرسش
-                                                        <span>حسن شجاعی</span>
-                                                    </p>
-                                                </div>
-                                                <p>
-                                                    اين دستگاه قابليت استفاده از شارژر هاي بلوتوثي رو هم
-                                                    داره؟<br>
-                                                    مطابق با سيستم Qr هست؟
-                                                </p>
-                                                <div class="footer">
-                                                    <em>۶ آذر ۱۳۹۸</em>
-                                                    <a href="#" class="link-border js-add-answer-btn">
-                                                        به این
-                                                        پرسش پاسخ
-                                                        دهید
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="section">
-                                                <div class="faq-header-question">
-                                                    <span class="fa fa-question-circle-o"></span>
-                                                    <p>
-                                                        پرسش
-                                                        <span>حسن شجاعی</span>
-                                                    </p>
-                                                </div>
-                                                <p>
-                                                    اين دستگاه قابليت استفاده از شارژر هاي بلوتوثي رو هم
-                                                    داره؟<br>
-                                                    مطابق با سيستم Qr هست؟
-                                                </p>
-                                                <div class="footer">
-                                                    <em>۶ آذر ۱۳۹۸</em>
-                                                    <a href="#" class="link-border js-add-answer-btn">
-                                                        به این
-                                                        پرسش پاسخ
-                                                        دهید
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="tab-pane fade" id="Newsfaqs" role="tabpanel" aria-labelledby="Newsfaqs-tab">
-                                    <ul class="faq-list">
-                                        <li class="is-question">
-                                            <div class="section">
-                                                <div class="faq-header-question">
-                                                    <span class="fa fa-question-circle-o"></span>
-                                                    <p>
-                                                        پرسش
-                                                        <span>علی</span>
-                                                    </p>
-                                                </div>
-                                                <p>
-                                                    اين دستگاه قابليت استفاده از شارژر هاي بلوتوثي رو هم
-                                                    داره؟<br>
-                                                    مطابق با سيستم Qr هست؟
-                                                </p>
-                                                <div class="footer">
-                                                    <em>۶ آذر ۱۳۹۸</em>
-                                                    <a href="#" class="link-border js-add-answer-btn">
-                                                        به این
-                                                        پرسش پاسخ
-                                                        دهید
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="section">
-                                                <div class="faq-header-question">
-                                                    <span class="fa fa-question-circle-o"></span>
-                                                    <p>
-                                                        پرسش
-                                                        <span>علی</span>
-                                                    </p>
-                                                </div>
-                                                <p>
-                                                    اين دستگاه قابليت استفاده از شارژر هاي بلوتوثي رو هم
-                                                    داره؟<br>
-                                                    مطابق با سيستم Qr هست؟
-                                                </p>
-                                                <div class="footer">
-                                                    <em>۶ آذر ۱۳۹۸</em>
-                                                    <a href="#" class="link-border js-add-answer-btn">
-                                                        به این
-                                                        پرسش پاسخ
-                                                        دهید
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="section">
-                                                <div class="faq-header-question">
-                                                    <span class="fa fa-question-circle-o"></span>
-                                                    <p>
-                                                        پرسش
-                                                        <span>علی</span>
-                                                    </p>
-                                                </div>
-                                                <p>
-                                                    اين دستگاه قابليت استفاده از شارژر هاي بلوتوثي رو هم
-                                                    داره؟<br>
-                                                    مطابق با سيستم Qr هست؟
-                                                </p>
-                                                <div class="footer">
-                                                    <em>۶ آذر ۱۳۹۸</em>
-                                                    <a href="#" class="link-border js-add-answer-btn">
-                                                        به این
-                                                        پرسش پاسخ
-                                                        دهید
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-xs-12 pull-left sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
-
-                        <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 0px; position: static; transform: none; top: 0px; left: 1533.06px;">
-                            <div class="question-side-bar">
-                                <div class="question-filter">
-                                    <div class="form-auth-row d-inline-block mb-0">
-                                        <label class="ui-checkbox">
-                                            <input type="checkbox" value="1" name="login" id="remember1">
-                                            <span class="ui-checkbox-check"></span>
-                                        </label>
-                                        <label for="remember1" class="remember-me">
-                                            پرسش‌های پاسخ داده شده
-                                        </label>
-                                    </div>
-                                    <div class="form-auth-row d-inline-block mt-0 mb-0">
-                                        <label class="ui-checkbox">
-                                            <input type="checkbox" value="1" name="login" id="remember2">
-                                            <span class="ui-checkbox-check"></span>
-                                        </label>
-                                        <label for="remember2" class="remember-me">
-                                            پرسش‌های بی‌پاسخ
-                                        </label>
-                                    </div>
-                                    <div class="question-filter-bottom">
-                                        <div class="form-auth-row d-inline-block mt-0 mb-0">
-                                            <label class="ui-checkbox">
-                                                <input type="checkbox" value="1" name="login" id="remember3">
-                                                <span class="ui-checkbox-check"></span>
-                                            </label>
-                                            <label for="remember3" class="remember-me">
-                                                پرسش‌های من
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </div>
     </div>
 
 </div>
-</div>
-    </div>
+
 
 @section Scripts
 {

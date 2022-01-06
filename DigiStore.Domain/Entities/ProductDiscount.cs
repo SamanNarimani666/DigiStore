@@ -7,6 +7,11 @@ namespace DigiStore.Domain.Entities
 {
     public partial class ProductDiscount
     {
+        public ProductDiscount()
+        {
+            ProductDiscountUses = new HashSet<ProductDiscountUse>();
+        }
+
         public int ProductDiscountId { get; set; }
         public int ProductId { get; set; }
         public int Percentage { get; set; }
@@ -16,5 +21,6 @@ namespace DigiStore.Domain.Entities
         public Guid Rowguid { get; set; }
 
         public virtual Product Product { get; set; }
+        public virtual ICollection<ProductDiscountUse> ProductDiscountUses { get; set; }
     }
 }

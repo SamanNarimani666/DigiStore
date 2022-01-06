@@ -5,9 +5,25 @@
     ViewData["Title"] = "سبد خرید " + User.Identity.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var totalPrice = 0;
+    var discountPrice = 0;
+    var SumDiscount = 0;
     if (Model != null)
     {
-        totalPrice = Model.GetTotalPrice();
+        @if (Model.Details != null && Model.Details.Any())
+        {
+            foreach (var orderDetail in Model.Details)
+            {
+
+                @if (orderDetail.DiscountPercentage != null && orderDetail.DiscountPercentage != 0)
+                {
+                    SumDiscount += ((orderDetail.ProductPrice + orderDetail.ProductColorPrice) * (orderDetail.DiscountPercentage.Value) / 100) * orderDetail.Qty;
+                }
+
+            }
+
+        }
+        totalPrice = Model.GetTotalPrice() - SumDiscount;
+
     }
 
 }
@@ -71,12 +87,7 @@
                                                     <i class="fa fa-color" style="height: 30px; width: 40px; border: 1px solid black; background-color: @orderDetail.ColorCode;"></i>
                                                 </div>
                                             }
-                                            @*@if (orderDetail.Product.Guarantees != null && orderDetail.Product.Guarantees.Any())
-                                                {
-                                                    <div class="checkout-guarantee">
-                                                        <i class="fa fa-check"></i>گارانتی: @orderDetail.Product.Guarantees.FirstOrDefault().GuaranteeName
-                                                    </div>
-                                                }*@
+
                                             @if (orderDetail.DiscountPercentage != null && orderDetail.DiscountPercentage != 0)
                                             {
                                                 <div class="checkout-guarantee">
@@ -88,7 +99,13 @@
                                             @if (orderDetail.DiscountPercentage != null && orderDetail.DiscountPercentage != 0)
                                             {
                                                 <div class="checkout-guarantee">
-                                                    <h6> مقدار تخفیف @(((((orderDetail.ProductPrice + orderDetail.ProductColorPrice)) * (orderDetail.DiscountPercentage.Value) / 100) * orderDetail.Qty).ToString("#,0")) تومان</h6>
+                                                    <h6>
+                                                        مقدار تخفیف @{
+                                                            discountPrice = (((orderDetail.ProductPrice + orderDetail.ProductColorPrice)) * (orderDetail.DiscountPercentage.Value) / 100) * orderDetail.Qty;
+
+
+                                                        }تومان @(discountPrice.ToString("#,0"))
+                                                    </h6>
                                                     <br />
                                                     <i class="fa fa-color"></i>
                                                 </div>
@@ -103,24 +120,39 @@
                                             </div>
                                         </div>
 
+                                        @if (orderDetail.DiscountPercentage != null && orderDetail.DiscountPercentage != 0)
+                                        {
+                                            <a href="#" class="add-to-sfl">
+                                                <div class="cart-item-product-price">
+                                                    قیمت کل :
+                                                    @((orderDetail.Qty * (orderDetail.ProductPrice + orderDetail.ProductColorPrice) - discountPrice).ToString("#,0"))
+                                                    <span>
+                                                        تومان
+                                                    </span>
+                                                </div>
 
-                                        <a href="#" class="add-to-sfl">
-                                            <div class="cart-item-product-price">
-                                                قیمت کل :
-                                                @((orderDetail.Qty*(orderDetail.ProductPrice+ orderDetail.ProductColorPrice)).ToString("#,0"))
-                                                <span>
-                                                    تومان
-                                                </span>
-                                            </div>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" class="add-to-sfl">
+                                                <div class="cart-item-product-price">
+                                                    قیمت کل :
+                                                    @((orderDetail.Qty * (orderDetail.ProductPrice + orderDetail.ProductColorPrice)).ToString("#,0"))
+                                                    <span>
+                                                        تومان
+                                                    </span>
+                                                </div>
 
-                                        </a>
+                                            </a>
+                                        }
 
                                     </div>
                                 </div>
 
+                                <hr />
 
                             }
-                            <hr />
 
                         }
 
@@ -128,7 +160,7 @@
                 </div>
 
                 <div class="checkout-to-shipping-sticky">
-                    <a href="#" class="selenium-next-step-shipping">ادامه فرآیند خرید</a>
+                    <a asp-controller="Order" asp-action="PayUserOrderPrice" asp-area="UserPanel" class="selenium-next-step-shipping">ادامه فرآیند خرید</a>
                     <div class="checkout-to-shipping-price-report">
                         <p>مبلغ قابل پرداخت</p>
                         <div class="cart-item-product-price">
@@ -149,16 +181,16 @@
                                 <span>@Model.Details.Sum(p => p.Qty)</span>
                             </li>
                             <li>
-                                <span>جمع</span>
-                                <span> @(totalPrice.ToString("#,0")) تومان</span>
+                                <span>جمع اجزا</span>
+                                <span> @Model.GetTotalPrice().ToString("#,0") تومان</span>
                             </li>
                             <li>
                                 <span>تخغیف</span>
-                                <span>۳,۴۲۰,۰۰۰ تومان</span>
+                                <span>@Model.GetTotalDiscounts().ToString("#,0") تومان</span>
                             </li>
                             <li>
                                 <span>مبلغ قابل پرداخت</span>
-                                <span>              @(totalPrice.ToString("#,0")) تومان</span>
+                                <span>             @((Model.GetTotalPrice() - Model.GetTotalDiscounts()).ToString("#,0"))) تومان</span>
                             </li>
                         </ul>
                     </div>

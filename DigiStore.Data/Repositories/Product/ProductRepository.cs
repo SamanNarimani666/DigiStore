@@ -179,6 +179,17 @@ namespace DigiStore.Data.Repositories.Product
         }
         #endregion
 
+        #region GetPopularProduct
+        public async Task<List<Domain.Entities.Product>> GetPopularProduct(int take)
+        {
+            return await _context.Products.Include(p => p.SalesOrderDetails)
+                .Where(p=>p.SalesOrderDetails.Any())
+                .OrderByDescending(d => d.SalesOrderDetails.Sum(c=>c.OrderQty))
+                .Take(take)
+                .ToListAsync();
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {

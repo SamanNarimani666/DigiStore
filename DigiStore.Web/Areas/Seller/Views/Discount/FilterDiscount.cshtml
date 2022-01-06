@@ -1,4 +1,5 @@
-﻿@using DigiStore.Application.Utils
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
 @model DigiStore.Domain.ViewModels.ProductDiscount.FilterProductDiscountViewModel
 @{
     ViewData["Title"] = "فیلتر کد های تخفیف";
@@ -34,10 +35,13 @@
                         {
                             <tr>
 
-                                <td>@(item.ProductDiscountId)</td>
                                 <td>@(item.Percentage)%</td>
                                 <td>@(item.ExpierDate.ToShamsiDate())</td>
-                                <td>@(item.DiscountNumber)</td>
+                                <td>@(item.DiscountNumber!=0? item.DiscountNumber: "نامحدود")</td>
+                                <td>
+                                    <img src="@(PathExtension.ProductImageThumb + item.Product.ImageName)" class="img-fluid img-thumbnail"/>
+                                    @item.Product.Name
+                                </td>
                             </tr>
 
                         }

@@ -8,6 +8,7 @@ using DigiStore.Data.Repositories.AddressCity;
 using DigiStore.Data.Repositories.AddressState;
 using DigiStore.Data.Repositories.Brand;
 using DigiStore.Data.Repositories.Category;
+using DigiStore.Data.Repositories.FavoriteProductUser;
 using DigiStore.Data.Repositories.Guarantee;
 using DigiStore.Data.Repositories.Product;
 using DigiStore.Data.Repositories.ProductColor;
@@ -28,6 +29,7 @@ using DigiStore.Domain.IRepositories.AddressCity;
 using DigiStore.Domain.IRepositories.AddressState;
 using DigiStore.Domain.IRepositories.Brand;
 using DigiStore.Domain.IRepositories.Category;
+using DigiStore.Domain.IRepositories.FavoriteProductUser;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
@@ -76,6 +78,8 @@ namespace DigiStore.IOC
             services.AddScoped<ISellerWalletRepository, SellerWalletRepository>();
             services.AddScoped<IProductDiscountRepository, ProductDiscountRepository>();
             services.AddScoped<IProductDiscountUseRepository, ProductDiscountUseRepository>();
+            services.AddScoped<IPaymentSerivce,PaymentSerivce>();
+            services.AddScoped<IFavoriteProductUserRepository, FavoriteProductUserRepository>();
 
 
             services.AddSingleton<IPasswordHelper, PasswordHelper>();

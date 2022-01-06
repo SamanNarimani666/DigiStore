@@ -20,5 +20,19 @@ namespace DigiStore.Data.Repositories.ProductDiscountUse
             await _context.DisposeAsync();
         }
         #endregion
+
+        #region AddProductDiscountUse
+        public async Task AddProductDiscountUse(Domain.Entities.ProductDiscountUse discountUse)
+        {
+            await _context.ProductDiscountUses.AddAsync(discountUse);
+        }
+        #endregion
+
+        #region Save
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
+        }
+        #endregion
     }
 }

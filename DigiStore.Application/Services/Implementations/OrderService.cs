@@ -5,6 +5,8 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Application.Utils;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.Enums.Store;
+using DigiStore.Domain.IRepositories.ProductDiscount;
+using DigiStore.Domain.IRepositories.ProductDiscountUse;
 using DigiStore.Domain.IRepositories.SalesOrder;
 using DigiStore.Domain.IRepositories.SalesOrderDetail;
 using DigiStore.Domain.IRepositories.SellerWallet;
@@ -18,11 +20,15 @@ namespace DigiStore.Application.Services.Implementations
         private readonly ISalesOrderHeaderRepository _orderHeaderRepository;
         private readonly ISalesOrderDetailRepository _orderDetailRepository;
         private readonly ISellerWalletRepository _sellerWalletRepository;
-        public OrderService(ISalesOrderHeaderRepository orderHeaderRepository, ISalesOrderDetailRepository orderDetailRepository, ISellerWalletRepository sellerWalletRepository)
+        private readonly IProductDiscountRepository _discountRepository;
+        private readonly IProductDiscountUseRepository _discountUseRepository;
+        public OrderService(ISalesOrderHeaderRepository orderHeaderRepository, ISalesOrderDetailRepository orderDetailRepository, ISellerWalletRepository sellerWalletRepository, IProductDiscountRepository discountRepository, IProductDiscountUseRepository discountUseRepository)
         {
             _orderHeaderRepository = orderHeaderRepository;
             _orderDetailRepository = orderDetailRepository;
             _sellerWalletRepository = sellerWalletRepository;
+            _discountRepository = discountRepository;
+            _discountUseRepository = discountUseRepository;
         }
         #endregion
 
@@ -111,7 +117,7 @@ namespace DigiStore.Application.Services.Implementations
                         ProductPrice = s.Product.Price,
                         ProductTitle = s.Product.Name,
                         ProductImageName = s.Product.ImageName,
-                        DiscountPercentage = s.Product.ProductDiscounts.OrderByDescending(p=>p.ModifiedDate).FirstOrDefault(s=>s.ExpierDate>DateTime.Now)?.Percentage
+                        DiscountPercentage = s.Product.ProductDiscounts.OrderByDescending(p=>p.ModifiedDate).FirstOrDefault(p=>p.ExpierDate>DateTime.Now && p.DiscountNumber - p.ProductDiscountUses.Count >= 0)?.Percentage
                     };
                 }).ToList()
             };
@@ -166,13 +172,22 @@ namespace DigiStore.Application.Services.Implementations
         {
             var openOrder = await GetUserLastOpenOrder(userId);
             int totalPrice = 0;
-            foreach (var detial in openOrder.SalesOrderDetails)
-            {
-                var oneProductPrice = detial.Color != null ? detial.Product.Price + detial.Color.Price : detial.Product.Price;
-                totalPrice += oneProductPrice * detial.OrderQty;
-            }
+            var discunt = 0;
 
+            foreach (var detials in openOrder.SalesOrderDetails)
+            {
+                var oneProductPrice = (detials.Color != null ? detials.Product.Price + detials.Color.Price : detials.Product.Price);
+                var productDiscount =
+                    await _discountRepository.GetProductDiscountByProductId(detials.Product.ProductId);
+                if (productDiscount != null)
+                {
+                    discunt = (int)Math.Ceiling(oneProductPrice * productDiscount.Percentage / ((decimal)100));
+                }
+
+                totalPrice += detials.OrderQty*(oneProductPrice- discunt);
+            }
             openOrder.OrderSum = totalPrice;
+            openOrder.ModifiedDate=DateTime.Now;
             _orderHeaderRepository.UpdateSalesOrderHeader(openOrder);
             await _orderHeaderRepository.Save();
             return totalPrice;
@@ -180,7 +195,7 @@ namespace DigiStore.Application.Services.Implementations
         #endregion
 
         #region PayOrderProductPriceToSeller
-        public async Task PayOrderProductPriceToSeller(int userId)
+        public async Task PayOrderProductPriceToSeller(int userId, long trackingCode)
         {
             var openOrder = await GetUserLastOpenOrder(userId);
             foreach (var detials in openOrder.SalesOrderDetails)
@@ -188,15 +203,35 @@ namespace DigiStore.Application.Services.Implementations
                 var productPrice = detials.Product.Price;
                 var productColorPrice = detials.Color?.Price ?? 0;
                 var discunt = 0;
-                var totlaPrice = detials.OrderQty * ((productPrice + productColorPrice) - discunt);
+                var totalPrice = detials.OrderQty * ((productPrice + productColorPrice) - discunt);
+                var productDiscount =
+                    await _discountRepository.GetProductDiscountByProductId(detials.Product.ProductId);
+                if (productDiscount != null)
+                {
+                    discunt =(int)Math.Ceiling(totalPrice * productDiscount.Percentage/ ((decimal)100));
+                    try
+                    {
+                        var newDiscountUse= new ProductDiscountUse()
+                        {
+                            UserId = userId,
+                            ProductDiscountId = productDiscount.ProductDiscountId,
+                            CreateDate = DateTime.Now,
+                        };
+                        await _discountUseRepository.AddProductDiscountUse(newDiscountUse);
+                        await _discountUseRepository.Save();
+                    }
+                    catch { }
+                }
+
+                var totalPriceWithDiscount = totalPrice - discunt;
                 await _sellerWalletRepository.AddSellerWallet(new SellerWallet()
                 {
                     SellerId = detials.Product.SellerId,
-                    Price = (int)Math.Ceiling(totlaPrice + detials.Product?.SiteProfile ?? 1 / (double)100),
+                    Price = (int)Math.Ceiling(totalPriceWithDiscount *(100- detials.Product?.SiteProfile ?? 0)  / (double)100),
                     TransactionType = (byte)TransactionType.Deposit,
-                    Descriptions = $"فروش محصول {detials.Product.Name}  با مبلغ {totlaPrice}  در تاریخ{DateTime.Now.ToStringShamsiDate()} به تعداد  {detials.OrderQty}  عدد با سهام در نظر گرفته شده {(100) - detials.Product.SiteProfile}در صد "
+                    Descriptions = $"فروش محصول {detials.Product.Name}  با مبلغ {totalPriceWithDiscount}  در تاریخ{DateTime.Now.ToStringShamsiDate()} به تعداد  {detials.OrderQty}  عدد با سهام در نظر گرفته شده {(100) - detials.Product.SiteProfile}در صد "
                 });
-                detials.Price = totlaPrice;
+                detials.Price = totalPriceWithDiscount;
                 detials.ColorPrice = productColorPrice;
                 detials.ModifiedDate = DateTime.Now;
                 _orderDetailRepository.UpdateSalesOrderDetail(detials);
@@ -204,12 +239,12 @@ namespace DigiStore.Application.Services.Implementations
             }
             await _orderDetailRepository.Save();
             openOrder.IsPaiy = true;
+            openOrder.TracingCode =Convert.ToString(trackingCode);
             openOrder.ModifiedDate = DateTime.Now;
             _orderHeaderRepository.UpdateSalesOrderHeader(openOrder);
             await _orderHeaderRepository.Save();
 
         }
-
         #endregion
 
         #endregion
@@ -219,6 +254,9 @@ namespace DigiStore.Application.Services.Implementations
         {
             await _orderHeaderRepository.DisposeAsync();
             await _orderDetailRepository.DisposeAsync();
+            await _sellerWalletRepository.DisposeAsync();
+            await _discountRepository.DisposeAsync();
+            await _discountUseRepository.DisposeAsync();
         }
         #endregion
     }

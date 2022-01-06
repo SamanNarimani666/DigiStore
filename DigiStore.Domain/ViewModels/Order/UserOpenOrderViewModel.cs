@@ -15,5 +15,12 @@ namespace DigiStore.Domain.ViewModels.Order
         {
             return Details.Sum(s => (s.ProductPrice + s.ProductColorPrice) * s.Qty);
         }
+
+        public int GetTotalDiscounts()
+        {
+            return Details.Sum(s => s.GetOrderDetailWithDiscountPriceAmount());
+        }
+
+
     }
 }

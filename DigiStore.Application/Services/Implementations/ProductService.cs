@@ -12,6 +12,7 @@ using DigiStore.Domain.IRepositories.Category;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.IRepositories.ProductDiscount;
 using DigiStore.Domain.IRepositories.ProductFeature;
 using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.ProductVisited;
@@ -565,7 +566,13 @@ namespace DigiStore.Application.Services.Implementations
         {
            return await _productVisitedRepository.filterFilterProductVisited(filterProductVisited);
         }
+        #endregion
 
+        #region GetPopularProduct
+        public async Task<List<Product>> GetPopularProduct(int take)
+        {
+            return await _productRepository.GetPopularProduct(take);
+        }
         #endregion
 
         #region Dispose

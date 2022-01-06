@@ -11,7 +11,7 @@ namespace DigiStore.Application.Extensions
     {
         public static string GetOrderDetailWithDiscountPrice(this UserOpenOrderDetailItemViewModel detail)
         {
-            if (detail.DiscountPercentage != null)
+            if (detail.DiscountPercentage != null&& detail.DiscountPercentage!=0)
             {
                 return ((detail.ProductPrice+ detail.ProductColorPrice)* (detail.DiscountPercentage.Value / 100) * detail.Qty).ToString("#,0 تومان");
 

@@ -32,6 +32,7 @@ namespace DigiStore.Web.Areas.Seller.Controllers
             if (filterProductDiscount.ProductId == null && filterProductDiscount.ProductId == 0) return NoContent();
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
             filterProductDiscount.SellerId = seller.SellerId;
+            filterProductDiscount.TakeEntity = 5;
             return View(await _discountService.FilterProductDiscount(filterProductDiscount));
         }
         #endregion

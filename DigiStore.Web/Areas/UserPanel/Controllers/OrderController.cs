@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
+using DigiStore.Application.Extensions;
 using DigiStore.Application.Services.Interfaces;
+using DigiStore.Domain.Enums.Payment;
 using DigiStore.Domain.ViewModels.Order;
 using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
@@ -14,10 +16,12 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         #region Constructor
         private readonly IOrderService _orderService;
         private readonly IUserService _userService;
-        public OrderController(IOrderService orderService, IUserService userService)
+        private readonly IPaymentSerivce _paymentSerivce;
+        public OrderController(IOrderService orderService, IUserService userService, IPaymentSerivce paymentSerivce)
         {
             _orderService = orderService;
             _userService = userService;
+            _paymentSerivce = paymentSerivce;
         }
         #endregion
 
@@ -55,11 +59,52 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         }
         #endregion
 
+        #region pay order
+        [HttpGet("pay-order")]
+        public async Task<IActionResult> PayUserOrderPrice()
+        {
+            var openOrderAmount = await _orderService.GetTotalOrderPriceForPayment(User.GetUserId());
+            string callbackUrl = PathExtension.SiteUrl + Url.RouteUrl("ZarinPalPaymentResult");
+
+            string redirectUrl = "";
+            var status = _paymentSerivce.CreatePaymentRequest(null, openOrderAmount,"پرداخت سبد خرید",callbackUrl, ref redirectUrl);
+            if (status == PaymentStatus.St100)
+            {
+                return Redirect(redirectUrl);
+            }
+            return RedirectToAction("UserOpenOrder");
+        }
+        #endregion
+
+        #region Call back zarinpal 
+        [AllowAnonymous]
+        [HttpGet("payment-result",Name="ZarinPalPaymentResult")]
+        public async Task<IActionResult> CallBackZarinPal()
+        {
+            string authority = _paymentSerivce.GetAuthorityCodeFromCallback(HttpContext);
+            if (authority == "")
+            {
+                TempData[WarningMessage] = "عملیات پرداخت با شکست مواجه شد";
+            }
+            var openOrderAmount = await _orderService.GetTotalOrderPriceForPayment(User.GetUserId());
+            long refId = 0;
+            var res = _paymentSerivce.PaymentVerification(null, authority, openOrderAmount, ref refId);
+            if (res == PaymentStatus.St100)
+            {
+                TempData[SuccessMessage] = "پرداخت شما با موفقیت انجام شد";
+                TempData[InfoMessage] = "کد پیگیری" + refId;
+                await _orderService.PayOrderProductPriceToSeller(User.GetUserId(), refId);
+                return View();
+            }
+            return View();
+        }
+        #endregion
+
         #region OpenOrderPartial
         [HttpGet("change-detialCount/{detialId}/{count}")]
-        public async Task ChangedetialCount(int detialId,int count)
+        public async Task ChangedetialCount(int detialId, int count)
         {
-            await _orderService.ChangeOrderQty(detialId,User.GetUserId(),count);
+            await _orderService.ChangeOrderQty(detialId, User.GetUserId(), count);
         }
         #endregion
 

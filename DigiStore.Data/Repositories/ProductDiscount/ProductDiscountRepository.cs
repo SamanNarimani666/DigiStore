@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.IRepositories.ProductDiscount;
@@ -21,7 +23,7 @@ namespace DigiStore.Data.Repositories.ProductDiscount
         #region FilterProductDiscount
         public async Task<FilterProductDiscountViewModel> FilterProductDiscount(FilterProductDiscountViewModel filterProductDiscount)
         {
-            var query =  _context.ProductDiscounts.Include(p=>p.Product).AsQueryable();
+            var query =  _context.ProductDiscounts.Include(p=>p.Product).OrderByDescending(p=>p.ModifiedDate).AsQueryable();
 
             #region Filter
             if (filterProductDiscount.ProductId != null && filterProductDiscount.ProductId!=0)
@@ -49,6 +51,31 @@ namespace DigiStore.Data.Repositories.ProductDiscount
             await _context.AddAsync(productDiscount);
         }
         #endregion
+
+        #region GetProductDiscountByProductId
+        public async Task<Domain.Entities.ProductDiscount> GetProductDiscountByProductId(int productId)
+        {
+            return await _context.ProductDiscounts.Include(p => p.ProductDiscountUses)
+                .OrderByDescending(p=>p.ModifiedDate)
+                .FirstOrDefaultAsync(p =>
+                    p.ProductId == productId && p.DiscountNumber.Value - p.ProductDiscountUses.Count > 0);
+
+        }
+        #endregion
+
+        #region GetAlloffProducs
+        public async Task<List<Domain.Entities.ProductDiscount>> GetAlloffProducs(int take)
+        {
+            return await _context.ProductDiscounts
+                .Include(p=>p.Product)
+                .Where(p => p.ExpierDate >= DateTime.Now)
+                .OrderByDescending(p => p.ExpierDate)
+                .Skip(0)
+                .Take(take)
+                .Distinct()
+                .ToListAsync();
+        }
+        #endregion  
 
         #region Save
         public async Task Save()

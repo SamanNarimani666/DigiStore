@@ -1,5 +1,9 @@
-﻿@{
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.Entities;
+@{
     ViewData["Title"] = "دیجی استور";
+    var offProduct = ViewBag.OffProduct as List<ProductDiscount>;
+    var popularProducs = ViewBag.PopularProducs as List<Product>;
 }
 <!--    Start Main Slider -------------------->
 @await Component.InvokeAsync("HomeSlider")
@@ -163,232 +167,70 @@
 </div>
 <!--  product-slider-------------------->
 <!--slider-amazing----------------------------->
-<section class="section-slider amazing-section mb-3 mt-4" style="background: rgb(239, 57, 78);">
-    <div class="container-amazing">
-        <div class="container-main">
-            <div>
-                <div class="col-lg-3 display-md-none pull-right">
-                    <div class="amazing-product text-center mt-5">
-                        <a href="#">
-                            <img src="/assets/images/amazing/amazing.png" alt="amazing">
-                        </a>
-                        <a href="#" class="view-all-amazing-btn">
-                            مشاهده همه
-                            <i class="uil uil-angle-left"></i>
-                        </a>
+@if (offProduct != null && offProduct.Any())
+{
+    <section class="section-slider amazing-section mb-3 mt-4" style="background: rgb(239, 57, 78);">
+        <div class="container-amazing">
+            <div class="container-main">
+                <div>
+                    <div class="col-lg-3 display-md-none pull-right">
+                        <div class="amazing-product text-center mt-5">
+                            <a href="#">
+                                <img src="/assets/images/amazing/amazing.png" alt="amazing">
+                            </a>
+                            <a asp-controller="Product" asp-action="ProductSearch" asp-area="" class="view-all-amazing-btn">
+                                مشاهده همه
+                                <i class="uil uil-angle-left"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-9 col-md-12 pull-left">
-                    <div class="section-slider-content">
-                        <div class="section-slider-product slider-amazing mt-3">
-                            <div class="widget widget-product card" style="margin:0;">
-                                <header class="card-header card-header-amazing">
-                                    <span class="title-one">پیشنهاد شگفت انگیز</span>
-                                    <a class="card-title">مشاهده همه</a>
-                                </header>
-                                <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                                    <div class="owl-stage-outer">
-                                        <div class="owl-stage"
-                                             style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
-                                            <div class="owl-item active"
-                                                 style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/Knife.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز 82
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item active"
-                                                 style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/phone.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز 82
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
+                    <div class="col-lg-9 col-md-12 pull-left">
+                        <div class="section-slider-content">
+                            <div class="section-slider-product slider-amazing mt-3">
+                                <div class="widget widget-product card" style="margin:0;">
+                                    <header class="card-header card-header-amazing">
+                                        <span class="title-one">پیشنهاد شگفت انگیز</span>
+                                        <a class="card-title">مشاهده همه</a>
+                                    </header>
+                                    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                                        <div class="owl-stage-outer">
+                                            <div class="owl-stage"
+                                                 style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                                @foreach (var OffProducs in offProduct)
+                                                {
+
+
+                                                    <div class="owl-item active"
+                                                         style="width: 309.083px; margin-left: 10px;">
+                                                        <div class="item">
+                                                            <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@OffProducs.Product.ProductId" asp-route-title="@OffProducs.Product.Name.FixTextForUrl()">
+                                                                <img src="@(PathExtension.ProductImageOrigin+OffProducs.Product.ImageName)"
+                                                                     class="img-fluid" alt="img-slider">
+                                                            </a>
+                                                            <h2 class="post-title">
+                                                                <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@OffProducs.Product.ProductId" asp-route-title="@OffProducs.Product.Name.FixTextForUrl()">
+                                                                    @OffProducs.Product.Name
+                                                                </a>
+                                                            </h2>
+                                                            <div class="price">
+                                                                <div class="discount-item">
+                                                                    <span>@OffProducs.Percentage٪</span>
+                                                                </div>
+                                                                <del><span>@OffProducs.Product.Price.ToString("#,0")<span>تومان</span></span></del>
+                                                                <ins><span>@((OffProducs.Product.Price - (OffProducs.Product.Price* OffProducs.Percentage)/100).ToString("#,0"))<span>تومان</span></span></ins>
+                                                            </div>
+                                                            <div class="product-box-timer">
+                                                                <span class="fa fa-clock-o"></span>
+                                                                <div class="countdown countdown-style-3 h4"
+                                                                     data-date-time="@(OffProducs.ExpierDate.ToString("u"))"
+                                                                     data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item active"
-                                                 style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/tishert.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز 82
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item active"
-                                                 style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/headphone.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز 82
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/power-bank.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز 82
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۲۱٪</span>
-                                                        </div>
-                                                        <del><span>۱۵۹,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۱۳۹,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/clock.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز 82
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۲۶٪</span>
-                                                        </div>
-                                                        <del><span>۱,۵۵۸,۷۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۱,۱۴۹,۰۰۰ <span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/backpack.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز 82
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۶۷٪</span>
-                                                        </div>
-                                                        <del><span>۸۱۹,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۲۶۹,۹۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
+                                                }
+
                                             </div>
                                         </div>
                                     </div>
@@ -399,8 +241,8 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+}
 <!--slider-amazing----------------------------->
 <!--   adplacement -------------------->
 <div class="adplacement">
@@ -429,237 +271,41 @@
     </div>
 </div>
 <!--   adplacement -------------------->
-<!--slider-amazing----------------------------->
-<section class="section-slider amazing-section mb-3 mt-4" style="background: #6bb927;">
-    <div class="container-amazing">
-        <div class="container-main">
-            <div>
-                <div class="col-lg-3 display-md-none pull-right">
-                    <div class="amazing-product text-center mt-5">
-                        <a href="#">
-                            <img src="/assets/images/amazing/amazing-supermarket.png" alt="amazing">
-                        </a>
-                        <a href="#" class="view-all-amazing-btn">
-                            مشاهده همه
-                            <i class="uil uil-angle-left"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-9 col-md-12 pull-left">
-                    <div class="section-slider-content">
-                        <div class="section-slider-product slider-amazing amazing-supermarket mt-3">
-                            <div class="widget widget-product card" style="margin:0;">
-                                <header class="card-header card-header-amazing">
-                                    <span class="title-one">شگفت انگیز سوپر مارکتی</span>
-                                    <a class="card-title">مشاهده همه</a>
-                                </header>
-                                <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                                    <div class="owl-stage-outer">
-                                        <div class="owl-stage"
-                                             style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
-                                            <div class="owl-item active"
-                                                 style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/Whitex.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز 82
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item active"
-                                                 style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/Napkin.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند ایکس ویژن مدل 55XT515 سایز 55
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item active"
-                                                 style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/Barberry.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند مجیک تی وی مدل MT65D2400 سایز
-                                                            65 اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item active"
-                                                 style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/Tablecloth.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند ایکس ویژن مدل 49XTU725 سایز 49
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/Pizza.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند ایکس ویژن مدل 49XTU725 سایز 49
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/Tea.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند ایکس ویژن مدل 43XT725 سایز 43
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                <div class="item">
-                                                    <a href="#">
-                                                        <img src="/assets/images/product-slider-2/Sugar.jpg"
-                                                             class="img-fluid" alt="img-slider">
-                                                    </a>
-                                                    <h2 class="post-title">
-                                                        <a href="#">
-                                                            تلویزیون ال ای دی هوشمند ایکس ویژن مدل 55XTU725 سایز 55
-                                                            اینچ
-                                                        </a>
-                                                    </h2>
-                                                    <div class="price">
-                                                        <div class="discount-item">
-                                                            <span>۳۲٪</span>
-                                                        </div>
-                                                        <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                    </div>
-                                                    <div class="product-box-timer">
-                                                        <span class="fa fa-clock-o"></span>
-                                                        <div class="countdown countdown-style-3 h4"
-                                                             data-date-time="10/10/2025 24:00"
-                                                             data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                        </div>
-                                                    </div>
-                                                </div>
+<!--   slider-product-------------------->
+@if (popularProducs != null && popularProducs.Any())
+{
+    <div class="col-lg-12 col-md-12 col-xs-12 pull-right mt-2">
+        <div class="row">
+            <div class="col-12">
+                <div class="widget widget-product card">
+                    <header class="card-header">
+                        <h1 class="title-one">پرفروش ترین محصولات</h1>
+                    </header>
+                    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                        <div class="owl-stage-outer">
+                            <div class="owl-stage"
+                                 style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                @foreach (var Popularproducts in popularProducs)
+                                {
+                                    <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                                        <div class="item">
+                                            <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@Popularproducts.ProductId" asp-route-title="@Popularproducts.Name.FixTextForUrl()">
+                                                <img src="@(PathExtension.ProductImageOrigin+Popularproducts.ImageName)" class="img-fluid"
+                                                     alt="img-slider">
+                                            </a>
+                                            <h2 class="post-title">
+                                                <a href="#">
+                                                  @Popularproducts.Name
+                                                </a>
+                                            </h2>
+                                            <div class="price">
+                                                <ins><span>@Popularproducts.Price.ToString("#,0")<span>تومان</span></span></ins>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -667,221 +313,8 @@
             </div>
         </div>
     </div>
-</section>
-<!--slider-amazing----------------------------->
-<!--    Slider-sidebar------------------->
-<div class="col-lg-2 col-md-12 col-xs-12 pull-left">
-    <div class="slider-sidebar">
-        <div class="widget-suggestion widget card">
-            <header class="card-header promo-single-headline">
-                <h3 class="card-title">پیشنهادهای لحظه‌ای</h3>
-            </header>
-            <div id="progressBar">
-                <div class="slide-progress" style="width: 100%; transition: width 5000ms ease 0s;"></div>
-            </div>
-            <div id="suggestion-slider" class="owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                <div class="owl-stage-outer">
-                    <div class="owl-stage"
-                         style="transform: translate3d(1369px, 0px, 0px); transition: all 0.25s ease 0s; width: 2190px;">
-                        <div class="owl-item cloned" style="width: 273.75px;">
-                            <div class="item">
-                                <a href="#">
-                                    <img src="/assets/images/slider-sidebar/slider-sidebar-1.jpg" class="w-100"
-                                         alt="img-slider">
-                                </a>
-                                <h3 class="product-title">
-                                    <a href="#"> لپ تاپ 15 اینچی ایسوس مدل VivoBook X543MA - A</a>
-                                </h3>
-                                <div class="price">
-                                    <del><span class="amount">۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                    <span class="amount">۳,۳۹۵,۰۰۰<span>تومان</span></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="owl-item cloned" style="width: 273.75px;">
-                            <div class="item">
-                                <a href="#">
-                                    <img src="/assets/images/slider-sidebar/slider-sidebar-2.jpg" class="w-100"
-                                         alt="img-slider">
-                                </a>
-                                <h3 class="product-title">
-                                    <a href="#"> لپ تاپ 15 اینچی دل مدل XPS 7590-A </a>
-                                </h3>
-                                <div class="price">
-                                    <del><span class="amount">۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                    <span class="amount">۳,۳۹۵,۰۰۰<span>تومان</span></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="owl-item" style="width: 273.75px;">
-                            <div class="item">
-                                <a href="#">
-                                    <img src="/assets/images/slider-sidebar/slider-sidebar-3.jpg" class="w-100"
-                                         alt="img-slider">
-                                </a>
-                                <h3 class="product-title">
-                                    <a href="#"> لپ تاپ 15 اینچی مایکروسافت مدل Surface Book 2- C </a>
-                                </h3>
-                                <div class="price">
-                                    <span class="amount">۴,۵۳۰,۰۰۰<span>تومان</span></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="owl-item" style="width: 273.75px;">
-                            <div class="item">
-                                <a href="#">
-                                    <img src="/assets/images/slider-sidebar/slider-sidebar-4.jpg" class="w-100"
-                                         alt="img-slider">
-                                </a>
-                                <h3 class="product-title">
-                                    <a href="#">
-                                        لپ تاپ ۱۵ اینچی ایسوس مدل FX503VD - A
-                                    </a>
-                                </h3>
-                                <div class="price">
-                                    <del><span class="amount">۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                    <span class="amount">۳,۳۹۵,۰۰۰<span>تومان</span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--    Slider-sidebar------------------->
-<!--   slider-product-------------------->
-<div class="col-lg-10 col-md-12 col-xs-12 pull-right mt-2">
-    <div class="row">
-        <div class="col-12">
-            <div class="widget widget-product card">
-                <header class="card-header">
-                    <span class="title-one">صندلی اداری</span>
-                </header>
-                <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                    <div class="owl-stage-outer">
-                        <div class="owl-stage"
-                             style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
-                            <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/chair1.jpg" class="img-fluid"
-                                             alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            صندلی اداری رونیکا مدل گلرخ
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/chair2.jpg" class="img-fluid"
-                                             alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            صندلی اداری رونیکا مدل گلرخ
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/chair3.jpg" class="img-fluid"
-                                             alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            صندلی اداری رونیکا مدل گلرخ
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/chair4.jpg" class="img-fluid"
-                                             alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            صندلی اداری رونیکا مدل گلرخ
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/chair5.jpg" class="img-fluid"
-                                             alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            صندلی اداری رونیکا مدل گلرخ
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/chair6.jpg" class="img-fluid"
-                                             alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            صندلی اداری رونیکا مدل گلرخ
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                <div class="item">
-                                    <a href="#">
-                                        <img src="/assets/images/product-slider-2/chair7.jpg" class="img-fluid"
-                                             alt="img-slider">
-                                    </a>
-                                    <h2 class="post-title">
-                                        <a href="#">
-                                            صندلی اداری رونیکا مدل گلرخ
-                                        </a>
-                                    </h2>
-                                    <div class="price">
-                                        <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+}
+
 
 <!--        category--------------------------->
 <div class="col-12">

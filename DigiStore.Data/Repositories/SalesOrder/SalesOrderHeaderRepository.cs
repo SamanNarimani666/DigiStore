@@ -30,6 +30,7 @@ namespace DigiStore.Data.Repositories.SalesOrder
               .Include(p=>p.SalesOrderDetails)
               .ThenInclude(p=>p.Product)
               .ThenInclude(p=>p.ProductDiscounts)
+              .ThenInclude(p=>p.ProductDiscountUses)
               .Include(p => p.SalesOrderDetails)
               .ThenInclude(p=>p.Color)
               .SingleOrDefaultAsync(p => p.UserId == userId && !p.IsPaiy);
