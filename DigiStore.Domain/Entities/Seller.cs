@@ -9,6 +9,7 @@ namespace DigiStore.Domain.Entities
     {
         public Seller()
         {
+            Productcomments = new HashSet<Productcomment>();
             Products = new HashSet<Product>();
             SellerWallets = new HashSet<SellerWallet>();
         }
@@ -31,6 +32,7 @@ namespace DigiStore.Domain.Entities
         public Guid Rowguid { get; set; }
 
         public virtual User User { get; set; }
+        public virtual ICollection<Productcomment> Productcomments { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<SellerWallet> SellerWallets { get; set; }
     }

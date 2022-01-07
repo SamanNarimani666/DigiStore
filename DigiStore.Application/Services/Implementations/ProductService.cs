@@ -13,12 +13,14 @@ using DigiStore.Domain.IRepositories.FavoriteProductUser;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.IRepositories.Productcomment;
 using DigiStore.Domain.IRepositories.ProductFeature;
 using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.ProductVisited;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
 using DigiStore.Domain.ViewModels.FavoriteProductUser;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Domain.ViewModels.ProductComment;
 using DigiStore.Domain.ViewModels.ProductVisited;
 using Microsoft.AspNetCore.Http;
 
@@ -36,7 +38,8 @@ namespace DigiStore.Application.Services.Implementations
         private readonly IProductVisitedRepository _productVisitedRepository;
         private readonly IProductFeatureRepository _productFeatureRepository;
         private readonly IFavoriteProductUserRepository _favoriteProductUserRepository;
-        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository, IFavoriteProductUserRepository favoriteProductUserRepository)
+        private readonly IProductcommentRepository _productcommentRepository;
+        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository, IFavoriteProductUserRepository favoriteProductUserRepository, IProductcommentRepository productcommentRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
@@ -47,6 +50,7 @@ namespace DigiStore.Application.Services.Implementations
             _productVisitedRepository = productVisitedRepository;
             _productFeatureRepository = productFeatureRepository;
             _favoriteProductUserRepository = favoriteProductUserRepository;
+            _productcommentRepository = productcommentRepository;
         }
         #endregion
 
@@ -639,6 +643,46 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region CreateProductCommnet
+        public async Task<CreateProductCommnetResult> CreateProductCommnet(CreateProductCommnetViewModel createProductCommnet, int userId)
+        {
+            var product = await _productRepository.GetProductById(createProductCommnet.ProductId);
+            if (product == null) return CreateProductCommnetResult.NotFoundProduct;
+            try
+            {
+                var newComment= new Productcomment()
+                {
+                    UserId = userId,
+                    SellerId = product.SellerId,
+                    ProductId = createProductCommnet.ProductId,
+                    Title = createProductCommnet.Title,
+                    Comment = createProductCommnet.Comment
+                };
+                await _productcommentRepository.AddProductcomment(newComment);
+                await _productcommentRepository.Save();
+                return CreateProductCommnetResult.Success;
+            }
+            catch
+            {
+                return CreateProductCommnetResult.Error;
+            }
+        }
+        #endregion
+
+        #region GetProductByProductId
+        public async Task<Product> GetProductByProductId(int productId)
+        {
+            return await _productRepository.GetProductById(productId);
+        }
+        #endregion
+
+        #region filterFilterProductComment
+        public async Task<FilterProductCommentViewModel> filterFilterProductComment(FilterProductCommentViewModel filterProductComment)
+        {
+            return await _productcommentRepository.filterFilterProductComment(filterProductComment);
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {
@@ -651,6 +695,7 @@ namespace DigiStore.Application.Services.Implementations
             await _productVisitedRepository.DisposeAsync();
             await _productFeatureRepository.DisposeAsync();
             await _favoriteProductUserRepository.Save();
+            await _productcommentRepository.DisposeAsync();
         }
         #endregion
     }

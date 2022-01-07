@@ -4,6 +4,7 @@ using DigiMarket.Application.ViewModels.Account;
 using DigiStore.Application.ViewModels.Account;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.ViewModels.Account;
+using DigiStore.Domain.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Application.Services.Interfaces
@@ -23,5 +24,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<EditUserProfileViewModel> InfoUserForEditProfile(int userId);
         Task<EditUserProfileResult> EditUserProfile(EditUserProfileViewModel editUserProfile, IFormFile UserAvatar, int userId);
         Task<ChangePasswordResult> ChangePassWord(ChangePasswordViewModel changePassword, int userId);
+        Task<FilterUserViewModel> FilterUserTask(FilterUserViewModel filterUser);
     }
 }

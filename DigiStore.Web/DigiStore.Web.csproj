@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Shared\Components\ProductComment\" />
     <Folder Include="wwwroot\Admin\assets\plugins\jstree\themes\default\" />
     <Folder Include="wwwroot\Files\Store\SellerDocument\" />
     <Folder Include="wwwroot\Images\ProductGallery\Thumb\" />

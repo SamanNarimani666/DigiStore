@@ -19,7 +19,7 @@ namespace DigiStore.Web.ViewComponents
         }
     }
 
-    public class SiteFooterViewComponent : ViewComponent 
+    public class SiteFooterViewComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
@@ -27,7 +27,7 @@ namespace DigiStore.Web.ViewComponents
         }
     }
 
-    public class HomeSliderViewComponent:ViewComponent
+    public class HomeSliderViewComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
@@ -45,7 +45,7 @@ namespace DigiStore.Web.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View("LoginInformationUser",await _userService.GetInformationUserForSidebarById(User.GetUserId()));
+            return View("LoginInformationUser", await _userService.GetInformationUserForSidebarById(User.GetUserId()));
         }
     }
     public class UserOrderViewComponent : ViewComponent
@@ -76,4 +76,6 @@ namespace DigiStore.Web.ViewComponents
             return View("UserOrderResponsive", openOrder);
         }
     }
+
+ 
 }

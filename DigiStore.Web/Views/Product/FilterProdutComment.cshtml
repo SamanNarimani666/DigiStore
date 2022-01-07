@@ -1,0 +1,61 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.ProductComment.FilterProductCommentViewModel
+@{
+    ViewData["Title"] = "FilterProdutComment";
+    Layout = null;
+}
+<form method="get" asp-controller="Product" id="filter-form" asp-action="FilterProdutComment" asp-area="">
+    <input type="hidden" asp-for="PageId" />
+    <div class="col-lg-9 col-md-9 col-xs-12 pull-left">
+
+        <div id="product-comment-list">
+            <div class="tab-content" id="myTabContent">
+                @if (Model.ProductComments != null && Model.ProductComments.Any())
+                {
+                    <div class="tab-pane fade show active m-0" id="Buyerscomments" role="tabpanel" aria-labelledby="Buyerscomments-tab">
+                        <ul class="comments-list">
+
+                            @foreach (var comment in Model.ProductComments)
+                            {
+
+                                <li>
+                                    <section>
+
+                                        <div class="col-lg-8 col-md-12 col-xs-12 pull-right m-0">
+                                            <div class="article">
+                                                <div class="header">
+                                                    <div>
+                                                       
+                                                        <div class="avatar">
+                                                            <img class="rounded-circle img-fluid" style="height: 40px;" src="@(!string.IsNullOrEmpty(comment.User.UserAvatar) ? PathExtension.UserAvatarThumb +comment.User.UserAvatar : PathExtension.DefaultAvatar)" alt="Alternate Text">
+                                                            @comment.User.UserName
+                                                            <span>
+                                                                @comment.CreateDate.ToStringShamsiDate() ساعت @comment.CreateDate.ToString("HH:mm")
+                                                            </span>
+                                                        </div>
+                                                        @comment.Title
+                                                      
+                                                    </div>
+                                                </div>
+                                                <p>
+                                                    @Html.Raw(comment.Comment)
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </section>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <partial name="_NotFoundItem" />
+                }
+            </div>
+        </div>
+    </div>
+</form>
+

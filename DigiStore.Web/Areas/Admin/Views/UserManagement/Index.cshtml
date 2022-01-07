@@ -1,0 +1,179 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.ViewModels.User
+@model DigiStore.Domain.ViewModels.User.FilterUserViewModel
+@{
+    ViewData["Title"] = "لیست کاربران";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-sm-3">
+        <div class="panel panel-color panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">فیلتر</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-controller="UserManagement" asp-action="Index" asp-area="Admin" method="get" id="filter-form" class="form-horizontal" role="form">
+                    <input type="hidden" asp-for="PageId" />
+                    <label class="control-label">نام کاربری</label>
+                    <div class="form-group">
+                        <input type="text" asp-for="UserName" class="form-control" placeholder="بر اساس نام  کاربری">
+                    </div>
+                    <label class="control-label">ایمیل </label>
+                    <div class="form-group">
+                        <input type="text" asp-for="Email" class="form-control" placeholder="بر اساس ایمیل">
+                    </div>
+                    <label class="control-label">شماره تماس </label>
+                    <div class="form-group">
+                        <input type="text" asp-for="Mobile" class="form-control" placeholder="بر اساس شماره تماس">
+                    </div>
+
+                    <label class="control-label">تعداد نمایش</label>
+                    <div class="form-group">
+                        <select asp-for="TakeEntity" class="form-control">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        @foreach (var item in Html.GetEnumSelectList<FilterUserOrderBy>())
+                        {
+
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    @if (Convert.ToByte(item.Value) == Convert.ToByte(Model.UserOrderBy))
+                                    {
+
+                                        <input class="form-check-input" type="radio" value="@item.Value" name="@nameof(Model.UserOrderBy)" checked="checked" />
+
+                                    }
+                                    else
+                                    {
+                                        <input class="form-check-input" type="radio" value="@item.Value" name="@nameof(Model.UserOrderBy)" />
+
+                                    }
+
+                                    <span class="text">@item.Text</span>
+                                </label>
+                            </div>
+
+                        }
+
+                    </div>
+                    <hr/>
+                    <div class="control-group">
+                        @foreach (var item in Html.GetEnumSelectList<UserState>())
+                        {
+
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    @if (Convert.ToByte(item.Value) == Convert.ToByte(Model.UserState))
+                                    {
+
+                                        <input class="form-check-input" type="radio" value="@item.Value" name="@nameof(Model.UserState)" checked="checked" />
+
+                                    }
+                                    else
+                                    {
+                                        <input class="form-check-input" type="radio" value="@item.Value" name="@nameof(Model.UserState)" />
+
+                                    }
+
+                                    <span class="text">@item.Text</span>
+                                </label>
+                            </div>
+
+                        }
+
+                    </div>
+                    <div class="form-control">
+                        <button type="submit" class="btn btn-block btn-xs btn-purple waves-effect waves-light">فیلتر</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="card-box table-responsive">
+            <h4 class="header-title m-t-0 m-b-30">لیست کاربران</h4>
+
+            <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (Model.Users != null && Model.Users.Any())
+                        {
+
+
+                            <table class="table table-hover">
+
+                                <thead>
+                                    <tr>
+
+                                        <th>تصویر</th>
+                                        <th>نام کاربری</th>
+                                        <th>ایمیل</th>
+                                        <th>موبایل</th>
+                                        <th>نام کامل</th>
+                                        <th>وضعیت</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.Users)
+                                    {
+                                    <tr>
+                                        <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar)?PathExtension.UserAvatarThumb+item.UserAvatar:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                        <td>@item.UserName</td>
+                                        <td>@item.Email</td>
+                                        <td>@item.Mobile</td>
+                                        <td>@(item.FullName!=null? item.FullName:" ")</td>
+                                        @if (item.IsDelete)
+                                        {
+
+
+                                            <td class="danger">حذف شده</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="success">حذف شده  نشده</td>
+                                        }
+                                    </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <partial name="_NotFoundItem" />
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-6">
+                            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end col -->
+
+
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+
+}
+

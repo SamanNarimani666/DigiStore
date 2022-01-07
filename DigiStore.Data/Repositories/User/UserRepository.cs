@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.IRepositories.User;
+using DigiStore.Domain.ViewModels.Paging;
+using DigiStore.Domain.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigiStore.Data.Repositories.User
@@ -84,6 +87,70 @@ namespace DigiStore.Data.Repositories.User
         {
             await _context.AddAsync(user);
         }
+        #endregion
+
+        #region FilterUser
+        public async Task<FilterUserViewModel> FilterUserTask(FilterUserViewModel filterUser)
+        {
+            var user = _context.Users.AsQueryable();
+
+            #region Order
+            switch (filterUser.UserOrderBy)
+            {
+                case FilterUserOrderBy.Create_Date_Asc:
+                    user = user.OrderBy(p => p.CreateDate);
+                    break;
+
+                case FilterUserOrderBy.Create_Date_Desc:
+                    user = user.OrderByDescending(p => p.CreateDate);
+                    break;
+            }
+            #endregion
+
+            #region filter
+            if (filterUser.Users != null)
+                user = user.Where(p => EF.Functions.Like(p.UserName, $"%{filterUser.UserName}%"));
+            if (filterUser.Email != null)
+                user = user.Where(p => EF.Functions.Like(p.Email, $"%{filterUser.Email}%"));
+            if (filterUser.Mobile != null)
+                user = user.Where(p => EF.Functions.Like(p.Mobile, $"%{filterUser.Mobile}%"));
+            #endregion
+
+            #region State
+            switch (filterUser.UserState)
+            {
+                case UserState.All:
+                    break;
+                case UserState.Active:
+                    user = user.Where(p => p.IsActive);
+                    break;
+                case UserState.NotActive:
+                    user = user.Where(p => !p.IsActive);
+                    break;
+                case UserState.IsDelete:
+                    user = user.Where(p => p.IsDelete);
+                    break;
+                case UserState.NotDelete:
+                    user = user.Where(p => !p.IsDelete);
+                    break;
+                case UserState.IsBolick:
+                    user = user.Where(p => p.IsBlock);
+                    break;
+                case UserState.NotBlock:
+                    user = user.Where(p => !p.IsBlock);
+                    break;
+            }
+            #endregion
+
+            #region Paging
+            var pager = Pager.Build(filterUser.PageId, await user.CountAsync(), filterUser.TakeEntity,
+                filterUser.HowManyShowPageAfterAndBefore);
+            var allProduct = user.Paging(pager).ToList();
+            return filterUser.SetPaging(pager).SetUser(allProduct);
+
+            #endregion
+        }
+
         #endregion
 
         #region Save

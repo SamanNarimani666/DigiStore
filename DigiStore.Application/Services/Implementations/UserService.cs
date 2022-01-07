@@ -12,6 +12,7 @@ using DigiStore.Application.ViewModels.Account;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.User;
 using DigiStore.Domain.ViewModels.Account;
+using DigiStore.Domain.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Application.Services.Implementations
@@ -229,6 +230,13 @@ namespace DigiStore.Application.Services.Implementations
             _userRepository.EditUser(user);
            await _userRepository.Save();
             return ChangePasswordResult.Success;
+        }
+        #endregion
+
+        #region MyRegion
+        public async Task<FilterUserViewModel> FilterUserTask(FilterUserViewModel filterUser)
+        {
+            return await _userRepository.FilterUserTask(filterUser);
         }
         #endregion
 

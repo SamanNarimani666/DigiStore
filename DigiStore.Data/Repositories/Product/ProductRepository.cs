@@ -94,10 +94,13 @@ namespace DigiStore.Data.Repositories.Product
 
             #endregion
 
+            #region paging
             var pager = Pager.Build(filterProduct.PageId, await product.CountAsync(), filterProduct.TakeEntity,
                 filterProduct.HowManyShowPageAfterAndBefore);
             var allProduct = product.Paging(pager).ToList();
             return filterProduct.SetPaging(pager).SetProduct(allProduct);
+
+            #endregion
         }
         #endregion
 

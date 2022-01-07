@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.ViewModels.FavoriteProductUser;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Domain.ViewModels.ProductComment;
 using DigiStore.Domain.ViewModels.ProductVisited;
 using Microsoft.AspNetCore.Http;
 
@@ -44,5 +45,9 @@ namespace DigiStore.Application.Services.Interfaces
         Task<bool> IsExistThisProductInUserFavoritList(int productId, int userId);
         Task<FilterFavoritViewModel> GetFavoriteProductUserByUserId(FilterFavoritViewModel filterFavorit);
         Task<bool> DeleteFavoritProduct(int favoritId,int productId,int userId);
+        Task<CreateProductCommnetResult> CreateProductCommnet(CreateProductCommnetViewModel createProductCommnet,int userId);
+        Task<Product> GetProductByProductId(int productId);
+
+        Task<FilterProductCommentViewModel> filterFilterProductComment(FilterProductCommentViewModel filterProductComment);
     }
 }

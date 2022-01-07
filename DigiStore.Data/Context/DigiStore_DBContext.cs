@@ -574,6 +574,12 @@ namespace DigiStore.Data.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Production_Productcomment_ProductId");
 
+                entity.HasOne(d => d.Seller)
+                    .WithMany(p => p.Productcomments)
+                    .HasForeignKey(d => d.SellerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Production_Productcomment_SellerId");
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Productcomments)
                     .HasForeignKey(d => d.UserId)

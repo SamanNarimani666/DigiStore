@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using DigiStore.Domain.ViewModels.User;
 
 namespace DigiStore.Domain.IRepositories.User
 {
@@ -19,5 +17,6 @@ namespace DigiStore.Domain.IRepositories.User
         Task<Entities.User> GetUserById(int userId);
         Task Save();
         Task AddUser(Entities.User user);
+        Task<FilterUserViewModel> FilterUserTask(FilterUserViewModel filterUser);
     }
 }

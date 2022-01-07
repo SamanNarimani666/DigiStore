@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using DigiStore.Application.Extensions;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.FavoriteProductUser;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Domain.ViewModels.ProductComment;
 using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Authorization;
@@ -83,6 +85,53 @@ namespace DigiStore.Web.Controllers
             return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger,
                 SuccessMessage = "خطا در ثبت اطلاعات", null);
         }
+        #endregion
+
+        #region ProductCommnet
+        [HttpGet("add-product-commnet/{productId}")]
+        public async Task<IActionResult> ProductCommnet(int productId)
+        {
+            var product = await _productService.GetProductByProductId(productId);
+            if (product == null) return NotFound();
+            ViewBag.Product = product;
+            return View(new CreateProductCommnetViewModel() { ProductId = productId });
+        }
+        [HttpPost("add-product-commnet/{productId}")]
+        public async Task<IActionResult> ProductCommnet(CreateProductCommnetViewModel createProductCommnet)
+        {
+            var product = await _productService.GetProductByProductId(createProductCommnet.ProductId);
+            if (product == null) return NotFound();
+            if (ModelState.IsValid)
+            {
+                var res = await _productService.CreateProductCommnet(createProductCommnet, User.GetUserId());
+                switch (res)
+                {
+                    case CreateProductCommnetResult.Error:
+                        TempData[ErrorMessage] = "خطا در ثبت اطلاعات";
+                        break;
+                    case CreateProductCommnetResult.NotFoundProduct:
+                        TempData[ErrorMessage] = "محصولی با این مشخصات یافت نشد";
+                        break;
+                    case CreateProductCommnetResult.Success:
+                        TempData[SuccessMessage] = "کاربر گرامی نظر شما با موفقیت ثبت شد.";
+                        TempData[InfoMessage] = "از اینکه به محصولات سایت ما توجه می کنید بی نهایت سپاس گذاریم";
+                        return RedirectToAction("ProductDetail",
+                            new { @productId = createProductCommnet.ProductId, @title = product.Name.FixTextForUrl() });
+                }
+            }
+            ViewBag.Product = product;
+            return View(createProductCommnet);
+        }
+        #endregion
+
+        #region FilterProdutComment
+        [HttpGet("filterProductComment/{productId}")]
+        public async Task<IActionResult> FilterProdutComment(int productId,FilterProductCommentViewModel filterProductComment)
+        {
+            filterProductComment.ProductId = productId;
+            return View(await _productService.filterFilterProductComment(filterProductComment));
+        }
+
         #endregion
     }
 }

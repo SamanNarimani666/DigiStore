@@ -12,6 +12,7 @@ using DigiStore.Data.Repositories.FavoriteProductUser;
 using DigiStore.Data.Repositories.Guarantee;
 using DigiStore.Data.Repositories.Product;
 using DigiStore.Data.Repositories.ProductColor;
+using DigiStore.Data.Repositories.Productcomment;
 using DigiStore.Data.Repositories.ProductDiscount;
 using DigiStore.Data.Repositories.ProductDiscountUse;
 using DigiStore.Data.Repositories.ProductFeature;
@@ -33,6 +34,7 @@ using DigiStore.Domain.IRepositories.FavoriteProductUser;
 using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
+using DigiStore.Domain.IRepositories.Productcomment;
 using DigiStore.Domain.IRepositories.ProductDiscount;
 using DigiStore.Domain.IRepositories.ProductDiscountUse;
 using DigiStore.Domain.IRepositories.ProductFeature;
@@ -80,6 +82,7 @@ namespace DigiStore.IOC
             services.AddScoped<IProductDiscountUseRepository, ProductDiscountUseRepository>();
             services.AddScoped<IPaymentSerivce,PaymentSerivce>();
             services.AddScoped<IFavoriteProductUserRepository, FavoriteProductUserRepository>();
+            services.AddScoped<IProductcommentRepository, ProductcommentRepository>();
 
 
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
