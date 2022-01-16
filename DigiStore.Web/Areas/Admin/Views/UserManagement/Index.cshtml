@@ -101,7 +101,7 @@
     <div class="col-lg-9">
         <div class="card-box table-responsive">
             <h4 class="header-title m-t-0 m-b-30">لیست کاربران</h4>
-
+            <a class="btn btn-success" asp-controller="UserManagement" asp-action="CreateUser" asp-area="Admin">ایجاد کاربر جدید</a>
             <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
                 <div class="row">
                     <div class="col-sm-12">
@@ -112,27 +112,27 @@
                             <table class="table table-hover">
 
                                 <thead>
-                                    <tr>
+                                <tr>
 
-                                        <th>تصویر</th>
-                                        <th>نام کاربری</th>
-                                        <th>ایمیل</th>
-                                        <th>موبایل</th>
-                                        <th>نام کامل</th>
-                                        <th>وضعیت</th>
-                                        <th>عملیات</th>
-                                    </tr>
+                                    <th>تصویر</th>
+                                    <th>نام کاربری</th>
+                                    <th>ایمیل</th>
+                                    <th>موبایل</th>
+                                    <th>نام کامل</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
                                 </thead>
 
                                 <tbody>
-                                    @foreach (var item in Model.Users)
-                                    {
+                                @foreach (var item in Model.Users)
+                                {
                                     <tr>
-                                        <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar)?PathExtension.UserAvatarThumb+item.UserAvatar:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                        <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar) ? PathExtension.UserAvatarThumb + item.UserAvatar : PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری"/></td>
                                         <td>@item.UserName</td>
                                         <td>@item.Email</td>
                                         <td>@item.Mobile</td>
-                                        <td>@(item.FullName!=null? item.FullName:" ")</td>
+                                        <td>@(item.FullName != null ? item.FullName : " ")</td>
                                         @if (item.IsDelete)
                                         {
 
@@ -141,17 +141,31 @@
                                         }
                                         else
                                         {
-                                            <td class="success">حذف شده  نشده</td>
+                                            <td class="success">حذف نشده</td>
                                         }
+                                        @if (item.IsDelete)
+                                        {
+
+
+                                            <td ><a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="RestoreteUser" asp-area="Admin" asp-route-userId="@item.UserId">بازگرداندن کاربر</a></td>
+                                        }
+                                        else
+                                        {
+                                            <td><a class="btn btn-danger btn-sm" asp-controller="UserManagement" asp-action="DeleteUser" asp-area="Admin" asp-route-userId="@item.UserId">حذف کاربر</a></td>
+
+                                        }
+                                        <td>
+                                            <a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="EditUser" asp-area="Admin" asp-route-userId="@item.UserId" >ویرایش کاربر</a>
+                                        </td>
                                     </tr>
 
-                                    }
+                                }
                                 </tbody>
                             </table>
                         }
                         else
                         {
-                            <partial name="_NotFoundItem" />
+                            <partial name="_NotFoundItem"/>
                         }
                     </div>
                 </div>

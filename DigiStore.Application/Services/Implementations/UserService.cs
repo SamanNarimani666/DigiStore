@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiMarket.Application.ViewModels.Account;
 using DigiStore.Application.Convertors;
@@ -11,6 +13,7 @@ using DigiStore.Application.Utils;
 using DigiStore.Application.ViewModels.Account;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.User;
+using DigiStore.Domain.IRepositories.UserRole;
 using DigiStore.Domain.ViewModels.Account;
 using DigiStore.Domain.ViewModels.User;
 using Microsoft.AspNetCore.Http;
@@ -22,13 +25,15 @@ namespace DigiStore.Application.Services.Implementations
         #region Field
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHelper _passwordHelper;
+        private readonly IUserRoleRepository _userRoleRepository;
         #endregion
 
         #region Constructor
-        public UserService(IUserRepository repository, IPasswordHelper passwordHelper)
+        public UserService(IUserRepository userRepository, IPasswordHelper passwordHelper, IUserRoleRepository userRoleRepository)
         {
-            _userRepository = repository;
+            _userRepository = userRepository;
             _passwordHelper = passwordHelper;
+            _userRoleRepository = userRoleRepository;
         }
         #endregion
 
@@ -48,7 +53,7 @@ namespace DigiStore.Application.Services.Implementations
                 Email = registerUser.Email.SanitizeText(),
                 PassWord = _passwordHelper.EncodePasswordMd5(registerUser.PassWord.SanitizeText()),
                 ActiveCode = Generators.Generators.GeneratorsUniqueCode(),
-                
+
             };
             try
             {
@@ -196,7 +201,7 @@ namespace DigiStore.Application.Services.Implementations
         #endregion
 
         #region EditUserProfile
-        public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileViewModel editUserProfile, IFormFile UserAvatar,int userId)
+        public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileViewModel editUserProfile, IFormFile UserAvatar, int userId)
         {
             var user = await _userRepository.GetUserById(userId);
             if (user == null) return EditUserProfileResult.NotFound;
@@ -228,17 +233,156 @@ namespace DigiStore.Application.Services.Implementations
                 return ChangePasswordResult.Error;
             user.PassWord = _passwordHelper.EncodePasswordMd5(changePassword.NewPassword.SanitizeText());
             _userRepository.EditUser(user);
-           await _userRepository.Save();
+            await _userRepository.Save();
             return ChangePasswordResult.Success;
         }
         #endregion
 
-        #region MyRegion
-        public async Task<FilterUserViewModel> FilterUserTask(FilterUserViewModel filterUser)
+        #region FilterUser
+        public async Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser)
         {
             return await _userRepository.FilterUserTask(filterUser);
         }
         #endregion
+
+        #region DeleteUser
+        public async Task<bool> DeleteUser(int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null) return false;
+            try
+            {
+                user.IsDelete = true;
+                _userRepository.EditUser(user);
+                await _userRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region RestoreUser
+        public async Task<bool> RestoreUser(int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null) return false;
+            try
+            {
+                user.IsDelete = false;
+                _userRepository.EditUser(user);
+                await _userRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region CreateUser
+        public async Task<CreateUserResult> CreateUser(CreateUserViewModel createUser, List<int> rolesId, IFormFile userAvatar)
+        {
+            if (await _userRepository.IsExistsUserByEmail(FixedText.FixEmail(createUser.Email)))
+                return CreateUserResult.ExistsEmail;
+            if (await _userRepository.IsExistsUserByUserName(createUser.UserName))
+                return CreateUserResult.ExistUserName;
+            if (await _userRepository.IsExistsUserByMobile(createUser.Mobile))
+                return CreateUserResult.ExistMobile;
+
+            var user = new User()
+            {
+                UserName = createUser.UserName.SanitizeText(),
+                Mobile = createUser.Mobile.SanitizeText(),
+                Email = createUser.Email.SanitizeText(),
+                PassWord = _passwordHelper.EncodePasswordMd5(createUser.PassWord.SanitizeText()),
+                ActiveCode = Generators.Generators.GeneratorsUniqueCode(),
+                IsActive = true
+
+            };
+            try
+            {
+                if (userAvatar != null && userAvatar.IsImage())
+                {
+                    var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(userAvatar.FileName);
+                    var res = userAvatar.AddImageToServer(imageName, PathExtension.UserAvatarOriginServer, 100, 100,
+                        PathExtension.UserAvatarThumbServer);
+                    if (res)
+                    {
+                        user.UserAvatar = imageName;
+                    }
+                }
+                await _userRepository.AddUser(user);
+                await _userRepository.Save();
+                await _userRoleRepository.AddRoleToUser(rolesId, user.UserId);
+                await _userRoleRepository.Save();
+                return CreateUserResult.Success;
+            }
+            catch
+            {
+                return CreateUserResult.Error;
+            }
+        }
+        #endregion
+
+        #region UserInfoForEdit
+        public async Task<EditUserForAdminViewModel> UserInfoForEdit(int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null) return null;
+            return new EditUserForAdminViewModel()
+            {
+                UserId = userId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                UserImage=user.UserAvatar,
+            };
+        }
+        #endregion
+
+        #region EditUserForAdmin
+        public async Task<EditUserResult> EditUserForAdmin(EditUserForAdminViewModel editUser, List<int> rolesId, IFormFile userAvatar)
+        {
+            var user = await _userRepository.GetUserById(editUser.UserId);
+            if (user == null) return EditUserResult.NotFound;
+            user.FirstName = editUser.FirstName.SanitizeText();
+            user.LastName = editUser.LastName.SanitizeText();
+            if (!string.IsNullOrEmpty(editUser.PassWord))
+            {
+                user.PassWord = _passwordHelper.EncodePasswordMd5(editUser.PassWord.SanitizeText());
+            }
+            try
+            {
+                if (userAvatar != null && userAvatar.IsImage())
+                {
+                    var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(userAvatar.FileName);
+                    var res = userAvatar.AddImageToServer(imageName, PathExtension.UserAvatarOriginServer, 100, 100,
+                        PathExtension.UserAvatarThumbServer, user.UserAvatar);
+                    if (res)
+                    {
+                        user.UserAvatar = imageName;
+                    }
+                }
+                _userRepository.EditUser(user);
+                await _userRepository.Save();
+                _userRoleRepository.DeleteUserRoles(editUser.UserId);
+                await _userRoleRepository.Save();
+                await _userRoleRepository.AddRoleToUser(rolesId, user.UserId);
+                await _userRoleRepository.Save();
+                return EditUserResult.Success;
+            }
+            catch
+            {
+                return EditUserResult.Error;
+            }
+
+        }
+        #endregion
+
 
         #region Dispose
         public async ValueTask DisposeAsync()

@@ -69,6 +69,35 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         }
         #endregion
 
+        #region AddAddressForOrder
+
+        [HttpGet("AddAddressForOrder/{orderId}")]
+        public async Task<IActionResult> AddAddressForOrder(int orderId)
+        {
+            ViewBag.State = await _addressService.GetAllState();
+            return PartialView();
+        }
+
+        [HttpPost("AddAddressForOrder/{orderId}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAddressForOrder(int orderId,AddAddressViewModel addAddress)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _addressService.AddAddressUser(addAddress, User.GetUserId());
+                switch (res)
+                {
+                    case AddAddressResult.Error:
+                        TempData[ErrorMessage] = "خطا در ثبت آدرس ";
+                        break;
+                    case AddAddressResult.Success:
+                        TempData[SuccessMessage] = "آدرس با موفقیت ثبت شد";
+                        return Redirect($"/UserPanel/Add-Order-Inforamtion/{orderId}");
+                }
+            }
+            return PartialView(addAddress);
+        }
+        #endregion
+
         #region DeleteAddress
         public async Task<IActionResult> DeleteAddress(int id)
         {

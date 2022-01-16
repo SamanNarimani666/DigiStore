@@ -17,11 +17,13 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         private readonly IOrderService _orderService;
         private readonly IUserService _userService;
         private readonly IPaymentSerivce _paymentSerivce;
-        public OrderController(IOrderService orderService, IUserService userService, IPaymentSerivce paymentSerivce)
+        private readonly IAddressService _addressService;
+        public OrderController(IOrderService orderService, IUserService userService, IPaymentSerivce paymentSerivce, IAddressService addressService)
         {
             _orderService = orderService;
             _userService = userService;
             _paymentSerivce = paymentSerivce;
+            _addressService = addressService;
         }
         #endregion
 
@@ -67,7 +69,7 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
             string callbackUrl = PathExtension.SiteUrl + Url.RouteUrl("ZarinPalPaymentResult");
 
             string redirectUrl = "";
-            var status = _paymentSerivce.CreatePaymentRequest(null, openOrderAmount,"پرداخت سبد خرید",callbackUrl, ref redirectUrl);
+            var status = _paymentSerivce.CreatePaymentRequest(null, openOrderAmount, "پرداخت سبد خرید", callbackUrl, ref redirectUrl);
             if (status == PaymentStatus.St100)
             {
                 return Redirect(redirectUrl);
@@ -78,12 +80,14 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
 
         #region Call back zarinpal 
         [AllowAnonymous]
-        [HttpGet("payment-result",Name="ZarinPalPaymentResult")]
+        [HttpGet("payment-result", Name = "ZarinPalPaymentResult")]
         public async Task<IActionResult> CallBackZarinPal()
         {
+            ViewBag.PayStatus = false;
             string authority = _paymentSerivce.GetAuthorityCodeFromCallback(HttpContext);
             if (authority == "")
             {
+                ViewBag.PayStatus = false;
                 TempData[WarningMessage] = "عملیات پرداخت با شکست مواجه شد";
             }
             var openOrderAmount = await _orderService.GetTotalOrderPriceForPayment(User.GetUserId());
@@ -91,6 +95,8 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
             var res = _paymentSerivce.PaymentVerification(null, authority, openOrderAmount, ref refId);
             if (res == PaymentStatus.St100)
             {
+                ViewBag.PayStatus = true;
+                ViewBag.RefId = refId;
                 TempData[SuccessMessage] = "پرداخت شما با موفقیت انجام شد";
                 TempData[InfoMessage] = "کد پیگیری" + refId;
                 await _orderService.PayOrderProductPriceToSeller(User.GetUserId(), refId);
@@ -120,6 +126,56 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
             }
             return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger, "محصول مورد نظر در سبد خرید یافت نشد", null);
         }
+        #endregion
+
+        #region Add Order Inforamtion
+        [HttpGet("Add-Order-Inforamtion/{orderId}")]
+        public async Task<IActionResult> AddorderInformation(int orderId)
+        {
+            var openOrder = await _orderService.GetOpenOrderUserForAddInformation(orderId, User.GetUserId());
+            if (openOrder == null) return NoContent();
+            ViewBag.UserAddress = await _addressService.GetUserAddressByUserId(User.GetUserId());
+            return View(openOrder);
+        }
+        [HttpPost("Add-Order-Inforamtion/{orderId}")]
+        public async Task<IActionResult> AddorderInformation(int orderId,CreateOrderInforamtionViewModel createOrderInforamtion)
+        {
+            var openOrder = await _orderService.GetOpenOrderUserForAddInformation(orderId, User.GetUserId());
+            if (openOrder == null) return NoContent();
+            if (ModelState.IsValid)
+            {
+                var res = await _orderService.CreateOrderInforamtion(createOrderInforamtion, User.GetUserId());
+                switch (res)
+                {
+                    case CreateOrderInforamtionResult.Error:
+                        TempData[ErrorMessage] = "خطا در ثبت اطلاعات";
+                        break;
+                    case CreateOrderInforamtionResult.NotFoundAddress:
+                        TempData[ErrorMessage] = "آدرسی یافت نشد";
+                        TempData[WarningMessage] = "کاربر گرامی با کلیک بر روی دکمه بالا آدرسی را برای ارسال محصول انتخاب بفرمایید ";
+                        break;
+                    case CreateOrderInforamtionResult.NotFoundUserOpenOrder:
+                        TempData[ErrorMessage] = "سفارشی با این مشخصات یافت نشده ";
+                        break;
+                    case CreateOrderInforamtionResult.Success:
+                        TempData[SuccessMessage] = "اطلاعات گیرنده با موفقیت ثبت شده ";
+                        TempData[InfoMessage] = "کاربر گرامی اکنون شما می توانید سفارش خد را نهایی کنید";
+                        return RedirectToAction("PayOrder");
+                }
+            }
+            ViewBag.UserAddress = await _addressService.GetUserAddressByUserId(User.GetUserId());
+            return View(openOrder);
+        }
+        #endregion
+
+        #region Pay Order
+        [HttpGet("PayOrder")]
+        public async Task<IActionResult> PayOrder()
+        {
+            var openOrder = await _orderService.GetUserOpenOrderDetials(User.GetUserId());
+            return View(openOrder);
+        }
+        
         #endregion
     }
 }

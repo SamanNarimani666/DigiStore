@@ -206,7 +206,7 @@
                         جستجو محصول:
                     </button>
 
-                    <input type="text" class="input-sidebar" asp-for="Name" placeholder="نام محصول یا برند مورد نظر را بنویسید…">
+                    <input type="text" class="input-sidebar" asp-for="Name" placeholder="نام محصول  مورد نظر را بنویسید…">
 
                     <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
 
@@ -241,35 +241,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-sidebar">
-                    <button class="btn btn-light btn-box-sidebar" type="button" data-toggle="collapse" data-target="#collapseExampleSeller" aria-expanded="false" aria-controls="collapseExampleSeller">
-                        <i class="fa fa-chevron-down arrow"></i>برند
-                    </button>
-                    <div class="collapse show" id="collapseExampleSeller">
-                        <div class="catalog">
-
-                            @if (procutCategories != null && procutCategories.Any())
-                            {
-                                <ul>
-                                    @foreach (var category in procutCategories)
-                                    {
-                                        <li>
-                                            <a href="#" class="filter-label">
-                                                <div class="form-auth-row">
-                                                    <label for="remembersumsung" class="ui-checkbox">
-                                                        <input type="checkbox" name="SelectedPrductCategories" value="@category.ProductCategoryId">
-                                                        <span class="ui-checkbox-check"></span>
-                                                    </label>
-                                                    <label for="remembersumsung" class="remember-me">@category.Title</label>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                        </div>
-                    </div>
-                </div>
+               
 
             </div>
         </div>

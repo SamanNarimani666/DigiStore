@@ -10,7 +10,6 @@ using DigiStore.Domain.Entities;
 using DigiStore.Domain.Enums.Product;
 using DigiStore.Domain.IRepositories.Category;
 using DigiStore.Domain.IRepositories.FavoriteProductUser;
-using DigiStore.Domain.IRepositories.Guarantee;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.IRepositories.ProductColor;
 using DigiStore.Domain.IRepositories.Productcomment;
@@ -33,19 +32,17 @@ namespace DigiStore.Application.Services.Implementations
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly ISelectedProductCategoryRepository _selectedProductCategoryRepository;
         private readonly IProductColorRepository _colorRepository;
-        private readonly IProductGuaranteeRepository _guaranteeRepository;
         private readonly IProductGalleryRepository _galleryRepository;
         private readonly IProductVisitedRepository _productVisitedRepository;
         private readonly IProductFeatureRepository _productFeatureRepository;
         private readonly IFavoriteProductUserRepository _favoriteProductUserRepository;
         private readonly IProductcommentRepository _productcommentRepository;
-        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGuaranteeRepository guaranteeRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository, IFavoriteProductUserRepository favoriteProductUserRepository, IProductcommentRepository productcommentRepository)
+        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository, IFavoriteProductUserRepository favoriteProductUserRepository, IProductcommentRepository productcommentRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
             _selectedProductCategoryRepository = selectedProductCategoryRepository;
             _colorRepository = colorRepository;
-            _guaranteeRepository = guaranteeRepository;
             _galleryRepository = galleryRepository;
             _productVisitedRepository = productVisitedRepository;
             _productFeatureRepository = productFeatureRepository;
@@ -95,6 +92,7 @@ namespace DigiStore.Application.Services.Implementations
                         IsActive = createProduct.IsActive,
                         BrandId = createProduct.BradnId,
                         ImageName = imageName,
+                        SiteProfile = createProduct.SiteProfile,
                         ProductAcceptanceState = (byte)ProductAcceptanceState.UnderProgress
                     };
                     await _productRepository.AddProduct(product);
@@ -105,8 +103,6 @@ namespace DigiStore.Application.Services.Implementations
                     await AddProductSelectedColors(product.ProductId, createProduct.ProductColors);
                     //Add Product Features
                     await AddProductFeatures(product.ProductId, createProduct.ProductFeature);
-                    // Add Product Guarantee
-                    await AddAllProductSelectedGuarantee(product.ProductId, createProduct.ProductGuarantee);
                     return CreateProductResult.Success;
                 }
                 catch
@@ -175,6 +171,7 @@ namespace DigiStore.Application.Services.Implementations
                 ShortDescription = product.ShortDescription,
                 ProductImage = product.ImageName,
                 ProductId = product.ProductId,
+                SiteProfile = product.SiteProfile.Value,
                 ProductColors = _colorRepository.GetColorProductByProductId(productId).Select(c => new CreateProductColorViewModel()
                 {
                     ColorCode = c.ColorCode,
@@ -182,11 +179,6 @@ namespace DigiStore.Application.Services.Implementations
                 }).ToList(),
                 SelectedCategories = _selectedProductCategoryRepository.GetProductSelectedCategoryByProductId(productId).Select(p => p.ProductCategoryId.Value).ToList()
                 ,
-                ProductGuarantee = _guaranteeRepository.GetProductGuaranteesByProductId(productId).Select(g => new CreateProductGuaranteeViewModel()
-                {
-                    GuaranteeName = g.GuaranteeName,
-                    Price = g.Price.Value
-                }).ToList(),
                 ProductFeature = _productFeatureRepository.GetProductFeatureByProductId(productId).Select(f=>new CreateProductFeatureViewModel()
                 {
                     FeatureTitle = f.FeatureTitle,
@@ -202,7 +194,10 @@ namespace DigiStore.Application.Services.Implementations
             var mainProduct = await _productRepository.GetProductWithSellerById(editProduct.ProductId);
             if (mainProduct == null) return EditProductResult.NotFoundProduct;
             if (mainProduct.Seller.UserId != userId) return EditProductResult.NotFoundUser;
-
+            //Remove Color Product
+            RemoveAllProductSelectedColors(editProduct.ProductId);
+            //Add Product Color
+            await AddProductSelectedColors(editProduct.ProductId, editProduct.ProductColors);
             try
             {
                 mainProduct.Name = editProduct.Title;
@@ -211,6 +206,7 @@ namespace DigiStore.Application.Services.Implementations
                 mainProduct.Description = editProduct.Description;
                 mainProduct.ShortDescription = editProduct.ShortDescription;
                 mainProduct.IsActive = editProduct.IsActive;
+                mainProduct.SiteProfile = editProduct.SiteProfile;
                 mainProduct.ProductAcceptanceState = (byte)ProductAcceptanceState.UnderProgress;
                 if (ProductImage != null)
                 {
@@ -223,29 +219,22 @@ namespace DigiStore.Application.Services.Implementations
                 }
 
 
-                //Remove Color Product
-                RemoveAllProductSelectedColors(editProduct.ProductId);
-                //Add Product Color
-                await AddProductSelectedColors(editProduct.ProductId, editProduct.ProductColors);
-
-
+                
 
                 //Remove Product Selected Categoty
                 RemoveAllProductSelectedCategories(editProduct.ProductId);
                 //Add Product Selected Categoty
                 await AddProductSelectedCategories(editProduct.ProductId, editProduct.SelectedCategories);
 
+                //Remove Color Product
+                RemoveAllProductSelectedColors(editProduct.ProductId);
+                //Add Product Color
+                await AddProductSelectedColors(editProduct.ProductId, editProduct.ProductColors);
+
                 //Remove Product Features
                 RemoveAllProductFeatures(editProduct.ProductId);
                 //Add Product Features
                 await AddProductFeatures(editProduct.ProductId,editProduct.ProductFeature);
-
-                // Remove Product Selected guarantee
-                RemoveAllProductSelectedGuarantee(editProduct.ProductId);
-                // Add Product Guarantee
-                await AddAllProductSelectedGuarantee(editProduct.ProductId, editProduct.ProductGuarantee);
-
-
 
                 _productRepository.EditProduct(mainProduct);
                 await _productRepository.Save();
@@ -271,14 +260,12 @@ namespace DigiStore.Application.Services.Implementations
         #region RemoveAllProductSelectedColors
         public void RemoveAllProductSelectedColors(int productId)
         {
-            _colorRepository.DeleteProductColor(_colorRepository.GetColorProductByProductId(productId));
-        }
-        #endregion
-
-        #region RemoveAllProductSelectedGuarantee
-        public void RemoveAllProductSelectedGuarantee(int productId)
-        {
-            _guaranteeRepository.DeleteProductGuarantee(_guaranteeRepository.GetProductGuaranteesByProductId(productId));
+            var productsColors = _colorRepository.GetColorProductByProductId(productId);
+            foreach (var colors in productsColors)
+            {
+                colors.IsDelete = true;
+            }
+            _colorRepository.EditProductColoe(productsColors);
         }
         #endregion
 
@@ -322,31 +309,9 @@ namespace DigiStore.Application.Services.Implementations
                     }
 
                 }
-                await _colorRepository.AddColor(productColor);
+                 _colorRepository.AddColor(productColor);
             }
             await _colorRepository.Save();
-        }
-        #endregion
-
-        #region AddAllProductSelectedGuarantee
-        public async Task AddAllProductSelectedGuarantee(int productId, List<CreateProductGuaranteeViewModel> createProductGuarantee)
-        {
-            if (createProductGuarantee != null && createProductGuarantee.Any())
-            {
-                var productguarantee = new List<Guarantee>();
-                foreach (var guarantees in createProductGuarantee)
-                {
-                    productguarantee.Add(new Guarantee()
-                    {
-                        ProductId = productId,
-                        Price = guarantees.Price,
-                        GuaranteeName = guarantees.GuaranteeName
-                    });
-                }
-
-                await _guaranteeRepository.AddProductGuarantee(productguarantee);
-            }
-            await _guaranteeRepository.Save();
         }
         #endregion
 
@@ -626,9 +591,6 @@ namespace DigiStore.Application.Services.Implementations
             if (favoritProduct == null) return false;
             if (favoritProduct.UserId != userId) return false;
             if (favoritProduct.ProductId != productId) return false;
-            {
-                
-            }
             try
             {
                 favoritProduct.IsDelete = true;
@@ -683,6 +645,21 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region GetMostPopular
+        public async Task<List<Product>> GetMostPopular(int take)
+        {
+          return  await _productRepository.GetMostPopular(take);
+        }
+        #endregion
+
+        #region RecommendedproductsForUser
+        public async Task<List<Product>> RecommendedproductsForUser(int take, int userId)
+        {
+            var result= await _productRepository.RecommendedproductsForUser(take, userId);
+            return result;
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {
@@ -690,7 +667,6 @@ namespace DigiStore.Application.Services.Implementations
             await _productCategoryRepository.DisposeAsync();
             await _selectedProductCategoryRepository.DisposeAsync();
             await _colorRepository.DisposeAsync();
-            await _guaranteeRepository.DisposeAsync();
             await _galleryRepository.DisposeAsync();
             await _productVisitedRepository.DisposeAsync();
             await _productFeatureRepository.DisposeAsync();

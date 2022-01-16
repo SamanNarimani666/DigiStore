@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DigiMarket.Application.ViewModels.Account;
 using DigiStore.Application.ViewModels.Account;
@@ -24,6 +25,12 @@ namespace DigiStore.Application.Services.Interfaces
         Task<EditUserProfileViewModel> InfoUserForEditProfile(int userId);
         Task<EditUserProfileResult> EditUserProfile(EditUserProfileViewModel editUserProfile, IFormFile UserAvatar, int userId);
         Task<ChangePasswordResult> ChangePassWord(ChangePasswordViewModel changePassword, int userId);
-        Task<FilterUserViewModel> FilterUserTask(FilterUserViewModel filterUser);
+        Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser);
+        Task<bool> DeleteUser(int userId);
+        Task<bool> RestoreUser(int userId);
+        Task<CreateUserResult> CreateUser(CreateUserViewModel createUser,List<int> rolesId,IFormFile userAvatar);
+        Task<EditUserForAdminViewModel> UserInfoForEdit(int userId);
+        Task<EditUserResult> EditUserForAdmin(EditUserForAdminViewModel editUser, List<int> rolesId, IFormFile userAvatar);
+       
     }
 }

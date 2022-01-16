@@ -15,6 +15,8 @@ namespace DigiStore.Domain.IRepositories.Product
         Task<Entities.Product> GetProductBySellerOwnerId(int productId,int userId);
         Task<ProductDetailViewModel> GetProductDetail(int productId);
         Task<List<Entities.Product>> GetPopularProduct(int take);
+        Task<List<Entities.Product>> GetMostPopular(int take);
+        Task<List<Entities.Product>> RecommendedproductsForUser(int take,int userId);
         Task Save();
     }
 }

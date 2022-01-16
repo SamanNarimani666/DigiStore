@@ -1,0 +1,255 @@
+﻿@using DigiStore.Domain.Entities
+@using DigiStore.Domain.ViewModels.Order
+@model CreateOrderInforamtionViewModel
+@{
+    ViewData["Title"] = "اطلاعات دریافت کننده";
+    var userAddress = ViewBag.UserAddress as List<Address>;
+    Layout = null;
+
+}
+
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://www.digikala.com/mag/wp-content/themes/digikalamag//assets/common/img/ms-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://www.digikala.com/mag/wp-content/themes/digikalamag//assets/common/img/ms-icon-144x144.png">
+    <title>@ViewData["Title"] </title>
+    <!--    font-->
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/materialdesignicons.css">
+    <link rel="stylesheet" href="/assets/css/materialdesignicons.css.map">
+    <!--    font-->
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/notifications.css" />
+</head>
+
+<body>
+    <!--shopping-->
+    <header class="shopping-page">
+        <div class="container">
+            <div class="header-shopping-logo">
+                <a href="/"><img src="/assets/images/logo.png" alt="logo"></a>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <ul class="checkout-steps">
+                    <li class="is-completed">
+                        <a class="checkout-steps-item-link active-link-shopping">
+                            <span>اطلاعات ارسال</span>
+                        </a>
+                    </li>
+                    <li class="is-completed">
+                        <a class="checkout-steps-item active-link">
+                            <span>پرداخت</span>
+                        </a>
+                    </li>
+                    <li class="is-active">
+                        <a class="checkout-steps-item active-link">
+                            <span>اتمام خرید و ارسال</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    @if (Model != null)
+    {
+        <form method="post" asp-controller="Order" asp-action="AddorderInformation" asp-area="UserPanel">
+            <input type="hidden" asp-for="OrderId" />
+            <div class="main-shopping">
+                <div class="content-shopping">
+                    <div class="col-lg-12 col-md-12 col-xs-12 pull-right">
+
+                        <div class="shipment-page-container">
+
+                            <div class="headline-checkout-shopping">
+                                <span>انتخاب آدرس تحویل سفارش</span>
+                            </div>
+                            @if (userAddress != null && userAddress.Any())
+                            {
+
+
+                                <div class="payment">
+
+                                    <ul class="checkout-paymethod">
+                                        @foreach (var UserAddress in userAddress)
+                                        {
+
+                                            <li class="wallet-container">
+                                                <div class="checkout-paymethod-item">
+                                                    <span class="mdi mdi-card-text-outline"></span>
+                                                    <label class="radio-primary">
+                                                        <input type="radio" asp-for="AddressId" value="@UserAddress.AddressId">
+                                                        <span class="ui-radio-check"></span>
+                                                    </label>
+                                                    <div class="checkout-paymethod-title">
+                                                        <div class="paymethod-wallet-amount">
+                                                            <p class="checkout-paymethod-title-label">@($"{UserAddress.Address1} - {UserAddress.State.StateName}-{UserAddress.City.CityName}")</p>
+                                                            <span>پلاک:</span>
+                                                            <span class="checkout-paymethod-currency">@UserAddress.Zipcode</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wallet-extra-info">
+                                                        کد پستی :     @UserAddress.PostalCode
+                                                        <span asp-validation-for="AddressId" class="text-danger"></span>
+
+                                                    </div>
+                                                    <div class="wallet-extra-info">
+                                                       واحد :     @UserAddress.Unit
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                    <div class="card bg-light text-dark">
+                                        <div class="card-body">
+                                            <i class="fa fa-map-marker" style="color: blue" aria-hidden="true"></i>
+                                            <a href="#" class="edit-address-link  " onclick="AddAddress(@Model.OrderId)">
+                                                <span> افزودن آدرس جدید</span>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-danger">
+                                    آدرسی وارد نشده است
+                                </div>
+                                <div class="card bg-light text-dark">
+                                    <div class="card-body">
+                                        <i class="fa fa-map-marker" style="color: blue" aria-hidden="true"></i>
+                                        <a href="#" class="edit-address-link  " onclick="AddAddress(@Model.OrderId)">
+                                            <span> افزودن آدرس جدید</span>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            }
+
+
+
+                            <div class="normal-delivery col-12">
+                                <div class="checkout-pack">
+                                    <div class="checkout-pack-header">
+                                        اطلاعات گیرنده
+
+                                    </div>
+                                    <div class="checkout-time-table-shipping-type">
+                                        <i class="fa fa-User"></i>ارسال عادی
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name-last">نام گیرنده</label>
+                                        <input type="text" id="name-last" asp-for="ReceiverName" class="form-control" placeholder="نام گیرنده  را وارد کنید">
+                                        <span asp-validation-for="ReceiverName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name-last">شماره تماس گیرنده</label>
+                                        <input type="text" id="name-last" asp-for="ReceiverMobile"class="form-control" placeholder="شماره تماس گیرنده را وارد کنید">
+                                        <span asp-validation-for="ReceiverMobile" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name-last">کد ملی  گیرنده</label>
+                                        <input type="text" id="name-last" asp-for="ReceiverNaationalId" class="form-control" placeholder="کد ملی  گیرنده را وارد کنید">
+                                        <span asp-validation-for="ReceiverNaationalId" class="text-danger"></span>
+                                    </div>
+
+                                
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="checkout-to-shipping-sticky">
+                        <button type="submit" class="selenium-next-step-shipping">ادامه فرآیند خرید</button>
+                        <div class="checkout-to-shipping-price-report">
+                            <p>ادامه فرایند خرید</p>
+                        </div>
+                    </div>
+
+                    <div class="checkout-actions">
+                        <a asp-controller="Order" asp-action="UserOpenOrder" asp-area="UserPanel" class="btn-link-spoiler">
+                            « بازگشت به سبد خرید
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <footer class="footer-light">
+                    <div class="container">
+                        <div class="footer-checkout-col">
+                            <div class="footer-checkout-col-phone">
+                                <span class="mdi mdi-phone"></span>شماره تماس :
+                                <a href="#">
+                                    09108639618
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="footer-checkout-col">
+                            <div class="footer-checkout-col-phone">
+                                <span class="mdi mdi-email-outline"></span>شماره تماس :
+                                <a href="#">Samannarimani666@gmail.com</a>
+                            </div>
+                        </div>
+                        <p class="copy-right-footer-light">Copyright © 2006 - 2019 DigiStore.com</p>
+                    </div>
+                </footer>
+            </div>
+        </form>
+    }
+    <!--shopping-->
+    <partial name="_FooterReferences" />
+    <partial name="_ValidationScriptsPartial" />
+
+</body>
+</html>
+
+<!--       modal----------------------->
+<div class="remodal-overlay" id="modal">
+    <div class="col-lg-8 col-md-8 col-xs-12 mx-auto">
+        <div class="remodal">
+            <a href="#" class="remodal-close close-profile-address"
+               onclick="closemodal()"><i class="fa fa-close"></i></a>
+            <div id="modalbody" class="middle-container">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<partial name="_ValidationScriptsPartial" />
+<partial name="_SiteMessages" />
+<script>
+    function AddAddress(orderId) {
+        $.ajax({
+            url: "/Address/AddAddressForOrder/" + orderId,
+            type: "Get"
+        }).done(function (result) {
+            $("#modal").modal('show');
+            $("#modalbody").html(result);
+        });
+    }
+    function closemodal() {
+        $("#modal").modal('hide');
+    }
+
+
+</script>
+
+

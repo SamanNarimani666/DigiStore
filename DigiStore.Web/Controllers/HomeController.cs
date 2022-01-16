@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.Enums.Payment;
+using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Mvc;
 namespace DigiStore.Web.Controllers
 {
@@ -21,6 +22,8 @@ namespace DigiStore.Web.Controllers
         {
             ViewBag.OffProduct = await _discountService.GetAlloffProducs(8);
             ViewBag.PopularProducs = await _productService.GetPopularProduct(8);
+            ViewBag.MostPopularProduct = await _productService.GetMostPopular(8);
+            if (User.Identity.IsAuthenticated) ViewBag.RecommendedproductsForUser=await _productService.RecommendedproductsForUser(8, User.GetUserId());
             return View();
         }
 

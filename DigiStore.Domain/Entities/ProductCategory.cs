@@ -21,6 +21,7 @@ namespace DigiStore.Domain.Entities
         public bool IsActive { get; set; }
         public DateTime ModifiedDate { get; set; }
         public Guid Rowguid { get; set; }
+        public string IconName { get; set; }
 
         public virtual ProductCategory Parent { get; set; }
         public virtual ICollection<ProductCategory> InverseParent { get; set; }

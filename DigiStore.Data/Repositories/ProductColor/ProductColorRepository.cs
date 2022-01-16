@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.ProductColor;
-using DigiStore.Domain.ViewModels.Product;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace DigiStore.Data.Repositories.ProductColor
 {
@@ -20,9 +19,9 @@ namespace DigiStore.Data.Repositories.ProductColor
         #endregion
 
         #region AddColor
-        public async Task AddColor(List<Color> colors)
+        public void AddColor(List<Color> colors)
         {
-            await _context.Colors.AddRangeAsync(colors);
+             _context.Colors.AddRange(colors);
         }
         #endregion
 
@@ -37,6 +36,13 @@ namespace DigiStore.Data.Repositories.ProductColor
         public void DeleteProductColor(List<Color> colors)
         {
              _context.Colors.RemoveRange(colors);
+        }
+        #endregion
+
+        #region EditProductColoe
+        public void EditProductColoe(List<Color> colors)
+        {
+           _context.Colors.UpdateRange(colors);
         }
         #endregion
 

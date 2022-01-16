@@ -5,6 +5,7 @@ namespace DigiStore.Domain.ViewModels.Order
 {
     public class UserOpenOrderViewModel
     {
+        public int OrderId { get; set; }
         public long UserId { get; set; }
 
         public string Description { get; set; }

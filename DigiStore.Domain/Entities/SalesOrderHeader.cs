@@ -9,6 +9,7 @@ namespace DigiStore.Domain.Entities
     {
         public SalesOrderHeader()
         {
+            SalesInforamtions = new HashSet<SalesInforamtion>();
             SalesOrderDetails = new HashSet<SalesOrderDetail>();
         }
 
@@ -24,6 +25,7 @@ namespace DigiStore.Domain.Entities
         public DateTime ModifiedDate { get; set; }
 
         public virtual User User { get; set; }
+        public virtual ICollection<SalesInforamtion> SalesInforamtions { get; set; }
         public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; }
     }
 }

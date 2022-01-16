@@ -7,9 +7,10 @@ namespace DigiStore.Domain.IRepositories.ProductColor
 {
     public interface IProductColorRepository:IAsyncDisposable
     {
-        Task AddColor(List<Color> colors);
+        void AddColor(List<Color> colors);
         List<Color> GetColorProductByProductId(int productId);
         void DeleteProductColor(List<Color> colors);
+        void EditProductColoe(List<Color> colors);
         Task Save();
     }
 }

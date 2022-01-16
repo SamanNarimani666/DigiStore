@@ -53,6 +53,7 @@ namespace DigiStore.Data.Repositories.Product
             }
             #endregion
 
+            var selected = _context.ProductSelectedCategories.Include(p => p.ProductCategory).Select(p=>p.ProductCategoryId).ToList();
             #region filter
             if (!string.IsNullOrEmpty(filterProduct.Name))
                 product = product.Where(p => EF.Functions.Like(p.Name, ($"%{filterProduct.Name}%")));
@@ -63,15 +64,6 @@ namespace DigiStore.Data.Repositories.Product
                     s.ProductSelectedCategories.Any(f => f.ProductCategory.UrlName == filterProduct.Category));
             if (filterProduct.Selectedbrands != 0 && filterProduct.Selectedbrands != null)
                 product = product.Where(p => p.BrandId == filterProduct.Selectedbrands);
-            if (filterProduct.SelectedPrductCategories != null && filterProduct.SelectedPrductCategories.Any())
-            {
-                foreach (var selected in filterProduct.SelectedPrductCategories)
-                {
-                product = product.Where(s=>s.ProductSelectedCategories.Any(f=>f.ProductCategoryId.Value==selected));
-
-                }
-            }
-
             #endregion
 
             #region Order
@@ -149,7 +141,6 @@ namespace DigiStore.Data.Repositories.Product
         {
             var product = await _context.Products.AsQueryable()
                 .Include(p=>p.ProductGalleries)
-                .Include(p=>p.Guarantees)
                 .Include(p => p.Colors)
                 .Include(p=>p.ProductGalleries)
                 .Include(p=>p.ProductSelectedCategories)
@@ -171,10 +162,15 @@ namespace DigiStore.Data.Repositories.Product
                 Description = product.Description,
                 ProductCategories = product.ProductSelectedCategories.Select(s=>s.ProductCategory).ToList(),
                 ProductGalleries = product.ProductGalleries.ToList(),
-                ProductColors = product.Colors.ToList(),
+                ProductColors = product.Colors.Where(p=>!p.IsDelete).ToList(),
                 SellerId = product.SellerId,
                 Seller = product.Seller,
-                Guarantees = product.Guarantees.ToList(),
+                MainCategoryTitle=  _context.ProductSelectedCategories.Include(p=>p.ProductCategory)
+                    .Where(p => p.ProductId == productId && p.ProductCategory.ParentId == null).Select(p=>p.ProductCategory.Title).FirstOrDefault()
+                    ?.ToString(),
+                SubCategoryTitle = _context.ProductSelectedCategories.Include(p => p.ProductCategory)
+                    .Where(p => p.ProductId == productId && p.ProductCategory.ParentId != null).Select(p => p.ProductCategory.Title).FirstOrDefault()
+                    ?.ToString(),
                 ProductFeatures = product.ProductFeatures.ToList(),
                 RelatedProducts = await _context.Products.AsQueryable()
                     .Include(s=>s.ProductSelectedCategories)
@@ -198,6 +194,39 @@ namespace DigiStore.Data.Repositories.Product
                 .OrderByDescending(d => d.SalesOrderDetails.Sum(c=>c.OrderQty))
                 .Take(take)
                 .ToListAsync();
+        }
+        #endregion
+
+        #region GetMostPopular
+        public async Task<List<Domain.Entities.Product>> GetMostPopular(int take)
+        {
+            return await _context.Products.Include(p=>p.FavoriteProductUsers)
+                .Where(p=>p.FavoriteProductUsers.Any())
+                .OrderByDescending(f=>f.FavoriteProductUsers.Count)
+                .Take(take)
+                .ToListAsync();
+        }
+        #endregion
+
+        #region RecommendedproductsForUser
+        public async Task<List<Domain.Entities.Product>> RecommendedproductsForUser(int take, int userId)
+        {
+           
+            var getLastProductVisitedByUser = await _context.ProductVisiteds.OrderByDescending(p => p.ModifiedDate)
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (getLastProductVisitedByUser == null) return null;
+
+            var product = await _context.Products.Include(p => p.ProductSelectedCategories)
+                .SingleOrDefaultAsync(p => p.ProductId == getLastProductVisitedByUser.ProductId);
+
+            var selectedCategotiesId = product.ProductSelectedCategories
+                .Select(f => f.ProductCategoryId).ToList();
+
+            return await _context.Products.AsQueryable()
+                .Include(s => s.ProductSelectedCategories)
+                .Where(s => s.ProductSelectedCategories.Any(f => selectedCategotiesId.Contains(f.ProductCategoryId)) &&
+                            s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted).ToListAsync();
         }
         #endregion
 

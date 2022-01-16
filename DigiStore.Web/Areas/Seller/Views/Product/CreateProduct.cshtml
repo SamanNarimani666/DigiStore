@@ -45,6 +45,12 @@
                                 </div>
 
                                 <div class="form-legal-item">
+                                    <label>درصد برداشت</label>
+                                    <input type="number" asp-for="SiteProfile" placeholder="درصد برداشت محصول را وارد نمایید">
+                                    <span asp-validation-for="SiteProfile" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-legal-item">
                                     <label>توضیحات کوتاه</label>
                                     <textarea asp-for="ShortDescription" class="form-control" cols="75" rows="10" placeholder="توضیحات کوتاه محصول"></textarea>
                                     <span asp-validation-for="ShortDescription" class="text-danger"></span>
@@ -200,90 +206,6 @@
 
                                     </div>
                                 </div>
-
-                                <label><h4>  گارانتی </h4></label>
-                                <div class="form-legal-item">
-                                    <label>نام گارانتی</label>
-                                    <input type="text" placeholder="نام  رنگ محصول را وارد نمایید" id="Product_Guarantee_Name_input" />
-                                </div>
-                                <div class="form-legal-item">
-                                    <label>قیمت مضافگارانتی محصول</label>
-                                    <input type="number" placeholder="قیمت مضاف رنگ محصول را وارد نمایید" id="Product_Guarantee_Price_input" />
-                                </div>
-                                <div class="parent-btn">
-                                    <button id="addGuaranteeButton" type="button" class="btn btn-success">
-                                        افزودن گارانتی
-                                    </button>
-                                </div>
-                                <div class="profile-stats page-profile-order">
-                                    <div class="table-orders">
-
-                                        <table class="table">
-                                            <thead class="thead-dark">
-                                                <tr>
-
-                                                    <th style="text-align: center">نام گارانتی</th>
-                                                    <th style="text-align: center">قیمت</th>
-                                                    <th style="text-align: center">عملیات</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="list_of_product_guarantee">
-                                            </tbody>
-
-                                        </table>
-
-                                    </div>
-                                </div>
-
-
-                                <label><h4>  نقاط قوت و ضعف </h4></label>
-                                <div class="form-legal-item">
-                                    <label>نقاط قوت</label>
-                                    <input type="text" placeholder="نقاط قوت محصول را وارد نمایید" id="Product_Guarantee_Name_Strengths" />
-                                </div>
-                                <div class="parent-btn">
-                                    <button id="addGuaranteeButton" type="button" class="btn btn-success">
-                                        افزودن   نقاط قوت
-                                    </button>
-                                </div>
-                                <div class="form-legal-item">
-                                    <label>نقاط ضعف</label>
-                                    <input type="number" placeholder="نقاط ضعف رنگ محصول را وارد نمایید" id="Product_Guarantee_Price_WeakPoints" />
-                                </div>
-                                <div class="parent-btn">
-                                    <button id="addGuaranteeButton" type="button" class="btn btn-danger">
-                                        افزودن نقاط ضعف
-                                    </button>
-                                </div>
-
-                                <section class="content-expert-stats row">
-                                    <div class="col-8 pull-right">
-                                        <div class="content-expert-stats-left">
-                                            <div class="content-expert-evaluation">
-                                                <div class="col-lg-5 col-md-5 col-xs-12 pull-right" style="padding:0;">
-                                                    <div class="content-expert-evaluation-positive">
-                                                        <span>نقاط قوت</span>
-                                                        <ul id="list_of_product_Strengths">
-                                                            <li>صفحه نمایش AMOLED </li>
-                                                            <li>طراحی چشم‎نواز قاب پشتی</li>
-                                                            <li>عملکرد مطلوب تراشه Exynos 9610 </li>
-                                                            <li>طول عمر بالای باتری</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-5 col-md-5 col-xs-12 pull-right" style="padding:0;">
-                                                    <div class="content-expert-evaluation-negative">
-                                                        <span>نقاط ضعف</span>
-                                                        <ul id="list_of_product_WeakPoints">
-                                                            <li>مقاوم نبودن در برابر آب</li>
-                                                            <li>عملکرد نه چندان خوب دوربین در شب</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
                             </fieldset>
                         </div>
                     </div>

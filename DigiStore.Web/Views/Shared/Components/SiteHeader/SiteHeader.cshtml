@@ -14,59 +14,14 @@
 
                     <div class="col-lg-8 col-md-12 col-xs-12 pull-right">
                         <div class="search-header search-box">
-                            <form action="#">
-                                <input type="text" class="header-search-input" placeholder="جستجو در دیجی استور...">
+                            <form method="get" id="filter-form" asp-controller="Product" asp-action="ProductSearch">
+                                <input type="text" name="Name" class="header-search-input" placeholder="جستجو در دیجی استور...">
                                 <button class="btn-search" type="submit">
                                     <img src="/assets/images/search.png"
                                          alt="search">
                                 </button>
                             </form>
-                            <div class="search-result">
-                                <ul class="search-result-list">
-                                    <li>
-                                        <a href="#" class="btn btn-light btn-remove-search">
-                                            موبایل
-                                            <i class="mdi mdi-close"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="btn btn-light btn-remove-search">
-                                            لپ تاپ
-                                            <i class="mdi mdi-close"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="btn btn-light btn-remove-search">
-                                            مودم
-                                            <i class="mdi mdi-close"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="btn btn-light btn-remove-search">
-                                            شیائومی
-                                            <i class="mdi mdi-close"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="btn btn-light btn-remove-search">
-                                            دوربین
-                                            <i class="mdi mdi-close"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <ul class="search-result-most-view">
-                                    <li><a href="#">موبایل <i class="fa fa-angle-left"></i></a></li>
-                                    <li><a href="#">لپ تاپ <i class="fa fa-angle-left"></i></a></li>
-                                    <li><a href="#">مودم <i class="fa fa-angle-left"></i></a></li>
-                                    <li><a href="#">شیائومی <i class="fa fa-angle-left"></i></a></li>
-                                    <li><a href="#">دوربین <i class="fa fa-angle-left"></i></a></li>
-                                </ul>
-                                <div class="search-results-list js-search-ad-banner">
-                                    <a href="#">
-                                        <img src="/assets/images/banner-search.jpg" alt="banner-search">
-                                    </a>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 
@@ -119,10 +74,14 @@
                     <div class="responsive-header-left">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            @await Component.InvokeAsync("UserOrderResponsive")
+
                             <div class="btn-login-responsive">
                                 <span class="mdi mdi-account"></span>
-                                <span class="cart-count">3</span>
+
+
                                 <div class="dropdown-menu-login">
+
                                     @await Component.InvokeAsync("LoginInformationUser")
                                     <div class="header-profile-dropdown-actions">
                                         <div class="header-profile-dropdown-action-container">
@@ -142,6 +101,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         }
                         else
                         {
@@ -167,9 +127,6 @@
                                 </div>
                             </div>
                         }
-
-                        @*@await Component.InvokeAsync("UserOrderResponsive")*@
-
                         <button class="question-faq"><span class="fa fa-question-circle-o"></span></button>
                     </div>
                     <!-- responsive header-->
@@ -239,165 +196,13 @@
 
                 </li>
 
-                <li class="item-list-menu megamenu-1 nav-overlay">
-                    <a href="#" class="list-category first after"
-                       style="font-weight: bold;"><i class="mdi mdi-sale text-danger"></i> تخفیف و پیشنهاد ها</a>
-                    <ul class="list-menu-level-2 list-menu-discounts-offers">
-                        <li class="discounts-offers-list-item">
-                            <ul>
-                                <li class="discounts-offers-item">
-                                    <a href="#" class="list-category-megamenu-3">
-                                        <span>
-                                            مشاهده همه تخفیف‌ها و
-                                            پیشنهادها<i class="fa fa-angle-left"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span>
-                                            کالاهای
-                                            شگفت‌انگیز<i class="fa fa-angle-left"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span>
-                                            شگفت‌انگیز
-                                            سوپرمارکتی<i class="fa fa-angle-left"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span>
-                                            فروش
-                                            ویژه<i class="fa fa-angle-left"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span class="medium-display-title">کالای دیجیتال</span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span class="medium-display-title">کالای دیجیتال</span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span class="medium-display-title">کالای دیجیتال</span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span class="medium-display-title">کالای دیجیتال</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="discounts-offers-list-item">
-                            <ul>
-                                <li class="discounts-offers-item sublist-option">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span class="medium-display-title">
-                                            بسته های لوازم تحریر کمتر از ۱۰۰ هزار
-                                            تومان
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item sublist-option">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span class="medium-display-title">
-                                            ابزار دستی کمتر از ۱۰۰ هزار تومان
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <span class="sublist-divider"></span>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span>
-                                            با هر
-                                            خرید هدیه بگیرید!
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span>
-                                            تخفیف
-                                            پایان فصل
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span>
-                                            کارت
-                                            هدیه
-                                            خرید از دیجی‌کالا
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="discounts-offers-item">
-                                    <a href="#"
-                                       class="list-category-megamenu-3 list-category-megamenu-3-medium">
-                                        <span>
-                                            تازه‌های
-                                            فروشنده‌های جدید
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="discounts-offers-list-item main-banner">
-                            <a href="#">
-                                <img src="/assets/images/banner.jpg" alt="banner">
-                            </a>
-                        </li>
-                    </ul>
-                </li>
                 <li class="item-list-menu megamenu-1">
-                    <a href="#" class="list-category first after">
-                        <i class="mdi mdi-marker-check text-success"></i>
-                        دیجی استور من
+                    <a asp-controller="Product" asp-action="ProductSearch" asp-area="" class="list-category first after">
+                        <i class="mdi mdi-basket text-success"></i>
+                        محصولات
                     </a>
                 </li>
-                <li class="item-list-menu megamenu-1">
-                    <a href="#" class="list-category first after">
-                        <i class="mdi mdi-plus-outline text-primary"></i>
-                        دیجی پلاس
-                    </a>
-                </li>
-                <li class="item-list-menu megamenu-1 item-set">
-                    <a href="#" class="list-category first after">
-                        سوالی
-                        دارید؟
-                    </a>
-                </li>
-                <li class="item-list-menu megamenu-1 item-set">
-                    <a href="#" class="list-category first after">
-                        فروشنده
-                        شوید
-                    </a>
-                </li>
+
 
             </ul>
         </nav>
@@ -414,38 +219,38 @@
         @if (categories != null && categories.Any())
         {
             <ul class="nav-categories ul-base">
-            @foreach (var category in categories.Where(p => p.ParentId == null))
-            {
+                @foreach (var category in categories.Where(p => p.ParentId == null))
+                {
 
-                <li class="has-sub">
-                    <a href="#">@category.Title</a>
-            @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
-            {
-                @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
-                 {
-                     <ul>
-                         <li class="has-sub">
-                             <a href="#" class="category-level-2">@subCategory.Title</a>
-                             @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
-                             {
-                                 <ul>
-                                 @foreach (var subSubCategory in categories.Where(p => p.ParentId == subCategory.ProductCategoryId))
-                                  {
-                                      <li><a href="#" class="category-level-3">@subSubCategory.Title</a></li>
-                                    
-                                  }
-                                 </ul>
-                             }
+                    <li class="has-sub">
+                        <a href="#">@category.Title</a>
+                        @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
+                        {
+                            @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
+                            {
+                                <ul>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">@subCategory.Title</a>
+                                        @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
+                                        {
+                                            <ul>
+                                                @foreach (var subSubCategory in categories.Where(p => p.ParentId == subCategory.ProductCategoryId))
+                                                {
+                                                    <li><a href="#" class="category-level-3">@subSubCategory.Title</a></li>
 
-                         </li>
-                     </ul>
-                 }
-            }
-                </li>
-            }
+                                                }
+                                            </ul>
+                                        }
+
+                                    </li>
+                                </ul>
+                            }
+                        }
+                    </li>
+                }
             </ul>
         }
-        
+
     </nav>
     <div class="nav-btn">
         <span class="linee1"></span>

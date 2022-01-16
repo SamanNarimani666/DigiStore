@@ -1,0 +1,222 @@
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Order.UserOpenOrderViewModel
+@{
+    ViewData["Title"] = "پرداخت نهایی";
+    Layout = null;
+}
+@{
+   
+    var totalPrice = 0;
+    var discountPrice = 0;
+    var SumDiscount = 0;
+    if (Model != null)
+    {
+        @if (Model.Details != null && Model.Details.Any())
+         {
+             foreach (var orderDetail in Model.Details)
+             {
+
+                 @if (orderDetail.DiscountPercentage != null && orderDetail.DiscountPercentage != 0)
+                  {
+                      SumDiscount += ((orderDetail.ProductPrice + orderDetail.ProductColorPrice) * (orderDetail.DiscountPercentage.Value) / 100) * orderDetail.Qty;
+                  }
+
+             }
+
+         }
+        totalPrice = Model.GetTotalPrice() - SumDiscount;
+
+    }
+
+}
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png"
+          href="https://www.digikala.com/mag/wp-content/themes/digikalamag//assets/common/img/ms-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="144x144"
+          href="https://www.digikala.com/mag/wp-content/themes/digikalamag//assets/common/img/ms-icon-144x144.png">
+    <title>shopping-payment</title>
+    <!--    font--------------------------------------------->
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/materialdesignicons.css">
+    <link rel="stylesheet" href="/assets/css/materialdesignicons.css.map">
+    <!--    font--------------------------------------------->
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+    <!--shopping--------------------->
+    <header class="shopping-page">
+        <div class="container">
+            <div class="header-shopping-logo">
+                <a href="/"><img src="/assets/images/logo.png" alt="logo"></a>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <ul class="checkout-steps">
+                    <li class="is-completed is-completed-active">
+                        <a class="checkout-steps-item-link active-link-shopping">
+                            <span>اطلاعات ارسال</span>
+                        </a>
+                    </li>
+                    <li class="is-completed">
+                        <a class="checkout-steps-item-link active-link-shopping">
+                            <span>پرداخت</span>
+                        </a>
+                    </li>
+                    <li class="is-active">
+                        <a class="checkout-steps-item active-link">
+                            <span>اتمام خرید و ارسال</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-shopping">
+        <div class="content-shopping">
+            <div class="col-lg-9 col-md-9 col-xs-12 pull-right">
+                <div class="shipment-page-container">
+                    <div class="headline-checkout-shopping">
+                        <span>انتخاب شیوه پرداخت</span>
+                    </div>
+                    <div class="headline-checkout-shopping">
+                        <span>خلاصه سفارش</span>
+                    </div>
+                @if (Model.Details != null && Model.Details.Any())
+                {
+
+
+<div class="checkout-order-summary">
+                        <div class="checkout-order-summary-item">
+                            <a class="btn btn-light btn-checkout" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                <header class="checkout-order-summary-header">
+                                    <i class="fa fa-chevron-down arrow"></i>
+                                    <div class="checkout-order-summary-row">
+                                        <div class="checkout-order-summary-col-post-time">
+                                            <span>(@Model.Details.Sum(p => p.Qty) کالا)</span>
+                                        </div>
+                                     
+                                        <div class="checkout-order-summary-col-shipping-cost">
+                                            مبلغ مرسوله
+                                            <span>@totalPrice.ToString("#,0") تومان</span>
+                                        </div>
+                                    </div>
+                                </header>
+                            </a>
+                            <div class="collapse float-right" id="collapseExample">
+                                <div class="checkout-order-summary-content">
+                                    @foreach (var orderDetail in Model.Details)
+                                    {
+                                    <section class="swiper-order-summary">
+                                        <div class="swiper-container">
+                                            <div class="col-lg-5 col-md-6 col-xs-12">
+                                                <div class="product-box-container">
+                                                    <div class="product-box-compact">
+                                                        <a href="#">
+                                                            <img src="@(PathExtension.ProductImageThumb + orderDetail.ProductImageName)" alt="img-slider">
+                                                        </a>
+                                                        <div class="product-box-title">
+                                                          @orderDetail.ProductTitle
+                                                        </div>
+                                                        <div class="checkout-order-summary-tagline">
+                                                            <span>تعداد : @orderDetail.Qty</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout-to-shipping-sticky">
+                            <a asp-controller="Order" asp-action="PayUserOrderPrice" asp-area="UserPanel" class="selenium-next-step-shipping">پرداخت نهایی</a>
+                            <div class="checkout-to-shipping-price-report">
+                                <p>مبلغ قابل پرداخت</p>
+                                <div class="cart-item-product-price">
+                                   @totalPrice.ToString("#,0")
+                                    <span>تومان</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            }
+            else
+            {
+                <partial name="_NotFoundItem"/>
+            }
+                </div>
+
+
+               
+
+
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-xs-12 pull-left">
+                <div class="page-aside">
+                    <div class="checkout-summary">
+                        <ul class="checkout-summary-summary">
+                            <li>
+                                <span>تعداد کالا</span>
+                                <span>@Model.Details.Sum(p => p.Qty)</span>
+                            </li>
+                            <li>
+                                <span>جمع اجزا</span>
+                                <span> @Model.GetTotalPrice().ToString("#,0") تومان</span>
+                            </li>
+                            <li>
+                                <span>تخغیف</span>
+                                <span>@Model.GetTotalDiscounts().ToString("#,0") تومان</span>
+                            </li>
+                            <li>
+                                <span>مبلغ قابل پرداخت</span>
+                                <span>             @((Model.GetTotalPrice() - Model.GetTotalDiscounts()).ToString("#,0")) تومان</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+           
+            <footer class="footer-light">
+                <div class="container">
+                    <div class="footer-checkout-col">
+                        <div class="footer-checkout-col-phone">
+                            <span class="mdi mdi-phone"></span>شماره تماس :
+                            <a href="#">
+                                09108639618
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-checkout-col">
+                        <div class="footer-checkout-col-phone">
+                            <span class="mdi mdi-email-outline"></span>شماره تماس :
+                            <a href="#">Samannarimani666@gmail.com</a>
+                        </div>
+                    </div>
+                    <p class="copy-right-footer-light">Copyright © 2006 - 2019 DigiStore.com</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!--shopping--------------------->
+    <script src="/assets/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/main.js"></script>
+</body>
+
+</html>
+

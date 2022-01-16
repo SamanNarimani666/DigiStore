@@ -18,5 +18,7 @@ namespace DigiStore.Domain.IRepositories.User
         Task Save();
         Task AddUser(Entities.User user);
         Task<FilterUserViewModel> FilterUserTask(FilterUserViewModel filterUser);
+        Task<Entities.User> GetUserByUserName(string userName);
+
     }
 }

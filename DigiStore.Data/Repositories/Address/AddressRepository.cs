@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.IRepositories.Address;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DigiStore.Data.Repositories.Address
 {
-    public class AddressRepository :IAddressRepository
+    public class AddressRepository : IAddressRepository
     {
         #region Constructor
         private readonly DigiStore_DBContext _context;
@@ -29,9 +30,9 @@ namespace DigiStore.Data.Repositories.Address
         public async Task<Domain.Entities.Address> GetAddressById(int addressId)
         {
             return await _context.Addresses
-                .Include(p=>p.State)
-                .Include(p=>p.City)
-                .SingleOrDefaultAsync(p=>p.AddressId==addressId);
+                .Include(p => p.State)
+                .Include(p => p.City)
+                .SingleOrDefaultAsync(p => p.AddressId == addressId);
         }
         #endregion
 
@@ -46,10 +47,10 @@ namespace DigiStore.Data.Repositories.Address
         public async Task<FilterAddressVieweModel> FilterAddress(FilterAddressVieweModel filterAddress)
         {
             var adddress = _context.Addresses
-                .Where(a=>a.IsDelete==false)
+                .Where(a => a.IsDelete == false)
                 .Include(p => p.State)
                 .Include(p => p.City)
-                .OrderByDescending(a=>a.ModifiedDate)
+                .OrderByDescending(a => a.ModifiedDate)
                 .AsQueryable();
 
             if (filterAddress.UserId != null)
@@ -59,6 +60,13 @@ namespace DigiStore.Data.Repositories.Address
                 filterAddress.HowManyShowPageAfterAndBefore);
             var allTickets = adddress.Paging(pager).ToList();
             return filterAddress.SetPaging(pager).SetAddress(allTickets);
+        }
+        #endregion
+
+        #region GetLastAddressUser
+        public async Task<List<Domain.Entities.Address>> GetUserAddressByUserId(int userId)
+        {
+            return await _context.Addresses.Include(a => a.State).Include(p=>p.City).Where(p=>p.UserId==userId&&!p.IsDelete).ToListAsync();
         }
         #endregion
 

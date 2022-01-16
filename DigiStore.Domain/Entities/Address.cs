@@ -7,6 +7,11 @@ namespace DigiStore.Domain.Entities
 {
     public partial class Address
     {
+        public Address()
+        {
+            SalesInforamtions = new HashSet<SalesInforamtion>();
+        }
+
         public int AddressId { get; set; }
         public int UserId { get; set; }
         public int StateId { get; set; }
@@ -22,5 +27,6 @@ namespace DigiStore.Domain.Entities
         public virtual City City { get; set; }
         public virtual State State { get; set; }
         public virtual User User { get; set; }
+        public virtual ICollection<SalesInforamtion> SalesInforamtions { get; set; }
     }
 }

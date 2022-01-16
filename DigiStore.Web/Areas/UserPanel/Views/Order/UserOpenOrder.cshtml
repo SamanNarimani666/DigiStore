@@ -160,7 +160,7 @@
                 </div>
 
                 <div class="checkout-to-shipping-sticky">
-                    <a asp-controller="Order" asp-action="PayUserOrderPrice" asp-area="UserPanel" class="selenium-next-step-shipping">ادامه فرآیند خرید</a>
+                    <a asp-controller="Order" asp-action="AddorderInformation" asp-area="UserPanel" asp-route-orderId="@Model.OrderId" class="selenium-next-step-shipping">ادامه فرآیند خرید</a>
                     <div class="checkout-to-shipping-price-report">
                         <p>مبلغ قابل پرداخت</p>
                         <div class="cart-item-product-price">
@@ -190,7 +190,7 @@
                             </li>
                             <li>
                                 <span>مبلغ قابل پرداخت</span>
-                                <span>             @((Model.GetTotalPrice() - Model.GetTotalDiscounts()).ToString("#,0"))) تومان</span>
+                                <span>             @((Model.GetTotalPrice() - Model.GetTotalDiscounts()).ToString("#,0")) تومان</span>
                             </li>
                         </ul>
                     </div>

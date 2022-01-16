@@ -44,5 +44,8 @@ namespace DigiStore.Domain.ViewModels.Product
         public List<ProductFeature> ProductFeatures { get; set; }
         public List<Entities.Product> RelatedProducts { get; set; }
         public int CountComment { get; set; }
+        public string MainCategoryTitle { get; set; }
+        public string SubCategoryTitle { get; set; }
+
     }
 }

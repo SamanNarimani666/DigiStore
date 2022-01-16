@@ -40,16 +40,7 @@
                         index += 1;
                     }
                 }
-                @if (Model.ProductGuarantee != null && Model.ProductGuarantee.Any())
-                {
-                    var index = 0;
-                    foreach (var guarantee in Model.ProductGuarantee)
-                    {
-                        <input type="hidden" value="@guarantee.GuaranteeName" name="ProductGuarantee[@index].GuaranteeName" guarantee-Name-hidden-input="@guarantee.GuaranteeName-@guarantee.Price" />
-                        <input type="hidden" value="@guarantee.Price" name="ProductGuarantee[@index].Price" guarantee-Price-hidden-input="@guarantee.GuaranteeName-@guarantee.Price" />
-                        index += 1;
-                    }
-                }
+
             @if (Model.ProductFeature != null && Model.ProductFeature.Any())
             {
                 var index = 0;
@@ -76,7 +67,11 @@
                                     <input type="number" asp-for="Price" placeholder="قیمت محصول را وارد نمایید">
                                     <span asp-validation-for="Price" class="text-danger"></span>
                                 </div>
-
+                            <div class="form-legal-item">
+                                <label>درصد برداشت</label>
+                                <input type="number" asp-for="SiteProfile" placeholder="درصد برداشت محصول را وارد نمایید">
+                                <span asp-validation-for="SiteProfile" class="text-danger"></span>
+                            </div>
                                 <div class="form-legal-item">
                                     <label>توضیحات کوتاه</label>
                                     <textarea asp-for="ShortDescription" class="form-control" cols="75" rows="10" placeholder="توضیحات کوتاه محصول"></textarea>
@@ -263,53 +258,6 @@
                                     </div>
                                 </div>
 
-
-                                <br /><br />
-                                <label><h4>  گارانتی </h4></label>
-                                <div class="form-legal-item">
-                                    <label>نام گارانتی</label>
-                                    <input type="text" placeholder="نام  گارانتی محصول را وارد نمایید" id="Product_Guarantee_Name_input" />
-                                </div>
-                                <div class="form-legal-item">
-                                    <label>قیمت مضاف گارانتی محصول</label>
-                                    <input type="number" placeholder="قیمت مضافگارانتی محصول را وارد نمایید" id="Product_Guarantee_Price_input" />
-                                </div>
-                                <div class="parent-btn">
-                                    <button id="addGuaranteeButton" type="button" class="btn btn-success">
-                                        افزودن گارانتی
-                                    </button>
-                                </div>
-                                <div class="profile-stats page-profile-order">
-                                    <div class="table-orders">
-
-                                        <table class="table">
-                                            <thead class="thead-dark">
-                                                <tr>
-
-                                                    <th style="text-align: center">نام گارانتی</th>
-                                                    <th style="text-align: center">قیمت</th>
-                                                    <th style="text-align: center">عملیات</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="list_of_product_guarantee">
-                                                @if (Model.ProductGuarantee != null && Model.ProductGuarantee.Any())
-                                                {
-                                                    @foreach (var item in Model.ProductGuarantee)
-                                                    {
-                                                        <tr Guarantee-table-item="@item.GuaranteeName-@item.Price">
-                                                            <td>@item.GuaranteeName</td>
-                                                            <td>
-                                                                @item.Price
-                                                            </td>
-                                                            <td><a class="btn btn-danger" onclick="RemoveProductGuarantee('@item.GuaranteeName-@item.Price')">حذف</a></td>
-                                                        </tr>
-                                                    }
-                                                }
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-                                </div>
                             </fieldset>
                         </div>
                     </div>

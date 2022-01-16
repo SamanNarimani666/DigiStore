@@ -16,5 +16,6 @@ namespace DigiStore.Application.Services.Interfaces
        Task<EditAddressResult> EditAddress(EditAddressViewModel editAddress, int userId);
        Task<bool> DeleteAddress(int addressId,int userId);
        Task<EditAddressViewModel> EditInfoAddress(int userId,int addressId);
+       Task<List<Domain.Entities.Address>> GetUserAddressByUserId(int userId);
    }
 }

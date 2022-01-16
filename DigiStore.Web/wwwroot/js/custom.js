@@ -160,36 +160,6 @@ $("[Main_Category_Chekbox]").on('change',
         }
     });
 
-$('#addGuaranteeButton').on('click',
-    (e) => {
-        e.preventDefault();
-        var guaranteeName = $('#Product_Guarantee_Name_input').val();
-        var guaranteePrice = $('#Product_Guarantee_Price_input').val();
-        if (guaranteeName !== '' && guaranteePrice !== '') {
-            var currentGuaranteeCount = $("#list_of_product_guarantee tr");
-            var index = currentGuaranteeCount.length;
-            var guaranteeNameNameNode =
-                `<input type="hidden" value="${guaranteeName}" name="ProductGuarantee[${index
-                }].GuaranteeName" guarantee-Name-hidden-input="${guaranteeName}-${guaranteePrice}" />`;
-            var guaranteePriceNode =
-                `<input type="hidden" value="${guaranteePrice}" name="ProductGuarantee[${index
-                }].Price" guarantee-Price-hidden-input="${guaranteeName}-${guaranteePrice}" />`;
-
-            $('#create_product_form').append(guaranteeNameNameNode);
-            $('#create_product_form').append(guaranteePriceNode);
-
-            var guaranteeNameTableNode =
-                `<tr Guarantee-table-item="${guaranteeName}-${guaranteePrice}"> <td>${guaranteeName}</td> <td>${guaranteePrice
-                }</td> <td><a class="btn btn-danger" onclick="RemoveProductGuarantee('${guaranteeName}-${guaranteePrice}')">حذف</a></td> </tr>`;
-            $("#list_of_product_guarantee").append(guaranteeNameTableNode);
-
-            $('#Product_Guarantee_Name_input').val('');
-            $('#Product_Guarantee_Price_input').val('');
-        } else {
-            ShowMessage('اخطار', 'لطفا نام رنگ و قیمت آن را به درستی وارد نمایید', 'warning');
-        }
-
-    });
 
 $('#addColorButton').on('click',
     (e) => {
@@ -289,12 +259,6 @@ $('#addfeatureButton').on('click',
 
 
 
-function RemoveProductGuarantee(index) {
-    $('[guarantee-Name-hidden-input="' + index + '"]').remove();
-    $('[guarantee-Price-hidden-input="' + index + '"]').remove();
-    $('[Guarantee-table-item="' + index + '"]').remove();
-    reOrderProductGuaranteeHiddenInputs();
-}
 
 function RemoveProductColor(index) {
     $('[color-name-hidden-input="' + index + '"]').remove();

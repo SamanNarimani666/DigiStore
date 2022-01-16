@@ -101,7 +101,7 @@ namespace DigiStore.Web.Areas.Seller.Controllers
                         TempData[ErrorMessage] = "فروشگاهی با این کاربر یافت نشد";
                         break;
                     case EditProductResult.Success:
-                        TempData[SuccessMessage] = "محصول مورد نظر با موفقیت ثبت شد";
+                        TempData[SuccessMessage] = "محصول مورد نظر با موفقیت ویرایش شد";
                         return RedirectToAction("Index");
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.IRepositories.User;
@@ -64,6 +65,7 @@ namespace DigiStore.Data.Repositories.User
         #region GetUserByActiveCode
         public void EditUser(Domain.Entities.User user)
         {
+            user.ModifiedDate=DateTime.Now;
             _context.Users.Update(user);
         }
         #endregion
@@ -150,7 +152,13 @@ namespace DigiStore.Data.Repositories.User
 
             #endregion
         }
+        #endregion
 
+        #region GetUserByUserName
+        public async Task<Domain.Entities.User> GetUserByUserName(string userName)
+        {
+            return await _context.Users.SingleOrDefaultAsync(p => p.UserName == userName);
+        }
         #endregion
 
         #region Save

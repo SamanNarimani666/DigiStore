@@ -24,7 +24,6 @@ namespace DigiStore.Data.Context
         public virtual DbSet<Color> Colors { get; set; }
         public virtual DbSet<ContactU> ContactUs { get; set; }
         public virtual DbSet<FavoriteProductUser> FavoriteProductUsers { get; set; }
-        public virtual DbSet<Guarantee> Guarantees { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
@@ -37,6 +36,7 @@ namespace DigiStore.Data.Context
         public virtual DbSet<Productcomment> Productcomments { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
+        public virtual DbSet<SalesInforamtion> SalesInforamtions { get; set; }
         public virtual DbSet<SalesOrderDetail> SalesOrderDetails { get; set; }
         public virtual DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
         public virtual DbSet<Seller> Sellers { get; set; }
@@ -265,29 +265,6 @@ namespace DigiStore.Data.Context
                     .HasConstraintName("FK__Production_FavoriteProductUser_UserId");
             });
 
-            modelBuilder.Entity<Guarantee>(entity =>
-            {
-                entity.ToTable("Guarantee", "Production");
-
-                entity.Property(e => e.GuaranteeName)
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Rowguid)
-                    .HasColumnName("rowguid")
-                    .HasDefaultValueSql("(newsequentialid())");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Guarantees)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Production_Guarantee_ProductId");
-            });
-
             modelBuilder.Entity<Permission>(entity =>
             {
                 entity.ToTable("Permission", "Users");
@@ -367,6 +344,8 @@ namespace DigiStore.Data.Context
                 entity.HasIndex(e => e.IsDelete, "I_NC_Production_ProductCategory_IsDelete");
 
                 entity.HasIndex(e => e.Title, "I_NC_Production_ProductCategory_Title");
+
+                entity.Property(e => e.IconName).HasMaxLength(200);
 
                 entity.Property(e => e.ModifiedDate)
                     .HasColumnType("datetime")
@@ -631,6 +610,53 @@ namespace DigiStore.Data.Context
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Users_RolePermission_RoleID");
+            });
+
+            modelBuilder.Entity<SalesInforamtion>(entity =>
+            {
+                entity.ToTable("SalesInforamtion", "Sales");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ReceiverMobile)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ReceiverNaationalId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ReceiverName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Address)
+                    .WithMany(p => p.SalesInforamtions)
+                    .HasForeignKey(d => d.AddressId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Sales_SalesInforamtion_AddressId");
+
+                entity.HasOne(d => d.SalesOrder)
+                    .WithMany(p => p.SalesInforamtions)
+                    .HasForeignKey(d => d.SalesOrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Sales_SalesInforamtion_SalesOrderId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SalesInforamtions)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Sales_SalesInforamtion_UserID");
             });
 
             modelBuilder.Entity<SalesOrderDetail>(entity =>

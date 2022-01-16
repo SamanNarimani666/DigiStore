@@ -21,10 +21,9 @@
             <div class="product-nav-container">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb px-0">
-                        <li class="breadcrumb-item"><a href="#">فروشگاه اینترنتی @Model.Seller.StoreName</a></li>
-                        <li class="breadcrumb-item"><a href="#">کالای دیجیتال</a></li>
-                        <li class="breadcrumb-item"><a href="#">موبایل</a></li>
-                        <li class="breadcrumb-item active open" aria-current="page">گوشی موبایل</li>
+                        <li class="breadcrumb-item"><a >فروشگاه اینترنتی @Model.Seller.StoreName</a></li>
+                        <li class="breadcrumb-item"><a >@Model.MainCategoryTitle</a></li>
+                        <li class="breadcrumb-item"><a >@Model.SubCategoryTitle</a></li>
                     </ol>
                 </nav>
                 <div class="product-ext-links">
@@ -66,94 +65,11 @@
             <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next disabled"><i class="fa fa-angle-left"></i></button></div>
             <div class="owl-dots disabled"></div></ul>
     </div>
-    <div class="gallery-item">
-        <ul class="gallery-options">
-            <li class="option-wishes">
-                <button class="btn-option btn-option-wishes">
-                    <i class="mdi mdi-heart-outline"></i>
-                    <span class="tooltip-short">افزودن به علاقه‌مندی</span>
-                </button>
-            </li>
-            <li class="option-social">
-                <button class="btn-option btn-option-social" data-toggle="modal" data-target="#exampleModalCenter">
-                    <i class="mdi mdi-share-outline"></i>
-                    <span class="tooltip-short">اشتراک گذاری</span>
-                </button>
-            </li>
-            <li class="option-alarm">
-                <button class="btn-option btn-option-alarm" data-toggle="modal" data-target="#exampleModalCenteralarm">
-                    <i class="mdi mdi-bell-outline"></i>
-                    <span class="tooltip-short">اطلاع‌رسانی</span>
-                </button>
-            </li>
-            <li class="option-alarm">
-                <a href="product-comparison.html" class="btn-option btn-option-comparison">
-                    <i class="mdi mdi-compare"></i>
-                    <span class="tooltip-short">مقایسه</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+  
 </div>
 </div>
 
-<!-- Modal social-->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">
-                    اشتراک گذاری در شبکه های اجتماعی
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="form-share-row">
-                <div class="form-share-col">
-                    <ul class="btn-group-share">
-                        <li>
-                            <a href="#" class="btn-share btn-share-twitter">
-                                <i class="fa fa-twitter"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="btn-share btn-share-facebook">
-                                <i class="fa fa-facebook"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="btn-share btn-share-whatsapp">
-                                <i class="fa fa-whatsapp"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="form-share-title">ارسال به ایمیل</div>
-            <form for="#" class="send-to-email">
-                <div class="form-share-row">
-                    <div class="form-share-col">
-                        <input name="email" class="input-send-to-email" type="email" placeholder="آدرس ایمیل را وارد نمایید.">
-                    </div>
-                </div>
-                <div class="form-share-row">
-                    <div class="form-share-col">
-                        <div class="btn-send-email">ارسال</div>
-                    </div>
-                </div>
-            </form>
-            <div class="form-share-row">
-                <div class="form-share-col">
-                    <input class="ui-url-field" type="url" value="https://www.digikala.com/product/dkp-1672478" readonly="">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal social-->
-<!-- Modal alarm -->
-<!-- Modal alarm -->
+
 <div class="col-lg-8 col-md-12 col-xs-12 pull-left px-0" style="transform: none;" id="ProductVisited" ProductVisite="@Model.ProductId">
     <section class="product-info" style="transform: none;">
         <div class="product-headline">
@@ -161,13 +77,13 @@
                 <div class="product-directory">
                     <ul class="mb-0">
                         <li>
-                            <a href="#" class="link-border">شیائومی</a>
+                            <a href="#" class="link-border">@Model.MainCategoryTitle</a>
                         </li>
                         <li>
                             <span>/</span>
                         </li>
                         <li>
-                            <a href="#" class="link-border">گوشی موبایل شیائومی</a>
+                            <a href="#" class="link-border">@Model.SubCategoryTitle</a>
                         </li>
                     </ul>
                     <h1 class="product-title">
@@ -235,31 +151,6 @@
                 <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; top: 0px;">
                     <div class="product-seller-info">
                         <div class="js-seller-info-changable">
-                            @if (Model.Guarantees != null && Model.Guarantees.Any())
-                            {
-                                foreach (var guarantees in Model.Guarantees)
-                                {
-
-
-                                    <div class="product-seller-row product-seller-row-guarantee">
-                                        <div class="js-guarantee-text">
-                                            @if (guarantees.Price == 0 || guarantees.Price == null)
-                                            {
-                                                @(guarantees.GuaranteeName)
-
-                                            }
-                                            else
-                                            {
-                                                @($"{guarantees.GuaranteeName} قیمت  : {guarantees.Price.Value.ToString("n0")}")
-
-                                            }
-                                            <i class="mdi mdi-check"></i>
-                                        </div>
-                                    </div>
-                                }
-                            }
-
-
                             <div class="product-seller-row">
                                 <div class="product-seller-row-price">
                                     <div class="product-seller-price-label">
@@ -400,34 +291,6 @@
                             </div>
                         </section>
                     </article>
-                    <section class="content-expert-stats row">
-                        <div class="col-8 pull-right">
-                            <div class="content-expert-stats-left">
-                                <div class="content-expert-evaluation">
-                                    <div class="col-lg-5 col-md-5 col-xs-12 pull-right" style="padding: 0;">
-                                        <div class="content-expert-evaluation-positive">
-                                            <span>نقاط قوت</span>
-                                            <ul>
-                                                <li>صفحه نمایش AMOLED </li>
-                                                <li>طراحی چشم‎نواز قاب پشتی</li>
-                                                <li>عملکرد مطلوب تراشه Exynos 9610 </li>
-                                                <li>طول عمر بالای باتری</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-5 col-md-5 col-xs-12 pull-right" style="padding: 0;">
-                                        <div class="content-expert-evaluation-negative">
-                                            <span>نقاط ضعف</span>
-                                            <ul>
-                                                <li>مقاوم نبودن در برابر آب</li>
-                                                <li>عملکرد نه چندان خوب دوربین در شب</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
                 </div>
 
                 <div class="tab params" style="display: none;">

@@ -23,10 +23,8 @@ namespace DigiStore.Application.Services.Interfaces
         Task<EditProductResult> EditProduct(EditProductViewModel editProduct, int userId, IFormFile ProductImage);
         void RemoveAllProductSelectedCategories(int productId);
         void RemoveAllProductSelectedColors(int productId);
-        void RemoveAllProductSelectedGuarantee(int productId);
         Task AddProductSelectedCategories(int productId, List<int> CategoriesId);
         Task AddProductSelectedColors(int productId, List<CreateProductColorViewModel> createProductColor);
-        Task AddAllProductSelectedGuarantee(int productId, List<CreateProductGuaranteeViewModel> createProductGuarantee);
         Task<List<ProductGallery>> GetAllProductGallery(int productId);
         Task<Product> GetProductBySellerOwnerId(int productId, int userId);
         Task<List<ProductGallery>> GetAllProductGalleryForSellerpanel(int productId, int sellerId);
@@ -49,5 +47,7 @@ namespace DigiStore.Application.Services.Interfaces
         Task<Product> GetProductByProductId(int productId);
 
         Task<FilterProductCommentViewModel> filterFilterProductComment(FilterProductCommentViewModel filterProductComment);
+        Task<List<Domain.Entities.Product>> GetMostPopular(int take);
+        Task<List<Domain.Entities.Product>> RecommendedproductsForUser(int take, int userId);
     }
 }

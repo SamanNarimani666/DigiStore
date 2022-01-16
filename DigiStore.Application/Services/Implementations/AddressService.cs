@@ -63,9 +63,9 @@ namespace DigiStore.Application.Services.Implementations
                     Address1 = addAddress.Address.SanitizeText(),
                     Unit = addAddress.Unit.SanitizeText()
                 };
-              await  _addressRepository.AddAddress(address);
-              await _addressRepository.Save();
-              return AddAddressResult.Success;
+                await _addressRepository.AddAddress(address);
+                await _addressRepository.Save();
+                return AddAddressResult.Success;
             }
             catch
             {
@@ -77,7 +77,7 @@ namespace DigiStore.Application.Services.Implementations
         #region FilterAddress
         public async Task<FilterAddressVieweModel> FilterAddress(FilterAddressVieweModel filterAddress)
         {
-           return await _addressRepository.FilterAddress(filterAddress);
+            return await _addressRepository.FilterAddress(filterAddress);
         }
         #endregion
 
@@ -113,7 +113,7 @@ namespace DigiStore.Application.Services.Implementations
             if (address == null) return false;
             if (address.UserId != userId) return false;
             address.IsDelete = true;
-            address.ModifiedDate=DateTime.Now;
+            address.ModifiedDate = DateTime.Now;
             _addressRepository.EditAddress(address);
             await _addressRepository.Save();
             return true;
@@ -135,6 +135,13 @@ namespace DigiStore.Application.Services.Implementations
                 CityId = address.CityId,
                 Unit = address.Unit
             };
+        }
+        #endregion
+
+        #region GetLastAddressUser
+        public async Task<List<Domain.Entities.Address>> GetUserAddressByUserId(int userId)
+        {
+            return await _addressRepository.GetUserAddressByUserId(userId);
         }
         #endregion
 
