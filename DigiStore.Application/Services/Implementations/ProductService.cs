@@ -660,6 +660,13 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region TheMostVisitedProducts
+        public async Task<List<Product>> TheMostVisitedProducts(int take)
+        {
+            return await _productRepository.TheMostVisitedProducts(take);
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {

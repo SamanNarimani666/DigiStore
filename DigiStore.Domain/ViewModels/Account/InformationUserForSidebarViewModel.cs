@@ -6,8 +6,6 @@ namespace DigiStore.Domain.ViewModels.Account
     {
         [Display(Name = "شماره تماس")]
         public string Mobile { get; set; }
-        [Display(Name = "کیف پول")]
-        public int Wallet { get; set; }
         public string UserAvatar { get; set; }
     }
 }

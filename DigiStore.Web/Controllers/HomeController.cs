@@ -23,6 +23,7 @@ namespace DigiStore.Web.Controllers
             ViewBag.OffProduct = await _discountService.GetAlloffProducs(8);
             ViewBag.PopularProducs = await _productService.GetPopularProduct(8);
             ViewBag.MostPopularProduct = await _productService.GetMostPopular(8);
+            ViewBag.MostVisitedProduct = await _productService.TheMostVisitedProducts(8);
             if (User.Identity.IsAuthenticated) ViewBag.RecommendedproductsForUser=await _productService.RecommendedproductsForUser(8, User.GetUserId());
             return View();
         }

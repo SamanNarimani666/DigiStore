@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.FavoriteProductUser;
+using DigiStore.Domain.ViewModels.ProductComment;
 using DigiStore.Domain.ViewModels.ProductVisited;
 using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
@@ -52,6 +53,17 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
             TempData[ErrorMessage] = "خطا در حذف محصول مورد نظر";
             return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger, "",
                 null);
+        }
+
+        #endregion
+
+        #region UserProductPomments
+        [HttpGet("product-comment")]
+        public async Task<IActionResult> UserProductPComments(FilterProductCommentViewModel filterComment)
+        {
+            filterComment.UserId = User.GetUserId();
+            filterComment.OrderBydate = OrderBydate.Desc_Date;
+            return View(await _productService.filterFilterProductComment(filterComment));
         }
 
         #endregion

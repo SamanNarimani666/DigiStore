@@ -230,6 +230,17 @@ namespace DigiStore.Data.Repositories.Product
         }
         #endregion
 
+        #region TheMostVisitedProducts
+        public async Task<List<Domain.Entities.Product>> TheMostVisitedProducts(int take)
+        {
+            return await _context.Products.Include(p=>p.ProductVisiteds)
+                .Where(p=>p.ProductVisiteds.Any())
+                .OrderByDescending(p=>p.ProductVisiteds.Count)
+                .Take(take)
+                .ToListAsync();
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {

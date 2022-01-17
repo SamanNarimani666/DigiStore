@@ -182,7 +182,6 @@ namespace DigiStore.Application.Services.Implementations
             {
                 Mobile = user.Mobile,
                 UserAvatar = user.UserAvatar,
-                Wallet = 16000
             };
         }
         #endregion

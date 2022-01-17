@@ -1,0 +1,57 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.ProductComment.FilterProductCommentViewModel
+@{
+    ViewData["Title"] = "دیدگاه های محصول";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles
+{
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/materialdesignicons.css">
+    <link rel="stylesheet" href="/assets/css/materialdesignicons.css.map">
+    <!--    font--------------------------------------------->
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+}
+@await Component.InvokeAsync("UserSidebar")
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="headline-profile">
+            <span>نقد و نظرات</span>
+        </div>
+        @if (Model.ProductComments != null && Model.ProductComments.Any())
+        {
+            @foreach (var item in Model.ProductComments)
+            {
+                <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
+                    <div class="profile-stats">
+                        <div class="profile-recent-fav profile-comments-fav">
+                            <div class="profile-comment">
+                                <div class="profile-comment-thumb">
+                                    <div class="profile-comment-img">
+                                        <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@item.Product.ProductId"><img src="@(PathExtension.ProductImageOrigin + item.Product.ImageName)" alt="profile"></a>
+                                    </div>
+                                </div>
+                                <div class="profile-comment-content">
+                                    <h4>
+                                        @Html.Raw(item.Product.Name)
+                                        <span class="profile-comment-status-review">@(item.CreateDate.ToShamsiDateTime())</span>
+                                        <p>
+                                            @Html.Raw(item.Comment)
+                                        </p>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <partial name="_NotFoundItem" />
+        }
+    </div>
+</div>
+

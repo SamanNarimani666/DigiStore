@@ -22,15 +22,6 @@
                     <span class="profile-box-phone">@Model.Mobile</span>
                 </div>
 
-                <a href="#" class="profile-box-row-arrow">
-                    <div class="profile-box-title">کیف پول</div>
-                    <div class="profile-box-price">
-                        <div class="wallet-amount">@Model.Wallet.ToString("n0")</div>
-                        <div class="profile-box-currency">تومان</div>
-                        <i class="fa fa-angle-left"></i>
-                    </div>
-                    <p class="profile-box-wallet-link">افزایش موجودی</p>
-                </a>
 
             </div>
             <ul class="profile-menu-items">
@@ -55,7 +46,7 @@
                         علاقه مندی ها
                     </a>
                 </li>
-                <li><a href="profile-comments.html" class="profile-menu-url"><span class="mdi mdi-comment-multiple-outline"></span>نقد و نظرات</a></li>
+                <li><a asp-controller="Product" asp-action="UserProductPComments" asp-area="UserPanel" class="profile-menu-url"><span class="mdi mdi-comment-multiple-outline"></span>نقد و نظرات</a></li>
                 <li>
                     <a asp-controller="Address" asp-action="ListAddress" asp-area="UserPanel" class="profile-menu-url">
                         <span class="mdi mdi-map-marker-outline"></span>آدرس

@@ -45,9 +45,9 @@ namespace DigiStore.Application.Services.Interfaces
         Task<bool> DeleteFavoritProduct(int favoritId,int productId,int userId);
         Task<CreateProductCommnetResult> CreateProductCommnet(CreateProductCommnetViewModel createProductCommnet,int userId);
         Task<Product> GetProductByProductId(int productId);
-
         Task<FilterProductCommentViewModel> filterFilterProductComment(FilterProductCommentViewModel filterProductComment);
         Task<List<Domain.Entities.Product>> GetMostPopular(int take);
         Task<List<Domain.Entities.Product>> RecommendedproductsForUser(int take, int userId);
+        Task<List<Domain.Entities.Product>> TheMostVisitedProducts(int take);
     }
 }
