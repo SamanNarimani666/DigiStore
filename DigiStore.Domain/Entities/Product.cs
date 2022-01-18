@@ -14,6 +14,7 @@ namespace DigiStore.Domain.Entities
             ProductDiscounts = new HashSet<ProductDiscount>();
             ProductFeatures = new HashSet<ProductFeature>();
             ProductGalleries = new HashSet<ProductGallery>();
+            ProductRatings = new HashSet<ProductRating>();
             ProductSelectedCategories = new HashSet<ProductSelectedCategory>();
             ProductVisiteds = new HashSet<ProductVisited>();
             Productcomments = new HashSet<Productcomment>();
@@ -44,6 +45,7 @@ namespace DigiStore.Domain.Entities
         public virtual ICollection<ProductDiscount> ProductDiscounts { get; set; }
         public virtual ICollection<ProductFeature> ProductFeatures { get; set; }
         public virtual ICollection<ProductGallery> ProductGalleries { get; set; }
+        public virtual ICollection<ProductRating> ProductRatings { get; set; }
         public virtual ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public virtual ICollection<ProductVisited> ProductVisiteds { get; set; }
         public virtual ICollection<Productcomment> Productcomments { get; set; }

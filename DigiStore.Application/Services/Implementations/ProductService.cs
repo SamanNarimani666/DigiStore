@@ -15,6 +15,7 @@ using DigiStore.Domain.IRepositories.ProductColor;
 using DigiStore.Domain.IRepositories.Productcomment;
 using DigiStore.Domain.IRepositories.ProductFeature;
 using DigiStore.Domain.IRepositories.ProductGallery;
+using DigiStore.Domain.IRepositories.ProductRating;
 using DigiStore.Domain.IRepositories.ProductVisited;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
 using DigiStore.Domain.ViewModels.FavoriteProductUser;
@@ -37,7 +38,8 @@ namespace DigiStore.Application.Services.Implementations
         private readonly IProductFeatureRepository _productFeatureRepository;
         private readonly IFavoriteProductUserRepository _favoriteProductUserRepository;
         private readonly IProductcommentRepository _productcommentRepository;
-        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository, IFavoriteProductUserRepository favoriteProductUserRepository, IProductcommentRepository productcommentRepository)
+        private readonly IProductRatingRepository _productRatingRepository;
+        public ProductService(IProductRepository productRepository, IProductCategoryRepository productCategoryRepository, ISelectedProductCategoryRepository selectedProductCategoryRepository, IProductColorRepository colorRepository, IProductGalleryRepository galleryRepository, IProductVisitedRepository productVisitedRepository, IProductFeatureRepository productFeatureRepository, IFavoriteProductUserRepository favoriteProductUserRepository, IProductcommentRepository productcommentRepository, IProductRatingRepository productRatingRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
@@ -48,6 +50,7 @@ namespace DigiStore.Application.Services.Implementations
             _productFeatureRepository = productFeatureRepository;
             _favoriteProductUserRepository = favoriteProductUserRepository;
             _productcommentRepository = productcommentRepository;
+            _productRatingRepository = productRatingRepository;
         }
         #endregion
 
@@ -179,7 +182,7 @@ namespace DigiStore.Application.Services.Implementations
                 }).ToList(),
                 SelectedCategories = _selectedProductCategoryRepository.GetProductSelectedCategoryByProductId(productId).Select(p => p.ProductCategoryId.Value).ToList()
                 ,
-                ProductFeature = _productFeatureRepository.GetProductFeatureByProductId(productId).Select(f=>new CreateProductFeatureViewModel()
+                ProductFeature = _productFeatureRepository.GetProductFeatureByProductId(productId).Select(f => new CreateProductFeatureViewModel()
                 {
                     FeatureTitle = f.FeatureTitle,
                     FeatureValue = f.FeatureValue
@@ -219,7 +222,7 @@ namespace DigiStore.Application.Services.Implementations
                 }
 
 
-                
+
 
                 //Remove Product Selected Categoty
                 RemoveAllProductSelectedCategories(editProduct.ProductId);
@@ -234,7 +237,7 @@ namespace DigiStore.Application.Services.Implementations
                 //Remove Product Features
                 RemoveAllProductFeatures(editProduct.ProductId);
                 //Add Product Features
-                await AddProductFeatures(editProduct.ProductId,editProduct.ProductFeature);
+                await AddProductFeatures(editProduct.ProductId, editProduct.ProductFeature);
 
                 _productRepository.EditProduct(mainProduct);
                 await _productRepository.Save();
@@ -253,7 +256,7 @@ namespace DigiStore.Application.Services.Implementations
         public void RemoveAllProductSelectedCategories(int productId)
         {
             _selectedProductCategoryRepository.DeleteProductSelectedCategory(_selectedProductCategoryRepository.GetProductSelectedCategoryByProductId(productId));
-            
+
         }
         #endregion
 
@@ -309,7 +312,7 @@ namespace DigiStore.Application.Services.Implementations
                     }
 
                 }
-                 _colorRepository.AddColor(productColor);
+                _colorRepository.AddColor(productColor);
             }
             await _colorRepository.Save();
         }
@@ -472,7 +475,7 @@ namespace DigiStore.Application.Services.Implementations
                     if (userId != null && await _productVisitedRepository.IsVisitedUserThisProduct(productId, userId.Value))
                     {
                         var IsVisitedUserThisProduct = await _productVisitedRepository.GetProductVisitedByProductIdAndUserId(productId, userId.Value);
-                        IsVisitedUserThisProduct.ModifiedDate=DateTime.Now;
+                        IsVisitedUserThisProduct.ModifiedDate = DateTime.Now;
                         _productVisitedRepository.UpdateProductVisited(IsVisitedUserThisProduct);
                         var newProductVisted = new ProductVisited()
                         {
@@ -505,7 +508,7 @@ namespace DigiStore.Application.Services.Implementations
         #endregion
 
         #region AddProductFeatures
-        public async Task AddProductFeatures(int productId,List<CreateProductFeatureViewModel> createProductFeature)
+        public async Task AddProductFeatures(int productId, List<CreateProductFeatureViewModel> createProductFeature)
         {
             var newFeatures = new List<ProductFeature>();
             if (createProductFeature != null && createProductFeature.Any())
@@ -529,14 +532,14 @@ namespace DigiStore.Application.Services.Implementations
         #region RemoveAllProductFeatures
         public void RemoveAllProductFeatures(int productId)
         {
-           _productFeatureRepository.RemoveProductFeature(_productFeatureRepository.GetProductFeatureByProductId(productId));
+            _productFeatureRepository.RemoveProductFeature(_productFeatureRepository.GetProductFeatureByProductId(productId));
         }
         #endregion
 
         #region GetLastProductVisited
         public async Task<FilterProductVisitedViewModel> GetLastProductVisited(FilterProductVisitedViewModel filterProductVisited)
         {
-           return await _productVisitedRepository.filterFilterProductVisited(filterProductVisited);
+            return await _productVisitedRepository.filterFilterProductVisited(filterProductVisited);
         }
         #endregion
 
@@ -585,7 +588,7 @@ namespace DigiStore.Application.Services.Implementations
         #endregion
 
         #region DeleteFavoritProduct
-        public async Task<bool> DeleteFavoritProduct(int favoritId,int productId, int userId)
+        public async Task<bool> DeleteFavoritProduct(int favoritId, int productId, int userId)
         {
             var favoritProduct = await _favoriteProductUserRepository.GetFavoriteProductUserById(favoritId);
             if (favoritProduct == null) return false;
@@ -612,7 +615,7 @@ namespace DigiStore.Application.Services.Implementations
             if (product == null) return CreateProductCommnetResult.NotFoundProduct;
             try
             {
-                var newComment= new Productcomment()
+                var newComment = new Productcomment()
                 {
                     UserId = userId,
                     SellerId = product.SellerId,
@@ -622,6 +625,18 @@ namespace DigiStore.Application.Services.Implementations
                 };
                 await _productcommentRepository.AddProductcomment(newComment);
                 await _productcommentRepository.Save();
+                var newProductRating = new ProductRating()
+                {
+                    ProductId = product.ProductId,
+                    ConstructionQuality = createProductCommnet.ConstructionQuality,
+                    DesignAndAppearance = createProductCommnet.DesignAndAppearance,
+                    EaseOfUse = createProductCommnet.EaseOfUse,
+                    FeaturesAndCapabilities = createProductCommnet.FeaturesAndCapabilities,
+                    Innovation = createProductCommnet.Innovation,
+                    PurchaseValueRelativeToPrice = createProductCommnet.PurchaseValueRelativeToPrice
+                };
+                await _productRatingRepository.AddProductRating(newProductRating);
+                await _productRatingRepository.Save();
                 return CreateProductCommnetResult.Success;
             }
             catch
@@ -648,14 +663,14 @@ namespace DigiStore.Application.Services.Implementations
         #region GetMostPopular
         public async Task<List<Product>> GetMostPopular(int take)
         {
-          return  await _productRepository.GetMostPopular(take);
+            return await _productRepository.GetMostPopular(take);
         }
         #endregion
 
         #region RecommendedproductsForUser
         public async Task<List<Product>> RecommendedproductsForUser(int take, int userId)
         {
-            var result= await _productRepository.RecommendedproductsForUser(take, userId);
+            var result = await _productRepository.RecommendedproductsForUser(take, userId);
             return result;
         }
         #endregion
@@ -679,6 +694,7 @@ namespace DigiStore.Application.Services.Implementations
             await _productFeatureRepository.DisposeAsync();
             await _favoriteProductUserRepository.Save();
             await _productcommentRepository.DisposeAsync();
+            await _productRatingRepository.DisposeAsync();
         }
         #endregion
     }

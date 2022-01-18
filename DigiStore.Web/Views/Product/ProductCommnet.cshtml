@@ -6,7 +6,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var product = ViewBag.Product as Product;
 }
+@section Styles
+{
 
+    <link rel="stylesheet" href="/assets/css/bootstrap-slider.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+  
+}
+@section Scripts
+{
+    <script src="/assets/js/bootstrap-slider.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    
+
+
+}
 <div class="col-12">
     <div class="product-page">
         <nav aria-label="breadcrumb">
@@ -19,328 +34,179 @@
                 </li>
             </ol>
         </nav>
-    <form method="post" asp-controller="Product" asp-action="ProductCommnet" asp-area="" id="addCommentForm">
-        <input type="hidden" asp-for="ProductId"/>
-        <section class="product-comment">
-            <div class="comments-product">
-                <div class="comments-product-row">
-                    <div class="col-lg-4 col-md-4 col-xs-12 pull-right">
-                        @if (product != null)
-                        {
+        <form asp-controller="Product" asp-area="" asp-action="ProductCommnet" method="post" id="addCommentForm">
+            <input type="hidden" asp-for="ProductId" />
+            <section class="product-comment">
+                <div class="comments-product">
+                    <div class="comments-product-row">
+                        <div class="col-lg-4 col-md-4 col-xs-12 pull-right">
                             <div class="comments-product-col-gallery mt-5 pt-3 text-center">
                                 <a href="#">
-                                    <img src="@(PathExtension.ProductImageOrigin + product.ImageName)" style="max-width: 100%;" alt="img-slider">
+                                    <img src="@(PathExtension.ProductImageOrigin + product.ImageName)" style="max-width: 60%; height: 70%;" alt="img-slider">
                                 </a>
                             </div>
-                        }
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-xs-12 pull-left">
+                            <div class="comments-product-col-info">
+                                <div class="comments-product-headline">
+                                    <h3 class="comments-product-title">
 
-                    </div>
-                    <div class="col-lg-8 col-md-8 col-xs-12 pull-left">
-                        <div class="comments-product-col-info">
-                            <div class="comments-product-headline">
-                                <h3 class="comments-product-title">
-                                    @if (product != null)
-                                    {
-                                        product.Name.ToString();
-                                    }
-                                </h3>
-                </div>
-                <div class="comments-product-attributes px-3">
-                    <div class="row">
-                        <div class="col-sm-6 col-12 mb-3">
-                            <div class="comments-product-attributes-title">کیفیت ساخت</div>
-                            <div class="slider slider-horizontal slider-rtl" id="" style="margin-bottom: 26px;">
-                                <div class="slider-track">
-                                    <div class="slider-track-low" style="right: 0px; width: 0%;"></div>
-                                    <div class="slider-selection tick-slider-selection" style="right: 0%; width: 50%;"></div>
-                                    <div class="slider-track-high" style="left: 0px; width: 50%;"></div></div>
-                                <div class="tooltip tooltip-main top hide" role="presentation" style="right: 50%;">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner">3</div></div>
-                                <div class="tooltip tooltip-min top hide" role="presentation">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="tooltip tooltip-max hide top" role="presentation" style="">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="slider-tick-label-container" style="margin-right: -27.875px;">
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">خیلی بد</div>
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">بد</div>
-                                    <div class="slider-tick-label label-in-selection label-is-selection" style="width: 55.75px;">معمولی</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">خوب</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">عالی</div></div>
-                                <div class="slider-tick-container">
-                                    <div class="slider-tick round in-selection" style="right: 0%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 25%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 50%;"></div>
-                                    <div class="slider-tick round" style="right: 75%;"></div>
-                                    <div class="slider-tick round" style="right: 100%;"></div></div>
-                                <div class="slider-handle min-slider-handle round" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" tabindex="0" style="right: 50%;"></div>
-                                <div class="slider-handle max-slider-handle round hide" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" tabindex="0" style="right: 0%;"></div></div><input id="ex1" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
-                        </div>
-                        <div class="col-sm-6 col-12 mb-3">
-                            <div class="comments-product-attributes-title">
-                                ارزش خرید به نسبت
-                                قیمت
-                            </div>
-                            <div class="slider slider-horizontal slider-rtl" id="" style="margin-bottom: 26px;">
-                                <div class="slider-track">
-                                    <div class="slider-track-low" style="right: 0px; width: 0%;"></div>
-                                    <div class="slider-selection tick-slider-selection" style="right: 0%; width: 50%;"></div>
-                                    <div class="slider-track-high" style="left: 0px; width: 50%;"></div></div>
-                                <div class="tooltip tooltip-main top hide" role="presentation" style="right: 50%;">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner">3</div></div>
-                                <div class="tooltip tooltip-min top hide" role="presentation">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="tooltip tooltip-max hide top" role="presentation" style="">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="slider-tick-label-container" style="margin-right: -27.875px;">
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">خیلی بد</div>
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">بد</div>
-                                    <div class="slider-tick-label label-in-selection label-is-selection" style="width: 55.75px;">معمولی</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">خوب</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">عالی</div></div>
-                                <div class="slider-tick-container">
-                                    <div class="slider-tick round in-selection" style="right: 0%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 25%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 50%;"></div>
-                                    <div class="slider-tick round" style="right: 75%;"></div>
-                                    <div class="slider-tick round" style="right: 100%;"></div></div>
-                                <div class="slider-handle min-slider-handle round" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" tabindex="0" style="right: 50%;"></div>
-                                <div class="slider-handle max-slider-handle round hide" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" tabindex="0" style="right: 0%;"></div></div><input id="ex2" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6 col-12 mb-3">
-                            <div class="comments-product-attributes-title">نوآوری</div>
-                            <div class="slider slider-horizontal slider-rtl" id="" style="margin-bottom: 26px;">
-                                <div class="slider-track">
-                                    <div class="slider-track-low" style="right: 0px; width: 0%;"></div>
-                                    <div class="slider-selection tick-slider-selection" style="right: 0%; width: 50%;"></div>
-                                    <div class="slider-track-high" style="left: 0px; width: 50%;"></div></div>
-                                <div class="tooltip tooltip-main top hide" role="presentation" style="right: 50%;">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner">3</div></div>
-                                <div class="tooltip tooltip-min top hide" role="presentation">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="tooltip tooltip-max hide top" role="presentation" style="">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="slider-tick-label-container" style="margin-right: -27.875px;">
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">خیلی بد</div>
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">بد</div>
-                                    <div class="slider-tick-label label-in-selection label-is-selection" style="width: 55.75px;">معمولی</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">خوب</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">عالی</div></div>
-                                <div class="slider-tick-container">
-                                    <div class="slider-tick round in-selection" style="right: 0%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 25%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 50%;"></div>
-                                    <div class="slider-tick round" style="right: 75%;"></div>
-                                    <div class="slider-tick round" style="right: 100%;"></div></div>
-                                <div class="slider-handle min-slider-handle round" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" tabindex="0" style="right: 50%;"></div>
-                                <div class="slider-handle max-slider-handle round hide" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" tabindex="0" style="right: 0%;"></div></div><input id="ex3" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
-                        </div>
-                        <div class="col-sm-6 col-12 mb-3">
-                            <div class="comments-product-attributes-title">
-                                امکانات و قابلیت ها
-                            </div>
-                            <div class="slider slider-horizontal slider-rtl" id="" style="margin-bottom: 26px;">
-                                <div class="slider-track">
-                                    <div class="slider-track-low" style="right: 0px; width: 0%;"></div>
-                                    <div class="slider-selection tick-slider-selection" style="right: 0%; width: 50%;"></div>
-                                    <div class="slider-track-high" style="left: 0px; width: 50%;"></div></div>
-                                <div class="tooltip tooltip-main top hide" role="presentation" style="right: 50%;">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner">3</div></div>
-                                <div class="tooltip tooltip-min top hide" role="presentation">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="tooltip tooltip-max hide top" role="presentation" style="">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="slider-tick-label-container" style="margin-right: -27.875px;">
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">خیلی بد</div>
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">بد</div>
-                                    <div class="slider-tick-label label-in-selection label-is-selection" style="width: 55.75px;">معمولی</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">خوب</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">عالی</div></div>
-                                <div class="slider-tick-container">
-                                    <div class="slider-tick round in-selection" style="right: 0%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 25%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 50%;"></div>
-                                    <div class="slider-tick round" style="right: 75%;"></div>
-                                    <div class="slider-tick round" style="right: 100%;"></div></div>
-                                <div class="slider-handle min-slider-handle round" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" tabindex="0" style="right: 50%;"></div>
-                                <div class="slider-handle max-slider-handle round hide" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" tabindex="0" style="right: 0%;"></div></div><input id="ex4" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6 col-12 mb-3">
-                            <div class="comments-product-attributes-title">سهولت استفاده</div>
-                            <div class="slider slider-horizontal slider-rtl" id="" style="margin-bottom: 26px;">
-                                <div class="slider-track">
-                                    <div class="slider-track-low" style="right: 0px; width: 0%;"></div>
-                                    <div class="slider-selection tick-slider-selection" style="right: 0%; width: 50%;"></div>
-                                    <div class="slider-track-high" style="left: 0px; width: 50%;"></div></div>
-                                <div class="tooltip tooltip-main top hide" role="presentation" style="right: 50%;">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner">3</div></div>
-                                <div class="tooltip tooltip-min top hide" role="presentation">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="tooltip tooltip-max hide top" role="presentation" style="">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="slider-tick-label-container" style="margin-right: -27.875px;">
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">خیلی بد</div>
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">بد</div>
-                                    <div class="slider-tick-label label-in-selection label-is-selection" style="width: 55.75px;">معمولی</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">خوب</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">عالی</div></div>
-                                <div class="slider-tick-container">
-                                    <div class="slider-tick round in-selection" style="right: 0%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 25%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 50%;"></div>
-                                    <div class="slider-tick round" style="right: 75%;"></div>
-                                    <div class="slider-tick round" style="right: 100%;"></div></div>
-                                <div class="slider-handle min-slider-handle round" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" tabindex="0" style="right: 50%;"></div>
-                                <div class="slider-handle max-slider-handle round hide" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" tabindex="0" style="right: 0%;"></div></div><input id="ex5" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
-                        </div>
-                        <div class="col-sm-6 col-12 mb-3">
-                            <div class="comments-product-attributes-title">طراحی و ظاهر</div>
-                            <div class="slider slider-horizontal slider-rtl" id="" style="margin-bottom: 26px;">
-                                <div class="slider-track">
-                                    <div class="slider-track-low" style="right: 0px; width: 0%;"></div>
-                                    <div class="slider-selection tick-slider-selection" style="right: 0%; width: 50%;"></div>
-                                    <div class="slider-track-high" style="left: 0px; width: 50%;"></div></div>
-                                <div class="tooltip tooltip-main top hide" role="presentation" style="right: 50%;">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner">3</div></div>
-                                <div class="tooltip tooltip-min top hide" role="presentation">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="tooltip tooltip-max hide top" role="presentation" style="">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner"></div></div>
-                                <div class="slider-tick-label-container" style="margin-right: -27.875px;">
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">خیلی بد</div>
-                                    <div class="slider-tick-label label-in-selection" style="width: 55.75px;">بد</div>
-                                    <div class="slider-tick-label label-in-selection label-is-selection" style="width: 55.75px;">معمولی</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">خوب</div>
-                                    <div class="slider-tick-label" style="width: 55.75px;">عالی</div></div>
-                                <div class="slider-tick-container">
-                                    <div class="slider-tick round in-selection" style="right: 0%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 25%;"></div>
-                                    <div class="slider-tick round in-selection" style="right: 50%;"></div>
-                                    <div class="slider-tick round" style="right: 75%;"></div>
-                                    <div class="slider-tick round" style="right: 100%;"></div></div>
-                                <div class="slider-handle min-slider-handle round" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" tabindex="0" style="right: 50%;"></div>
-                                <div class="slider-handle max-slider-handle round hide" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" tabindex="0" style="right: 0%;"></div></div><input id="ex6" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
-                        </div>
-                    </div>
-                </div>
-                </div>
-                </div>
-                <div class="comments-add">
-                    <div class="comments-add-row">
-                        <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
-                            <div class="comments-add-col-form">
-                                <div class="form-comment">
-                                    <div class="col-md-12 col-sm-12">
-                                        <div class="form-ui">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-row-title mb-2">
-                                                        عنوان نظر شما
-                                                        (اجباری)
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <input asp-for="Title" class="input-ui pr-2" type="text" placeholder="عنوان نظر خود را بنویسید">
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 mt-5">
-                                                    <div class="form-row-title mb-2">
-                                                        متن نظر شما
-                                                        (اجباری)
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <textarea asp-for="Comment" ckeditor="1" class="input-ui pr-2 pt-2" rows="8" placeholder="متن خود را بنویسید" style="height: 120px;"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 mt-2 mb-2 px-0">
-                                                    <div class="product-offer-question">
-                                                        <div class="product-offer-question-option">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <br>
-                                                <br>
-                                                <div class="col-12 px-0">
-                                                    <button type="submit" class="btn comment-submit-button">
-                                                        ثبت نظر
-                                                    </button>
-                                                </div>
+                                        @product.Name
+
+
+                                    </h3>
+                                </div>
+                                <div class="comments-product-attributes px-3">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-12 mb-3">
+                                            <div class="comments-product-attributes-title">کیفیت ساخت</div>
+                                          <input asp-for="ConstructionQuality" id="ex1" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
+                                        </div>
+                                        <div class="col-sm-6 col-12 mb-3">
+                                            <div class="comments-product-attributes-title">
+                                                ارزش خرید به نسبت
+                                                قیمت
                                             </div>
+                                            <input asp-for="PurchaseValueRelativeToPrice" id="ex2" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-12 mb-3">
+                                            <div class="comments-product-attributes-title">نوآوری</div>
+                                            <input asp-for="Innovation" id="ex3" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
+                                        </div>
+                                        <div class="col-sm-6 col-12 mb-3">
+                                            <div class="comments-product-attributes-title">
+                                                امکانات و قابلیت ها
+                                            </div>
+                                            <input asp-for="FeaturesAndCapabilities" id="ex4" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-12 mb-3">
+                                            <div class="comments-product-attributes-title">سهولت استفاده</div>
+                                            <input asp-for="EaseOfUse" id="ex5" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
+                                        </div>
+                                        <div class="col-sm-6 col-12 mb-3">
+                                            <div class="comments-product-attributes-title">طراحی و ظاهر</div>
+                                            <input asp-for="DesignAndAppearance" id="ex6" type="text" data-provide="slider" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-labels="[&quot;خیلی بد&quot;, &quot;بد&quot;, &quot;معمولی&quot;,&quot;خوب&quot;,&quot;عالی&quot;]" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide" data-value="3" value="3" style="display: none;">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-xs-12 pull-left">
-                            <div class="comments-add-col-content">
-                                <h3>
-                                    دیگران را با نوشتن نظرات خود، برای انتخاب این محصول راهنمایی کنید.
-                                </h3>
-                                <div>
-                                    <p>لطفا پیش از ارسال نظر، خلاصه قوانین زیر را مطالعه کنید:</p>
-                                    <p>
-                                        فارسی بنویسید و از کیبورد فارسی استفاده کنید. بهتر است از فضای
-                                        خالی (Space)
-                                        بیش‌از‌حدِ معمول، شکلک یا ایموجی استفاده نکنید و از کشیدن حروف
-                                        یا کلمات با
-                                        صفحه‌کلید بپرهیزید.
-                                    </p>
-                                    <p>
-                                        نظرات خود را براساس تجربه و استفاده‌ی عملی و با دقت به نکات فنی
-                                        ارسال کنید؛ بدون
-                                        تعصب به محصول خاص، مزایا و معایب را بازگو کنید و بهتر است از
-                                        ارسال نظرات
-                                        چندکلمه‌‌ای خودداری کنید.
-                                    </p>
-                                    <p>
-                                        بهتر است در نظرات خود از تمرکز روی عناصر متغیر مثل قیمت، پرهیز
-                                        کنید.
-                                    </p>
-                                    <p>
-                                        به کاربران و سایر اشخاص احترام بگذارید. پیام‌هایی که شامل محتوای
-                                        توهین‌آمیز و
-                                        کلمات نامناسب باشند، حذف می‌شوند.
-                                    </p>
-                                    <p>
-                                        از ارسال لینک‌های سایت‌های دیگر و ارایه‌ی اطلاعات شخصی خودتان مثل
-                                        شماره تماس،
-                                        ایمیل و آی‌دی شبکه‌های اجتماعی پرهیز کنید.
-                                    </p>
-                                    <p>
-                                        با توجه به ساختار بخش نظرات، از پرسیدن سوال یا درخواست راهنمایی
-                                        در این بخش
-                                        خودداری کرده و سوالات خود را در بخش «پرسش و پاسخ» مطرح کنید.
-                                    </p>
+                        <div class="comments-add">
+                            <div class="comments-add-row">
+                                <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
+                                    <div class="comments-add-col-form">
+                                        <div class="form-comment">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="form-ui">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="form-row-title mb-2">
+                                                                عنوان نظر شما
+                                                                (اجباری)
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <input asp-for="Title" class="input-ui pr-2" type="text" placeholder="عنوان نظر خود را بنویسید">
+                                                            </div>
+                                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                                        </div>
+
+                                                        <div class="col-12 mt-5">
+                                                            <div class="form-row-title mb-2">
+                                                                متن نظر شما
+                                                                (اجباری)
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <textarea ckeditor="1" class="input-ui pr-2 pt-2" rows="10" asp-for="Comment" placeholder="متن خود را بنویسید" style="height: 120px;"></textarea>
+                                                            </div>
+                                                            <span asp-validation-for="Comment" class="text-danger"></span>
+
+                                                        </div>
+                                                        <div class="col-12 mt-2 mb-2 px-0">
+                                                            <div class="product-offer-question">
+                                                                <div class="product-offer-question-option">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                        <br>
+                                                        <br>
+                                                        <div class="col-12 px-0">
+                                                            <button type="submit" class="btn comment-submit-button">
+                                                                ثبت نظر
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-xs-12 pull-left">
+                                    <div class="comments-add-col-content">
+                                        <h3>
+                                            دیگران را با نوشتن نظرات خود، برای انتخاب این محصول راهنمایی کنید.
+                                        </h3>
+                                        <div>
+                                            <p>لطفا پیش از ارسال نظر، خلاصه قوانین زیر را مطالعه کنید:</p>
+                                            <p>
+                                                فارسی بنویسید و از کیبورد فارسی استفاده کنید. بهتر است از فضای
+                                                خالی (Space)
+                                                بیش‌از‌حدِ معمول، شکلک یا ایموجی استفاده نکنید و از کشیدن حروف
+                                                یا کلمات با
+                                                صفحه‌کلید بپرهیزید.
+                                            </p>
+                                            <p>
+                                                نظرات خود را براساس تجربه و استفاده‌ی عملی و با دقت به نکات فنی
+                                                ارسال کنید؛ بدون
+                                                تعصب به محصول خاص، مزایا و معایب را بازگو کنید و بهتر است از
+                                                ارسال نظرات
+                                                چندکلمه‌‌ای خودداری کنید.
+                                            </p>
+                                            <p>
+                                                بهتر است در نظرات خود از تمرکز روی عناصر متغیر مثل قیمت، پرهیز
+                                                کنید.
+                                            </p>
+                                            <p>
+                                                به کاربران و سایر اشخاص احترام بگذارید. پیام‌هایی که شامل محتوای
+                                                توهین‌آمیز و
+                                                کلمات نامناسب باشند، حذف می‌شوند.
+                                            </p>
+                                            <p>
+                                                از ارسال لینک‌های سایت‌های دیگر و ارایه‌ی اطلاعات شخصی خودتان مثل
+                                                شماره تماس،
+                                                ایمیل و آی‌دی شبکه‌های اجتماعی پرهیز کنید.
+                                            </p>
+                                            <p>
+                                                با توجه به ساختار بخش نظرات، از پرسیدن سوال یا درخواست راهنمایی
+                                                در این بخش
+                                                خودداری کرده و سوالات خود را در بخش «پرسش و پاسخ» مطرح کنید.
+                                            </p>
+                                            <p>
+                                                هرگونه نقد و نظر در خصوص سایت دیجی‌کالا، خدمات و درخواست کالا را
+                                                با ایمیل
+                                                <a href="#">
+                                                    Samannarimani666@gmail.com
+                                                </a>
+                                                یا با شماره‌ی
+
+                                                <a href="#">
+                                                    09108639618
+                                                </a>
+                                                در میان بگذارید و از نوشتن آن‌ها در بخش نظرات خودداری کنید.
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-    </div>
-    </div>
-    </div>
-    </section>
-    </form>
+                </div>
+            </section>
+        </form>
     </div>
 </div>
 

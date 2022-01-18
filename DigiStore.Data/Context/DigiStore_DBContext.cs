@@ -31,6 +31,7 @@ namespace DigiStore.Data.Context
         public virtual DbSet<ProductDiscountUse> ProductDiscountUses { get; set; }
         public virtual DbSet<ProductFeature> ProductFeatures { get; set; }
         public virtual DbSet<ProductGallery> ProductGalleries { get; set; }
+        public virtual DbSet<ProductRating> ProductRatings { get; set; }
         public virtual DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public virtual DbSet<ProductVisited> ProductVisiteds { get; set; }
         public virtual DbSet<Productcomment> Productcomments { get; set; }
@@ -469,6 +470,37 @@ namespace DigiStore.Data.Context
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Production_ProductGallery_ProductId");
+            });
+
+            modelBuilder.Entity<ProductRating>(entity =>
+            {
+                entity.ToTable("ProductRating", "Production");
+
+                entity.Property(e => e.ConstructionQuality).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.DesignAndAppearance).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.EaseOfUse).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.FeaturesAndCapabilities).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Innovation).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PurchaseValueRelativeToPrice).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newsequentialid())");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductRatings)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Production_ProductRating_ProductId");
             });
 
             modelBuilder.Entity<ProductSelectedCategory>(entity =>

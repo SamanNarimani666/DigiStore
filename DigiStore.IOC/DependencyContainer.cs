@@ -18,6 +18,7 @@ using DigiStore.Data.Repositories.ProductDiscount;
 using DigiStore.Data.Repositories.ProductDiscountUse;
 using DigiStore.Data.Repositories.ProductFeature;
 using DigiStore.Data.Repositories.ProductGallery;
+using DigiStore.Data.Repositories.ProductRating;
 using DigiStore.Data.Repositories.ProductVisited;
 using DigiStore.Data.Repositories.Role;
 using DigiStore.Data.Repositories.RolePermission;
@@ -46,6 +47,7 @@ using DigiStore.Domain.IRepositories.ProductDiscount;
 using DigiStore.Domain.IRepositories.ProductDiscountUse;
 using DigiStore.Domain.IRepositories.ProductFeature;
 using DigiStore.Domain.IRepositories.ProductGallery;
+using DigiStore.Domain.IRepositories.ProductRating;
 using DigiStore.Domain.IRepositories.ProductVisited;
 using DigiStore.Domain.IRepositories.Role;
 using DigiStore.Domain.IRepositories.RolePermission;
@@ -101,7 +103,7 @@ namespace DigiStore.IOC
             services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
             services.AddScoped<IContactUsRepository, ContactUsRepository>();
             services.AddScoped<ISiteSettingRepository, SiteSettingRepository>();
-
+            services.AddScoped<IProductRatingRepository, ProductRatingRepository>();
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
             services.AddSingleton<ISender, EmailSender>();
 
