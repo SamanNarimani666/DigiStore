@@ -1,4 +1,5 @@
 ﻿ <!--   Footer---------------------------->
+@model DigiStore.Domain.Entities.SiteSetting
 <footer>
     <div class="footer-jump">
         <a href="#">
@@ -85,20 +86,11 @@
                     </form>
                 </div>
 
-                <div class="footer-social">
-                    <span class="newslitter-form-social">دیجی‌استور را در شبکه‌های اجتماعی دنبال کنید:</span>
-
-                    <div class="social-links">
-                        <a href="#"><i class="fa fa-instagram"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-linkedin-square"></i></a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-
+    @if (Model != null)
+    {
     <div class="col-12">
         <div class="footer-address">
             <div class="footer-contact">
@@ -106,11 +98,11 @@
                     <li>هفت روز هفته ، ۲۴ ساعت شبانه‌روز پاسخگوی شما هستیم</li>
                     <li style="float:right">
                         شماره تماس : <a href="#" class="phone-contact">
-                            ۶۱۹۳۰۰۰۰ - ۰۲۱ ، ۹۵۱۱۹۰۹۵
-                            - ۰۲۱
+                           @Model.Phone
                         </a>
                     </li>
-                    <li class="email-title">آدرس ایمیل : <a href="#">info@digistore.com</a></li>
+                    <li class="email-title">آدرس ایمیل : <a href="#">@Model.Email</a></li>
+                    <li class="email-title">آدرس: @Model.Address</li>
                 </ul>
             </div>
 
@@ -122,53 +114,50 @@
             </div>
         </div>
     </div>
+  
+        <div class="more-info">
+            <div class="col-12">
+                <div class="about-site">
+                    <h1>فروشگاه اینترنتی دیجی‌استور بررسی، انتخاب و خرید آنلاین</h1>
+                    <p>
+                      @Model.FooterText
+                    </p>
 
-    <div class="more-info">
-        <div class="col-12">
-            <div class="about-site">
-                <h1>فروشگاه اینترنتی دیجی‌استور بررسی، انتخاب و خرید آنلاین</h1>
-                <p>
-                    دیجی‌استور به عنوان یکی از قدیمی‌ترین فروشگاه های اینترنتی با بیش از یک دهه تجربه، با پایبندی به
-                    سه اصل، پرداخت در محل، 7 روز ضمانت بازگشت کالا و تضمین اصل‌بودن کالا موفق شده تا همگام با
-                    فروشگاه‌های معتبر جهان، به بزرگ‌ترین فروشگاه
-                    اینترنتی ایران تبدیل شود. به محض ورود به سایت دیجی‌استور با دنیایی از کالا رو به رو می‌شوید! هر
-                    آنچه که نیاز دارید و به ذهن شما خطور می‌کند در اینجا پیدا خواهید کرد.
-                </p>
+                    <div class="footer-inner-box">
+                        <a href="#" class="footer-badge">
+                            <img src="/assets/images/footer-svg/footer-1.svg" style="width: 130px !important;"
+                                 alt="badge">
+                        </a>
 
-                <div class="footer-inner-box">
-                    <a href="#" class="footer-badge">
-                        <img src="/assets/images/footer-svg/footer-1.svg" style="width: 130px !important;"
-                             alt="badge">
-                    </a>
+                        <a href="#" class="footer-badge">
+                            <img src="/assets/images/footer-svg/footer-2.svg" style="width: 130px !important;"
+                                 alt="badge">
+                        </a>
 
-                    <a href="#" class="footer-badge">
-                        <img src="/assets/images/footer-svg/footer-2.svg" style="width: 130px !important;"
-                             alt="badge">
-                    </a>
+                        <a href="#" class="footer-badge">
+                            <img src="/assets/images/footer-svg/footer-3.svg" style="width: 130px !important;"
+                                 alt="badge">
+                        </a>
 
-                    <a href="#" class="footer-badge">
-                        <img src="/assets/images/footer-svg/footer-3.svg" style="width: 130px !important;"
-                             alt="badge">
-                    </a>
+                        <a href="#" class="footer-badge">
+                            <img src="/assets/images/footer-svg/footer-4.svg" style="width: 130px !important;"
+                                 alt="badge">
+                        </a>
+                        <a href="#" class="footer-badge">
+                            <img src="/assets/images/footer-svg/footer-5.svg" style="width: 130px !important;"
+                                 alt="badge">
+                        </a>
+                    </div>
+                </div>
 
-                    <a href="#" class="footer-badge">
-                        <img src="/assets/images/footer-svg/footer-4.svg" style="width: 130px !important;"
-                             alt="badge">
-                    </a>
-                    <a href="#" class="footer-badge">
-                        <img src="/assets/images/footer-svg/footer-5.svg" style="width: 130px !important;"
-                             alt="badge">
-                    </a>
+                <div class="copy-right-footer">
+                    <p>
+                        @Model.CopyRight
+                    </p>
                 </div>
             </div>
-
-            <div class="copy-right-footer">
-                <p>
-                    استفاده از مطالب فروشگاه اینترنتی دیجی‌استور فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است.
-                    کلیه حقوق این سایت متعلق به شرکت نوآوران فن آوازه (فروشگاه آنلاین دیجی‌استور) می‌باشد.
-                </p>
-            </div>
         </div>
-    </div>
+    }
+
 </footer>
 <!--   Footer---------------------------->

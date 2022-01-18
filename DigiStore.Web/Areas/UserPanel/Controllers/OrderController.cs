@@ -7,8 +7,6 @@ using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-
 namespace DigiStore.Web.Areas.UserPanel.Controllers
 {
     public class OrderController : UserBaseController
@@ -175,7 +173,18 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
             var openOrder = await _orderService.GetUserOpenOrderDetials(User.GetUserId());
             return View(openOrder);
         }
-        
+
+        #endregion
+
+        #region FilterOrder
+
+        [HttpGet("order-list")]
+        public async Task<IActionResult> FilterOrder(FilterOrderViewModel filterOrder)
+        {
+            filterOrder.UserId = User.GetUserId();
+            return View(await _orderService.FilterOrder(filterOrder));
+        }
+
         #endregion
     }
 }

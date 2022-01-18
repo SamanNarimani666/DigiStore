@@ -128,7 +128,7 @@
                                 @foreach (var item in Model.Users)
                                 {
                                     <tr>
-                                        <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar) ? PathExtension.UserAvatarThumb + item.UserAvatar : PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری"/></td>
+                                        <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar) ? PathExtension.UserAvatarThumb + item.UserAvatar : PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
                                         <td>@item.UserName</td>
                                         <td>@item.Email</td>
                                         <td>@item.Mobile</td>
@@ -147,15 +147,19 @@
                                         {
 
 
-                                            <td ><a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="RestoreteUser" asp-area="Admin" asp-route-userId="@item.UserId">بازگرداندن کاربر</a></td>
+                                            <td>
+                                                <partial name="_RestoreUserViewModel" model="@(new DeleteAndRestoreUserViewModel(){UserId = item.UserId})" />
+                                            </td>
                                         }
                                         else
                                         {
-                                            <td><a class="btn btn-danger btn-sm" asp-controller="UserManagement" asp-action="DeleteUser" asp-area="Admin" asp-route-userId="@item.UserId">حذف کاربر</a></td>
+                                            <td>
+                                                <partial name="_DeleteUserPartial" model="@(new DeleteAndRestoreUserViewModel(){UserId = item.UserId})" />
+                                            </td>
 
                                         }
                                         <td>
-                                            <a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="EditUser" asp-area="Admin" asp-route-userId="@item.UserId" >ویرایش کاربر</a>
+                                            <a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="EditUser" asp-area="Admin" asp-route-userId="@item.UserId">ویرایش کاربر</a>
                                         </td>
                                     </tr>
 

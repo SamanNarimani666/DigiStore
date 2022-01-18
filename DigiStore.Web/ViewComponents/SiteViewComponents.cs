@@ -21,9 +21,15 @@ namespace DigiStore.Web.ViewComponents
 
     public class SiteFooterViewComponent : ViewComponent
     {
+        private readonly ISiteService _siteService;
+
+        public SiteFooterViewComponent(ISiteService siteService)
+        {
+            _siteService = siteService;
+        }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View("SiteFooter");
+            return View("SiteFooter",await _siteService.GetDefaultSiteSetting());
         }
     }
 
@@ -77,5 +83,18 @@ namespace DigiStore.Web.ViewComponents
         }
     }
 
+    public class BrandViewComponent : ViewComponent
+    {
+        private readonly IBranadService _branadService;
+
+        public BrandViewComponent(IBranadService branadService)
+        {
+            _branadService = branadService;
+        }
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            return View("Brand",await _branadService.GetAllBrands());
+        }
+    }
  
 }

@@ -28,6 +28,11 @@ namespace DigiStore.Domain.ViewModels.User
         [Compare("PassWord", ErrorMessage = "کلمه های عبور مغایرت دارند")]
         public string ConferimPassWord { get; set; }
 
+        [Display(Name = "فعال/غیر فعال ")]
+        public bool IsActive { get; set; }
+
+        [Display(Name = "بلاک ")]
+        public bool IsBlock { get; set; }
     }
     public enum EditUserResult
     {

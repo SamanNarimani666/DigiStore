@@ -33,6 +33,8 @@
     <Folder Include="Views\Shared\Components\ProductComment\" />
     <Folder Include="wwwroot\Admin\assets\plugins\jstree\themes\default\" />
     <Folder Include="wwwroot\Files\Store\SellerDocument\" />
+    <Folder Include="wwwroot\Images\Brand\Thumb\" />
+    <Folder Include="wwwroot\Images\Brand\origin\" />
     <Folder Include="wwwroot\Images\ProductGallery\Thumb\" />
     <Folder Include="wwwroot\Images\ProductGallery\origin\" />
     <Folder Include="wwwroot\Images\Product\Thumb\" />

@@ -20,16 +20,33 @@
                     @foreach (var favoritProduct in Model.FavoriteProductUsers)
                      {
                          <div class="profile-recent-fav profile-favorites-fav">
-                             <a href="#" class="img-profile-favorites"><img src="@(PathExtension.ProductImageThumb + favoritProduct.Product.ImageName)" alt="profile"></a>
+                             <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@favoritProduct.Product.ProductId" asp-route-title="@favoritProduct.Product.Name.FixTextForUrl()" class="img-profile-favorites"><img src="@(PathExtension.ProductImageThumb + favoritProduct.Product.ImageName)" alt="profile"></a>
                              <div class="profile-recent-fav-col">
-                                 <a href="#" style="font-size: 16px;">@favoritProduct.Product.Name</a>
+                                 <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@favoritProduct.Product.ProductId" asp-route-title="@favoritProduct.Product.Name.FixTextForUrl()" style="font-size: 16px;">@favoritProduct.Product.Name</a>
                                  <div class="profile-recent-fav-price">@favoritProduct.Product.Price.ToString("#,0")تومان</div>
                                  <div class="profile-recent-fav-remove"><a onclick="RemoveProductFromFavoritList(@favoritProduct.FavoriteProductUserId,@favoritProduct.Product.ProductId)"><i class="fa fa-trash"></i></a></div>
                                  <a href="#" class="profile-wishlist">مشاهده محصول<i class="fa fa-angle-left"></i></a>
                              </div>
                          </div>
                      }
-                    <partial name="_PagingPartial" model="@Model.GetCurrentPaging()"/>
+                    <div class="pager">
+                        <ul class="page-item">
+                            @if (Model.StartPage < Model.PageId)
+                            {
+                                <li class="btn"><a href="/UserPanel/favorit-product-user?pageid=@(Model.PageId - 1)">«</a></li>
+                            }
+
+                            @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                            {
+                                <li class="pagination-item"  onclick="FillPageId(@i)"><a href="/UserPanel/favorit-product-user?pageid=@i" onclick="FillPageId(@i)" style="cursor: pointer" class="@(Model.PageId == i ? "pager-item-active" : " ")" >@i</a></li>
+                            }
+                            @if (Model.EndPage > Model.PageId)
+                            {
+                                <li class="btn" ><a class="btn"  href="/UserPanel/favorit-product-user?pageid=@(Model.PageId + 1)">»</a></li>
+                            }
+                        </ul>
+                    </div>
+
 
                 }
                 else

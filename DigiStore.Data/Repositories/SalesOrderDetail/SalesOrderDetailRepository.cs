@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.IRepositories.SalesOrderDetail;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigiStore.Data.Repositories.SalesOrderDetail
 {
@@ -32,6 +34,16 @@ namespace DigiStore.Data.Repositories.SalesOrderDetail
         public void DeleteSalesOrderDetail(Domain.Entities.SalesOrderDetail orderDetail)
         {
             _context.SalesOrderDetails.Remove(orderDetail);
+        }
+        #endregion
+
+        #region GetSalesOrderDetialByOrderId
+        public async Task<Domain.Entities.SalesOrderDetail> GetSalesOrderDetialByOrderId(int orderId, int userId)
+        {
+            var order= await _context.SalesOrderDetails.Include(p=>p.Product).Include(p => p.SalesOrder).ThenInclude(p=>p.SalesInforamtions).ThenInclude(p=>p.Address).SingleOrDefaultAsync(p =>
+                p.SalesOrder.SalesOrderId == orderId && p.SalesOrder.UserId == userId);
+            if (order == null) return null;
+            return order;
         }
         #endregion
 

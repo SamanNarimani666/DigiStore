@@ -42,10 +42,11 @@
                                     @await Component.InvokeAsync("LoginInformationUser")
                                     <div class="header-profile-dropdown-actions">
                                         <div class="header-profile-dropdown-action-container">
-                                            <span class="header-profile-dropdown-action-link">سفارش‌های من</span>
-                                        </div>
-                                        <div class="header-profile-dropdown-action-container">
-                                            <span class="header-profile-dropdown-action-link">جوایز دیجی‌کلاب</span>
+                                            <a asp-controller="Order" asp-area="UserPanel" asp-action="FilterOrder">
+                                                <span class="header-profile-dropdown-action-link">
+                                                    سفارشات من
+                                                </span>
+                                            </a>
                                         </div>
                                         <div class="header-profile-dropdown-action-container">
                                             <a asp-action="Logout" asp-controller="Account">
@@ -85,10 +86,11 @@
                                     @await Component.InvokeAsync("LoginInformationUser")
                                     <div class="header-profile-dropdown-actions">
                                         <div class="header-profile-dropdown-action-container">
-                                            <span class="header-profile-dropdown-action-link">سفارش‌های من</span>
-                                        </div>
-                                        <div class="header-profile-dropdown-action-container">
-                                            <span class="header-profile-dropdown-action-link">جوایز دیجی‌کلاب</span>
+                                            <a asp-controller="Order" asp-area="UserPanel" asp-action="FilterOrder">
+                                                <span class="header-profile-dropdown-action-link">
+                                                    سفارشات من
+                                                </span>
+                                            </a>
                                         </div>
                                         <div class="header-profile-dropdown-action-container">
                                             <a asp-action="Logout" asp-controller="Account">
@@ -134,129 +136,145 @@
             </div>
         </div>
 
-        <!-- Start megamenu-->
-        <nav class="main-menu">
-            <ul class="new-list-menu">
-                <li class="item-list-menu megamenu-1 category nav-overlay">
-                    <a href="#"
-                       class="list-category first after" style="font-weight: bold;">
-                        <i class="mdi mdi-menu"></i>
-                        دسته بندی کالاها
-                    </a>
-                    @if (categories != null && categories.Any())
-                    {
-                        <ul class="list-menu-level-2">
-                            @foreach (var category in categories.Where(p => p.ParentId == null))
-                            {
+    <!-- Start megamenu-->
+     
+            <nav class="main-menu">
+                <ul class="new-list-menu">
+                    <li class="item-list-menu megamenu-1 category nav-overlay">
+                        <a href="#"
+                           class="list-category first after" style="font-weight: bold;">
+                            <i class="mdi mdi-menu"></i>
+                            دسته بندی کالاها
+                        </a>
 
-                                <li class="item-menu-2">
-                                    <a href="#" class="list-category-menu-2">
-                                        <i class="mdi mdi-monitor"></i>@category.Title
-                                    </a>
-                                    @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
-                                    {
-                                        <ul class="megamenu-level-3 row">
-                                            <li class="list-category">
-                                                <a href="#" class="list-category-megamenu">همه دسته بندی های کالای @category.Title</a>
-                                            </li>
-                                            @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
-                                            {
-
-
-                                                <li class="item-megamenu-title">
-                                                    <a href="#"
-                                                       class="list-category-megamenu-3">
-                                                        <span>
-                                                            @subCategory.Title<i class="fa fa-angle-left"></i>
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                                @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
-                                                {
-                                                    @foreach (var subSubCategory in categories.Where(p => p.ParentId == subCategory.ProductCategoryId))
-                                                    {
-
-                                                        <li class="item-megamenu-item">
-                                                            <a href="#" class="list-category-megamenu-3">
-                                                                @subSubCategory.Title
-                                                            </a>
-                                                        </li>
-                                                    }
-                                                }
-
-
-                                            }
-                                        </ul>
-                                    }
-                                </li>
-
-                            }
-                        </ul>
-                    }
-
-                </li>
-
-                <li class="item-list-menu megamenu-1">
-                    <a asp-controller="Product" asp-action="ProductSearch" asp-area="" class="list-category first after">
-                        <i class="mdi mdi-basket text-success"></i>
-                        محصولات
-                    </a>
-                </li>
-
-
-            </ul>
-        </nav>
-    </div>
-    <!--        End megamenu------------------->
-    <!--    responsive-megamenu-mobile----------------->
-    <nav class="sidebar">
-        <div class="nav-header">
-            <div class="header-cover"></div>
-            <div class="logo-wrap">
-                <a class="logo-icon" href="#"><img alt="logo-icon" src="/assets/images/logo.png" width="40"></a>
-            </div>
-        </div>
-        @if (categories != null && categories.Any())
-        {
-            <ul class="nav-categories ul-base">
-                @foreach (var category in categories.Where(p => p.ParentId == null))
-                {
-
-                    <li class="has-sub">
-                        <a href="#">@category.Title</a>
-                        @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
+                        @if (categories != null && categories.Any())
                         {
-                            @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
-                            {
-                                <ul>
-                                    <li class="has-sub">
-                                        <a href="#" class="category-level-2">@subCategory.Title</a>
+
+                            <ul class="list-menu-level-2">
+                                @foreach (var category in categories.Where(p => p.ParentId == null))
+                                {
+
+                                    <li class="item-menu-2">
+                                        <a href="#" class="list-category-menu-2">
+                                            <i class="mdi mdi-monitor"></i>@category.Title
+                                        </a>
                                         @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
                                         {
-                                            <ul>
-                                                @foreach (var subSubCategory in categories.Where(p => p.ParentId == subCategory.ProductCategoryId))
+                                            <ul class="megamenu-level-3 row">
+                                                <li class="list-category">
+                                                    <a href="#" class="list-category-megamenu">همه دسته بندی های کالای @category.Title</a>
+                                                </li>
+                                                @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
                                                 {
-                                                    <li><a href="#" class="category-level-3">@subSubCategory.Title</a></li>
+
+
+                                                    <li class="item-megamenu-title">
+                                                        <a href="#"
+                                                           class="list-category-megamenu-3">
+                                                            <span>
+                                                                @subCategory.Title<i class="fa fa-angle-left"></i>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
+                                                    {
+                                                        @foreach (var subSubCategory in categories.Where(p => p.ParentId == subCategory.ProductCategoryId))
+                                                        {
+
+                                                            <li class="item-megamenu-item">
+                                                                <a href="/ProductSearch?CategoryId=@subSubCategory.ProductCategoryId" class="list-category-megamenu-3">
+                                                                    @subSubCategory.Title
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+
 
                                                 }
                                             </ul>
                                         }
-
                                     </li>
-                                </ul>
-                            }
-                        }
-                    </li>
-                }
-            </ul>
-        }
 
-    </nav>
-    <div class="nav-btn">
-        <span class="linee1"></span>
-        <span class="linee2"></span>
-        <span class="linee3"></span>
+                                }
+                            </ul>
+
+
+                        }
+
+                    </li>
+
+                    <li class="item-list-menu megamenu-1">
+                        <a asp-controller="Product" asp-action="ProductSearch" asp-area="" class="list-category first after">
+                            <i class="mdi mdi-basket text-success"></i>
+                            محصولات
+                        </a>
+                    </li>
+
+                    <li class="item-list-menu megamenu-1">
+                        <a asp-controller="Home" asp-action="ContactUs" asp-area="" class="list-category first after">
+                            <i class="mdi mdi-contacts"></i>
+                            تماس با ما
+                        </a>
+                    </li>
+                    <li class="item-list-menu megamenu-1">
+                        <a asp-controller="Home" asp-action="AboutUs" asp-area="" class="list-category first after">
+                            درباره ما
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+    
     </div>
-    <div class="overlay"></div>
-    <!--    responsive-megamenu-mobile----------------->
-</header>
+        <!--        End megamenu------------------->
+        <!--    responsive-megamenu-mobile----------------->
+        <nav class="sidebar">
+            <div class="nav-header">
+                <div class="header-cover"></div>
+                <div class="logo-wrap">
+                    <a class="logo-icon" href="#"><img alt="logo-icon" src="/assets/images/logo.png" width="40"></a>
+                </div>
+            </div>
+            @if (categories != null && categories.Any())
+            {
+                <ul class="nav-categories ul-base">
+                    @foreach (var category in categories.Where(p => p.ParentId == null))
+                    {
+
+                        <li class="has-sub">
+                            <a href="#">@category.Title</a>
+                            @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
+                            {
+                                @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
+                                {
+                                    <ul>
+                                        <li class="has-sub">
+                                            <a href="#" class="category-level-2">@subCategory.Title</a>
+                                            @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
+                                            {
+                                                <ul>
+                                                    @foreach (var subSubCategory in categories.Where(p => p.ParentId == subCategory.ProductCategoryId))
+                                                    {
+                                                        <li><a href="/ProductSearch?CategoryId=@subSubCategory.ProductCategoryId" class="category-level-3">@subSubCategory.Title</a></li>
+
+                                                    }
+                                                </ul>
+                                            }
+
+                                        </li>
+                                    </ul>
+                                }
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+
+        </nav>
+        <div class="nav-btn">
+            <span class="linee1"></span>
+            <span class="linee2"></span>
+            <span class="linee3"></span>
+        </div>
+        <div class="overlay"></div>
+        <!--    responsive-megamenu-mobile----------------->
+    </header>

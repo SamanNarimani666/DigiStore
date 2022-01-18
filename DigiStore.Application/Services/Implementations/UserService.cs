@@ -339,6 +339,8 @@ namespace DigiStore.Application.Services.Implementations
                 LastName = user.LastName,
                 UserName = user.UserName,
                 UserImage=user.UserAvatar,
+                IsActive = user.IsActive,
+                IsBlock = user.IsBlock
             };
         }
         #endregion
@@ -350,6 +352,9 @@ namespace DigiStore.Application.Services.Implementations
             if (user == null) return EditUserResult.NotFound;
             user.FirstName = editUser.FirstName.SanitizeText();
             user.LastName = editUser.LastName.SanitizeText();
+            user.IsActive = editUser.IsActive;
+            user.IsBlock = editUser.IsBlock;
+
             if (!string.IsNullOrEmpty(editUser.PassWord))
             {
                 user.PassWord = _passwordHelper.EncodePasswordMd5(editUser.PassWord.SanitizeText());

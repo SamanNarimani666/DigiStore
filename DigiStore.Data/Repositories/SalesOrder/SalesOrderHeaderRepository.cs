@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.SalesOrder;
+using DigiStore.Domain.ViewModels.Order;
+using DigiStore.Domain.ViewModels.Paging;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigiStore.Data.Repositories.SalesOrder
@@ -51,6 +54,29 @@ namespace DigiStore.Data.Repositories.SalesOrder
         }
         #endregion
 
+        #region FilterOrder
+        public async Task<FilterOrderViewModel> FilterOrder(FilterOrderViewModel filterOrder)
+        {
+            var query = _context.SalesOrderHeaders
+                .Where(p=>p.IsPaiy)
+                .OrderByDescending(p => p.ModifiedDate).AsQueryable();
+
+            #region Filter
+            if (filterOrder.UserId != null && filterOrder.UserId != 0)
+            {
+                query = query.Where(p => p.UserId == filterOrder.UserId);
+            }
+            #endregion
+
+            #region paging
+            var pager = Pager.Build(filterOrder.PageId, await query.CountAsync(), filterOrder.TakeEntity,
+                filterOrder.HowManyShowPageAfterAndBefore);
+            var allProduct = query.Paging(pager).ToList();
+            return filterOrder.SetPaging(pager).SetOrder(allProduct);
+            #endregion
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {
@@ -67,7 +93,5 @@ namespace DigiStore.Data.Repositories.SalesOrder
             }
         }
         #endregion
-
-        
     }
 }

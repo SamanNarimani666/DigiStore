@@ -32,10 +32,10 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region DeleteUser
-        [HttpGet]
-        public async Task<IActionResult> DeleteUser(int userId)
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(DeleteAndRestoreUserViewModel deleteAndRestoreUser)
         {
-            var res = await _userService.DeleteUser(userId);
+            var res = await _userService.DeleteUser(deleteAndRestoreUser.UserId);
             if (res)
             {
                 TempData[SuccessMessage] = "کاربر مورد تظر با موفقیت حذف شد";
@@ -50,10 +50,10 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region RestoreteUser
-        [HttpGet]
-        public async Task<IActionResult> RestoreteUser(int userId)
+        [HttpPost]
+        public async Task<IActionResult> RestoreteUser(DeleteAndRestoreUserViewModel deleteAndRestoreUser)
         {
-            var res = await _userService.RestoreUser(userId);
+            var res = await _userService.RestoreUser(deleteAndRestoreUser.UserId);
             if (res)
             {
                 TempData[SuccessMessage] = "کاربر مورد تظر با موفقیت بازگردانده شد";
@@ -109,14 +109,14 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region EditUser
-        [HttpGet("edit-user/{userId}"),ValidateAntiForgeryToken]
+        [HttpGet("edit-user/{userId}")]
         public async Task<IActionResult> EditUser(int userId)
         {
             ViewBag.Role = await _permissionService.GetAllRole();
             ViewBag.UserRoles = _permissionService.UserRolesId(userId);
             return View(await _userService.UserInfoForEdit(userId));
         }
-        [HttpPost("edit-user/{userId}")]
+        [HttpPost("edit-user/{userId}"),ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(int userId, EditUserForAdminViewModel editUserInfo,List<int> selectedRoles,IFormFile userAvatar)
         {
             if (ModelState.IsValid)

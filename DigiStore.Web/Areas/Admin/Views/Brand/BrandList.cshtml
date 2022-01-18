@@ -1,0 +1,94 @@
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Brand.FilterBrandViewModel
+@{
+    ViewData["Title"] = "لیست برند ها";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+
+<div class="row">
+
+    <div class="col-sm-3">
+        <div class="panel panel-color panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">فیلتر</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-controller="Brand" asp-action="BrandList" asp-area="Admin" method="get" id="filter-form" class="form-horizontal" role="form">
+                    <input type="hidden" asp-for="PageId" />
+                    <label class="control-label">نام برند</label>
+                    <div class="form-group">
+                        <input type="text" asp-for="BrandTitle" class="form-control" placeholder="بر اساس نام">
+                    </div>
+                    <label class="control-label">تعداد نمایش</label>
+                    <div class="form-group">
+                        <select asp-for="TakeEntity" class="form-control">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <button type="submit" class="btn btn-block btn-xs btn-purple waves-effect waves-light">فیلتر</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="card-box table-responsive">
+            <h4 class="header-title m-t-0 m-b-30">لیست برند ها</h4>
+            <a asp-controller="Brand" asp-area="Admin" asp-action="CreateBrand" class="btn btn-success">ایجاد برند جدید</a>
+            <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (Model.Brands != null && Model.Brands.Any())
+                        {
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                        <th>لوگو برند  </th>
+                                        <th>نام برند</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Brands)
+                                    {
+                                        <tr>
+                                            <td><img src="@(!string.IsNullOrEmpty(item.Logo)?PathExtension.BrandThumb+item.Logo:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                            <td>@item.BrandName</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-warning" asp-controller="Brand" asp-area="Admin" asp-action="EditBrand" asp-route-brandId="@item.BrandId">وبرایش برند</a>
+                                            </td>
+                                        </tr>
+
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <partial name="_NotFoundItem" />
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-6">
+                            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end col -->
+
+
+    </div>
+</div>

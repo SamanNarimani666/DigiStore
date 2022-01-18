@@ -30,13 +30,13 @@
                             <div class="profile-comment">
                                 <div class="profile-comment-thumb">
                                     <div class="profile-comment-img">
-                                        <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@item.Product.ProductId"><img src="@(PathExtension.ProductImageOrigin + item.Product.ImageName)" alt="profile"></a>
+                                        <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@item.Product.ProductId" asp-route-title="@item.Product.Name.FixTextForUrl()"><img src="@(PathExtension.ProductImageOrigin + item.Product.ImageName)" alt="profile"></a>
                                     </div>
                                 </div>
                                 <div class="profile-comment-content">
                                     <h4>
                                         @Html.Raw(item.Product.Name)
-                                        <span class="profile-comment-status-review">@(item.CreateDate.ToShamsiDateTime())</span>
+                                        <span class="profile-comment-status-review">@(item.CreateDate.ToStringShamsiDate())</span>
                                         <p>
                                             @Html.Raw(item.Comment)
                                         </p>

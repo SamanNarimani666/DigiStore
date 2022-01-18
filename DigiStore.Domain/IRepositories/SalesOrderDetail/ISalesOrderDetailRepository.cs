@@ -8,6 +8,7 @@ namespace DigiStore.Domain.IRepositories.SalesOrderDetail
         Task AddOrderDetail(Entities.SalesOrderDetail orderDetail);
         void UpdateSalesOrderDetail(Entities.SalesOrderDetail orderDetail);
         void DeleteSalesOrderDetail(Entities.SalesOrderDetail orderDetail);
+        Task<Entities.SalesOrderDetail> GetSalesOrderDetialByOrderId(int orderId, int userId);
         Task Save();
     }
 }

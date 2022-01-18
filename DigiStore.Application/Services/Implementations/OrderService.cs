@@ -256,6 +256,19 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region FilterOrder
+        public async Task<FilterOrderViewModel> FilterOrder(FilterOrderViewModel filterOrder)
+        {
+            return await _orderHeaderRepository.FilterOrder(filterOrder);
+        }
+        #endregion
+
+        #region GetSalesOrderDetialByOrderId
+        public async Task<SalesOrderDetail> GetSalesOrderDetialByOrderId(int orderId, int userId)
+        {
+            return await _orderDetailRepository.GetSalesOrderDetialByOrderId(orderId, userId);
+        }
+        #endregion
         #endregion
 
         #region GetOpenOrderUserForAddInformation
@@ -272,6 +285,7 @@ namespace DigiStore.Application.Services.Implementations
             };
         }
         #endregion
+
         #region CreateOrderInforamtion
         public async Task<CreateOrderInforamtionResult> CreateOrderInforamtion(CreateOrderInforamtionViewModel createOrderInforamtion, int userId)
         {

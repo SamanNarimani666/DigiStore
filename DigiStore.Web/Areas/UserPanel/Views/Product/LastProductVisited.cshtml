@@ -49,7 +49,26 @@
 
                     </ul>
                 </div>
-                <partial name="_PagingPartial" model="@Model.GetCurrentPaging()" />
+                <div class="pager">
+                    <ul class="page-item">
+        
+                        @if (Model.StartPage < Model.PageId)
+                        {
+                            <li class="btn"><a href="/UserPanel/user-history?pageid=@(Model.PageId - 1)">«</a></li>
+                        }
+                        @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                        {
+                            <li class="pagination-item"><a class="@(Model.PageId == i ? "pager-item-active" : "")" onclick="FillPageId(@i)" href="/UserPanel/user-history?pageid=@i">@i</a></li>
+                        }
+
+                        @if (Model.EndPage > Model.PageId)
+                        {
+                            <li class="btn"><a class="btn" href="/UserPanel/user-history?pageid=@(Model.PageId + 1)">»</a></li>
+                        }
+
+                    </ul>
+                </div>
+
             </form>
         }
         else

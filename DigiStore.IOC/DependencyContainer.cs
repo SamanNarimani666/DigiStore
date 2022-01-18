@@ -8,6 +8,7 @@ using DigiStore.Data.Repositories.AddressCity;
 using DigiStore.Data.Repositories.AddressState;
 using DigiStore.Data.Repositories.Brand;
 using DigiStore.Data.Repositories.Category;
+using DigiStore.Data.Repositories.ContactUs;
 using DigiStore.Data.Repositories.FavoriteProductUser;
 using DigiStore.Data.Repositories.Permission;
 using DigiStore.Data.Repositories.Product;
@@ -26,6 +27,7 @@ using DigiStore.Data.Repositories.SalesOrderDetail;
 using DigiStore.Data.Repositories.SelectedProductCategory;
 using DigiStore.Data.Repositories.Seller;
 using DigiStore.Data.Repositories.SellerWallet;
+using DigiStore.Data.Repositories.SiteSetting;
 using DigiStore.Data.Repositories.Ticket;
 using DigiStore.Data.Repositories.User;
 using DigiStore.Data.Repositories.UserRole;
@@ -34,6 +36,7 @@ using DigiStore.Domain.IRepositories.AddressCity;
 using DigiStore.Domain.IRepositories.AddressState;
 using DigiStore.Domain.IRepositories.Brand;
 using DigiStore.Domain.IRepositories.Category;
+using DigiStore.Domain.IRepositories.ContactUs;
 using DigiStore.Domain.IRepositories.FavoriteProductUser;
 using DigiStore.Domain.IRepositories.Permission;
 using DigiStore.Domain.IRepositories.Product;
@@ -52,6 +55,7 @@ using DigiStore.Domain.IRepositories.SalesOrderDetail;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
 using DigiStore.Domain.IRepositories.Seller;
 using DigiStore.Domain.IRepositories.SellerWallet;
+using DigiStore.Domain.IRepositories.SiteSetting;
 using DigiStore.Domain.IRepositories.Ticket;
 using DigiStore.Domain.IRepositories.User;
 using DigiStore.Domain.IRepositories.UserRole;
@@ -66,7 +70,7 @@ namespace DigiStore.IOC
         {
             //DB Context Options
             services.AddDbContext<DigiStore_DBContext>(option => { option.UseSqlServer(connectionString); });
-
+            
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<ITicketMessageRepository, TicketMessageRepository>();
@@ -95,6 +99,8 @@ namespace DigiStore.IOC
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+            services.AddScoped<IContactUsRepository, ContactUsRepository>();
+            services.AddScoped<ISiteSettingRepository, SiteSettingRepository>();
 
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
             services.AddSingleton<ISender, EmailSender>();
@@ -109,7 +115,7 @@ namespace DigiStore.IOC
             services.AddScoped<ISellerWalletService, SellerWalletService>();
             services.AddScoped<IProductDiscountService, ProductDiscountService>();
             services.AddScoped<IPermissionService, PermissionService>();
-
+            services.AddScoped<ISiteService, SiteService>();
         }
     }
 }

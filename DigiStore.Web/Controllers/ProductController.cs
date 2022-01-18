@@ -26,7 +26,6 @@ namespace DigiStore.Web.Controllers
 
         #region ProductSearch
         [HttpGet("ProductSearch")]
-        [HttpGet("ProductSearch/{Category}")]
         public async Task<IActionResult> ProductSearch(FilterProductViewModel filterProduct)
         {
 
@@ -56,7 +55,7 @@ namespace DigiStore.Web.Controllers
         [HttpGet("visited/{produtId}")]
         public async Task Visited(int produtId)
         {
-            if (produtId != null && produtId != 0)
+            if (produtId != 0)
             {
                 await _productService.AddProductVisited(produtId, HttpExtensions.GetUserIp(HttpContext),
                     IdentityExtensions.GetUserId(User));

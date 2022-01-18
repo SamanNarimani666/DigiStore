@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DigiStore.Domain.Entities;
+using DigiStore.Domain.ViewModels.Order;
 
 namespace DigiStore.Domain.IRepositories.SalesOrder
 {
@@ -10,6 +11,7 @@ namespace DigiStore.Domain.IRepositories.SalesOrder
         Task<SalesOrderHeader> GetSalesOrderHeaderByUserId(int userId);
         Task<bool> IsOpenSalesOrderHeaderByUser(int userId);
         void UpdateSalesOrderHeader(SalesOrderHeader orderHeader);
+        Task<FilterOrderViewModel> FilterOrder(FilterOrderViewModel filterOrder);
         Task Save();
     }
 }

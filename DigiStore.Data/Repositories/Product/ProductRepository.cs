@@ -59,10 +59,10 @@ namespace DigiStore.Data.Repositories.Product
                 product = product.Where(p => EF.Functions.Like(p.Name, ($"%{filterProduct.Name}%")));
             if (filterProduct.SellerId != null && filterProduct.SellerId != 0)
                 product = product.Where(p => p.SellerId == filterProduct.SellerId.Value);
-            if (!string.IsNullOrEmpty(filterProduct.Category))
+            if (filterProduct.CategoryId!=0)
                 product = product.Where(s =>
-                    s.ProductSelectedCategories.Any(f => f.ProductCategory.UrlName == filterProduct.Category));
-            if (filterProduct.Selectedbrands != 0 && filterProduct.Selectedbrands != null)
+                    s.ProductSelectedCategories.Any(f => f.ProductCategory.ProductCategoryId == filterProduct.CategoryId));
+            if (filterProduct.Selectedbrands != 0)
                 product = product.Where(p => p.BrandId == filterProduct.Selectedbrands);
             #endregion
 

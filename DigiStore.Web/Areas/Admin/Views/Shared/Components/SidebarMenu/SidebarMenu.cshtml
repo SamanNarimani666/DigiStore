@@ -4,53 +4,34 @@
        
 
         <li>
-            <a href="index.html" class="waves-effect active"><i class="zmdi zmdi-view-dashboard"></i> <span> داشبورد </span> </a>
+            <a asp-controller="Home" asp-action="Index" asp-area="Admin" class="waves-effect active"><i class="zmdi zmdi-view-dashboard"></i> <span> داشبورد </span> </a>
         </li>
 
         <li>
-            <a href="typography.html" class="waves-effect"><i class="zmdi zmdi-format-underlined"></i> <span> در خواست های فروشندگی </span> </a>
+            <a asp-controller="Seller" asp-action="SellerRequests" asp-area="Admin"class="waves-effect"><i class="zmdi zmdi-store"></i> <span> در خواست های فروشندگی </span> </a>
         </li>
 
         <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-invert-colors"></i> <span> رابط کاربی </span> <span class="menu-arrow"></span></a>
+            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-account"></i> <span> مدیریت کاربران </span> <span class="menu-arrow"></span></a>
             <ul class="list-unstyled">
-                <li><a href="ui-buttons.html">دکمه ها</a></li>
-                <li><a href="ui-cards.html">کارد</a></li>
-                <li><a href="ui-draggable-cards.html">کارت های جابه جا شونده</a></li>
-                <li><a href="ui-checkbox-radio.html">چک باکس ها</a></li>
-                <li><a href="ui-material-icons.html">آیکون های طراحی متریال</a></li>
-                <li><a href="ui-font-awesome-icons.html">فونت آسوم</a></li>
-                <li><a href="ui-themify-icons.html">تم فی آیکون</a></li>
-                <li><a href="ui-modals.html">مدل ها</a></li>
-                <li><a href="ui-notification.html">اطلاعات</a></li>
-                <li><a href="ui-range-slider.html">نوار تغیرات</a></li>
-                <li><a href="ui-components.html">اجزا</a>
-                <li><a href="ui-sweetalert.html">هشدار ها</a>
-                <li><a href="ui-treeview.html">نمایش درختی</a>
-                <li><a href="ui-widgets.html">ویجت ها</a></li>
+                <li><a asp-controller="UserManagement" asp-action="Index" asp-area="Admin">لیست کاربران</a></li>
+                <li><a asp-controller="UserManagement" asp-action="CreateUser" asp-area="Admin">ایجاد کاربر جدید</a></li>
             </ul>
         </li>
 
         <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-warning pull-right">7</span><span> فرم ها </span> </a>
+            <a href="javascript:void(0);" class="waves-effect"><i class="ti-hand-point-left"></i><span> مدیریت نقش ها </span><span class="menu-arrow"></span> </a>
             <ul class="list-unstyled">
-                <li><a href="form-elements.html">فرم های عمومی</a></li>
-                <li><a href="form-advanced.html">فرم های پیشرفته</a></li>
-                <li><a href="form-validation.html">فرم ولیدشن</a></li>
-                <li><a href="form-wizard.html">فرم پیشفرض</a></li>
-                <li><a href="form-fileupload.html">فرم آپلود</a></li>
-                <li><a href="form-wysiwig.html">ادیتور 1</a></li>
-                <li><a href="form-xeditable.html">ادیتور 2</a></li>
+                <li><a asp-controller="Role" asp-action="FilterRole" asp-area="Admin">لیست نقش های موجود</a></li>
+                <li><a asp-controller="Role" asp-action="CreateRole" asp-area="Admin">ایجاد نقش جدید</a></li>
             </ul>
         </li>
 
         <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-view-list"></i> <span> جدول ها </span> <span class="menu-arrow"></span></a>
+            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-view-list"></i> <span> برند ها </span> <span class="menu-arrow"></span></a>
             <ul class="list-unstyled">
-                <li><a href="tables-basic.html">جدول پیشفرض</a></li>
-                <li><a href="tables-datatable.html">جدول داده ها</a></li>
-                <li><a href="tables-responsive.html">جدول واکنش گرا</a></li>
-                <li><a href="tables-editable.html">جدول تغیرات</a></li>
+                <li><a asp-controller="Brand" asp-area="Admin" asp-action="BrandList">لیست برند ها</a></li>
+                <li><a asp-controller="Brand" asp-area="Admin" asp-action="CreateBrand">ایجاد برند جدید</a></li>
             </ul>
         </li>
 
@@ -66,7 +47,7 @@
         </li>
 
         <li>
-            <a href="calendar.html"><i class="zmdi zmdi-calendar"></i><span> تقویم </span></a>
+            <a asp-controller="Product" asp-action="Index" asp-area="Admin"><i class="zmdi zmdi-shopping-basket"></i><span> محصولات </span></a>
         </li>
 
         <li>

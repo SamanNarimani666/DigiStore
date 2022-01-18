@@ -17,7 +17,7 @@ namespace DigiStore.Application.Services.Interfaces
         Task PayOrderProductPriceToSeller(int userId, long trackingCode);
         Task<CreateOrderInforamtionViewModel> GetOpenOrderUserForAddInformation(int orderId,int userId);
         Task<CreateOrderInforamtionResult> CreateOrderInforamtion(CreateOrderInforamtionViewModel createOrderInforamtion,int userId);
-
-
+        Task<FilterOrderViewModel> FilterOrder(FilterOrderViewModel filterOrder);
+        Task<SalesOrderDetail> GetSalesOrderDetialByOrderId(int orderId,int userId);
     }
 }

@@ -1,0 +1,31 @@
+﻿@model DigiStore.Domain.Entities.SiteSetting
+@{
+    ViewData["Title"] = "درباره ما";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-lg-12 col-md-12 col-xs-12 pull-right">
+    <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="profile-navbar">
+            <div class="profile-navbar-back-alignment">
+
+                <h4 class="edit-personal">
+                    @ViewData["Title"]
+
+                </h4>
+            </div>
+        </div>
+        <div class="profile-stats">
+            @if (Model != null)
+            {
+                <h1>درباره دیجی استور</h1>
+                <p class="lead"> @Model.AboutUs</p>
+                   
+            }
+
+        </div>
+    </div>
+</div>
+
+
+

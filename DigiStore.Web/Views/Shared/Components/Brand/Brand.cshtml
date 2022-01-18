@@ -1,0 +1,35 @@
+﻿@using DigiStore.Application.Extensions
+@model List<DigiStore.Domain.Entities.Brand>
+@if (Model != null && Model.Any())
+{
+    <div class="col-lg-12 col-md-12 col-xs-12 pull-right">
+        <div class="row">
+            <div class="col-12">
+                <div class="widget widget-product card">
+                    <header class="card-header">
+                        <span class="title-one">برندهای ویژه</span>
+                    </header>
+                    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                        <div class="owl-stage-outer">
+                            <div class="owl-stage"
+                                 style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                                        <div class="item">
+                                            <a href="/ProductSearch?Selectedbrands=@item.BrandId">
+                                                <img src="@(PathExtension.BrandOrigin+item.Logo)" class="img-fluid" alt="@item.BrandName"
+                                                     style="width: 100px !important; height: 100px !important;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

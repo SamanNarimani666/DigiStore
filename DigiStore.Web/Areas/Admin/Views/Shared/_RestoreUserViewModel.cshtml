@@ -1,0 +1,5 @@
+﻿@model DigiStore.Domain.ViewModels.User.DeleteAndRestoreUserViewModel
+<form method="post" asp-controller="UserManagement" asp-action="RestoreteUser" asp-area="Admin">
+    <input type="hidden" asp-for="@Model.UserId" />
+    <button type="submit" class="btn btn-sm btn-warning">بازگردانی کاربر</button>
+</form>
