@@ -9,5 +9,6 @@ namespace DigiStore.Domain.IRepositories.Category
     {
         Task<List<ProductCategory>> GetAllProductCategoriesByParentId(int? parentId);
         Task<List<ProductCategory>> GetAllActiveProductCategory();
+        Task<ProductCategory> GetProductCategoryByCategoryId(int categoryId);
     }
 }

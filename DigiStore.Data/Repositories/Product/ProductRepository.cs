@@ -245,6 +245,20 @@ namespace DigiStore.Data.Repositories.Product
         }
         #endregion
 
+        #region GetAllActiveProductByCategoryId
+        public async Task<List<Domain.Entities.Product>> GetAllActiveProductByCategoryId(int categoryId, int count)
+        {
+            return await _context.ProductSelectedCategories.AsQueryable()
+                .Include(p => p.Product)
+                .Where(p => p.ProductCategoryId == categoryId && p.Product.IsActive&& p.Product.ProductAcceptanceState==(byte)ProductAcceptanceState.Accepted)
+                .OrderByDescending(s=>s.ModifiedDate)
+                .Distinct()                
+                .Select(s => s.Product).Distinct()
+                .Take(count)
+                .ToListAsync();
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {

@@ -50,5 +50,7 @@ namespace DigiStore.Application.Services.Interfaces
         Task<List<Domain.Entities.Product>> RecommendedproductsForUser(int take, int userId);
         Task<List<Domain.Entities.Product>> TheMostVisitedProducts(int take);
         Task<ProductRatingViewModel> GetProductRatingByProductId(int productId);
+        Task<List<Domain.Entities.Product>> GetAllActiveProductByCategoryId(int categoryId, int count);
+        Task<ProductCategory> GetProductCategoryByCategoryId(int categoryId);
     }
 }

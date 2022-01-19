@@ -687,9 +687,25 @@ namespace DigiStore.Application.Services.Implementations
         {
             var product = await _productRepository.GetProductById(productId);
             if (product == null) return null;
-            if (! await _productRatingRepository.IsHaveProductRating(productId)) return null;
-            var result= await _productRatingRepository.GetProductRatingByProductId(productId);
-           return result;
+            if (!await _productRatingRepository.IsHaveProductRating(productId)) return null;
+            var result = await _productRatingRepository.GetProductRatingByProductId(productId);
+            return result;
+        }
+        #endregion
+
+        #region GetAllActiveProductByCategoryId
+
+        public async Task<List<Product>> GetAllActiveProductByCategoryId(int categoryId, int count)
+        {
+            return await _productRepository.GetAllActiveProductByCategoryId(categoryId, count);
+        }
+
+        #endregion
+
+        #region GetProductCategoryByCategoryId
+        public async Task<ProductCategory> GetProductCategoryByCategoryId(int categoryId)
+        {
+            return await _productCategoryRepository.GetProductCategoryByCategoryId(categoryId);
         }
         #endregion
 

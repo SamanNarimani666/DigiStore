@@ -42,6 +42,13 @@ namespace DigiStore.Data.Repositories.Category
         }
         #endregion
 
+        #region GetProductCategoryByCategoryId
+        public async Task<ProductCategory> GetProductCategoryByCategoryId(int categoryId)
+        {
+            return await _context.ProductCategories.SingleOrDefaultAsync(p => p.ProductCategoryId == categoryId);
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {

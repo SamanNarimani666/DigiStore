@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DigiStore.Web.ViewComponents
 {
+    #region SiteHeader
     public class SiteHeaderViewComponent : ViewComponent
     {
         private readonly IProductService _productService;
@@ -18,7 +19,9 @@ namespace DigiStore.Web.ViewComponents
             return View("SiteHeader");
         }
     }
+    #endregion
 
+    #region SiteFooter
     public class SiteFooterViewComponent : ViewComponent
     {
         private readonly ISiteService _siteService;
@@ -32,7 +35,9 @@ namespace DigiStore.Web.ViewComponents
             return View("SiteFooter",await _siteService.GetDefaultSiteSetting());
         }
     }
+    #endregion
 
+    #region HomeSlider
     public class HomeSliderViewComponent : ViewComponent
     {
         private readonly ISiteService _siteService;
@@ -45,7 +50,9 @@ namespace DigiStore.Web.ViewComponents
             return View("HomeSlider",await _siteService.GetAllActiveSlider());
         }
     }
+    #endregion
 
+    #region LoginInformationUser
     public class LoginInformationUserViewComponent : ViewComponent
     {
         private readonly IUserService _userService;
@@ -59,6 +66,9 @@ namespace DigiStore.Web.ViewComponents
             return View("LoginInformationUser", await _userService.GetInformationUserForSidebarById(User.GetUserId()));
         }
     }
+    #endregion
+
+    #region UserOrder
     public class UserOrderViewComponent : ViewComponent
     {
         private readonly IOrderService _orderService;
@@ -73,6 +83,9 @@ namespace DigiStore.Web.ViewComponents
             return View("UserOrder", openOrder);
         }
     }
+    #endregion
+
+    #region UserOrderResponsive
     public class UserOrderResponsiveViewComponent : ViewComponent
     {
         private readonly IOrderService _orderService;
@@ -87,7 +100,9 @@ namespace DigiStore.Web.ViewComponents
             return View("UserOrderResponsive", openOrder);
         }
     }
+    #endregion
 
+    #region BrandSlider
     public class BrandViewComponent : ViewComponent
     {
         private readonly IBranadService _branadService;
@@ -101,6 +116,9 @@ namespace DigiStore.Web.ViewComponents
             return View("Brand",await _branadService.GetAllBrands());
         }
     }
+    #endregion
+
+    #region ProductRating
     public class ProductRatingViewComponent : ViewComponent
     {
         private readonly IProductService _productService;
@@ -115,7 +133,9 @@ namespace DigiStore.Web.ViewComponents
             return View("ProductRating", productRating);
         }
     }
+    #endregion
 
+    #region ProductScrore
     public class ProductScroreViewComponent : ViewComponent
     {
         private readonly IProductService _productService;
@@ -129,6 +149,23 @@ namespace DigiStore.Web.ViewComponents
             return View("ProductScrore", productRating);
         }
     }
+    #endregion
 
-
+    #region ProductSlider
+    public class ProductSliderViewComponent : ViewComponent
+    {
+        #region Constructor
+        private readonly IProductService _productService;
+        public ProductSliderViewComponent(IProductService productService)
+        {
+            _productService = productService;
+        }
+        #endregion
+        public async Task<IViewComponentResult> InvokeAsync(int categoryId)
+        {
+            ViewBag.category = await _productService.GetProductCategoryByCategoryId(categoryId);
+            return View("ProductSlider",await _productService.GetAllActiveProductByCategoryId(categoryId,8));
+        }
+    }
+    #endregion
 }

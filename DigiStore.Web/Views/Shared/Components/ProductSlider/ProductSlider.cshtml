@@ -1,0 +1,48 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.Entities
+@model List<DigiStore.Domain.Entities.Product>
+@{
+    var category = ViewBag.category as ProductCategory;
+}
+@if (Model != null && Model.Any()&&category!=null)
+{
+
+    <div class="col-lg-12 col-md-12 col-xs-12 pull-right">
+        <div class="row">
+            <div class="col-12">
+                <div class="widget widget-product card">
+                    <header class="card-header">
+                        <span class="title-one">@category.Title</span>
+                    </header>
+                   
+                        <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage"
+                                     style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                    @foreach (var product in Model)
+                                    {
+                                        <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                                            <div class="item">
+                                                <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@product.ProductId" asp-route-title="@product.Name.FixTextForUrl()">
+                                                    <img src="@(PathExtension.ProductImageOrigin+product.ImageName)" class="img-fluid"
+                                                         alt="img-slider">
+                                                </a>
+                                                <h2 class="post-title">
+                                                    <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@product.ProductId" asp-route-title="@product.Name.FixTextForUrl()">
+                                                      @product.Name
+                                                    </a>
+                                                </h2>
+                                                <div class="price">
+                                                    <ins><span>@product.Price.ToString("#,0")<span>تومان</span></span></ins>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
