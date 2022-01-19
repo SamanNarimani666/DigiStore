@@ -61,5 +61,13 @@ namespace DigiStore.Application.Extensions
         public static string BrandThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Brand/Thumb/");
 
         #endregion
+
+        #region Slider
+        public static string SliderImageOrigin = "/Images/Slider/origin/";
+        public static string SliderImageOriginServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Slider/origin/");
+
+        public static string SliderImageThumb = "/Images/Slider/Thumb/";
+        public static string SliderImageThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Slider/Thumb/");
+        #endregion
     }
 }

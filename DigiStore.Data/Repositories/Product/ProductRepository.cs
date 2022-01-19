@@ -194,7 +194,7 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<List<Domain.Entities.Product>> GetPopularProduct(int take)
         {
             return await _context.Products.Include(p => p.SalesOrderDetails)
-                .Where(p=>p.SalesOrderDetails.Any())
+                .Where(p=>p.SalesOrderDetails.Any()&& p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
                 .OrderByDescending(d => d.SalesOrderDetails.Sum(c=>c.OrderQty))
                 .Take(take)
                 .ToListAsync();
@@ -205,7 +205,7 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<List<Domain.Entities.Product>> GetMostPopular(int take)
         {
             return await _context.Products.Include(p=>p.FavoriteProductUsers)
-                .Where(p=>p.FavoriteProductUsers.Any())
+                .Where(p=>p.FavoriteProductUsers.Any()&&p.IsActive&&p.ProductAcceptanceState==(byte)ProductAcceptanceState.Accepted)
                 .OrderByDescending(f=>f.FavoriteProductUsers.Count)
                 .Take(take)
                 .ToListAsync();
@@ -230,7 +230,7 @@ namespace DigiStore.Data.Repositories.Product
             return await _context.Products.AsQueryable()
                 .Include(s => s.ProductSelectedCategories)
                 .Where(s => s.ProductSelectedCategories.Any(f => selectedCategotiesId.Contains(f.ProductCategoryId)) &&
-                            s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted).ToListAsync();
+                      s.IsActive&&s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted).ToListAsync();
         }
         #endregion
 
@@ -238,7 +238,7 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<List<Domain.Entities.Product>> TheMostVisitedProducts(int take)
         {
             return await _context.Products.Include(p=>p.ProductVisiteds)
-                .Where(p=>p.ProductVisiteds.Any())
+                .Where(p=>p.ProductVisiteds.Any()&&p.IsActive)
                 .OrderByDescending(p=>p.ProductVisiteds.Count)
                 .Take(take)
                 .ToListAsync();

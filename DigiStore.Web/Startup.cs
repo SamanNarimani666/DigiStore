@@ -16,6 +16,7 @@ using GoogleReCaptcha.V3;
 using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using WebMarkupMin.AspNetCore5;
 
 namespace DigiStore.Web
 {
@@ -31,7 +32,19 @@ namespace DigiStore.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region WebMarkupMin
+            services.AddWebMarkupMin(options =>
+                {
+                    options.AllowMinificationInDevelopmentEnvironment = true;
+                    options.AllowCompressionInDevelopmentEnvironment = true;
+                })
+                .AddHtmlMinification()
+                .AddHttpCompression();
+            #endregion
+
+            #region AddControllersWithViews
             services.AddControllersWithViews();
+            #endregion
 
             #region Authentication
             services.AddAuthentication(options =>
@@ -88,7 +101,7 @@ namespace DigiStore.Web
             #endregion
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseWebMarkupMin();
             app.UseRouting();
 
             app.UseAuthentication();

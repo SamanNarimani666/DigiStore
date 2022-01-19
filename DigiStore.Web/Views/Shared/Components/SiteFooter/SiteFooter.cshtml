@@ -91,72 +91,74 @@
     </div>
     @if (Model != null)
     {
-    <div class="col-12">
-        <div class="footer-address">
-            <div class="footer-contact">
-                <ul>
-                    <li>هفت روز هفته ، ۲۴ ساعت شبانه‌روز پاسخگوی شما هستیم</li>
-                    <li style="float:right">
-                        شماره تماس : <a href="#" class="phone-contact">
-                           @Model.Phone
-                        </a>
-                    </li>
-                    <li class="email-title">آدرس ایمیل : <a href="#">@Model.Email</a></li>
-                    <li class="email-title">آدرس: @Model.Address</li>
-                </ul>
-            </div>
-
-            <div class="address-images">
-                <a href="#">
-                    <img src="/assets/images/footer-img/1090a120.png" alt="address">
-                    <img src="/assets/images/footer-img/71abe5c9.png" alt="address">
-                </a>
-            </div>
-        </div>
-    </div>
-  
-        <div class="more-info">
+        <cache expires-after="@TimeSpan.FromHours(4)">
             <div class="col-12">
-                <div class="about-site">
-                    <h1>فروشگاه اینترنتی دیجی‌استور بررسی، انتخاب و خرید آنلاین</h1>
-                    <p>
-                      @Model.FooterText
-                    </p>
+                <div class="footer-address">
+                    <div class="footer-contact">
+                        <ul>
+                            <li>هفت روز هفته ، ۲۴ ساعت شبانه‌روز پاسخگوی شما هستیم</li>
+                            <li style="float:right">
+                                شماره تماس : <a href="#" class="phone-contact">
+                                    @Model.Phone
+                                </a>
+                            </li>
+                            <li class="email-title">آدرس ایمیل : <a href="#">@Model.Email</a></li>
+                            <li class="email-title">آدرس: @Model.Address</li>
+                        </ul>
+                    </div>
 
-                    <div class="footer-inner-box">
-                        <a href="#" class="footer-badge">
-                            <img src="/assets/images/footer-svg/footer-1.svg" style="width: 130px !important;"
-                                 alt="badge">
-                        </a>
-
-                        <a href="#" class="footer-badge">
-                            <img src="/assets/images/footer-svg/footer-2.svg" style="width: 130px !important;"
-                                 alt="badge">
-                        </a>
-
-                        <a href="#" class="footer-badge">
-                            <img src="/assets/images/footer-svg/footer-3.svg" style="width: 130px !important;"
-                                 alt="badge">
-                        </a>
-
-                        <a href="#" class="footer-badge">
-                            <img src="/assets/images/footer-svg/footer-4.svg" style="width: 130px !important;"
-                                 alt="badge">
-                        </a>
-                        <a href="#" class="footer-badge">
-                            <img src="/assets/images/footer-svg/footer-5.svg" style="width: 130px !important;"
-                                 alt="badge">
+                    <div class="address-images">
+                        <a href="#">
+                            <img src="/assets/images/footer-img/1090a120.png" alt="address">
+                            <img src="/assets/images/footer-img/71abe5c9.png" alt="address">
                         </a>
                     </div>
                 </div>
+            </div>
 
-                <div class="copy-right-footer">
-                    <p>
-                        @Model.CopyRight
-                    </p>
+            <div class="more-info">
+                <div class="col-12">
+                    <div class="about-site">
+                        <h1>فروشگاه اینترنتی دیجی‌استور بررسی، انتخاب و خرید آنلاین</h1>
+                        <p>
+                            @Model.FooterText
+                        </p>
+
+                        <div class="footer-inner-box">
+                            <a href="#" class="footer-badge">
+                                <img src="/assets/images/footer-svg/footer-1.svg" style="width: 130px !important;"
+                                     alt="badge">
+                            </a>
+
+                            <a href="#" class="footer-badge">
+                                <img src="/assets/images/footer-svg/footer-2.svg" style="width: 130px !important;"
+                                     alt="badge">
+                            </a>
+
+                            <a href="#" class="footer-badge">
+                                <img src="/assets/images/footer-svg/footer-3.svg" style="width: 130px !important;"
+                                     alt="badge">
+                            </a>
+
+                            <a href="#" class="footer-badge">
+                                <img src="/assets/images/footer-svg/footer-4.svg" style="width: 130px !important;"
+                                     alt="badge">
+                            </a>
+                            <a href="#" class="footer-badge">
+                                <img src="/assets/images/footer-svg/footer-5.svg" style="width: 130px !important;"
+                                     alt="badge">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="copy-right-footer">
+                        <p>
+                            @Model.CopyRight
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </cache>
     }
 
 </footer>

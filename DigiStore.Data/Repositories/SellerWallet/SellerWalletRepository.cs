@@ -28,7 +28,7 @@ namespace DigiStore.Data.Repositories.SellerWallet
         #region FilterSellerWallet
         public async Task<FilterSellerWalletViewModel> FilterSellerWallet(FilterSellerWalletViewModel filterSellerWallet)
         {
-            var sellerWallet = _context.SellerWallets.AsQueryable();
+            var sellerWallet = _context.SellerWallets.OrderByDescending(p=>p.ModifiedDate).AsQueryable();
 
             #region Filter
             if (filterSellerWallet.SellerId != null && filterSellerWallet.SellerId != 0)

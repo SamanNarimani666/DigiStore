@@ -10,6 +10,7 @@ using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.ContactUs;
 using DigiStore.Domain.IRepositories.SiteSetting;
 using DigiStore.Domain.ViewModels.Contacts;
+using DigiStore.Domain.ViewModels.Slider;
 
 namespace DigiStore.Application.Services.Implementations
 {
@@ -18,10 +19,12 @@ namespace DigiStore.Application.Services.Implementations
         #region Contrcutor
         private readonly IContactUsRepository _contactUsRepository;
         private readonly ISiteSettingRepository _settingRepository;
-        public SiteService(IContactUsRepository contactUsRepository, ISiteSettingRepository settingRepository)
+        private readonly ISiteSliderRepository _siteSliderRepository;
+        public SiteService(IContactUsRepository contactUsRepository, ISiteSettingRepository settingRepository, ISiteSliderRepository siteSliderRepository)
         {
             _contactUsRepository = contactUsRepository;
             _settingRepository = settingRepository;
+            _siteSliderRepository = siteSliderRepository;
         }
         #endregion
 
@@ -56,11 +59,19 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region GetAllActiveSlider
+        public async Task<List<Slider>> GetAllActiveSlider()
+        {
+            return await _siteSliderRepository.GetAllActiveSlider();
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {
             await _contactUsRepository.DisposeAsync();
             await _settingRepository.DisposeAsync();
+            await _siteSliderRepository.DisposeAsync();
         }
         #endregion
 

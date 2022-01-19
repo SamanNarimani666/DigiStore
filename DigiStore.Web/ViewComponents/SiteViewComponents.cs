@@ -35,9 +35,14 @@ namespace DigiStore.Web.ViewComponents
 
     public class HomeSliderViewComponent : ViewComponent
     {
+        private readonly ISiteService _siteService;
+        public HomeSliderViewComponent(ISiteService siteService)
+        {
+            _siteService = siteService;
+        }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View("HomeSlider");
+            return View("HomeSlider",await _siteService.GetAllActiveSlider());
         }
     }
 

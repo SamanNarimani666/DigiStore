@@ -20,6 +20,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="WebMarkupMin.AspNetCore5" Version="2.11.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +40,7 @@
     <Folder Include="wwwroot\Images\ProductGallery\origin\" />
     <Folder Include="wwwroot\Images\Product\Thumb\" />
     <Folder Include="wwwroot\Images\Product\origin\" />
+    <Folder Include="wwwroot\Images\Slider\Thumb\" />
     <Folder Include="wwwroot\Images\Store\Logo\Thumb\" />
     <Folder Include="wwwroot\Images\Store\Logo\origin\" />
     <Folder Include="wwwroot\Images\Upload\" />

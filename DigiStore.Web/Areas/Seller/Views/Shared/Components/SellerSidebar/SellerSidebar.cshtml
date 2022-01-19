@@ -31,13 +31,7 @@
                 <li><a asp-action="Index" asp-controller="Product" asp-area="Seller" class="profile-menu-url ">مدیریت محصولات</a></li>
                 <li><a asp-action="CreateProduct" asp-controller="Product" asp-area="Seller" class="profile-menu-url ">افزودن محصولات</a></li>
                 <li><a asp-action="FilterDiscount" asp-controller="Discount" asp-area="Seller" class="profile-menu-url ">مدیریت تخفیفات</a></li>
-                <li>
-                    <a href="profile-order.html" class="profile-menu-url">
-                        همه
-                        سفارش ها
-                    </a>
-                </li>
-                <li><a href="profile-comments.html" class="profile-menu-url">نقد و نظرات</a></li>
+                <li><a asp-action="Index" asp-controller="SellerWallet" asp-area="Seller" class="profile-menu-url">کیف پول</a></li>
                 <li><a asp-action="Logout" asp-controller="Account" class="profile-menu-url"></a></li>
             </ul>
         </div>

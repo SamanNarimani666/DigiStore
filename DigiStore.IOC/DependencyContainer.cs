@@ -29,6 +29,7 @@ using DigiStore.Data.Repositories.SelectedProductCategory;
 using DigiStore.Data.Repositories.Seller;
 using DigiStore.Data.Repositories.SellerWallet;
 using DigiStore.Data.Repositories.SiteSetting;
+using DigiStore.Data.Repositories.Slider;
 using DigiStore.Data.Repositories.Ticket;
 using DigiStore.Data.Repositories.User;
 using DigiStore.Data.Repositories.UserRole;
@@ -61,6 +62,7 @@ using DigiStore.Domain.IRepositories.SiteSetting;
 using DigiStore.Domain.IRepositories.Ticket;
 using DigiStore.Domain.IRepositories.User;
 using DigiStore.Domain.IRepositories.UserRole;
+using DigiStore.Domain.ViewModels.Slider;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -70,9 +72,12 @@ namespace DigiStore.IOC
     {
         public static void RegisterServices(IServiceCollection services,string connectionString)
         {
+            #region Context
             //DB Context Options
             services.AddDbContext<DigiStore_DBContext>(option => { option.UseSqlServer(connectionString); });
-            
+            #endregion
+
+            #region Repository
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<ITicketMessageRepository, TicketMessageRepository>();
@@ -104,9 +109,15 @@ namespace DigiStore.IOC
             services.AddScoped<IContactUsRepository, ContactUsRepository>();
             services.AddScoped<ISiteSettingRepository, SiteSettingRepository>();
             services.AddScoped<IProductRatingRepository, ProductRatingRepository>();
+            services.AddScoped<ISiteSliderRepository, SiteSliderRepository>();
+            #endregion
+
+            #region Tools
             services.AddSingleton<IPasswordHelper, PasswordHelper>();
             services.AddSingleton<ISender, EmailSender>();
+            #endregion
 
+            #region Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITicketService,TicketService>();
             services.AddScoped<IAddressService,AddressService>();
@@ -118,6 +129,7 @@ namespace DigiStore.IOC
             services.AddScoped<IProductDiscountService, ProductDiscountService>();
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<ISiteService, SiteService>();
+            #endregion
         }
     }
 }

@@ -27,7 +27,6 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         {
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
             if (seller == null) return NotFound();
-            filterSellerWallet.TakeEntity = 5;
             filterSellerWallet.SellerId = seller.SellerId;
             return View(await _sellerWalletService.FilterSellerWallet(filterSellerWallet));
         }

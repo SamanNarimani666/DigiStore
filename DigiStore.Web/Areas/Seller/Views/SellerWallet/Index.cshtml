@@ -45,9 +45,9 @@
                                         TransactionType acceptanceState = (TransactionType)item.TransactionType.Value;
                                         <td>
                                             @acceptanceState.GetDisplayName()
-                                        
-                                            
-                                            
+
+
+
                                         </td>
                                     }
                                     <td>@item.CreateDate.ToShamsiDate()</td>
@@ -59,7 +59,23 @@
                         </tbody>
 
                     </table>
-                    <partial name="_PagingPartial" model="@Model.GetCurrentPaging()" />
+                    <div class="pager">
+                        <ul class="page-item">
+                            @if (Model.StartPage < Model.PageId)
+                            {
+                                <li class="btn"><a href="/Seller/seller-wallet?pageid=@(Model.PageId - 1)">«</a></li>
+                            }
+
+                            @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                            {
+                                <li class="pagination-item" onclick="FillPageId(@i)"><a href="/Seller/seller-wallet?pageid=@i" onclick="FillPageId(@i)" style="cursor: pointer" class="@(Model.PageId == i ? "pager-item-active" : " ")">@i</a></li>
+                            }
+                            @if (Model.EndPage > Model.PageId)
+                            {
+                                <li class="btn"><a class="btn" href="/Seller/seller-wallet?pageid=@(Model.PageId + 1)">»</a></li>
+                            }
+                        </ul>
+                    </div>
                 }
                 else
                 {

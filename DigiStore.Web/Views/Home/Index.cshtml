@@ -9,7 +9,9 @@
     var mostVisitedProduct = ViewBag.MostVisitedProduct as List<Product>;
 }
 <!--    Start Main Slider -------------------->
-@await Component.InvokeAsync("HomeSlider")
+<cache expires-after="@TimeSpan.FromHours(3)">
+    @await Component.InvokeAsync("HomeSlider")
+</cache>
 <!--    End Main Slider ---------------------->
 <!--adplacement-------------------------------->
 <div class="col-lg-4 col-md-4 col-xs-12 pull-left">
@@ -172,68 +174,69 @@
 <!--slider-amazing----------------------------->
 @if (offProduct != null && offProduct.Any())
 {
-    <section class="section-slider amazing-section mb-3 mt-4" style="background: rgb(239, 57, 78);">
-        <div class="container-amazing">
-            <div class="container-main">
-                <div>
-                    <div class="col-lg-3 display-md-none pull-right">
-                        <div class="amazing-product text-center mt-5">
-                            <a href="#">
-                                <img src="/assets/images/amazing/amazing.png" alt="amazing">
-                            </a>
-                            <a asp-controller="Product" asp-action="ProductSearch" asp-area="" class="view-all-amazing-btn">
-                                مشاهده همه
-                                <i class="uil uil-angle-left"></i>
-                            </a>
+    <cache expires-after="@TimeSpan.FromMinutes(15)">
+        <section class="section-slider amazing-section mb-3 mt-4" style="background: rgb(239, 57, 78);">
+            <div class="container-amazing">
+                <div class="container-main">
+                    <div>
+                        <div class="col-lg-3 display-md-none pull-right">
+                            <div class="amazing-product text-center mt-5">
+                                <a href="#">
+                                    <img src="/assets/images/amazing/amazing.png" alt="amazing">
+                                </a>
+                                <a asp-controller="Product" asp-action="ProductSearch" asp-area="" class="view-all-amazing-btn">
+                                    مشاهده همه
+                                    <i class="uil uil-angle-left"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-9 col-md-12 pull-left">
-                        <div class="section-slider-content">
-                            <div class="section-slider-product slider-amazing mt-3">
-                                <div class="widget widget-product card" style="margin:0;">
-                                    <header class="card-header card-header-amazing">
-                                        <span class="title-one">پیشنهاد شگفت انگیز</span>
-                                        <a class="card-title">مشاهده همه</a>
-                                    </header>
-                                    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                                        <div class="owl-stage-outer">
-                                            <div class="owl-stage"
-                                                 style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
-                                                @foreach (var OffProducs in offProduct)
-                                                {
+                        <div class="col-lg-9 col-md-12 pull-left">
+                            <div class="section-slider-content">
+                                <div class="section-slider-product slider-amazing mt-3">
+                                    <div class="widget widget-product card" style="margin:0;">
+                                        <header class="card-header card-header-amazing">
+                                            <span class="title-one">پیشنهاد شگفت انگیز</span>
+                                            <a class="card-title">مشاهده همه</a>
+                                        </header>
+                                        <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                                            <div class="owl-stage-outer">
+                                                <div class="owl-stage"
+                                                     style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                                    @foreach (var OffProducs in offProduct)
+                                                    {
 
 
-                                                    <div class="owl-item active"
-                                                         style="width: 309.083px; margin-left: 10px;">
-                                                        <div class="item">
-                                                            <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@OffProducs.Product.ProductId" asp-route-title="@OffProducs.Product.Name.FixTextForUrl()">
-                                                                <img src="@(PathExtension.ProductImageOrigin+OffProducs.Product.ImageName)"
-                                                                     class="img-fluid" alt="img-slider">
-                                                            </a>
-                                                            <h2 class="post-title">
+                                                        <div class="owl-item active"
+                                                             style="width: 309.083px; margin-left: 10px;">
+                                                            <div class="item">
                                                                 <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@OffProducs.Product.ProductId" asp-route-title="@OffProducs.Product.Name.FixTextForUrl()">
-                                                                    @OffProducs.Product.Name
+                                                                    <img src="@(PathExtension.ProductImageOrigin+OffProducs.Product.ImageName)"
+                                                                         class="img-fluid" alt="img-slider">
                                                                 </a>
-                                                            </h2>
-                                                            <div class="price">
-                                                                <div class="discount-item">
-                                                                    <span>@OffProducs.Percentage٪</span>
+                                                                <h2 class="post-title">
+                                                                    <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@OffProducs.Product.ProductId" asp-route-title="@OffProducs.Product.Name.FixTextForUrl()">
+                                                                        @OffProducs.Product.Name
+                                                                    </a>
+                                                                </h2>
+                                                                <div class="price">
+                                                                    <div class="discount-item">
+                                                                        <span>@OffProducs.Percentage٪</span>
+                                                                    </div>
+                                                                    <del><span>@OffProducs.Product.Price.ToString("#,0")<span>تومان</span></span></del>
+                                                                    <ins><span>@((OffProducs.Product.Price - (OffProducs.Product.Price* OffProducs.Percentage)/100).ToString("#,0"))<span>تومان</span></span></ins>
                                                                 </div>
-                                                                <del><span>@OffProducs.Product.Price.ToString("#,0")<span>تومان</span></span></del>
-                                                                <ins><span>@((OffProducs.Product.Price - (OffProducs.Product.Price* OffProducs.Percentage)/100).ToString("#,0"))<span>تومان</span></span></ins>
-                                                            </div>
-                                                            <div class="product-box-timer">
-                                                                <span class="fa fa-clock-o"></span>
-                                                                <div class="countdown countdown-style-3 h4"
-                                                                     data-date-time="@(OffProducs.ExpierDate.ToString("u"))"
-                                                                     data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
+                                                                <div class="product-box-timer">
+                                                                    <span class="fa fa-clock-o"></span>
+                                                                    <div class="countdown countdown-style-3 h4"
+                                                                         data-date-time="@(OffProducs.ExpierDate.ToString("u"))"
+                                                                         data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                }
-
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -243,8 +246,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </cache>
 }
 @if (User.Identity.IsAuthenticated)
 {
@@ -323,45 +326,47 @@
 <!--   slider-product-------------------->
 @if (popularProducs != null && popularProducs.Any())
 {
-    <div class="col-lg-12 col-md-12 col-xs-12 pull-right mt-2">
-        <div class="row">
-            <div class="col-12">
-                <div class="widget widget-product card">
-                    <header class="card-header">
-                        <h1 class="title-one">پرفروش ترین محصولات</h1>
-                    </header>
-                    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                        <div class="owl-stage-outer">
-                            <div class="owl-stage"
-                                 style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
-                                @foreach (var Popularproducts in popularProducs)
-                                {
-                                    <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
-                                        <div class="item">
-                                            <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@Popularproducts.ProductId" asp-route-title="@Popularproducts.Name.FixTextForUrl()">
-                                                <img src="@(PathExtension.ProductImageOrigin+Popularproducts.ImageName)" class="img-fluid"
-                                                     alt="img-slider">
-                                            </a>
-                                            <h2 class="post-title">
-                                                <a href="#">
-                                                    @Popularproducts.Name
+    <cache expires-after="@TimeSpan.FromMinutes(15)">
+        <div class="col-lg-12 col-md-12 col-xs-12 pull-right mt-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="widget widget-product card">
+                        <header class="card-header">
+                            <h1 class="title-one">پرفروش ترین محصولات</h1>
+                        </header>
+                        <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage"
+                                     style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                    @foreach (var Popularproducts in popularProducs)
+                                    {
+                                        <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                                            <div class="item">
+                                                <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@Popularproducts.ProductId" asp-route-title="@Popularproducts.Name.FixTextForUrl()">
+                                                    <img src="@(PathExtension.ProductImageOrigin+Popularproducts.ImageName)" class="img-fluid"
+                                                         alt="img-slider">
                                                 </a>
-                                            </h2>
-                                            <div class="price">
-                                                <ins><span>@Popularproducts.Price.ToString("#,0")<span>تومان</span></span></ins>
+                                                <h2 class="post-title">
+                                                    <a href="#">
+                                                        @Popularproducts.Name
+                                                    </a>
+                                                </h2>
+                                                <div class="price">
+                                                    <ins><span>@Popularproducts.Price.ToString("#,0")<span>تومان</span></span></ins>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                }
+                                    }
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </cache>
 }
 
 <!--        category--------------------------->
@@ -422,51 +427,52 @@
 <!--        category--------------------------->
 @if (mostPopularProducts != null && mostPopularProducts.Any())
 {
-    <div class="col-lg-12 col-md-12 col-xs-12 pull-right">
-        <div class="row">
-            <div class="col-12">
-                <div class="widget widget-product card">
-                    <header class="card-header">
-                        <h1 class="title-one">محبوب ترین محصولات</h1>
-                    </header>
-                    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                        <div class="owl-stage-outer">
-                            <div class="owl-stage"
-                                 style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
-                                @foreach (var product in mostPopularProducts)
-                                {
-                                    <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
-                                        <div class="item">
-                                            <a href="#">
-                                                <img src="@(PathExtension.ProductImageOrigin+product.ImageName)" class="img-fluid"
-                                                     alt="img-slider">
-                                            </a>
-                                            <h2 class="post-title">
+    <cache expires-after="@TimeSpan.FromMinutes(15)">
+        <div class="col-lg-12 col-md-12 col-xs-12 pull-right">
+            <div class="row">
+                <div class="col-12">
+                    <div class="widget widget-product card">
+                        <header class="card-header">
+                            <h1 class="title-one">محبوب ترین محصولات</h1>
+                        </header>
+                        <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage"
+                                     style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                    @foreach (var product in mostPopularProducts)
+                                    {
+                                        <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                                            <div class="item">
                                                 <a href="#">
-                                                    @product.Name
+                                                    <img src="@(PathExtension.ProductImageOrigin+product.ImageName)" class="img-fluid"
+                                                         alt="img-slider">
                                                 </a>
-                                            </h2>
-                                            <div class="price">
-                                                <del>
-                                                    <span>
-                                                        @product.Price.ToString("#,0")
-                                                        <span>تومان</span>
-                                                    </span>
-                                                </del>
+                                                <h2 class="post-title">
+                                                    <a href="#">
+                                                        @product.Name
+                                                    </a>
+                                                </h2>
+                                                <div class="price">
+                                                    <del>
+                                                        <span>
+                                                            @product.Price.ToString("#,0")
+                                                            <span>تومان</span>
+                                                        </span>
+                                                    </del>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
 
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </cache>
 }
 <!--   slider-product-------------------->
 <!--   adplacement -------------------->
@@ -499,49 +505,50 @@
 <!--   slider-product-------------------->
 @if (mostVisitedProduct != null && mostVisitedProduct.Any())
 {
-<div class="col-lg-12 col-md-12 col-xs-12 pull-right">
-    <div class="row">
-        <div class="col-12">
-            <div class="widget widget-product card">
-                <header class="card-header">
-                    <h1 class="title-one">پربازدید ترین محصولات</h1>
-                </header>
-                <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                    <div class="owl-stage-outer">
-                        <div class="owl-stage"
-                             style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
-                            @foreach (var product in mostVisitedProduct)
-                            {
-                                <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
-                                    <div class="item">
-                                        <a href="#">
-                                            <img src="@(PathExtension.ProductImageOrigin+product.ImageName)" class="img-fluid"
-                                                 alt="img-slider">
-                                        </a>
-                                        <h2 class="post-title">
-                                            <a href="#">
-                                                @product.Name
-                                            </a>
-                                        </h2>
-                                        <div class="price">
-                                            <del>
-                                                <span>
-                                                    @product.Price.ToString("#,0")
-                                                    <span>تومان</span>
-                                                </span>
-                                            </del>
+    <cache expires-after="@TimeSpan.FromMinutes(15)">
+        <div class="col-lg-12 col-md-12 col-xs-12 pull-right">
+            <div class="row">
+                <div class="col-12">
+                    <div class="widget widget-product card">
+                        <header class="card-header">
+                            <h1 class="title-one">پربازدید ترین محصولات</h1>
+                        </header>
+                        <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage"
+                                     style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                    @foreach (var product in mostVisitedProduct)
+                                    {
+                                        <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                                            <div class="item">
+                                                <a href="#">
+                                                    <img src="@(PathExtension.ProductImageOrigin+product.ImageName)" class="img-fluid"
+                                                         alt="img-slider">
+                                                </a>
+                                                <h2 class="post-title">
+                                                    <a href="#">
+                                                        @product.Name
+                                                    </a>
+                                                </h2>
+                                                <div class="price">
+                                                    <del>
+                                                        <span>
+                                                            @product.Price.ToString("#,0")
+                                                            <span>تومان</span>
+                                                        </span>
+                                                    </del>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
                                 </div>
-                            }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
+    </cache>
 }
 <!--   slider-product-------------------->
 <!--   adplacement -------------------->
@@ -837,8 +844,9 @@
 </div>
 <!--   slider-product-------------------->
 <!--   slider-product-------------------->
-@await Component.InvokeAsync("Brand")
-
+<cache expires-after="@TimeSpan.FromMinutes(15)">
+    @await Component.InvokeAsync("Brand")
+</cache>
 <div class="col-lg-12 col-md-12 col-xs-12 pull-right">
     <div class="row">
         <div class="col-12">
