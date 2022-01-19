@@ -1,0 +1,24 @@
+﻿@model DigiStore.Domain.ViewModels.Product.ProductRatingViewModel
+
+
+@if (Model != null)
+{
+    var starGlold = 5 - Model.ProductRatingAverage();
+
+   
+        @for (int i = (int)starGlold; i < 5; i++)
+        {
+            <i class="fa fa-star active"></i>
+        }
+        @for (int i = 1; i <= starGlold; i++)
+        {
+            <i class="fa fa-star"></i>
+        }
+}
+else
+{
+    @for (int i = 1; i <= 5; i++)
+     {
+         <i class="fa fa-star"></i>
+     }
+}

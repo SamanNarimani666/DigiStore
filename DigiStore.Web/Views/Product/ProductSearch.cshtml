@@ -255,13 +255,8 @@
 
                                                 <div class="product-box-rate">
                                                     <span>@product.Productcomments.Count نفر</span>
-
                                                     <div class="product-star mb-3">
-                                                        <i class="fa fa-star active"></i>
-                                                        <i class="fa fa-star active"></i>
-                                                        <i class="fa fa-star active"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
+                                                        @await Component.InvokeAsync("ProductScrore",product.ProductId)
                                                     </div>
                                                 </div>
 

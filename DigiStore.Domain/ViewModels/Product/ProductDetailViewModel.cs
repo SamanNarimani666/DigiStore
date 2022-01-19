@@ -46,6 +46,7 @@ namespace DigiStore.Domain.ViewModels.Product
         public int CountComment { get; set; }
         public string MainCategoryTitle { get; set; }
         public string SubCategoryTitle { get; set; }
-
+        public int MainCategoryId { get; set; }
+        public int SubCategoryId { get; set; }
     }
 }

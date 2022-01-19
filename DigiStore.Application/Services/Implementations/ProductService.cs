@@ -682,6 +682,17 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region GetProductRatingByProductId
+        public async Task<ProductRatingViewModel> GetProductRatingByProductId(int productId)
+        {
+            var product = await _productRepository.GetProductById(productId);
+            if (product == null) return null;
+            if (! await _productRatingRepository.IsHaveProductRating(productId)) return null;
+            var result= await _productRatingRepository.GetProductRatingByProductId(productId);
+           return result;
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {

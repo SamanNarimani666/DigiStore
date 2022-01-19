@@ -49,5 +49,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<List<Domain.Entities.Product>> GetMostPopular(int take);
         Task<List<Domain.Entities.Product>> RecommendedproductsForUser(int take, int userId);
         Task<List<Domain.Entities.Product>> TheMostVisitedProducts(int take);
+        Task<ProductRatingViewModel> GetProductRatingByProductId(int productId);
     }
 }

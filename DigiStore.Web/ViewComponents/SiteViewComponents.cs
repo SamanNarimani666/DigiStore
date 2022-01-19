@@ -96,5 +96,34 @@ namespace DigiStore.Web.ViewComponents
             return View("Brand",await _branadService.GetAllBrands());
         }
     }
- 
+    public class ProductRatingViewComponent : ViewComponent
+    {
+        private readonly IProductService _productService;
+
+        public ProductRatingViewComponent(IProductService productService)
+        {
+            _productService = productService;
+        }
+        public async Task<IViewComponentResult> InvokeAsync(int productId)
+        {
+            var productRating = await _productService.GetProductRatingByProductId(productId);
+            return View("ProductRating", productRating);
+        }
+    }
+
+    public class ProductScroreViewComponent : ViewComponent
+    {
+        private readonly IProductService _productService;
+        public ProductScroreViewComponent(IProductService productService)
+        {
+            _productService = productService;
+        }
+        public async Task<IViewComponentResult> InvokeAsync(int productId)
+        {
+            var productRating = await _productService.GetProductRatingByProductId(productId);
+            return View("ProductScrore", productRating);
+        }
+    }
+
+
 }

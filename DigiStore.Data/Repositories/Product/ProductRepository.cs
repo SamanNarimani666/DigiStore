@@ -171,6 +171,10 @@ namespace DigiStore.Data.Repositories.Product
                 SubCategoryTitle = _context.ProductSelectedCategories.Include(p => p.ProductCategory)
                     .Where(p => p.ProductId == productId && p.ProductCategory.ParentId != null).Select(p => p.ProductCategory.Title).FirstOrDefault()
                     ?.ToString(),
+                MainCategoryId = _context.ProductSelectedCategories.Include(p => p.ProductCategory)
+                    .Where(p => p.ProductId == productId && p.ProductCategory.ParentId == null).Select(p => p.ProductCategory.ProductCategoryId).FirstOrDefault(),
+                SubCategoryId =  _context.ProductSelectedCategories.Include(p => p.ProductCategory)
+                    .Where(p => p.ProductId == productId && p.ProductCategory.ParentId != null).Select(p => p.ProductCategory.ProductCategoryId).FirstOrDefault(),
                 ProductFeatures = product.ProductFeatures.ToList(),
                 RelatedProducts = await _context.Products.AsQueryable()
                     .Include(s=>s.ProductSelectedCategories)

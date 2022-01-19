@@ -49,6 +49,13 @@
                                             </a>
                                         </div>
                                         <div class="header-profile-dropdown-action-container">
+                                            <a asp-controller="Order" asp-area="UserPanel" asp-action="UserOpenOrder">
+                                                <span class="header-profile-dropdown-action-link">
+                                                   سبد خرید من
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="header-profile-dropdown-action-container">
                                             <a asp-action="Logout" asp-controller="Account">
                                                 <span class="header-profile-dropdown-action-link">
                                                     خروج از حساب
@@ -155,21 +162,21 @@
                                 {
 
                                     <li class="item-menu-2">
-                                        <a href="#" class="list-category-menu-2">
-                                            <i class="mdi mdi-monitor"></i>@category.Title
+                                        <a href="/ProductSearch?CategoryId=@category.ProductCategoryId" class="list-category-menu-2">
+                                            <i class="@category.IconName"></i>@category.Title
                                         </a>
                                         @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
                                         {
                                             <ul class="megamenu-level-3 row">
                                                 <li class="list-category">
-                                                    <a href="#" class="list-category-megamenu">همه دسته بندی های کالای @category.Title</a>
+                                                    <a href="/ProductSearch?CategoryId=@category.ProductCategoryId" class="list-category-megamenu">همه دسته بندی های کالای @category.Title</a>
                                                 </li>
                                                 @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
                                                 {
 
 
                                                     <li class="item-megamenu-title">
-                                                        <a href="#"
+                                                        <a href="/ProductSearch?CategoryId=@subCategory.ProductCategoryId"
                                                            class="list-category-megamenu-3">
                                                             <span>
                                                                 @subCategory.Title<i class="fa fa-angle-left"></i>
@@ -241,14 +248,14 @@
                     {
 
                         <li class="has-sub">
-                            <a href="#">@category.Title</a>
+                            <a href="/ProductSearch?CategoryId=@category.ProductCategoryId">@category.Title</a>
                             @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
                             {
                                 @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
                                 {
                                     <ul>
                                         <li class="has-sub">
-                                            <a href="#" class="category-level-2">@subCategory.Title</a>
+                                            <a href="/ProductSearch?CategoryId=@subCategory.ProductCategoryId" class="category-level-2">@subCategory.Title</a>
                                             @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
                                             {
                                                 <ul>

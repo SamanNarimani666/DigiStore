@@ -1,0 +1,97 @@
+﻿@model DigiStore.Domain.ViewModels.Product.ProductRatingViewModel
+
+@if (Model != null)
+{
+    var starGlold = 5 - Model.ProductRatingAverage();
+
+    <div class="comments-summary-box">
+        <div class="comments-side-rating-container">
+            <div class="comments-side-rating">
+                <div class="comments-side-rating-main">@Model.ProductRatingAverage()</div>
+                <div class="comments-side-rating-desc">از ۵</div>
+            </div>
+            <div class="comments-side-rating-bottom">
+                <div class="product-star mb-3">
+                    @for (int i = (int)starGlold; i < 5; i++)
+                    {
+                        <i class="fa fa-star active"></i>
+
+                    }
+                    @for (int i = 1; i <= starGlold; i++)
+                    {
+                        <i class="fa fa-star"></i>
+                    }
+                </div>
+                <div class="comments-side-rating-all">
+                    از مجموع @Model.CountRating امتیاز  @Model.ProductRatingSum()
+                </div>
+            </div>
+        </div>
+        <ul class="comments-item-rating">
+            <li>
+                <div class="cell">کیفیت ساخت:</div>
+                <div class="cell-2">
+                    <div class="rating rating-general js-rating">
+                        <div class="rating-rate"></div>
+                    </div>
+                    <span class="rating-overall-word">@Model.ConstructionQuality</span>
+                </div>
+            </li>
+            <li>
+                <div class="cell">ارزش خرید به نسبت قیمت:</div>
+                <div class="cell-2">
+                    <div class="rating rating-general js-rating">
+                        <div class="rating-rate"></div>
+                    </div>
+                    <span class="rating-overall-word">@Model.PurchaseValueRelativeToPrice</span>
+                </div>
+            </li>
+            <li>
+                <div class="cell">نوآوری:</div>
+                <div class="cell-2">
+                    <div class="rating rating-general js-rating">
+                        <div class="rating-rate"></div>
+                    </div>
+                    <span class="rating-overall-word">@Model.Innovation</span>
+                </div>
+            </li>
+            <li>
+                <div class="cell">امکانات و قابلیت ها:</div>
+                <div class="cell-2">
+                    <div class="rating rating-general js-rating">
+                        <div class="rating-rate"></div>
+                    </div>
+                    <span class="rating-overall-word">@Model.FeaturesAndCapabilities</span>
+                </div>
+            </li>
+            <li>
+                <div class="cell">سهولت استفاده:</div>
+                <div class="cell-2">
+                    <div class="rating rating-general js-rating">
+                        <div class="rating-rate"></div>
+                    </div>
+                    <span class="rating-overall-word">@Model.EaseOfUse</span>
+                </div>
+            </li>
+            <li>
+                <div class="cell">طراحی و ظاهر:</div>
+                <div class="cell-2">
+                    <div class="rating rating-general js-rating">
+                        <div class="rating-rate"></div>
+                    </div>
+                    <span class="rating-overall-word">@Model.DesignAndAppearance</span>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        هنوز هیچ امتیازی ثبت نشده
+    </div>
+    <div class="alert alert-success">
+        اولین نفری باشید که به این محصول نظر می دهید
+    </div>
+}

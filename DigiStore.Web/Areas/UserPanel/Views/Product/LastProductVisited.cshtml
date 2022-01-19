@@ -30,13 +30,11 @@
                             <div class="user-history-list-item-content">
                                 <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@userhistory.Product.ProductId" asp-route-title="@userhistory.Product.Name.FixTextForUrl()" class="promotion-box-image"> @userhistory.Product.Name ...</a>
                                 <div class="stars">
-                                    <span class="star-item"><i class="fa fa-star active"></i></span>
-                                    <span class="star-item"><i class="fa fa-star active"></i></span>
-                                    <span class="star-item"><i class="fa fa-star active"></i></span>
-                                    <span class="star-item"><i class="fa fa-star active"></i></span>
-                                    <span class="star-item"><i class="fa fa-star active"></i></span>
+                                    <div class="product-star">
+                                        @await Component.InvokeAsync("ProductScrore", userhistory.Product.ProductId)
+                                    </div>
                                 </div>
-
+                                /
                                 <div class="user-history-list-item-content-container">
                                     <div class="new-price">
                                         <span class="new-price-value">@(userhistory.Product.Price.ToString("#,0"))</span>

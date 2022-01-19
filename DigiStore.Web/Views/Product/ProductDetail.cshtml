@@ -22,8 +22,8 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb px-0">
                         <li class="breadcrumb-item"><a >فروشگاه اینترنتی @Model.Seller.StoreName</a></li>
-                        <li class="breadcrumb-item"><a >@Model.MainCategoryTitle</a></li>
-                        <li class="breadcrumb-item"><a >@Model.SubCategoryTitle</a></li>
+                        <li class="breadcrumb-item"><a href="/ProductSearch?CategoryId=@Model.MainCategoryId">@Model.MainCategoryTitle</a></li>
+                        <li class="breadcrumb-item"><a href="/ProductSearch?CategoryId=@Model.SubCategoryId">@Model.SubCategoryTitle</a></li>
                     </ol>
                 </nav>
                 <div class="product-ext-links">
@@ -77,13 +77,13 @@
                 <div class="product-directory">
                     <ul class="mb-0">
                         <li>
-                            <a href="#" class="link-border">@Model.MainCategoryTitle</a>
+                            <a href="/ProductSearch?CategoryId=@Model.MainCategoryId" class="link-border">@Model.MainCategoryTitle</a>
                         </li>
                         <li>
                             <span>/</span>
                         </li>
                         <li>
-                            <a href="#" class="link-border">@Model.SubCategoryTitle</a>
+                            <a href="/ProductSearch?CategoryId=@Model.SubCategoryId" class="link-border">@Model.SubCategoryTitle</a>
                         </li>
                     </ul>
                     <h1 class="product-title">
@@ -345,83 +345,7 @@
 
 
                             <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 0px; position: static; transform: none;">
-                                <div class="comments-summary-box">
-                                    <div class="comments-side-rating-container">
-                                        <div class="comments-side-rating">
-                                            <div class="comments-side-rating-main">۳.۷</div>
-                                            <div class="comments-side-rating-desc">از ۵</div>
-                                        </div>
-                                        <div class="comments-side-rating-bottom">
-                                            <div class="product-star mb-3">
-                                                <i class="fa fa-star active"></i>
-                                                <i class="fa fa-star active"></i>
-                                                <i class="fa fa-star active"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                            <div class="comments-side-rating-all">
-                                                از مجموع ۸۳ امتیاز
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <ul class="comments-item-rating">
-                                        <li>
-                                            <div class="cell">کیفیت ساخت:</div>
-                                            <div class="cell-2">
-                                                <div class="rating rating-general js-rating">
-                                                    <div class="rating-rate"></div>
-                                                </div>
-                                                <span class="rating-overall-word">۳.۷</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="cell">ارزش خرید به نسبت قیمت:</div>
-                                            <div class="cell-2">
-                                                <div class="rating rating-general js-rating">
-                                                    <div class="rating-rate"></div>
-                                                </div>
-                                                <span class="rating-overall-word">۳.۷</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="cell">نوآوری:</div>
-                                            <div class="cell-2">
-                                                <div class="rating rating-general js-rating">
-                                                    <div class="rating-rate"></div>
-                                                </div>
-                                                <span class="rating-overall-word">۳.۷</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="cell">امکانات و قابلیت ها:</div>
-                                            <div class="cell-2">
-                                                <div class="rating rating-general js-rating">
-                                                    <div class="rating-rate"></div>
-                                                </div>
-                                                <span class="rating-overall-word">۳.۷</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="cell">سهولت استفاده:</div>
-                                            <div class="cell-2">
-                                                <div class="rating rating-general js-rating">
-                                                    <div class="rating-rate"></div>
-                                                </div>
-                                                <span class="rating-overall-word">۳.۷</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="cell">طراحی و ظاهر:</div>
-                                            <div class="cell-2">
-                                                <div class="rating rating-general js-rating">
-                                                    <div class="rating-rate"></div>
-                                                </div>
-                                                <span class="rating-overall-word">۳.۷</span>
-                                            </div>
-                                        </li>
-
-                                    </ul>
-                                </div>
+                                @await Component.InvokeAsync("ProductRating",Model.ProductId)
                                 <div class="comments-summary-note">
                                     <span>دیدگاه خود را درباره این کالا بیان کنید</span>
                                     <div class="parent-btn">
