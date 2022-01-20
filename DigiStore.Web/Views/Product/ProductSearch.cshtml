@@ -3,34 +3,24 @@
 @using DigiStore.Domain.ViewModels.Product
 @model DigiStore.Domain.ViewModels.Product.FilterProductViewModel
 @{
-    ViewData["Title"] = "فیلتر محصولات";
+    ViewData["Title"] = "جستجوی محصولات";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var procutCategories = ViewBag.ProductCategories as List<ProductCategory>;
     var brandProducts = ViewBag.ProductBrands as List<Brand>;
-    
+
 }
 
-<form method="get" id="filter-form" asp-controller="Product" asp-action="ProductSearch">
-<input type="hidden" asp-for="PageId" />
+<form asp-controller="Product" asp-action="ProductSearch" asp-area="" method="get" id="filter-form">
+    <input type="hidden" asp-for="PageId" />
 
     <div class="col-12">
         <div class="header-filters">
             <div class="remodal-search-advanced" id="modal-search" style="display: none;">
                 <nav class="remodal-page-layout">
-                    
-                  
+
+
                     <div class="remodal-page-main">
                         <div class="remodal-page-content">
-                            <div class="filter">
-                                <label for="search" class="profile-edit-label">
-                                    <span>جستجو در نتایج</span>
-                                    <input type="text" asp-for="Name"  placeholder="نام محصول مورد نظر را بنویسید ...">
-                                </label>
-                            </div>
-
-
-                       
-
                             <div class="filter">
                                 <div class="toggle-box">
                                     <div class="toggle-box-active">
@@ -126,7 +116,7 @@
                     <div class="catalog">
                         @if (procutCategories != null && procutCategories.Any())
                         {
-                            <span><a asp-controller="Product" asp-action="ProductSearch" asp-route-Category="" asp-area="" class="btn btn-block btn-light" >نمایش همه</a></span>
+                            <span><a asp-controller="Product" asp-action="ProductSearch" asp-route-Category="" asp-area="" class="btn btn-block btn-light">نمایش همه</a></span>
                             <ul class="catalog-list ">
                                 @foreach (var mainCategory in procutCategories.Where(p => p.ParentId == null))
                                 {
@@ -138,14 +128,34 @@
                                             {
                                                 <ul class="catalog-list" category_dropdown_list="@submainCategory.ParentId">
                                                     <div class="show-more">
-                                                        <span class="catalog-cat-item" category_dropdown_button="@submainCategory.ProductCategoryId"><i class="fa fa-angle-down"></i><a href="ProductSearch?CategoryId=@submainCategory.ProductCategoryId" class="catalog-link">@submainCategory.Title</a></span>
+                                                        <li>
+                                                            <a  class="filter-label">
+                                                                <div class="form-auth-row">
+                                                                    <label  class="ui-checkbox">
+                                                                        <input type="checkbox" name="CategoryId"  value="@submainCategory.ProductCategoryId">
+                                                                        <span class="ui-checkbox-check"></span>
+                                                                    </label>
+                                                                    <label  class="remember-me">@submainCategory.Title</label>
+                                                                </div>
+                                                            </a>
+                                                        </li>
                                                         @if (procutCategories.Any(p => p.ParentId == submainCategory.ProductCategoryId))
                                                         {
-                                                            <ul class="catalog-list">
+                                                            <ul class="catalog-list m-4">
                                                                 @foreach (var subSubmainCategory in procutCategories.Where(p => p.ParentId == submainCategory.ProductCategoryId))
                                                                 {
 
-                                                                    <li><a href="ProductSearch?CategoryId=@subSubmainCategory.ProductCategoryId" class="catalog-link"> @subSubmainCategory.Title</a></li>
+                                                                    <li>
+                                                                        <a  class="filter-label">
+                                                                            <div class="form-auth-row">
+                                                                                <label  class="ui-checkbox">
+                                                                                    <input type="checkbox"  name="CategoryId"  value="@subSubmainCategory.ProductCategoryId">
+                                                                                    <span class="ui-checkbox-check"></span>
+                                                                                </label>
+                                                                                <label  class="remember-me">@subSubmainCategory.Title</label>
+                                                                            </div>
+                                                                        </a>
+                                                                    </li>
                                                                 }
                                                             </ul>
                                                         }
@@ -161,7 +171,7 @@
 
                             </ul>
                         }
-
+                        <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
                     </div>
                 </div>
 
@@ -175,7 +185,26 @@
                     <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
 
                 </div>
+                <div class="box-sidebar">
+                    <button class="btn btn-light btn-box-sidebar" type="button" data-toggle="collapse" data-target="#collapseExampleSeller2" aria-expanded="false" aria-controls="collapseExampleSeller">
+                        <i class="fa fa-chevron-down arrow"></i>مرتب سازی بر اساس ...
+                    </button>
+                    <div class="collapse show" id="collapseExampleSeller2">
+                        <div class="catalog">
+                           
 
+                            <select class="form-group" style="width: 100%;" id="orderItem"  name="FilterProductOrderBy" aria-label=".form-select-sm example" asp-for="FilterProductOrderBy">
+                                @foreach (var item in Html.GetEnumSelectList<FilterProductOrderBy>())
+                                {
+                                    <option class="form-control" value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">مرتب سازی</button>
+                            
+                        </div>
+                    </div>
+                   
+                </div>
                 <div class="box-sidebar">
                     <button class="btn btn-light btn-box-sidebar" type="button" data-toggle="collapse" data-target="#collapseExampleSeller" aria-expanded="false" aria-controls="collapseExampleSeller">
                         <i class="fa fa-chevron-down arrow"></i>برند
@@ -189,13 +218,13 @@
                                     @foreach (var brands in brandProducts)
                                     {
                                         <li>
-                                            <a href="/ProductSearch?Selectedbrands=@brands.BrandId" class="filter-label">
+                                            <a  class="filter-label">
                                                 <div class="form-auth-row">
-                                                    <label for="remembersumsung" class="ui-checkbox">
-                                                        <input type="radio"  onchange="changeFilter()" name="Selectedbrands" value="@brands.BrandId">
+                                                    <label  class="ui-checkbox">
+                                                        <input type="checkbox"  name="Selectedbrands"  value="@brands.BrandId">
                                                         <span class="ui-checkbox-check"></span>
                                                     </label>
-                                                    <label for="remembersumsung" class="remember-me">@brands.BrandName</label>
+                                                    <label  class="remember-me">@brands.BrandName</label>
                                                 </div>
                                             </a>
                                         </li>
@@ -204,8 +233,10 @@
                             }
                         </div>
                     </div>
+                        <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
+
                 </div>
-               
+             
 
             </div>
         </div>
@@ -213,19 +244,10 @@
 
     <div class="col-lg-9 col-md-8 col-xs-12 pull-left">
         <div class="js-products">
-         
+            <div class="listing-counter"> @($"{Model.GetCurrentPagingStatus()} \t تعداد کالا\t{Model.AllEntitiesCount}")</div>
 
             <div class="listing-listing col">
-                <div class="listing-counter"> @($"{Model.GetCurrentPagingStatus()} \t تعداد کالا\t{Model.AllEntitiesCount}")</div>
 
-
-                <div class="listing-header">
-
-                    <label>مرتب سازی بر اساس ...</label>
-
-                    <select class="m-2" id="orderFilter" aria-label=".form-select-sm example" asp-for="FilterProductOrderBy" asp-items="@(Html.GetEnumSelectList<FilterProductOrderBy>())">
-                    </select>
-                </div>
 
                 <!-- <ul class="listing-item"> -->
                 <div class="tab-content" id="myTabContent">
@@ -256,7 +278,7 @@
                                                 <div class="product-box-rate">
                                                     <span>@product.Productcomments.Count نفر</span>
                                                     <div class="product-star mb-3">
-                                                        @await Component.InvokeAsync("ProductScrore",product.ProductId)
+                                                        @await Component.InvokeAsync("ProductScrore", product.ProductId)
                                                     </div>
                                                 </div>
 
@@ -290,7 +312,6 @@
     <script>
 
         var flag = true;
-        console.log(flag);
         if (flag == false) {
             $('[category_dropdown_button]').on('click',
                 function () {
@@ -310,6 +331,7 @@
         function changeFilter() {
             $("#filter-form").submit();
         }
+
     </script>
     <script src="/assets/js/theia-sticky-sidebar.min.js"></script>
 }

@@ -3,10 +3,12 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Brand;
 using Microsoft.AspNetCore.Mvc;
 using DigiStore.Web.Areas.Admin.Controllers;
+using DigiStore.Web.Security;
 using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class BrandController : AdminBaseController
     {
         #region Constructor
@@ -18,6 +20,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region BrandList
+        [PermissionChecker(11)]
         [HttpGet("brand-list")]
         public async Task<IActionResult> BrandList(FilterBrandViewModel filterBrand)
        {
@@ -26,6 +29,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region CreateBrand
+        [PermissionChecker(12)]
         [HttpGet("create-brands")]
         public  IActionResult CreateBrand()
         {
@@ -52,7 +56,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region EditBrand
-
+        [PermissionChecker(13)]
         [HttpGet("edit-brand/{brandId}")]
         public async Task<IActionResult> EditBrand(int brandId)
         {

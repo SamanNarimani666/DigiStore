@@ -32,6 +32,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region DeleteUser
+        [PermissionChecker(4)]
         [HttpPost]
         public async Task<IActionResult> DeleteUser(DeleteAndRestoreUserViewModel deleteAndRestoreUser)
         {
@@ -50,6 +51,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region RestoreteUser
+        [PermissionChecker(15)]
         [HttpPost]
         public async Task<IActionResult> RestoreteUser(DeleteAndRestoreUserViewModel deleteAndRestoreUser)
         {
@@ -109,6 +111,8 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region EditUser
+        [PermissionChecker(3)]
+
         [HttpGet("edit-user/{userId}")]
         public async Task<IActionResult> EditUser(int userId)
         {

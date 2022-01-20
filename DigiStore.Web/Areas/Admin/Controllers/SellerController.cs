@@ -3,6 +3,7 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Common;
 using DigiStore.Domain.ViewModels.Seller;
 using DigiStore.Web.Http;
+using DigiStore.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
@@ -19,6 +20,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region SellerRequestList
+        [PermissionChecker(8)]
         public async Task<IActionResult> SellerRequests(FilterSellerViewModel filterSeller)
         {
             return View(await _sellerService.FilterSeller(filterSeller));
@@ -26,6 +28,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region AcceptSellerRequest
+        [PermissionChecker(9)]
         public async Task<IActionResult> AcceptSellerRequest(int id)
         {
             var result = await _sellerService.AcceptSellerRequest(id);
@@ -46,6 +49,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region AcceptSellerRequest
+        [PermissionChecker(10)]
         [HttpPost,ValidateAntiForgeryToken]
         public async Task<IActionResult> RejectSellerRequest(RejectItemViewModel rejectItem)
         {

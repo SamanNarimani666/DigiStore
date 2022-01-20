@@ -145,8 +145,8 @@ namespace DigiStore.Data.Repositories.Product
                 .Include(p=>p.ProductGalleries)
                 .Include(p=>p.ProductSelectedCategories)
                 .Include(p=>p.ProductFeatures)
+                .Include(p=>p.ProductVisiteds)
                 .Include(p => p.Seller)
-                .ThenInclude(p => p.User)
                 .Include(p => p.ProductSelectedCategories)
                 .ThenInclude(p => p.ProductCategory)
                 .SingleOrDefaultAsync(p => p.ProductId == productId);
@@ -165,6 +165,7 @@ namespace DigiStore.Data.Repositories.Product
                 ProductColors = product.Colors.Where(p=>!p.IsDelete).ToList(),
                 SellerId = product.SellerId,
                 Seller = product.Seller,
+                CountVisited = product.ProductVisiteds.Count,
                 MainCategoryTitle=  _context.ProductSelectedCategories.Include(p=>p.ProductCategory)
                     .Where(p => p.ProductId == productId && p.ProductCategory.ParentId == null).Select(p=>p.ProductCategory.Title).FirstOrDefault()
                     ?.ToString(),

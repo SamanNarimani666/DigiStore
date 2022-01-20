@@ -311,14 +311,15 @@ $(document).ready(function () {
 
 function changeProductPriceBaseOnColor(ColorId, price) {
     var basePrice = parseInt($('#productBasePrice').val());
-    $('.current_Price').html(basePrice + price);
+    var sum = (basePrice + price);
+    $('.current_Price').html(sum);
     $('#add_product_to_order_ProductColorId').val(ColorId);
 
 }
 
 $('#number_of_Products_in_Order').on('change',
     function (e) {
-        console.log(e);
+        
 
     });
 
@@ -436,3 +437,5 @@ function RemoveProductFromFavoritList(favoritId, productId) {
         }
     });
 }
+
+

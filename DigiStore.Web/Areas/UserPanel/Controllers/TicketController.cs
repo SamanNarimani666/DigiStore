@@ -94,7 +94,7 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         #endregion
 
         #region DeleteTicketMessage
-        [HttpPost("delete-ticketMessage"), ValidateAntiForgeryToken]
+        [HttpPost("delete-ticketMessage")]
         public async Task<IActionResult> DeleteTicketMessage(DeleteTicketViewModel deleteTicket)
         {
             if (ModelState.IsValid)

@@ -10,400 +10,408 @@
 }
 
 
-<div class="col-12" style="transform: none;">
-    <div class="product-page" style="transform: none;">
 
-        <div>
-            <partial name="_AddProductToCartPartial" model="@(new AddProductToOrderViewModel(){ OrderQty = 1,ProductId = Model.ProductId})" />
-        </div>
 
-        <article class="js-product" style="transform: none;">
-            <div class="product-nav-container">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb px-0">
-                        <li class="breadcrumb-item"><a >فروشگاه اینترنتی @Model.Seller.StoreName</a></li>
-                        <li class="breadcrumb-item"><a href="/ProductSearch?CategoryId=@Model.MainCategoryId">@Model.MainCategoryTitle</a></li>
-                        <li class="breadcrumb-item"><a href="/ProductSearch?CategoryId=@Model.SubCategoryId">@Model.SubCategoryTitle</a></li>
-                    </ol>
-                </nav>
-                <div class="product-ext-links">
-                    <a asp-action="RequestSellerPanel" asp-controller="Seller" asp-area="UserPanel" class="product-ext-link">کالای خود را در دیجی‌استور بفروشید <i class="mdi mdi-storefront"></i></a>
-                </div>
+    <div class="col-12" style="transform: none;">
+        <div class="product-page" style="transform: none;">
+
+            <div>
+                <partial name="_AddProductToCartPartial" model="@(new AddProductToOrderViewModel(){ OrderQty = 1,ProductId = Model.ProductId})" />
             </div>
-            <div class="col-lg-4 col-md-12 col-xs-12 pull-right">
-                <div class="product-gallery">
-                    <div class="zoomWrapper" style="height: 411px; width: 411px;"><img class="zoom-img" id="img-product-zoom" src="@(PathExtension.ProductImageOrigin + Model.ImageName)" data-zoom-image="@(PathExtension.ProductImageOrigin + Model.ImageName)" alt="img-slider" style="position: absolute; width: 411px; height: 411px;"></div>
-                    <div id="gallery_01f" style="width: 420px; float: right;">
-                        <ul class="gallery-items owl-carousel owl-theme owl-rtl owl-loaded owl-drag" id="gallery-slider">
 
-                            <div class="owl-stage-outer">
-                                <div class="owl-stage" style="transform: translate3d(201px, 0px, 0px); transition: all 0s ease 0s; width: 1005px;">
-                                    <div class="owl-item" style="width: 191px; margin-left: 10px;">
-                            <li class="item">
-                                <a href="#" class="elevatezoom-gallery" data-update="" data-image="@(PathExtension.ProductImageOrigin + Model.ImageName)" data-zoom-image="@(PathExtension.ProductImageOrigin + Model.ImageName)">
-                                    <img src="@(PathExtension.ProductImageThumb + Model.ImageName)" width="100" alt="img-slider">
-                                </a>
-                            </li>
+            <article class="js-product" style="transform: none;">
+                <div class="product-nav-container">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb px-0">
+                            <li class="breadcrumb-item"><a>فروشگاه اینترنتی @Model.Seller.StoreName</a></li>
+                            <li class="breadcrumb-item"><a href="/ProductSearch?CategoryId=@Model.MainCategoryId">@Model.MainCategoryTitle</a></li>
+                            <li class="breadcrumb-item"><a href="/ProductSearch?CategoryId=@Model.SubCategoryId">@Model.SubCategoryTitle</a></li>
+                        </ol>
+                    </nav>
+                    <div class="product-ext-links">
+                        <a asp-action="RequestSellerPanel" asp-controller="Seller" asp-area="UserPanel" class="product-ext-link">کالای خود را در دیجی‌استور بفروشید <i class="mdi mdi-storefront"></i></a>
                     </div>
-                    @if (Model.ProductGalleries != null && Model.ProductGalleries.Any())
-                    {
-                        foreach (var gallery in Model.ProductGalleries)
-                        {
-                            <div class="owl-item active" style="width: 191px; margin-left: 10px;">
+                </div>
+                <div class="col-lg-4 col-md-12 col-xs-12 pull-right">
+                    <div class="product-gallery">
+                        <div class="zoomWrapper" style="height: 411px; width: 411px;"><img class="zoom-img" id="img-product-zoom" src="@(PathExtension.ProductImageOrigin + Model.ImageName)" data-zoom-image="@(PathExtension.ProductImageOrigin + Model.ImageName)" alt="img-slider" style="position: absolute; width: 411px; height: 411px;"></div>
+                        <div id="gallery_01f" style="width: 420px; float: right;">
+                            <ul class="gallery-items owl-carousel owl-theme owl-rtl owl-loaded owl-drag" id="gallery-slider">
+
+                                <div class="owl-stage-outer">
+                                    <div class="owl-stage" style="transform: translate3d(201px, 0px, 0px); transition: all 0s ease 0s; width: 1005px;">
+                                        <div class="owl-item" style="width: 191px; margin-left: 10px;">
                                 <li class="item">
-                                    <a href="#" class="elevatezoom-gallery" data-update="" data-image="@(PathExtension.ProductGalleryOrigin + gallery.ImageName)" data-zoom-image="@(PathExtension.ProductGalleryOrigin + gallery.ImageName)">
-                                        <img src="@(PathExtension.ProductGalleryThumb + gallery.ImageName)" width="100" alt="img-slider">
+                                    <a href="#" class="elevatezoom-gallery" data-update="" data-image="@(PathExtension.ProductImageOrigin + Model.ImageName)" data-zoom-image="@(PathExtension.ProductImageOrigin + Model.ImageName)">
+                                        <img src="@(PathExtension.ProductImageThumb + Model.ImageName)" width="100" alt="img-slider">
                                     </a>
                                 </li>
-                            </div>
-                        }
-                    }
-
-
-                </div>
-            </div>
-            <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next disabled"><i class="fa fa-angle-left"></i></button></div>
-            <div class="owl-dots disabled"></div></ul>
-    </div>
-  
-</div>
-</div>
-
-
-<div class="col-lg-8 col-md-12 col-xs-12 pull-left px-0" style="transform: none;" id="ProductVisited" ProductVisite="@Model.ProductId">
-    <section class="product-info" style="transform: none;">
-        <div class="product-headline">
-            <div class="product-title-container">
-                <div class="product-directory">
-                    <ul class="mb-0">
-                        <li>
-                            <a href="/ProductSearch?CategoryId=@Model.MainCategoryId" class="link-border">@Model.MainCategoryTitle</a>
-                        </li>
-                        <li>
-                            <span>/</span>
-                        </li>
-                        <li>
-                            <a href="/ProductSearch?CategoryId=@Model.SubCategoryId" class="link-border">@Model.SubCategoryTitle</a>
-                        </li>
-                    </ul>
-                    <h1 class="product-title">
-                        @Model.Title
-                    </h1>
-                </div>
-            </div>
-        </div>
-        <div class="product-attributes" style="transform: none;">
-            <div class="col-lg-8 col-md-8 col-xs-12 pull-right pr-0">
-                <div class="product-config">
-                    <div class="product-config-wrapper">
-                        <input type="hidden" name="product_Price" value="@Model.Price" id="productBasePrice" />
-                        @if (Model.ProductColors != null && Model.ProductColors.Any())
+                        </div>
+                        @if (Model.ProductGalleries != null && Model.ProductGalleries.Any())
                         {
-                            <div class="product-variants">
-                                <span>انتخاب رنگ: </span>
-                                <ul>
-                                    @foreach (var colors in Model.ProductColors.OrderByDescending(p => p.ColorId))
-                                    {
-
-                                        <li class="js-c-ui-variant">
-                                            <label class="ui-variant-color">
-                                                <span class="ui-variant-shape" style="background-color: @colors.ColorCode"></span>
-                                                <input type="radio" onclick="changeProductPriceBaseOnColor(@colors.ColorId,@colors.Price)" name="color" class="js-variant-selector" checked="">
-                                                <span class="ui-variant-check"></span>
-                                            </label>
-                                        </li>
-
-
-                                    }
-                                </ul>
-
-                            </div>
-                        }
-                        <div class="product-params">
-                            @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                            foreach (var gallery in Model.ProductGalleries)
                             {
-                                <ul>
-                                    <li class="title-product-features">
-                                        ویژگی‌های محصول
+                                <div class="owl-item active" style="width: 191px; margin-left: 10px;">
+                                    <li class="item">
+                                        <a href="#" class="elevatezoom-gallery" data-update="" data-image="@(PathExtension.ProductGalleryOrigin + gallery.ImageName)" data-zoom-image="@(PathExtension.ProductGalleryOrigin + gallery.ImageName)">
+                                            <img src="@(PathExtension.ProductGalleryThumb + gallery.ImageName)" width="100" alt="img-slider">
+                                        </a>
                                     </li>
-                                    @foreach (var feature in Model.ProductFeatures.Take(5))
-                                    {
-                                        <li class="product-params-more" style="display: list-item;">
-                                            <span>@feature.FeatureTitle</span>
-                                            <span>@feature.FeatureValue</span>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            <div class="product-additional-info">
-                                <div class="product-additional-item">
-                                    <p>
-                                        @Model.ShortDescription
-                                    </p>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-xs-12 pull-left sticky-sidebar" style="padding: 0px; position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
-
-                <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; top: 0px;">
-                    <div class="product-seller-info">
-                        <div class="js-seller-info-changable">
-                            <div class="product-seller-row">
-                                <div class="product-seller-row-price">
-                                    <div class="product-seller-price-label">
-                                        قیمت فروشنده
-                                    </div>
-
-                                    @if (Model.ProductColors != null && Model.ProductColors.Any())
-                                    {
-                                        var firstColor = Model.ProductColors.FirstOrDefault();
-                                        <div class="product-seller-price-real">
-                                            <div class="product-seller-price-prev current_Price">@((Model.Price + firstColor.Price).ToString("n0")) </div>
-                                            تومان
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="product-seller-price-real">
-                                            <div class="product-seller-price-prev current_Price">@((Model.Price).ToString("n0")) </div>
-                                            تومان
-                                        </div>
-                                    }
-
-                                </div>
-
-                                <div class="product_variant quantity">
-                                    <label>تعداد</label>
-                                    <input min="1" max="100" value="1" type="number" id="number_of_Products_in_Order">
-
-                                </div>
-                                <a id="submitToOrderForm" class="btn-add-to-cart">
-                                    <span class="btn-add-to-cart-txt">
-                                        افزودن
-                                        به سبد خرید
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="product-feature-body">
-            <div class="product-feature">
-                <div class="row">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        if (!@ViewBag.IsExistThisProductInUserfavortitList)
-                        {
-                            <partial name="AddProductToFavorit" model="@(new CreateIFavoriteProductUserViewModel(){ProductId = Model.ProductId})" />
-                            <button type="submit" class="btn btn-outline-danger btn-block" id="AddProductToFavorit"><span class="mdi mdi-heart-outline">افزودن به لیست محصولات محبوب</span></button>
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-</article>
-@if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
-{
-    <div class="col-lg-12 col-md-12 col-xs-12 pull-right p-0">
-        <div class="row">
-            <div class="col-12">
-                <div class="widget widget-product card">
-                    <header class="card-header">
-                        <span class="title-one">محصولات مرتبط</span>
-                    </header>
-                    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
-                        <div class="owl-stage-outer">
-                            <div class="owl-stage" style="transform: translate3d(844px, 0px, 0px); transition: all 0s ease 0s; width: 1970px;">
-                                @foreach (var relatedProduct in Model.RelatedProducts)
-                                {
-                                    <div class="owl-item" style="width: 271.333px; margin-left: 10px;">
-                                        <div class="item">
-                                            <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@relatedProduct.ProductId" asp-route-title="@relatedProduct.Name.FixTextForUrl()" class="promotion-box-image">
-                                                <img src="@(PathExtension.ProductImageOrigin + relatedProduct.ImageName)" class="img-fluid" alt="img-slider">
-                                            </a>
-                                            <h2 class="post-title">
-                                                <a href="#">
-                                                    @Model.Title
-                                                </a>
-                                            </h2>
-                                            <div class="price">
-                                                <ins><span>@(relatedProduct.Price)<span>تومان</span></span></ins>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-                        <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa fa-angle-left"></i></button></div>
-                        <div class="owl-dots disabled"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-<div class="p-tabs" style="transform: none;">
-    <div class="col-lg-12 col-md-12 col-xs-12 pull-right p-0 res-w" style="transform: none;">
-        <div class="box-tabs-main">
-            <ul class="box-tabs">
-                <li class="box-tabs-tab active-tabs">
-                    <a href="#"> نقد و بررسی</a>
-                </li>
-                <li class="box-tabs-tab">
-                    <a href="#"> مشخصات</a>
-                </li>
-                <li class="box-tabs-tab ">
-                    <a href="#">نظرات کاربران</a>
-                </li>
-            </ul>
-        </div>
-        <div class="tabs-content" style="transform: none;">
-            <div class="tab-active-content" style="transform: none;">
-                <div class="tab content-expert" style="display: none;">
-                    <article>
-                        <h2 class="params-headline">
-                            نقد و بررسی اجمالی
-                            <span>
-                                @Model.Title
-                            </span>
-                        </h2>
-                        <section class="content-expert-summary">
-                            <div class="is-masked">
-                                <div class="mask-text-product-summary">
-                                    <p>
-                                        @(Html.Raw(Model.Description))
-                                    </p>
-                                </div>
-                                <a href="#" class="mask-handler">
-                                    <span class="show-more" style="">ادامه مطلب</span>
-                                    <span class="show-less" style="display: none;">بستن</span>
-                                </a>
-                                <div class="shadow-box" style=""></div>
-                            </div>
-                        </section>
-                    </article>
-                </div>
-
-                <div class="tab params" style="display: none;">
-                    <article>
-                        @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
-                        {
-                            <h2 class="params-headline">
-                                مشخصات فنی
-                                <span>
-                                    @Model.Title
-                                </span>
-                            </h2>
-                            <section>
-                                <h3 class="params-title">مشخصات کلی</h3>
-                                <ul class="params-list">
-                                    @foreach (var features in Model.ProductFeatures)
-                                    {
-
-                                        <li>
-                                            <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding: 0;">
-                                                <div class="params-list-key">
-                                                    <span class="block">@features.FeatureTitle</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding: 0;">
-                                                <div class="params-list-value">
-                                                    <span class="block">@features.FeatureValue</span>
-                                                </div>
-                                            </div>
-
-                                        </li>
-                                    }
-                                </ul>
-                            </section>
-                        }
-
-                    </article>
-                </div>
-                <div class="tab comments" style="transform: none; display: none;">
-                    <h2 class="comments-headline">
-                        امتیاز کاربران به:
-                        <span>
-                            <span>
-                                @Model.Title
-                            </span>
-                        </span>
-                    </h2>
-                    <div class="comments-summary" style="transform: none;">
-                        <div class="col-lg-3 col-md-3 col-xs-12 pull-right sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
-
-
-
-                            <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 0px; position: static; transform: none;">
-                                @await Component.InvokeAsync("ProductRating",Model.ProductId)
-                                <div class="comments-summary-note">
-                                    <span>دیدگاه خود را درباره این کالا بیان کنید</span>
-                                    <div class="parent-btn">
-                                        @if (User.Identity.IsAuthenticated)
-                                        {
-                                            <a asp-controller="Product" asp-action="ProductCommnet" asp-route-productId="@Model.ProductId" class="dk-btn dk-btn-info">
-                                                افزودن نظر جدید
-                                                <i class="fa fa-comments sign-in"></i>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger">جهت ثبت نظر ابتدا باید وارد حساب کاربری خود شوید </div>
-                                        }
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="ProductComment">
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</div>
-
-
-@section Scripts
-{
-
-    <script src="/assets/js/jquery.ez-plus.js"></script>
-    <script src="/assets/js/owl.carousel.min.js"></script>
-    <script src="/assets/js/theia-sticky-sidebar.min.js"></script>
-    <partial name="_ValidationScriptsPartial" />
-    @if (Model.ProductColors != null && Model.ProductColors.Any())
-    {
-        var firstColor = Model.ProductColors.FirstOrDefault();
-
-        <script>
-            $(document).ready(function() {
-
-                changeProductPriceBaseOnColor(@firstColor.ColorId,@firstColor.Price);
-            });
-
-        </script>
-
-        
+                                
+        }
     }
-    <script>
-        $(function() {
-            $('#ProductComment').load("/filterProductComment/" + @Model.ProductId);
-            console.log($('#ProductComment').load("/filterProductComment/" + @Model.ProductId));
-        });
+
+
+                        </div>
+                        </div>
+                        <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next disabled"><i class="fa fa-angle-left"></i></button></div>
+                        <div class="owl-dots disabled"></div></ul>
+                        </div>
+
+                        </div>
+                        </div>
+
+
+                        <div class="col-lg-8 col-md-12 col-xs-12 pull-left px-0" style="transform: none;" id="ProductVisited" ProductVisite="@Model.ProductId">
+                            <section class="product-info" style="transform: none;">
+                                <div class="product-headline">
+                                    <div class="product-title-container">
+                                        <div class="product-directory">
+                                            <ul class="mb-0">
+                                                <li>
+                                                    <a href="/ProductSearch?CategoryId=@Model.MainCategoryId" class="link-border">@Model.MainCategoryTitle</a>
+                                                </li>
+                                                <li>
+                                                    <span>/</span>
+                                                </li>
+                                                <li>
+                                                    <a href="/ProductSearch?CategoryId=@Model.SubCategoryId" class="link-border">@Model.SubCategoryTitle</a>
+                                                </li>
+                                            </ul>
+                                            <h1 class="product-title">
+                                                @Model.Title
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-attributes" style="transform: none;">
+                                    <div class="col-lg-8 col-md-8 col-xs-12 pull-right pr-0">
+                                        <div class="product-config">
+                                            <div class="product-config-wrapper">
+                                                <input type="hidden" name="product_Price" value="@Model.Price" id="productBasePrice" />
+                                                @if (Model.ProductColors != null && Model.ProductColors.Any())
+                                                {
+                                                    <div class="product-variants">
+                                                        <span>انتخاب رنگ: </span>
+                                                        <ul>
+                                                            @foreach (var colors in Model.ProductColors.OrderByDescending(p => p.ColorId))
+                                                            {
+
+                                                                <li class="js-c-ui-variant">
+                                                                    <label class="ui-variant-color">
+                                                                        <span class="ui-variant-shape" style="background-color: @colors.ColorCode"></span>
+                                                                        <input type="radio" onclick="changeProductPriceBaseOnColor(@colors.ColorId,@colors.Price)" name="color" class="js-variant-selector" checked="">
+                                                                        <span class="ui-variant-check"></span>
+                                                                    </label>
+                                                                </li>
+
+
+                                                            }
+                                                        </ul>
+
+                                                    </div>
+                                                }
+                                                <div class="product-params">
+                                                    @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                                                    {
+                                                        <ul>
+                                                            <li class="title-product-features">
+                                                                ویژگی‌های محصول
+                                                            </li>
+                                                            @foreach (var feature in Model.ProductFeatures.Take(5))
+                                                            {
+                                                                <li class="product-params-more" style="display: list-item;">
+                                                                    <span>@feature.FeatureTitle</span>
+                                                                    <span>@feature.FeatureValue</span>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    <div class="product-additional-info">
+                                                        <div class="product-additional-item">
+                                                            <p>
+                                                                @Model.ShortDescription
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-xs-12 pull-left sticky-sidebar" style="padding: 0px; position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+                                        <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; top: 0px;">
+                                            <div class="product-seller-info">
+                                                <div class="js-seller-info-changable">
+                                                    <div class="product-seller-row">
+                                                        <div class="product-seller-row-price">
+                                                            <div class="product-seller-price-label">
+                                                                قیمت فروشنده
+                                                            </div>
+
+                                                            @if (Model.ProductColors != null && Model.ProductColors.Any())
+                                                            {
+                                                                var firstColor = Model.ProductColors.FirstOrDefault();
+                                                                <div class="product-seller-price-real">
+                                                                    <div class="product-seller-price-prev current_Price">@((Model.Price + firstColor.Price).ToString("n0")) </div>
+                                                                    تومان
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="product-seller-price-real">
+                                                                    <div class="product-seller-price-prev current_Price">@((Model.Price).ToString("n0")) </div>
+                                                                    تومان
+                                                                </div>
+                                                            }
+
+                                                        </div>
+
+                                                        <div class="product_variant quantity">
+                                                            <label>تعداد</label>
+                                                            <input min="1" max="100" value="1" type="number" id="number_of_Products_in_Order">
+
+                                                        </div>
+                                                        <div class="cart-view-count">
+                                                            <i class="mdi mdi-eye-outline"></i>
+                                                            @Model.CountVisited
+                                                            تعداد بازید از این کالا
+                                                        </div>
+                                                        <a id="submitToOrderForm" class="btn-add-to-cart">
+                                                            <span class="btn-add-to-cart-txt">
+                                                                افزودن
+                                                                به سبد خرید
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-feature-body">
+                                    <div class="product-feature">
+                                        <div class="row">
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                if (!@ViewBag.IsExistThisProductInUserfavortitList)
+                                                {
+                                                    <partial name="AddProductToFavorit" model="@(new CreateIFavoriteProductUserViewModel(){ProductId = Model.ProductId})" />
+                                                    <button type="submit" class="btn btn-outline-danger btn-block" id="AddProductToFavorit"><span class="mdi mdi-heart-outline">افزودن به لیست محصولات محبوب</span></button>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        </article>
+                        @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
+                        {
+                            <div class="col-lg-12 col-md-12 col-xs-12 pull-right p-0">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="widget widget-product card">
+                                            <header class="card-header">
+                                                <span class="title-one">محصولات مرتبط</span>
+                                            </header>
+                                            <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                                                <div class="owl-stage-outer">
+                                                    <div class="owl-stage" style="transform: translate3d(844px, 0px, 0px); transition: all 0s ease 0s; width: 1970px;">
+                                                        @foreach (var relatedProduct in Model.RelatedProducts)
+                                                        {
+                                                            <div class="owl-item" style="width: 271.333px; margin-left: 10px;">
+                                                                <div class="item">
+                                                                    <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@relatedProduct.ProductId" asp-route-title="@relatedProduct.Name.FixTextForUrl()" class="promotion-box-image">
+                                                                        <img src="@(PathExtension.ProductImageOrigin + relatedProduct.ImageName)" class="img-fluid" alt="img-slider">
+                                                                    </a>
+                                                                    <h2 class="post-title">
+                                                                        <a href="#">
+                                                                            @Model.Title
+                                                                        </a>
+                                                                    </h2>
+                                                                    <div class="price">
+                                                                        <ins><span>@(relatedProduct.Price)<span>تومان</span></span></ins>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                                <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-right"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa fa-angle-left"></i></button></div>
+                                                <div class="owl-dots disabled"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="p-tabs" style="transform: none;">
+                            <div class="col-lg-12 col-md-12 col-xs-12 pull-right p-0 res-w" style="transform: none;">
+                                <div class="box-tabs-main">
+                                    <ul class="box-tabs">
+                                        <li class="box-tabs-tab active-tabs">
+                                            <a href="#"> نقد و بررسی</a>
+                                        </li>
+                                        <li class="box-tabs-tab">
+                                            <a href="#"> مشخصات</a>
+                                        </li>
+                                        <li class="box-tabs-tab ">
+                                            <a href="#">نظرات کاربران</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tabs-content" style="transform: none;">
+                                    <div class="tab-active-content" style="transform: none;">
+                                        <div class="tab content-expert" style="display: none;">
+                                            <article>
+                                                <h2 class="params-headline">
+                                                    نقد و بررسی اجمالی
+                                                    <span>
+                                                        @Model.Title
+                                                    </span>
+                                                </h2>
+                                                <section class="content-expert-summary">
+                                                    <div class="is-masked">
+                                                        <div class="mask-text-product-summary">
+                                                            <p>
+                                                                @(Html.Raw(Model.Description))
+                                                            </p>
+                                                        </div>
+                                                        <a href="#" class="mask-handler">
+                                                            <span class="show-more" style="">ادامه مطلب</span>
+                                                            <span class="show-less" style="display: none;">بستن</span>
+                                                        </a>
+                                                        <div class="shadow-box" style=""></div>
+                                                    </div>
+                                                </section>
+                                            </article>
+                                        </div>
+
+                                        <div class="tab params" style="display: none;">
+                                            <article>
+                                                @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                                                {
+                                                    <h2 class="params-headline">
+                                                        مشخصات فنی
+                                                        <span>
+                                                            @Model.Title
+                                                        </span>
+                                                    </h2>
+                                                    <section>
+                                                        <h3 class="params-title">مشخصات کلی</h3>
+                                                        <ul class="params-list">
+                                                            @foreach (var features in Model.ProductFeatures)
+                                                            {
+
+                                                                <li>
+                                                                    <div class="col-lg-3 col-md-3 col-xs-12 pull-right" style="padding: 0;">
+                                                                        <div class="params-list-key">
+                                                                            <span class="block">@features.FeatureTitle</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-lg-9 col-md-9 col-xs-12 pull-left" style="padding: 0;">
+                                                                        <div class="params-list-value">
+                                                                            <span class="block">@features.FeatureValue</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </section>
+                                                }
+
+                                            </article>
+                                        </div>
+                                        <div class="tab comments" style="transform: none; display: none;">
+                                            <h2 class="comments-headline">
+                                                امتیاز کاربران به:
+                                                <span>
+                                                    <span>
+                                                        @Model.Title
+                                                    </span>
+                                                </span>
+                                            </h2>
+                                            <div class="comments-summary" style="transform: none;">
+                                                <div class="col-lg-3 col-md-3 col-xs-12 pull-right sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+
+
+                                                    <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 0px; position: static; transform: none;">
+                                                        @await Component.InvokeAsync("ProductRating", Model.ProductId)
+                                                        <div class="comments-summary-note">
+                                                            <span>دیدگاه خود را درباره این کالا بیان کنید</span>
+                                                            <div class="parent-btn">
+                                                                @if (User.Identity.IsAuthenticated)
+                                                                {
+                                                                    <a asp-controller="Product" asp-action="ProductCommnet" asp-route-productId="@Model.ProductId" class="dk-btn dk-btn-info">
+                                                                        افزودن نظر جدید
+                                                                        <i class="fa fa-comments sign-in"></i>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="alert alert-danger">جهت ثبت نظر ابتدا باید وارد حساب کاربری خود شوید </div>
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="ProductComment">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    
+
+ @section Scripts
+{
+
+<script src="/assets/js/jquery.ez-plus.js"></script>
+<script src="/assets/js/owl.carousel.min.js"></script>
+<script src="/assets/js/theia-sticky-sidebar.min.js"></script>
+<partial name="_ValidationScriptsPartial" />
+@if (Model.ProductColors != null && Model.ProductColors.Any())
+{
+var firstColor = Model.ProductColors.FirstOrDefault();
+
+<script>
+$(document).ready(function() {
+
+    changeProductPriceBaseOnColor(@firstColor.ColorId,@firstColor.Price);
+});
 
     </script>
+
+
 }
+<script>
+$(function() {
+    $('#ProductComment').load("/filterProductComment/" + @Model.ProductId);
+    console.log($('#ProductComment').load("/filterProductComment/" + @Model.ProductId));
+});
+
+                </script>
+            }

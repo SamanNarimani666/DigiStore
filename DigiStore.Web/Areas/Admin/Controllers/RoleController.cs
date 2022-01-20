@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels;
 using DigiStore.Domain.ViewModels.Roles;
+using DigiStore.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class RoleController : AdminBaseController
     {
         #region Construtor
@@ -19,6 +21,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region FilterRole
+        [PermissionChecker(5)]
         public async Task<IActionResult> FilterRole(FilterRoleViewModel filterRole)
         {
             return View(await _permissionService.filterRoles(filterRole));
@@ -26,6 +29,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion#
 
         #region CreateRole
+        [PermissionChecker(6)]
         [HttpGet("create-role")]
         public async Task<IActionResult> CreateRole()
         {
@@ -33,11 +37,11 @@ namespace DigiStore.Web.Areas.Admin.Controllers
             return View();
         }
         [HttpPost("create-role")]
-        public async Task<IActionResult> CreateRole(CreateRoleViewModel createRole,List<int> SelectedPermission)
+        public async Task<IActionResult> CreateRole(CreateRoleViewModel createRole, List<int> SelectedPermission)
         {
             if (ModelState.IsValid)
             {
-                var res = await _permissionService.CreateRole(createRole,SelectedPermission);
+                var res = await _permissionService.CreateRole(createRole, SelectedPermission);
                 switch (res)
                 {
                     case CreateRoleResult.Error:
@@ -54,6 +58,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region Edit Role
+        [PermissionChecker(7)]
         [HttpGet("edit-role/{roleId}")]
         public async Task<IActionResult> EditRole(int roleId)
         {
