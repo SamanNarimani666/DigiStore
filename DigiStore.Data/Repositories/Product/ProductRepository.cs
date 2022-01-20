@@ -161,7 +161,7 @@ namespace DigiStore.Data.Repositories.Product
                 ShortDescription = product.ShortDescription,
                 Description = product.Description,
                 ProductCategories = product.ProductSelectedCategories.Select(s=>s.ProductCategory).ToList(),
-                ProductGalleries = product.ProductGalleries.ToList(),
+                ProductGalleries = product.ProductGalleries.Where(p=>!p.IsDelete).ToList(),
                 ProductColors = product.Colors.Where(p=>!p.IsDelete).ToList(),
                 SellerId = product.SellerId,
                 Seller = product.Seller,

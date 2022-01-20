@@ -22,7 +22,7 @@ namespace DigiStore.Data.Repositories.ProductGallery
         #region GetAllProductGallery
         public async Task<List<Domain.Entities.ProductGallery>> GetAllProductGallery(int productId)
         {
-            return await _context.ProductGalleries.Where(p => !p.IsDelete && p.ProductId == productId).ToListAsync();
+            return await _context.ProductGalleries.Where(p => p.ProductId == productId&& p.IsDelete==false).ToListAsync();
         }
         #endregion
 

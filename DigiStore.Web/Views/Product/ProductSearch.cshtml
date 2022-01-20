@@ -301,7 +301,27 @@
                     </div>
                 </div>
                 <!-- </ul> -->
-                <partial name="_SitePaging" model="@Model.GetCurrentPaging()" />
+                <div class="pager">
+                    <ul class="page-item">
+        
+                        @if (Model.StartPage < Model.PageId)
+                        {
+                            <li class="btn"><a href="/ProductSearch?pageid=@(Model.PageId - 1)">«</a></li>
+                        }
+                        @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                        {
+                            <li class="pagination-item"><a href="/ProductSearch?pageid=@(i)" class="@(Model.PageId == i ? "pager-item-active" : "")">@i</a></li>
+                        }
+
+                        @if (Model.EndPage > Model.PageId)
+                        {
+                            <li class="btn"><a class="btn" ohref="/ProductSearch?pageid=@(Model.PageId + 1)">»</a></li>
+                        }
+       
+
+                    </ul>
+                </div>
+
             </div>
         </div>
     </div>
