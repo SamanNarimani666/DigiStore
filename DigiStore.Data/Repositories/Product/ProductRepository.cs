@@ -145,7 +145,6 @@ namespace DigiStore.Data.Repositories.Product
                 .Include(p=>p.ProductGalleries)
                 .Include(p=>p.ProductSelectedCategories)
                 .Include(p=>p.ProductFeatures)
-                .Include(p=>p.ProductVisiteds)
                 .Include(p => p.Seller)
                 .Include(p => p.ProductSelectedCategories)
                 .ThenInclude(p => p.ProductCategory)
@@ -165,7 +164,6 @@ namespace DigiStore.Data.Repositories.Product
                 ProductColors = product.Colors.Where(p=>!p.IsDelete).ToList(),
                 SellerId = product.SellerId,
                 Seller = product.Seller,
-                CountVisited = product.ProductVisiteds.Count,
                 MainCategoryTitle=  _context.ProductSelectedCategories.Include(p=>p.ProductCategory)
                     .Where(p => p.ProductId == productId && p.ProductCategory.ParentId == null).Select(p=>p.ProductCategory.Title).FirstOrDefault()
                     ?.ToString(),
@@ -239,7 +237,7 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<List<Domain.Entities.Product>> TheMostVisitedProducts(int take)
         {
             return await _context.Products.Include(p=>p.ProductVisiteds)
-                .Where(p=>p.ProductVisiteds.Any()&&p.IsActive)
+                .Where(p=>p.ProductVisiteds.Any()&& p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
                 .OrderByDescending(p=>p.ProductVisiteds.Count)
                 .Take(take)
                 .ToListAsync();

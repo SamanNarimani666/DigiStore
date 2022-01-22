@@ -48,6 +48,6 @@ namespace DigiStore.Domain.ViewModels.Product
         public string SubCategoryTitle { get; set; }
         public int MainCategoryId { get; set; }
         public int SubCategoryId { get; set; }
-        public int CountVisited { get; set; }
+        
     }
 }

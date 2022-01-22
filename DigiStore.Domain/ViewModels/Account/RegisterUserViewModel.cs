@@ -4,7 +4,7 @@ using DigiStore.Domain.ViewModels.Site;
 
 namespace DigiStore.Domain.ViewModels.Account
 {
-   public class RegisterViewModel:CaptchaViewModel
+    public class RegisterViewModel : CaptchaViewModel
     {
         [Display(Name = "نام کاربری")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -21,14 +21,14 @@ namespace DigiStore.Domain.ViewModels.Account
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [MinLength(11, ErrorMessage = "{0} نمی تواند کمتر از {1} کاراکتر باشد")]
-        [RegularExpression(@"09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}",ErrorMessage = "شماره تماس را درست وارد کنید")]
+        [RegularExpression(@"09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}", ErrorMessage = "شماره تماس را درست وارد کنید")]
         public string Mobile { get; set; }
 
         [Display(Name = "کلمه عبور")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         [MinLength(8, ErrorMessage = "{0} نمی تواند كمتر از {1} کاراکتر باشد .")]
-       // [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$", ErrorMessage = "کلمه عبور باید شامل حرف و عدد باشد")]
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$", ErrorMessage = "کلمه عبور باید شامل حرف و عدد باشد")]
         public string PassWord { get; set; }
         [Display(Name = "تکرار کلمه عبور")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -38,12 +38,12 @@ namespace DigiStore.Domain.ViewModels.Account
         public string ConferimPassWord { get; set; }
 
     }
-   public enum RegisterResult
-   {
-       Success,
-       ExistsEmail,
-       ExistUserName,
-       ExistMobile,
-       Failed
-   }
+    public enum RegisterResult
+    {
+        Success,
+        ExistsEmail,
+        ExistUserName,
+        ExistMobile,
+        Failed
+    }
 }
