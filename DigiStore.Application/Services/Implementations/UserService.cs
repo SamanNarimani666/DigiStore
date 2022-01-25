@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using DigiMarket.Application.ViewModels.Account;
 using DigiStore.Application.Convertors;
@@ -97,6 +96,7 @@ namespace DigiStore.Application.Services.Implementations
                 if (!await _userRepository.IsExistsUserByEmail(FixedText.FixEmail(login.EmailOrMobiel.SanitizeText()))) return LoginResult.NotFound;
                 var user = await _userRepository.GetUserByEmail(login.EmailOrMobiel.SanitizeText());
                 if (!user.IsActive) return LoginResult.NotActive;
+                if (user.IsDelete) return LoginResult.DeletedAccount;
                 if (user.IsBlock) return LoginResult.UserIsBlock;
                 if (user.PassWord != _passwordHelper.EncodePasswordMd5(login.PassWord.SanitizeText()))
                     return LoginResult.NotFound;

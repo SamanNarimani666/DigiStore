@@ -118,6 +118,9 @@ namespace DigiStore.Web.Controllers
                     case LoginResult.UserIsBlock:
                         TempData[WarningMessage] = "حساب کاربری شما بلاک شده است";
                         break;
+                    case LoginResult.DeletedAccount:
+                        TempData[WarningMessage] = "حساب کاربری شما حذف شده است";
+                        break;
                     case LoginResult.Success:
                         TempData[SuccessMessage] = "ورود به دیجی استور موفقیت انجام شد";
                         var user = await _userService.GetUserByEmailOrPhone(login.EmailOrMobiel);

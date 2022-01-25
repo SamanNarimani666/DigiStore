@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DigiStore.Application.Convertors;
 using DigiStore.Application.Security;
@@ -10,6 +8,7 @@ using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.ContactUs;
 using DigiStore.Domain.IRepositories.SiteSetting;
 using DigiStore.Domain.ViewModels.Contacts;
+using DigiStore.Domain.ViewModels.SiteSetting;
 using DigiStore.Domain.ViewModels.Slider;
 
 namespace DigiStore.Application.Services.Implementations
@@ -66,6 +65,50 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region GetDefaultSiteInformation
+        public async Task<GetSiteInformation> GetDefaultSiteInformation()
+        {
+            var siteSetting = await _settingRepository.GetDefaultSiteSetting();
+            if (siteSetting == null) return null;
+            return new GetSiteInformation()
+            {
+                Email = siteSetting.Email,
+                Phone = siteSetting.Phone,
+                Address = siteSetting.Address,
+                AboutUs = siteSetting.AboutUs,
+                CopyRight = siteSetting.CopyRight,
+                FooterText = siteSetting.FooterText,
+                SiteSettingId = siteSetting.SiteSettingId
+            };
+        }
+        #endregion
+
+        #region EditSiteSetting
+        public async Task<EditSiteSettingResult> EditSiteSetting(GetSiteInformation editSiteInformation)
+        {
+            var mainSiteSetting = await _settingRepository.GetDefaultSiteSettingById(editSiteInformation.SiteSettingId);
+            if (mainSiteSetting == null) return EditSiteSettingResult.NotFound;
+            mainSiteSetting.Phone = editSiteInformation.Phone.SanitizeText();
+            mainSiteSetting.Email = FixedText.FixEmail(editSiteInformation.Email.SanitizeText());
+            mainSiteSetting.AboutUs = editSiteInformation.AboutUs.SanitizeText();
+            mainSiteSetting.CopyRight = editSiteInformation.CopyRight.SanitizeText();
+            mainSiteSetting.Address = editSiteInformation.Address.SanitizeText();
+            mainSiteSetting.FooterText = editSiteInformation.FooterText.SanitizeText();
+            mainSiteSetting.Address = editSiteInformation.Address;
+            try
+            {
+                _settingRepository.EditSiteSetting(mainSiteSetting);
+                await _settingRepository.Save();
+                return EditSiteSettingResult.Success;
+            }
+            catch
+            {
+                return EditSiteSettingResult.Error;
+            }
+        }
+
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {
@@ -75,6 +118,5 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
-      
     }
 }

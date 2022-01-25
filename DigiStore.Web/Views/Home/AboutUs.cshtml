@@ -19,7 +19,7 @@
             @if (Model != null)
             {
                 <h1>درباره دیجی استور</h1>
-                <p class="lead"> @Model.AboutUs</p>
+                <p class="lead"> @Html.Raw(Model.AboutUs)</p>
                    
             }
 

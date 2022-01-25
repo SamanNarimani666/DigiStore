@@ -1,0 +1,45 @@
+﻿@model DigiStore.Domain.ViewModels.SiteSetting.GetSiteInformation
+@{
+    ViewData["Title"] = "اطلاعات سایت";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="col-md-12">
+    <a class="btn btn-success" asp-controller="SiteSetting" asp-area="Admin" asp-action="EditSiteSetting">ویرایش اطلاعات سایت</a>
+    <div class="card-box">
+        <h1>اطلاعات سایت دیجی استور</h1>
+
+        <hr/>
+
+        <div class="clearfix"></div>
+
+        <h2>شماره تماس</h2>
+        <p class="lead text-justify">@Model.Phone</p>
+
+        <div class="clearfix"></div>
+        <hr/>
+        <h2>ایمیل</h2>
+        <p class="lead text-justify">@Model.Email</p>
+
+        <hr/>
+        <div class="clearfix"></div>
+        <h2>آدرس</h2>
+        <p class="lead text-justify">@Model.Address</p>
+
+        <hr/>
+        <div class="clearfix"></div>
+        <h2>کپی رایت</h2>
+        <p class="lead text-justify">@Model.CopyRight</p>
+
+        <hr/>
+        <div class="clearfix"></div>
+        <h2>متن پاصفحه</h2>
+        <p class="lead text-justify">@Model.FooterText</p>
+        <hr/>
+        <div class="clearfix"></div>
+        <h2>درباره ما</h2>
+        <p class="lead text-justify">@Html.Raw(Model.AboutUs)</p>
+        <div class="clearfix"></div>
+    </div>
+</div>
+

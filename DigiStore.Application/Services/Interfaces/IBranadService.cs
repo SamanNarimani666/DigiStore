@@ -13,5 +13,8 @@ namespace DigiStore.Application.Services.Interfaces
         Task<CreateBrandResult> CreateBrand(CreateBrandViewModel brand,IFormFile brandLogo);
         Task<EditBrandViewModel> GetBrandInfoForEdit(int brandId);
         Task<EditBrandResult> EditBrand(EditBrandViewModel brand, IFormFile brandLogo);
+        Task<bool> DeleteBrand(int brandId);
+        Task<bool> RestoreBrand(int brandId);
+
     }
 }

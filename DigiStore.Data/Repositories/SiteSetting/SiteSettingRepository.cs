@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.IRepositories.SiteSetting;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,29 @@ namespace DigiStore.Data.Repositories.SiteSetting
         #region GetDefaultSiteSetting
         public async Task<Domain.Entities.SiteSetting> GetDefaultSiteSetting()
         {
-            return await _context.SiteSettings.SingleOrDefaultAsync(s => s.IsDefault.Value);
+            return await _context.SiteSettings.FirstOrDefaultAsync(s => s.IsDefault.Value);
+        }
+        #endregion
+
+        #region EditSiteSetting
+        public void EditSiteSetting(Domain.Entities.SiteSetting siteSetting)
+        {
+            siteSetting.ModifiedDate = DateTime.Now;
+            _context.SiteSettings.Update(siteSetting);
+        }
+        #endregion
+
+        #region GetDefaultSiteSetting
+        public async Task<Domain.Entities.SiteSetting> GetDefaultSiteSettingById(int siteSettingId)
+        {
+            return await _context.SiteSettings.FirstOrDefaultAsync(s =>s.SiteSettingId==siteSettingId&& s.IsDefault.Value);
+        }
+        #endregion
+
+        #region Save
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
         }
         #endregion
 

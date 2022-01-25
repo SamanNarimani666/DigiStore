@@ -60,12 +60,26 @@
                                 <tbody>
                                     @foreach (var item in Model.Brands)
                                     {
-                                        <tr>
+                                        <tr id="ajax-url-item-@item.BrandId">
                                             <td><img src="@(!string.IsNullOrEmpty(item.Logo)?PathExtension.BrandThumb+item.Logo:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
                                             <td>@item.BrandName</td>
                                             <td>
-                                                <a class="btn btn-sm btn-warning" asp-controller="Brand" asp-area="Admin" asp-action="EditBrand" asp-route-brandId="@item.BrandId">وبرایش برند</a>
+                                                <a class="btn btn-sm btn-info" asp-controller="Brand" asp-area="Admin" asp-action="EditBrand" asp-route-brandId="@item.BrandId">وبرایش برند</a>
                                             </td>
+                                            @if (!item.IsDelete)
+                                            {
+                                                <td>
+
+                                                    <a ajax-url-button="@item.BrandId" class="btn btn-danger btn-sm" asp-action="RemoveBrand" asp-controller="Brand" asp-area="Admin" asp-route-brandId="@item.BrandId">حذف برند</a>
+                                                </td>
+                                            }
+                                            @if (item.IsDelete)
+                                            {
+                                                <td>
+
+                                                    <a ajax-url-button="@item.BrandId" class="btn btn-warning btn-sm" asp-action="RestoreBrand" asp-controller="Brand" asp-area="Admin" asp-route-brandId="@item.BrandId">بازگردانی برند</a>
+                                                </td>
+                                            }
                                         </tr>
 
 

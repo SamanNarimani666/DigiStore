@@ -1,14 +1,14 @@
 ﻿   <!--- Sidemenu -->
 <div id="sidebar-menu">
     <ul>
-       
+
 
         <li>
             <a asp-controller="Home" asp-action="Index" asp-area="Admin" class="waves-effect active"><i class="zmdi zmdi-view-dashboard"></i> <span> داشبورد </span> </a>
         </li>
 
         <li>
-            <a asp-controller="Seller" asp-action="SellerRequests" asp-area="Admin"class="waves-effect"><i class="zmdi zmdi-store"></i> <span> در خواست های فروشندگی </span> </a>
+            <a asp-controller="Seller" asp-action="SellerRequests" asp-area="Admin" class="waves-effect"><i class="zmdi zmdi-store"></i> <span> در خواست های فروشندگی </span> </a>
         </li>
 
         <li class="has_sub">
@@ -41,6 +41,16 @@
         </li>
         <li>
             <a asp-controller="Ticket" asp-action="filterTicket" asp-area="Admin"><i class="ti-ticket"></i><span> تیکت ها </span></a>
+        </li>
+
+
+        <li class="has_sub">
+            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-settings "></i> <span> تنظیمات سایت </span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled">
+                <li><a asp-controller="SiteSetting" asp-area="Admin" asp-action="SiteInformation">اطلاعات سایت</a></li>
+                <li><a asp-controller="SiteSetting" asp-area="Admin" asp-action="EditSiteSetting">ویرایش اطلاعات سایت</a></li>
+
+            </ul>
         </li>
     </ul>
     <div class="clearfix"></div>

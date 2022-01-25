@@ -3,6 +3,7 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Brand;
 using Microsoft.AspNetCore.Mvc;
 using DigiStore.Web.Areas.Admin.Controllers;
+using DigiStore.Web.Http;
 using DigiStore.Web.Security;
 using Microsoft.AspNetCore.Http;
 
@@ -86,6 +87,46 @@ namespace DigiStore.Web.Areas.Admin.Controllers
             var bradn = await _branadService.GetBrandInfoForEdit(brandId);
             if (bradn == null) return NotFound();
             return View("EditBrand",bradn);
+        }
+        #endregion
+
+        #region DeleteBrand
+        public async Task<IActionResult> RemoveBrand(int brandId)
+        {
+            var res = await _branadService.DeleteBrand(brandId);
+            if (res)
+            {
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Success,
+                    "درخواست مورد نطر با موفقیت ثبت شد",
+                    null
+                );
+            }
+            return JsonResponseStatus.SendStatus(
+                JsonResponseStatusType.Danger,
+                "اطلاعاتی با این مشخصات یافت نشد",
+                null
+            );
+        }
+        #endregion
+
+        #region RestoreBrand
+        public async Task<IActionResult> RestoreBrand(int brandId)
+        {
+            var res = await _branadService.RestoreBrand(brandId);
+            if (res)
+            {
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Success,
+                    "درخواست مورد نطر با موفقیت ثبت شد",
+                    null
+                );
+            }
+            return JsonResponseStatus.SendStatus(
+                JsonResponseStatusType.Danger,
+                "اطلاعاتی با این مشخصات یافت نشد",
+                null
+            );
         }
         #endregion
     }

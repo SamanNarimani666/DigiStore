@@ -42,7 +42,7 @@ namespace DigiStore.Application.Services.Implementations
         {
             var newBrand = new Brand()
             {
-               BrandName = brand.BrandName
+                BrandName = brand.BrandName
             };
             try
             {
@@ -65,7 +65,9 @@ namespace DigiStore.Application.Services.Implementations
                 return CreateBrandResult.Error;
             }
         }
+        #endregion
 
+        #region GetBrandInfoForEdit
         public async Task<EditBrandViewModel> GetBrandInfoForEdit(int brandId)
         {
             var brand = await _brandRepository.GetBrandByBrandId(brandId);
@@ -76,7 +78,9 @@ namespace DigiStore.Application.Services.Implementations
                 BrandLogo = brand.Logo
             };
         }
+        #endregion
 
+        #region EditBrand
         public async Task<EditBrandResult> EditBrand(EditBrandViewModel brand, IFormFile brandLogo)
         {
             var mainBrand = await _brandRepository.GetBrandByBrandId(brand.BrandId);
@@ -105,7 +109,44 @@ namespace DigiStore.Application.Services.Implementations
             }
 
         }
+        #endregion
 
+        #region DeleteBrand
+        public async Task<bool> DeleteBrand(int brandId)
+        {
+            var mainBrand = await _brandRepository.GetBrandByBrandId(brandId);
+            if (mainBrand == null) return false;
+            try
+            {
+                mainBrand.IsDelete = true;
+                _brandRepository.UpdateBrand(mainBrand);
+                await _brandRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region RestoreBrand
+        public async Task<bool> RestoreBrand(int brandId)
+        {
+            var mainBrand = await _brandRepository.GetBrandByBrandId(brandId);
+            if (mainBrand == null) return false;
+            try
+            {
+                mainBrand.IsDelete = false;
+                _brandRepository.UpdateBrand(mainBrand);
+                await _brandRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         #endregion
 
         #region Dispose
