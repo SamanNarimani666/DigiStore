@@ -14,6 +14,7 @@ namespace DigiStore.Application.Services.Interfaces
         Task<List<Slider>> GetAllActiveSlider();
         Task<GetSiteInformation> GetDefaultSiteInformation();
         Task<EditSiteSettingResult> EditSiteSetting(GetSiteInformation editSiteInformation);
+        Task<FilterContactUsViewModel> FilterContactUs(FilterContactUsViewModel filterContactUs);
 
     }
 }

@@ -42,8 +42,6 @@
         <li>
             <a asp-controller="Ticket" asp-action="filterTicket" asp-area="Admin"><i class="ti-ticket"></i><span> تیکت ها </span></a>
         </li>
-
-
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-settings "></i> <span> تنظیمات سایت </span> <span class="menu-arrow"></span></a>
             <ul class="list-unstyled">
@@ -51,6 +49,9 @@
                 <li><a asp-controller="SiteSetting" asp-area="Admin" asp-action="EditSiteSetting">ویرایش اطلاعات سایت</a></li>
 
             </ul>
+        </li>
+        <li>
+            <a asp-controller="ContactUs" asp-action="Index" asp-area="Admin"><i class="fa fa-phone"></i><span> لبست تماس ها </span></a>
         </li>
     </ul>
     <div class="clearfix"></div>

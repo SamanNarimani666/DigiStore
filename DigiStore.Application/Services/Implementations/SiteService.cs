@@ -106,7 +106,13 @@ namespace DigiStore.Application.Services.Implementations
                 return EditSiteSettingResult.Error;
             }
         }
+        #endregion
 
+        #region FilterContactUs
+        public async Task<FilterContactUsViewModel> FilterContactUs(FilterContactUsViewModel filterContactUs)
+        {
+            return await _contactUsRepository.FilterContactUs(filterContactUs);
+        }
         #endregion
 
         #region Dispose

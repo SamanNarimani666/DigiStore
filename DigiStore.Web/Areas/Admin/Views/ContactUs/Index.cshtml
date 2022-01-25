@@ -1,0 +1,62 @@
+﻿@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.Contacts.FilterContactUsViewModel
+@{
+    ViewData["Title"] = "لیست تماس با ما";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content">
+    <div class="container">
+
+        <form method="get" id="filter-form" asp-controller="ContactUs" asp-area="Admin" asp-action="Index">
+            <input type="hidden" asp-for="PageId"/>
+        </form>
+            @if (Model.ContactUs != null && Model.ContactUs.Any())
+            {
+                <div class="row">
+                    @foreach (var item in Model.ContactUs)
+                    {
+                        <div class="col-md-4">
+                            <div class="text-center card-box">
+                                <h3>@item.Subject</h3>
+                                <p class="text-muted font-13 m-b-30">
+                                    @Html.Raw(item.Text)
+                                </p>
+
+                                <div class="text-left">
+                                    <p class="text-muted font-13"><strong>نام و نانم خانوادگی :</strong> <span class="m-l-15">@item.FullName</span></p>
+
+                                    <p class="text-muted font-13"><strong>ایمیل :</strong><span class="m-l-15">@item.Email</span></p>
+
+                                    <p class="text-muted font-13"><strong>تاریخ :</strong> <span class="m-l-15">@item.ModifiedDate.ToShamsiDate()</span></p>
+                                    <p class="text-muted font-13"><strong>IP کاربر :</strong> <span class="m-l-15">@item.UserIp</span></p>
+
+                                </div>
+
+                                <button type="button" class="btn btn-custom btn-rounded waves-effect waves-light">ارسال پیام</button>
+                            </div>
+
+                        </div>
+
+                    }
+
+                </div>
+
+                <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+
+
+
+            }
+            else
+            {
+                <partial name="_NotFoundItem" />
+            }
+            <!-- end row -->
+       
+
+    </div>
+
+
+    </div> <!-- container -->
+
+

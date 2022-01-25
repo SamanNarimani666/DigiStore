@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.IRepositories.ContactUs;
+using DigiStore.Domain.ViewModels.Contacts;
+using DigiStore.Domain.ViewModels.Paging;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigiStore.Data.Repositories.ContactUs
 {
@@ -19,6 +23,26 @@ namespace DigiStore.Data.Repositories.ContactUs
         public async Task AddContactUs(ContactU contactU)
         {
             await _context.ContactUs.AddAsync(contactU);
+        }
+        #endregion
+
+        #region FilterContactUs
+        public async Task<FilterContactUsViewModel> FilterContactUs(FilterContactUsViewModel filterContactUs)
+        {
+            var query = _context.ContactUs.OrderByDescending(p=>p.ModifiedDate).AsQueryable();
+
+            #region Filter
+            if (!string.IsNullOrEmpty(filterContactUs.Email))
+                query = query.Where(p => EF.Functions.Like(p.Email, $"%{filterContactUs.Email}%"));
+            #endregion
+
+            #region paging
+            var pager = Pager.Build(filterContactUs.PageId, await query.CountAsync(), filterContactUs.TakeEntity,
+                filterContactUs.HowManyShowPageAfterAndBefore);
+            var allProduct = query.Paging(pager).ToList();
+            return filterContactUs.SetPaging(pager).SetContactUs(allProduct);
+
+            #endregion
         }
         #endregion
 
