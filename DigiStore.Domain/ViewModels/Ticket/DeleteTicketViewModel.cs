@@ -8,7 +8,7 @@ namespace DigiStore.Domain.ViewModels.Ticket
         public int  TicketId { get; set; }
         [Required]
         public int  TicketMessageId { get; set; }
-        
+        public int  UserId { get; set; }
     }
 
     public enum DeleteTicketResult

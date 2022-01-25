@@ -75,13 +75,21 @@ namespace DigiStore.Application.Services.Implementations
                 UserId = userId,
                 Text = answerTicket.Text.SanitizeText()
             };
-            await _ticketMessageRepository.AddTicketMessage(ticketMessage);
-            await _ticketMessageRepository.Save();
-            ticket.IsReadByOwner = true;
-            ticket.IsReadByAdmin = false;
-            _ticketRepository.EditTicket(ticket);
-            await _ticketRepository.Save();
-            return AnswerTicketResult.Success;
+            try
+            {
+                await _ticketMessageRepository.AddTicketMessage(ticketMessage);
+                await _ticketMessageRepository.Save();
+                ticket.IsReadByOwner = true;
+                ticket.IsReadByAdmin = false;
+                ticket.TicketState = (byte)TicketState.UnderProgress;
+                _ticketRepository.EditTicket(ticket);
+                await _ticketRepository.Save();
+                return AnswerTicketResult.Success;
+            }
+            catch
+            {
+                return AnswerTicketResult.Error;
+            }
         }
         #endregion
 
@@ -102,6 +110,55 @@ namespace DigiStore.Application.Services.Implementations
             {
 
                 return DeleteTicketResult.Error;
+            }
+        }
+        #endregion
+
+        #region AnswerTicketForAdmin
+        public async Task<AnswerTicketResult> AnswerTicketForAdmin(AnswerTicketViewModel answerTicket,int userId)
+        {
+            var ticket = await _ticketRepository.GetTicketById(answerTicket.TicketId);
+            if (ticket == null) return AnswerTicketResult.NotFound;
+            var ticketMessage = new TicketMessage
+            {
+                TicketId = ticket.TicketId,
+                UserId = userId,
+                Text = answerTicket.Text.SanitizeText()
+            };
+            try
+            {
+                await _ticketMessageRepository.AddTicketMessage(ticketMessage);
+                await _ticketMessageRepository.Save();
+                ticket.IsReadByOwner = false;
+                ticket.IsReadByAdmin = true;
+                ticket.TicketState = (byte) TicketState.Answered;
+                _ticketRepository.EditTicket(ticket);
+                await _ticketRepository.Save();
+                return AnswerTicketResult.Success;
+            }
+            catch
+            {
+                return AnswerTicketResult.Error;
+            }
+
+        }
+        #endregion
+
+        #region ClosedTheTicket
+        public async Task<bool> ClosedTheTicket(int ticketId)
+        {
+            var ticket = await _ticketRepository.GetTicketById(ticketId);
+            if (ticket == null) return false;
+            try
+            {
+                ticket.TicketState = (byte) TicketState.Closed;
+                 _ticketRepository.EditTicket(ticket);
+                 await _ticketRepository.Save();
+                 return true;
+            }
+            catch
+            {
+                return false;
             }
         }
         #endregion

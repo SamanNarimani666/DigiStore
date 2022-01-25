@@ -48,7 +48,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         }
         #endregion
 
-        #region AcceptSellerRequest
+        #region RejectSellerRequest
         [PermissionChecker(10)]
         [HttpPost,ValidateAntiForgeryToken]
         public async Task<IActionResult> RejectSellerRequest(RejectItemViewModel rejectItem)

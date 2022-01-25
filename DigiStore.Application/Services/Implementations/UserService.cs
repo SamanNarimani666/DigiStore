@@ -387,6 +387,12 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region GetUserByUserId
+        public async Task<User> GetUserByUserId(int userId)
+        {
+            return await _userRepository.GetUserById(userId);
+        }
+        #endregion
 
         #region Dispose
         public async ValueTask DisposeAsync()

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
+using DigiStore.Domain.Enums.Ticket;
 using DigiStore.Domain.IRepositories.Ticket;
 using DigiStore.Domain.ViewModels.Paging;
 using DigiStore.Domain.ViewModels.Ticket;
@@ -42,21 +43,54 @@ namespace DigiStore.Data.Repositories.Ticket
             }
             #endregion
 
+            #region TicketPriority
+            switch (filterTicketViewModel.FilterTicketPriority)
+            {
+                case FilterTicketPriority.All:
+                    break;
+                case FilterTicketPriority.High:
+                    ticket = ticket.Where(p => p.TicketPriority == (byte) TicketPriority.High);
+                    break;
+                case FilterTicketPriority.Medium:
+                    ticket = ticket.Where(p => p.TicketPriority == (byte)TicketPriority.Medium);
+                    break;
+                case FilterTicketPriority.Low:
+                    ticket = ticket.Where(p => p.TicketPriority == (byte)TicketPriority.Low);
+                    break;
+            }
+            #endregion
+
+            #region TicketSection
+            switch (filterTicketViewModel.FilterTicketSection)
+            {
+                case FilterTicketSection.All:
+                    break;
+                case FilterTicketSection.Sale:
+                    ticket = ticket.Where(p => p.TicketSection == (byte) TicketSection.Sale);
+                    break;
+                case FilterTicketSection.Support:
+                    ticket = ticket.Where(p => p.TicketSection == (byte)TicketSection.Support);
+                    break;
+                case FilterTicketSection.Technical:
+                    ticket = ticket.Where(p => p.TicketSection == (byte)TicketSection.Technical);
+                    break;
+            }
+            #endregion
+
             #region filter
-            if (filterTicketViewModel.TicketSection != null)
-                ticket = ticket.Where(t => t.TicketSection == (byte)filterTicketViewModel.TicketSection.Value);
-            if (filterTicketViewModel.TicketPriority != null)
-                ticket = ticket.Where(t => t.TicketPriority == (byte)filterTicketViewModel.TicketPriority.Value);
             if (filterTicketViewModel.UserId != null)
                 ticket = ticket.Where(t => t.UserId == filterTicketViewModel.UserId);
             if (!string.IsNullOrEmpty(filterTicketViewModel.Title))
                 ticket = ticket.Where(t => EF.Functions.Like(t.Title, $"%{filterTicketViewModel.Title}%"));
             #endregion
 
+            #region Paging
             var pager = Pager.Build(filterTicketViewModel.PageId,await ticket.CountAsync(), filterTicketViewModel.TakeEntity,
                 filterTicketViewModel.HowManyShowPageAfterAndBefore);
             var allTickets = ticket.Paging(pager).ToList();
             return filterTicketViewModel.SetPaging(pager).SetTickets(allTickets);
+
+            #endregion
         }
         #endregion
 
@@ -79,7 +113,7 @@ namespace DigiStore.Data.Repositories.Ticket
             {
                 Ticket = ticket,
                 TicketMessage = await _context.TicketMessages
-                    .OrderBy(t=>t.CreatedDate)
+                    .OrderByDescending(t=>t.CreatedDate)
                     .Where(t=>t.TicketId==ticketId).ToListAsync()
             };
         }

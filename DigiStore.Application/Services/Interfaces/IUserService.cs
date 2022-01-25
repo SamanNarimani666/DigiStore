@@ -31,6 +31,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<CreateUserResult> CreateUser(CreateUserViewModel createUser,List<int> rolesId,IFormFile userAvatar);
         Task<EditUserForAdminViewModel> UserInfoForEdit(int userId);
         Task<EditUserResult> EditUserForAdmin(EditUserForAdminViewModel editUser, List<int> rolesId, IFormFile userAvatar);
-       
+        Task<User> GetUserByUserId(int userId);
     }
 }

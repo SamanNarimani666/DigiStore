@@ -15,25 +15,34 @@ namespace DigiStore.Data.Repositories.Ticket
             _context = context;
         }
         #endregion
+
+        #region AddTicketMessage
         public async Task AddTicketMessage(TicketMessage ticketMessage)
         {
             await _context.TicketMessages.AddAsync(ticketMessage);
         }
+        #endregion
 
+        #region DeleteTicketMessage
         public void DeleteTicketMessage(TicketMessage ticketMessage)
         {
             _context.TicketMessages.Remove(ticketMessage);
         }
+        #endregion
 
+        #region GetTicketMessageById
         public async Task<TicketMessage> GetTicketMessageById(int ticketMessageId)
         {
             return await _context.TicketMessages.FirstOrDefaultAsync(t => t.TicketMessageId == ticketMessageId);
         }
+        #endregion
 
+        #region Save
         public async Task Save()
         {
             await _context.SaveChangesAsync();
         }
+        #endregion
 
         #region Dispose
         public async ValueTask DisposeAsync()
@@ -44,8 +53,6 @@ namespace DigiStore.Data.Repositories.Ticket
             }
         }
         #endregion
-
-
 
     }
 }

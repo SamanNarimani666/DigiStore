@@ -1,0 +1,206 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.Enums.Ticket
+@using DigiStore.Domain.ViewModels.Ticket
+@model DigiStore.Domain.ViewModels.Ticket.FilterTicketViewModel
+@{
+    ViewData["Title"] = "لیست تیکت ها";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    sbyte rowCounter = 1;
+
+}
+
+<div class="row">
+
+    <div class="col-sm-3">
+        <div class="panel panel-color panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">فیلتر</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-controller="Ticket" asp-action="filterTicket" asp-area="Admin" method="get" id="filter-form" class="form-horizontal" role="form">
+                    <input type="hidden" asp-for="PageId" />
+                    <label class="control-label">عنوان تیکت:</label>
+                    <div class="form-group">
+                        <input type="text" asp-for="Title" class="form-control" placeholder="بر اساس عنوان">
+                    </div>
+                    <label class="control-label">اولویت</label>
+                    <div class="control-group">
+
+                        @foreach (var item in Html.GetEnumSelectList<FilterTicketPriority>())
+                        {
+
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    @if (Convert.ToByte(item.Value) == Convert.ToByte(Model.FilterTicketPriority))
+                                    {
+
+                                        <input class="form-check-input" type="radio" value="@item.Value" name="@nameof(Model.FilterTicketPriority)" checked="checked" />
+
+                                    }
+                                    else
+                                    {
+                                        <input class="form-check-input" type="radio" value="@item.Value" name="@nameof(Model.FilterTicketPriority)" />
+
+                                    }
+
+                                    <span class="text">@item.Text</span>
+                                </label>
+                            </div>
+
+                        }
+                        <div class="form-group">
+                            <label>بخش</label>
+                            <select asp-for="FilterTicketSection" class="form-control">
+                                @foreach (var item in Html.GetEnumSelectList<FilterTicketSection>())
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-control">
+                        <button type="submit" class="btn btn-block btn-xs btn-purple waves-effect waves-light">فیلتر</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="card-box table-responsive">
+            <h4 class="header-title m-t-0 m-b-30">لیست تیکت ها</h4>
+
+            <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (Model.Tickets != null && Model.Tickets.Any())
+                        {
+
+
+                            <table class="table table-hover">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>#</th>
+                                        <th>عنوان تیکت</th>
+                                        <th>وضعیت</th>
+                                        <th>عملیات</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.Tickets)
+                                    {
+                                        <tr id="ajax-url-item-@item.TicketId">
+
+                                            <td>@rowCounter</td>
+                                            <td>@item.Title</td>
+                                            @{
+                                                TicketState ticketState = (TicketState)item.TicketState.Value;
+                                                if (ticketState == TicketState.Answered)
+                                                {
+                                                    <td class="bg-success" style="text-align: center">@ticketState.GetDisplayName()</td>
+                                                }
+                                                else if (ticketState == TicketState.UnderProgress)
+                                                {
+                                                    <td class="bg-warning" style="text-align: center">@ticketState.GetDisplayName()</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="bg-custom" style="text-align: center">@ticketState.GetDisplayName()</td>
+
+                                                }
+                                            }
+                                            @if (ticketState != TicketState.Closed)
+                                            {
+                                                <td>
+
+                                                    <a ajax-url-button="@item.TicketId" class="btn btn-warning btn-sm" asp-action="ClosedTheTicket" asp-controller="Ticket" asp-area="Admin" asp-route-ticketId="@item.TicketId">بستن تیکت</a>
+                                                </td>
+                                            }
+
+                                            <td><a class="btn btn-success" asp-controller="Ticket" asp-area="Admin" asp-action="TicketDetail" asp-route-ticketId="@item.TicketId" asp-route-userId="@item.UserId">جزئیات تیکت<i class="ti-angle-left"></i></a></td>
+
+                                        </tr>
+                                        rowCounter++;
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <partial name="_NotFoundItem" />
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-6">
+                            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end col -->
+
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function CloseTicket() {
+            swal({
+                title: 'اخطار',
+                text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "بله",
+                cancelButtonText: "خیر",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((result) => {
+                if (result.value) {
+                    $('#CloseTicketForm').submit();
+                } else if (res.dismiss === swal.DismissReason.cancel) {
+                    swal('اعلام', 'عملیات لغو شد', 'error');
+                }
+            });
+        }
+        $('[ajax-url-button]').on('click', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            var itemId = $(this).attr('ajax-url-button');
+            console.log(itemId);
+            swal({
+                title: 'اخطار',
+                text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "بله",
+                cancelButtonText: "خیر",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((result) => {
+                if (result.value) {
+                    $.get(url).then(result => {
+                        if (result.status === 'Success') {
+                            ShowMessage('موفقیت', result.message);
+                            $('#ajax-url-item-' + itemId).hide(1500);
+                        }
+                    });
+                } else if (result.dismiss === swal.DismissReason.cancel) {
+                    swal('اعلام', 'عملیات لغو شد', 'error');
+                }
+            });
+        });
+    </script>
+}
+

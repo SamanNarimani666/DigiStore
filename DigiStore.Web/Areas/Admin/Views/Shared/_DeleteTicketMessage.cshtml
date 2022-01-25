@@ -1,0 +1,7 @@
+﻿@model DigiStore.Domain.ViewModels.Ticket.DeleteTicketViewModel
+<form asp-action="DeleteTicketMessage" id="deleteticketMessageForAdminform" asp-controller="Ticket" asp-area="Admin">
+    <input type="hidden" asp-for="TicketId" />
+    <input type="hidden" asp-for="TicketMessageId" />
+    <input type="hidden" asp-for="UserId" />
+    <button  onclick="RemoveTicket()" type="button" class="btn btn-danger">حذف</button>
+</form>

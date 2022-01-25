@@ -1,64 +1,43 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Ticket;
+using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
-using Microsoft.AspNetCore.Mvc;
 
-namespace DigiStore.Web.Areas.UserPanel.Controllers
+namespace DigiStore.Web.Areas.Admin.Controllers
 {
-    [Route("Ticket")]
-    public class TicketController : UserBaseController
+    public class TicketController : AdminBaseController
     {
         #region Constructor
         private readonly ITicketService _ticketService;
-        public TicketController(ITicketService ticketService)
+        private readonly IUserService _userService;
+        public TicketController(ITicketService ticketService, IUserService userService)
         {
             _ticketService = ticketService;
+            _userService = userService;
         }
         #endregion
 
-        #region ListTicket
-        [HttpGet("ListTicket")]
-        public async Task<IActionResult> ListTicket(FilterTicketViewModel filterTicket)
+        #region filterTicket
+        public async Task<IActionResult> filterTicket(FilterTicketViewModel filterTicket)
         {
-            filterTicket.UserId = User.GetUserId();
             filterTicket.OrderBy = FilterTicketOrder.CreateDate_DES;
-            return View(await _ticketService.FilterTickets(filterTicket));
-        }
-        #endregion
-
-        #region AddTicket
-        [HttpGet("add-Ticket")]
-        public IActionResult AddTicket()
-        {
-            return View();
-        }
-        [HttpPost("add-Ticket")]
-        public async Task<IActionResult> AddTicket(AddTicketViewModel addTicket)
-        {
-            if (ModelState.IsValid)
-            {
-                var res = await _ticketService.AddUserTicket(addTicket, User.GetUserId());
-                switch (res)
-                {
-                    case AddTicketResult.Error:
-                        TempData[ErrorMessage] = "خطا در ثبت تیکت";
-                        break;
-                    case AddTicketResult.Success:
-                        TempData[SuccessMessage] = "تیکت شما با موفقیت ثبت شد";
-                        return RedirectToAction("ListTicket", "Ticket", new {area = "UserPanel"});
-                }
-            }
-            return View(addTicket);
+            var filter = await _ticketService.FilterTickets(filterTicket);
+            return View(filter);
         }
         #endregion
 
         #region TicketDetails
-        [HttpGet("tickets/{ticketId}")]
-        public async Task<IActionResult> TicketDetail(int ticketId)
+        [HttpGet("tickets/{ticketId}/{userId}")]
+        public async Task<IActionResult> TicketDetail(int ticketId,int userId)
         {
-            var ticket = await _ticketService.TicketDetailsForShow(ticketId, User.GetUserId());
+            var ticket = await _ticketService.TicketDetailsForShow(ticketId, userId);
             if (ticket == null) return NotFound();
+            ViewBag.UserInfo = await _userService.GetUserByUserId(User.GetUserId());
             return View(ticket);
         }
         #endregion
@@ -74,25 +53,19 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
 
             if (ModelState.IsValid)
             {
-                var res = await _ticketService.AnswerTicket(answer, User.GetUserId());
+                var res = await _ticketService.AnswerTicketForAdmin(answer, User.GetUserId());
                 switch (res)
                 {
-                    case AnswerTicketResult.Error:
-                        TempData[ErrorMessage] = "خطا در ثبت پاسخ";
-                        break;
-                    case AnswerTicketResult.NotForUser:
-                        TempData[ErrorMessage] = "عدم دسترسی";
-                        return RedirectToAction("ListTicket");
                     case AnswerTicketResult.NotFound:
                         TempData[WarningMessage] = "اطلاعات مورد نظر یافت نشد";
-                        return RedirectToAction("ListTicket");
+                        return RedirectToAction("filterTicket");
                     case AnswerTicketResult.Success:
                         TempData[SuccessMessage] = "اطلاعات مورد نظر با موفقیت ثبت شد";
                         break;
                 }
             }
 
-            return RedirectToAction("TicketDetail", "Ticket", new { area = "UserPanel", ticketId = answer.TicketId });
+            return RedirectToAction("TicketDetail", "Ticket", new { area = "Admin", ticketId = answer.TicketId ,userId=answer.UserId});
         }
         #endregion
 
@@ -119,10 +92,30 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
                         break;
                     case DeleteTicketResult.Success:
                         TempData[SuccessMessage] = "تیکت با موفقیت قبت شد";
-                       break;
+                        break;
                 }
             }
-            return RedirectToAction("TicketDetail", "Ticket", new { area = "UserPanel", ticketId = deleteTicket.TicketId });
+            return RedirectToAction("TicketDetail", "Ticket", new { area = "Admin", ticketId = deleteTicket.TicketId, userId = deleteTicket.UserId });
+        }
+        #endregion
+
+        #region AcceptSellerRequest
+        public async Task<IActionResult> ClosedTheTicket(int ticketId)
+        {
+            var result = await _ticketService.ClosedTheTicket(ticketId);
+            if (result)
+            {
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Success,
+                    "درخواست مورد نطر با موفقیت ثبت شد",
+                    null
+                );
+            }
+            return JsonResponseStatus.SendStatus(
+                JsonResponseStatusType.Danger,
+                "اطلاعاتی با این مشخصات یافت نشد",
+                null
+            );
         }
         #endregion
     }

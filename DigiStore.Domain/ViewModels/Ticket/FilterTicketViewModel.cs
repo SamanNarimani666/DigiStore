@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using DigiStore.Domain.Enums.Ticket;
 using DigiStore.Domain.ViewModels.Paging;
 
@@ -12,14 +13,13 @@ namespace DigiStore.Domain.ViewModels.Ticket
 
         public int? UserId { get; set; }
 
-        public TicketSection? TicketSection { get; set; }
+        public FilterTicketSection FilterTicketSection { get; set; }
 
-        public TicketPriority? TicketPriority { get; set; }
 
         public FilterTicketOrder OrderBy { get; set; }
 
         public List<Entities.Ticket> Tickets { get; set; }
-
+        public FilterTicketPriority FilterTicketPriority { get; set; }
         #endregion
         #region Methods
 
@@ -47,7 +47,31 @@ namespace DigiStore.Domain.ViewModels.Ticket
 
     public enum FilterTicketOrder
     {
+        [Display(Name = "جدید")]
         CreateDate_DES,
+        [Display(Name = "قدیمی")]
         CreateDate_ASC,
+    }
+    public enum FilterTicketPriority
+    {
+        [Display(Name = "همه")]
+        All,
+        [Display(Name = "کم")]
+        Low,
+        [Display(Name = "متوسط")]
+        Medium,
+        [Display(Name = "زیاد")]
+        High
+    }
+    public enum FilterTicketSection
+    {
+        [Display(Name = "همه")]
+        All,
+        [Display(Name = "پشتیبانی")]
+        Support,
+        [Display(Name = "فنی")]
+        Technical,
+        [Display(Name = "فروش")]
+        Sale
     }
 }

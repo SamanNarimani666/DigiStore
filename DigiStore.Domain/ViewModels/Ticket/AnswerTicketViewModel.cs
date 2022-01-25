@@ -6,6 +6,7 @@ namespace DigiStore.Domain.ViewModels.Ticket
     public class AnswerTicketViewModel
     {
         public int  TicketId { get; set; }
+        public int UserId { get; set; }
 
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Text { get; set; }
@@ -14,6 +15,7 @@ namespace DigiStore.Domain.ViewModels.Ticket
     {
         NotForUser,
         NotFound,
-        Success
+        Success,
+        Error
     }
 }
