@@ -27,7 +27,7 @@
                                     <img class="d-block w-100" src="@(PathExtension.SliderImageOrigin + Model.FirstOrDefault()?.ImageName)" alt="Second slide">
                                 </a>
                             </div>
-                            @foreach (var item in Model.Skip(1).OrderByDescending(p=>p.DisplayPrority))
+                            @foreach (var item in Model.Skip(1))
                             {
                                 <div class="carousel-item">
                                     <a href="@item.Link">

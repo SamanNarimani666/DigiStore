@@ -211,16 +211,28 @@ namespace DigiStore.Application.Services.Implementations
             user.ModifiedDate = DateTime.Now;
             try
             {
-                if (UserAvatar != null && UserAvatar.IsImage())
+                if (UserAvatar != null)
                 {
-                    var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(UserAvatar.FileName);
-                    UserAvatar.AddImageToServer(imageName, PathExtension.UserAvatarOriginServer, 100, 100, PathExtension.UserAvatarThumbServer, user.UserAvatar);
-                    user.UserAvatar = imageName;
+                    if (UserAvatar.IsImage())
+                    {
+                        var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(UserAvatar.FileName);
+                        var res = UserAvatar.AddImageToServer(imageName, PathExtension.UserAvatarOriginServer, 100, 100, PathExtension.UserAvatarThumbServer, user.UserAvatar);
+                        if (res)
+                        {
+                            user.UserAvatar = imageName;
+
+                        }
+                        else
+                        {
+                            return EditUserProfileResult.NotIsIamage;
+                        }
+                    }
+                    else
+                    {
+                        return EditUserProfileResult.NotIsIamage;
+                    }
                 }
-                else
-                {
-                    return EditUserProfileResult.NotIsIamage;
-                }
+            
                 _userRepository.EditUser(user);
                 await _userRepository.Save();
                 return EditUserProfileResult.Success;
@@ -349,7 +361,7 @@ namespace DigiStore.Application.Services.Implementations
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
-                UserImage=user.UserAvatar,
+                UserImage = user.UserAvatar,
                 IsActive = user.IsActive,
                 IsBlock = user.IsBlock
             };

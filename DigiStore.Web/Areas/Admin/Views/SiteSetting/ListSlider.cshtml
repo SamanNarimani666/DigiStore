@@ -42,7 +42,7 @@
 
     <div class="col-lg-9">
         <div class="card-box table-responsive">
-            <h4 class="header-title m-t-0 m-b-30">لیست برند ها</h4>
+            <h4 class="header-title m-t-0 m-b-30">لیست تصویر ها</h4>
             <a asp-controller="SiteSetting" asp-area="Admin" asp-action="CreateSlider" class="btn btn-success">ایجاد تصویر جدید</a>
             <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
                 <div class="row">
@@ -54,6 +54,8 @@
                                     <tr>
                                         <th>عکس اسلایدر  </th>
                                         <th>مقصد لبنک</th>
+                                        <th>اولویت</th>
+                                        <th>وضعیت</th>
                                         <th>عملیات</th>
                                     </tr>
                                 </thead>
@@ -64,20 +66,37 @@
                                             <td><img src="@(PathExtension.SliderImageThumb+item.ImageName)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
                                             <td>@item.Link</td>
                                             <td>
-                                                <a class="btn btn-sm btn-info" asp-controller="Brand" asp-area="Admin" asp-action="EditBrand" asp-route-brandId="@item.SliderId">وبرایش اسلایدر</a>
+                                                @item.DisplayPrority
                                             </td>
+                                            @if (item.IsActive)
+                                            {
+                                                <td>
+                                                    <p class="text text-success"> فعال</p>
+
+                                                </td>
+                                            }
+                                            @if (!item.IsActive)
+                                            {
+                                                <td>
+                                                    <p class="text text-danger">غیر فعال</p>
+
+                                                </td>
+                                            }
+                                            <td>
+                                                <a class="btn btn-sm btn-info" asp-controller="SiteSetting" asp-area="Admin" asp-action="EditSlider" asp-route-sliderId="@item.SliderId">وبرایش اسلایدر</a>
+                                            </td>
+
                                             @if (!item.IsDelete)
                                             {
                                                 <td>
 
-                                                    <a ajax-url-button="@item.SliderId" class="btn btn-danger btn-sm" asp-action="RemoveBrand" asp-controller="Brand" asp-area="Admin" asp-route-brandId="@item.SliderId">حذف اسلایدر</a>
+                                                    <partial name="_DeleteSliderPartial" model="@(new DeleteAndRestoreSliderViewModel(){SliderId = item.SliderId})" />
                                                 </td>
-                                            }
-                                            @if (item.IsDelete)
+                                            }else
                                             {
                                                 <td>
+                                                    <partial name="_RestoreSliderPartial" model="@(new DeleteAndRestoreSliderViewModel(){SliderId = item.SliderId})" />
 
-                                                    <a ajax-url-button="@item.SliderId" class="btn btn-warning btn-sm" asp-action="RestoreBrand" asp-controller="Brand" asp-area="Admin" asp-route-brandId="@item.SliderId">بازگردانی برند</a>
                                                 </td>
                                             }
                                         </tr>
@@ -107,3 +126,49 @@
     </div>
 </div>
 
+@section Scripts
+{
+    <script>
+        function DeleteSlider() {
+            swal({
+                title: 'اخطار',
+                text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "بله",
+                cancelButtonText: "خیر",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((result) => {
+                if (result.value) {
+                    $('#deleteSlider').submit();
+                } else if (res.dismiss === swal.DismissReason.cancel) {
+                    swal('اعلام', 'عملیات لغو شد', 'error');
+                }
+            });
+        }
+        function RestoreSlider() {
+            swal({
+                title: 'اخطار',
+                text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "بله",
+                cancelButtonText: "خیر",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((result) => {
+                if (result.value) {
+                    $('#restoreSlider').submit();
+                } else if (res.dismiss === swal.DismissReason.cancel) {
+                    swal('اعلام', 'عملیات لغو شد', 'error');
+                }
+            });
+        }
+    </script>
+
+
+
+}

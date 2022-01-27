@@ -1,0 +1,5 @@
+﻿@model DigiStore.Domain.ViewModels.Slider.DeleteAndRestoreSliderViewModel
+<form id="deleteSlider" asp-controller="SiteSetting" asp-area="Admin" asp-action="DeleteSlider">
+    <input type="hidden" asp-for="SliderId"/>
+    <button type="button" onclick="DeleteSlider()" class="btn btn-danger btn-sm" >حذف اسلایدر</button>
+</form>

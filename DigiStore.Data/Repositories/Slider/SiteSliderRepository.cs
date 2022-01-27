@@ -23,7 +23,7 @@ namespace DigiStore.Data.Repositories.Slider
         #region GetAllActiveSlider
         public async Task<List<Domain.Entities.Slider>> GetAllActiveSlider()
         {
-            return await _context.Sliders.Where(p => p.IsActive && !p.IsDelete).ToListAsync();
+            return await _context.Sliders.Where(p => p.IsActive && !p.IsDelete).OrderBy(p => p.DisplayPrority.Value).ToListAsync();
         }
         #endregion
 
@@ -72,6 +72,27 @@ namespace DigiStore.Data.Repositories.Slider
         public async Task<bool> CheckImageDisplayPrority(byte displayPrority)
         {
             return await _context.Sliders.AnyAsync(p =>p.DisplayPrority== displayPrority&& p.IsActive && !p.IsDelete);
+        }
+        #endregion
+
+        #region GetSliderBySliderId
+        public async Task<Domain.Entities.Slider> GetSliderBySliderId(int sliderId)
+        {
+            return await _context.Sliders.FindAsync(sliderId);
+        }
+        #endregion
+
+        #region UpdateSlider
+        public void UpdateSlider(Domain.Entities.Slider slider)
+        {
+            _context.Sliders.Update(slider);
+        }
+        #endregion
+
+        #region CheckImageDisplayProrityForEdit
+        public async Task<bool> CheckImageDisplayProrityForEdit(int sliderId, byte displayPrority)
+        {
+            return await _context.Sliders.AnyAsync(p =>p.SliderId!=sliderId&& p.DisplayPrority == displayPrority && p.IsActive && !p.IsDelete);
         }
         #endregion
 

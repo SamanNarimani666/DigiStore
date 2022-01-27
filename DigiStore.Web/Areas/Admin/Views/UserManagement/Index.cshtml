@@ -128,7 +128,7 @@
                                 @foreach (var item in Model.Users)
                                 {
                                     <tr>
-                                        <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar) ? PathExtension.UserAvatarThumb + item.UserAvatar : PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                        <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar) ? PathExtension.UserAvatarThumb + item.UserAvatar : PathExtension.DefaultAvatarThum)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
                                         <td>@item.UserName</td>
                                         <td>@item.Email</td>
                                         <td>@item.Mobile</td>

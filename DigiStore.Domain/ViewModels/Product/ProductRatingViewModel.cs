@@ -19,7 +19,7 @@ namespace DigiStore.Domain.ViewModels.Product
         [Display(Name = "طراحی و ظاهر")]
         public int DesignAndAppearance { get; set; } = 0;
 
-        public int CountRating { get; set; }
+        public int? CountRating { get; set; }
 
         public  int ProductRatingSum()
         {

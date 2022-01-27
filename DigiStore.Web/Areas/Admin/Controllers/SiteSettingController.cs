@@ -26,7 +26,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
 
         #region EditSiteSetting
         [HttpGet("EditSiteSetting")]
-        public async  Task<IActionResult> EditSiteSetting()
+        public async Task<IActionResult> EditSiteSetting()
         {
             return View(await _siteService.GetDefaultSiteInformation());
         }
@@ -68,7 +68,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
             return View();
         }
         [HttpPost("create-slider")]
-        public async Task<IActionResult> CreateSlider(CreateSliderViewModel createSlider,IFormFile sliderImage)
+        public async Task<IActionResult> CreateSlider(CreateSliderViewModel createSlider, IFormFile sliderImage)
         {
             if (ModelState.IsValid)
             {
@@ -80,6 +80,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
                         break;
                     case CreateSliderResult.DisplayProrityIsExist:
                         TempData[WarningMessage] = "تصویری با این اولویت وجود دارد";
+                        ModelState.AddModelError("ImagepDisplayPrority", "تصویری با این اولویت وجود دارد");
                         break;
                     case CreateSliderResult.ImageError:
                         TempData[ErrorMessage] = "تصویر آپلود شده نامعتبر می باشد";
@@ -89,7 +90,84 @@ namespace DigiStore.Web.Areas.Admin.Controllers
                         return RedirectToAction("ListSlider", "SiteSetting");
                 }
             }
-            return View();
+            return View(createSlider);
+        }
+        #endregion
+
+        #region DeleteSlider
+        [HttpPost]
+        public async Task<IActionResult> DeleteSlider(DeleteAndRestoreSliderViewModel deleteSlider)
+        {
+            var res = await _siteService.DeleteSlider(deleteSlider);
+            if (res)
+            {
+                TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت حذف شد";
+            }
+            else
+            {
+                TempData[ErrorMessage] = "خطا در حذف تصویر";
+            }
+
+            return RedirectToAction("ListSlider", "SiteSetting");
+        }
+        #endregion
+
+        #region RestoreSlider
+        [HttpPost]
+        public async Task<IActionResult> RestoreSlider(DeleteAndRestoreSliderViewModel restoreSlider)
+        {
+            var res = await _siteService.RestoreSlider(restoreSlider);
+            if (res)
+            {
+                TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت بازگردانی شد";
+            }
+            else
+            {
+                TempData[ErrorMessage] = "خطا در باز گردانی تصویر";
+            }
+
+            return RedirectToAction("ListSlider", "SiteSetting");
+        }
+        #endregion
+
+        #region EditSlider
+        [HttpGet("edit-slider/{sliderId}")]
+        public async Task<IActionResult> EditSlider(int sliderId)
+        {
+            var slider = await _siteService.SliderInfoForEdit(sliderId);
+            if (slider == null) return NotFound();
+            return View(slider);
+        }
+
+        [HttpPost("edit-slider/{sliderId}")]
+        public async Task<IActionResult> EditSlider(int sliderId, EditSliderViewModel editSlider, IFormFile sliderImage)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _siteService.EditSlider(editSlider, sliderImage);
+                switch (res)
+                {
+                    case EditSliderResult.Error:
+                        TempData[ErrorMessage] = "خطا در ویرایش اطلاعات";
+                        break;
+                    case EditSliderResult.NotFound:
+                        TempData[ErrorMessage] = "اطلاعاتی با این مشخصات یافت نشد";
+                        break;
+                    case EditSliderResult.ImageError:
+                        TempData[ErrorMessage] = "تصویر آپلود شده معتبر نمی باشد";
+                        break;
+                    case EditSliderResult.DisplayProrityIsExist:
+                        TempData[ErrorMessage] = "اولویت وارد شده مربوط به تصویر فعال دیگری می باشد.";
+                        ModelState.AddModelError("ImagepDisplayPrority", "اولویت وارد شده مربوط به تصویر فعال دیگری می باشد.");
+                        break;
+                    case EditSliderResult.Sucess:
+                        TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت ویرایش شد";
+                        return RedirectToAction("ListSlider", "SiteSetting");
+                }
+            }
+            var slider = await _siteService.SliderInfoForEdit(sliderId);
+            if (slider == null) return NotFound();
+            return View(slider);
         }
         #endregion
     }

@@ -27,6 +27,8 @@ namespace DigiStore.Application.Extensions
 
         #region DefaultAvatar
         public static string DefaultAvatar = "/Images/defaults/Default.jpg";
+        public static string DefaultAvatarThum = "/Images/defaults/DefaultThum.jpg";
+
         #endregion
 
         #region user avatar

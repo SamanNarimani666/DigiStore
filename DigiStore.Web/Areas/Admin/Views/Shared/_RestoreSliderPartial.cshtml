@@ -1,0 +1,5 @@
+﻿@model DigiStore.Domain.ViewModels.Slider.DeleteAndRestoreSliderViewModel
+<form method="post" id="restoreSlider" asp-controller="SiteSetting" asp-area="Admin" asp-action="RestoreSlider">
+    <input type="hidden" asp-for="SliderId" />
+    <button type="button" onclick="RestoreSlider()" class="btn btn-warning btn-sm">بازگردانی اسلایدر</button>
+</form>

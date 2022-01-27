@@ -66,8 +66,6 @@ namespace DigiStore.Web.Areas.Admin.Controllers
             }
             return RedirectToAction("Index", "UserManagement");
         }
-
-
         #endregion
 
         #region Create User

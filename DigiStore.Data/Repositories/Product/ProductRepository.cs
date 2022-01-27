@@ -27,8 +27,6 @@ namespace DigiStore.Data.Repositories.Product
             var product = _context.Products
                 .Include(p => p.Seller)
                 .Include(p => p.ProductSelectedCategories)
-                .ThenInclude(p => p.ProductCategory)
-                .Include(p=>p.Productcomments)
                 .AsQueryable();
             #region State
             switch (filterProduct.FilterProductState)

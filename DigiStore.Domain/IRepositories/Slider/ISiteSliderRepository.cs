@@ -12,6 +12,10 @@ namespace DigiStore.Domain.ViewModels.Slider
         Task<FilterSliderViewModel> FilterSlider(FilterSliderViewModel filterSlider);
         Task AddSlider(Entities.Slider slider);
         Task<bool> CheckImageDisplayPrority(byte displayPrority);
+        Task<Entities.Slider> GetSliderBySliderId(int sliderId);
+        void UpdateSlider(Entities.Slider slider);
+        Task<bool> CheckImageDisplayProrityForEdit(int sliderId,byte displayPrority);
+
         Task Save();
     }
 }

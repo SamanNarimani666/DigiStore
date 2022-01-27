@@ -201,6 +201,106 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region DeleteSlider
+        public async Task<bool> DeleteSlider(DeleteAndRestoreSliderViewModel deleteSlider)
+        {
+            var slider = await _siteSliderRepository.GetSliderBySliderId(deleteSlider.SliderId);
+            if (slider == null) return false;
+            try
+            {
+                slider.IsDelete = true;
+                _siteSliderRepository.UpdateSlider(slider);
+                await _siteSliderRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region RestoreSlider
+        public async Task<bool> RestoreSlider(DeleteAndRestoreSliderViewModel restoreSlider)
+        {
+            var slider = await _siteSliderRepository.GetSliderBySliderId(restoreSlider.SliderId);
+            if (slider == null) return false;
+            try
+            {
+                slider.IsDelete = false;
+                _siteSliderRepository.UpdateSlider(slider);
+                await _siteSliderRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region SliderInfoForEdit
+        public async Task<EditSliderViewModel> SliderInfoForEdit(int sliderId)
+        {
+            var slider = await _siteSliderRepository.GetSliderBySliderId(sliderId);
+            if (slider == null) return null;
+            return new EditSliderViewModel()
+            {
+                SliderId = sliderId,
+                IsActive = slider.IsActive,
+                Link = slider.Link,
+                ImagepDisplayPrority = slider.DisplayPrority.Value,
+                ImageName = slider.ImageName
+                
+            };
+        }
+        #endregion
+
+        #region EditSlider
+        public async Task<EditSliderResult> EditSlider(EditSliderViewModel editSlider, IFormFile sliderImage)
+        {
+            var mainSlider = await _siteSliderRepository.GetSliderBySliderId(editSlider.SliderId);
+            if (mainSlider == null) return EditSliderResult.NotFound;
+            if (await _siteSliderRepository.CheckImageDisplayProrityForEdit(editSlider.SliderId,
+                editSlider.ImagepDisplayPrority)) return EditSliderResult.DisplayProrityIsExist;
+            mainSlider.DisplayPrority = editSlider.ImagepDisplayPrority;
+            mainSlider.IsActive = editSlider.IsActive;
+            mainSlider.Link = editSlider.Link;
+            try
+            {
+                if (sliderImage != null)
+                {
+                    if (sliderImage.IsImage())
+                    {
+                        var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(sliderImage.FileName);
+                        var res = sliderImage.AddImageToServer(imageName, PathExtension.SliderImageOriginServer, 100, 100,
+                            PathExtension.SliderImageThumbServer, mainSlider.ImageName);
+                        if (res)
+                        {
+                            mainSlider.ImageName = imageName;
+                        }
+                        else
+                        {
+                            return EditSliderResult.ImageError;
+                        }
+                    }
+                    else
+                    {
+                        return EditSliderResult.ImageError;
+                    }
+                }
+              
+                 _siteSliderRepository.UpdateSlider(mainSlider);
+                await _siteSliderRepository.Save();
+                return EditSliderResult.Sucess;
+            }
+            catch
+            {
+                return EditSliderResult.Error;
+            }
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {

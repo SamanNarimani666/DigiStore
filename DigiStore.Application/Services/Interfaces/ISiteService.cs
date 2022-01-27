@@ -21,5 +21,9 @@ namespace DigiStore.Application.Services.Interfaces
         Task<AnswerContactusResult> AnswerContactUs(ContactusForAnsweViewModel Answer);
         Task<FilterSliderViewModel> FilterSlider(FilterSliderViewModel filterSlider);
         Task<CreateSliderResult> CreateSlider(CreateSliderViewModel createSlider,IFormFile sliderImage);
+        Task<bool> DeleteSlider(DeleteAndRestoreSliderViewModel deleteSlider);
+        Task<bool> RestoreSlider(DeleteAndRestoreSliderViewModel restoreSlider);
+        Task<EditSliderViewModel> SliderInfoForEdit(int sliderId);
+        Task<EditSliderResult> EditSlider(EditSliderViewModel editSlider, IFormFile sliderImage);
     }
 }

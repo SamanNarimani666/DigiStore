@@ -42,8 +42,6 @@ CREATE INDEX I_NC_Users_User_Mobile    ON Users.[User](Mobile)
 GO
 CREATE INDEX I_NC_Users_User_PassWord    ON Users.[User]([PassWord])
 GO
-
-
 /*_______________________________________________________________________________________________________________________*/
 CREATE TABLE Users.Roles
 (
@@ -172,8 +170,10 @@ CREATE TABLE Site.Slider
  SliderID  int					NOT NULL identity(1,1)    CONSTRAINT PK_Site_Slider_SliderID  PRIMARY KEY
 ,ImageName nvarchar(200)		NOT NULL 
 ,Link      nvarchar(200)		NOT NULL
-,IsActive  bit					    NULL
-,CreatedDate Datetime		    NOT NULL				  CONSTRAINT DF_Site_Slider_ModifiedDate	 DEFAULT(GETDATE())
+,DisplayPrority    tinyint		    NULL
+,IsActive  bit					NOT NULL                  CONSTRAINT DF_Site_Slider_IsActive DEFAULT(0)
+,IsDelete  bit					NOT NULL				  CONSTRAINT DF_Site_Slider_IsDelete DEFAULT(0)
+,CreatedDate Datetime		    NOT NULL				  CONSTRAINT DF_Site_Slider_ModifiedDate DEFAULT(GETDATE())
 ,rowguid	uniqueidentifier    NOT NULL				  CONSTRAINT DF_Site_Slider_rowguid	     DEFAULT(NEWSEQUENTIALID())
 )
 GO
@@ -181,6 +181,7 @@ CREATE INDEX I_NC_Site_Slider_ImageName ON Site.Slider(ImageName)
 GO
 CREATE INDEX I_NC_Site_Slider_Link ON Site.Slider(Link)
 GO
+
 /*#########################################################################  Ticket  ##########################################################################################*/
 CREATE SCHEMA Ticket
 GO
