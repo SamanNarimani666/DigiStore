@@ -41,6 +41,13 @@
                                 <input asp-for="Mobile" class="form-control">
                             </div>
                             <span asp-validation-for="Mobile"></span>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" asp-for="IsActive" />
+                                    فعال / غیر فعال
+                                </label>
+                            </div>
+                            <span asp-validation-for="IsActive"></span>
                             <div class="form-group">
                                 <label>کلمه عبور</label>
                                 <input type="password" asp-for="PassWord" class="form-control">

@@ -19,9 +19,7 @@
                         <div class="col-md-4">
                             <div class="text-center card-box">
                                 <h3>@item.Subject</h3>
-                                <p class="text-muted font-13 m-b-30">
-                                    @Html.Raw(item.Text)
-                                </p>
+                              
 
                                 <div class="text-left">
                                     <p class="text-muted font-13"><strong>نام و نانم خانوادگی :</strong> <span class="m-l-15">@item.FullName</span></p>
@@ -33,7 +31,7 @@
 
                                 </div>
 
-                                <button type="button" class="btn btn-custom btn-rounded waves-effect waves-light">ارسال پیام</button>
+                                <a asp-action="AnswerContactUs" asp-controller="ContactUs" asp-area="Admin" asp-route-contactusId="@item.ContactUsid" type="button" class="btn btn-custom btn-rounded waves-effect waves-light">ارسال پیام</a>
                             </div>
 
                         </div>

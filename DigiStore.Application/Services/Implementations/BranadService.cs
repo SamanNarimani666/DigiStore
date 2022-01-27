@@ -56,6 +56,10 @@ namespace DigiStore.Application.Services.Implementations
                         newBrand.Logo = imageName;
                     }
                 }
+                else
+                {
+                    return CreateBrandResult.NotIsImage;
+                }
                 await _brandRepository.AddBrand(newBrand);
                 await _brandRepository.Save();
                 return CreateBrandResult.Success;

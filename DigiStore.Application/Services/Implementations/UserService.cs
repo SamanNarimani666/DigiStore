@@ -209,15 +209,26 @@ namespace DigiStore.Application.Services.Implementations
             user.FirstName = editUserProfile.FirstName.SanitizeText();
             user.LastName = editUserProfile.LastName.SanitizeText();
             user.ModifiedDate = DateTime.Now;
-            if (UserAvatar != null && UserAvatar.IsImage())
+            try
             {
-                var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(UserAvatar.FileName);
-                UserAvatar.AddImageToServer(imageName, PathExtension.UserAvatarOriginServer, 100, 100, PathExtension.UserAvatarThumbServer, user.UserAvatar);
-                user.UserAvatar = imageName;
+                if (UserAvatar != null && UserAvatar.IsImage())
+                {
+                    var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(UserAvatar.FileName);
+                    UserAvatar.AddImageToServer(imageName, PathExtension.UserAvatarOriginServer, 100, 100, PathExtension.UserAvatarThumbServer, user.UserAvatar);
+                    user.UserAvatar = imageName;
+                }
+                else
+                {
+                    return EditUserProfileResult.NotIsIamage;
+                }
+                _userRepository.EditUser(user);
+                await _userRepository.Save();
+                return EditUserProfileResult.Success;
             }
-            _userRepository.EditUser(user);
-            await _userRepository.Save();
-            return EditUserProfileResult.Success;
+            catch
+            {
+                return EditUserProfileResult.Error;
+            }
         }
         #endregion
 

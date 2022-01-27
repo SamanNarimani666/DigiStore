@@ -1,0 +1,109 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.ViewModels.Slider
+@model DigiStore.Domain.ViewModels.Slider.FilterSliderViewModel
+@{
+    ViewData["Title"] = "لیست سلایدر ها";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+
+</div><div class="row">
+
+    <div class="col-sm-3">
+        <div class="panel panel-color panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">فیلتر</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-controller="SiteSetting" asp-action="ListSlider" asp-area="Admin" method="get" id="filter-form" class="form-horizontal" role="form">
+                    <input type="hidden" asp-for="PageId" />
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" asp-for="IsDelete" />
+                            <span class="text">حذف شده/نشده</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <select asp-for="SliderOrder" class="form-control">
+                            @foreach (var order in Html.GetEnumSelectList<SliderOrder>())
+                            {
+                                <option value="@order.Value">@order.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <button type="submit" class="btn btn-block btn-xs btn-purple waves-effect waves-light">فیلتر</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="card-box table-responsive">
+            <h4 class="header-title m-t-0 m-b-30">لیست برند ها</h4>
+            <a asp-controller="SiteSetting" asp-area="Admin" asp-action="CreateSlider" class="btn btn-success">ایجاد تصویر جدید</a>
+            <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (Model.Sliders != null && Model.Sliders.Any())
+                        {
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>عکس اسلایدر  </th>
+                                        <th>مقصد لبنک</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Sliders)
+                                    {
+                                        <tr id="ajax-url-item-@item.SliderId">
+                                            <td><img src="@(PathExtension.SliderImageThumb+item.ImageName)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                            <td>@item.Link</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-info" asp-controller="Brand" asp-area="Admin" asp-action="EditBrand" asp-route-brandId="@item.SliderId">وبرایش اسلایدر</a>
+                                            </td>
+                                            @if (!item.IsDelete)
+                                            {
+                                                <td>
+
+                                                    <a ajax-url-button="@item.SliderId" class="btn btn-danger btn-sm" asp-action="RemoveBrand" asp-controller="Brand" asp-area="Admin" asp-route-brandId="@item.SliderId">حذف اسلایدر</a>
+                                                </td>
+                                            }
+                                            @if (item.IsDelete)
+                                            {
+                                                <td>
+
+                                                    <a ajax-url-button="@item.SliderId" class="btn btn-warning btn-sm" asp-action="RestoreBrand" asp-controller="Brand" asp-area="Admin" asp-route-brandId="@item.SliderId">بازگردانی برند</a>
+                                                </td>
+                                            }
+                                        </tr>
+
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <partial name="_NotFoundItem" />
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-6">
+                            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end col -->
+
+
+    </div>
+</div>
+

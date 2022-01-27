@@ -4,7 +4,7 @@ namespace DigiStore.Domain.ViewModels.Brand
 {
     public class CreateBrandViewModel
     {
-        [Display(Name = "کد پستی")]
+        [Display(Name = "نام برند")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string BrandName { get; set; }
@@ -13,6 +13,7 @@ namespace DigiStore.Domain.ViewModels.Brand
     public enum CreateBrandResult
     {
         Success,
+        NotIsImage,
         Error
     }
 }

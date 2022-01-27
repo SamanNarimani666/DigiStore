@@ -34,6 +34,12 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
                 var res = await _userService.EditUserProfile(editUserProfile, UserAvatar, User.GetUserId());
                 switch (res)
                 {
+                    case EditUserProfileResult.Error:
+                        TempData[ErrorMessage] = "خطا در ویرایش اطلاعات";
+                        break;
+                    case EditUserProfileResult.NotIsIamage:
+                        TempData[ErrorMessage] = "تصویر آپلود شده نامعتبر می باشد";
+                        break;
                     case EditUserProfileResult.NotFound:
                         TempData[ErrorMessage] = "حساب کاربری مورد نظر یافت نشد";
                         break;

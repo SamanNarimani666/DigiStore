@@ -978,6 +978,9 @@ namespace DigiStore.Data.Context
                 entity.HasIndex(e => e.UserName, "UQ_Users_User_UserName")
                     .IsUnique();
 
+                entity.HasIndex(e => e.Mobile, "UQ__User__6FAE07822DAE8834")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.Mobile, "UQ__User__6FAE0782AD1F72EE")
                     .IsUnique();
 

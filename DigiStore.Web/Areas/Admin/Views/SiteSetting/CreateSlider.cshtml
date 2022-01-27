@@ -1,6 +1,6 @@
-﻿@model DigiStore.Domain.ViewModels.Brand.CreateBrandViewModel
+﻿@model DigiStore.Domain.ViewModels.Slider.CreateSliderViewModel
 @{
-    ViewData["Title"] = "ایجاد برند جدید";
+    ViewData["Title"] = "ایجاد اسلایدر جدید";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -15,19 +15,31 @@
         <h2>افزودن برند</h2>
         <hr />
         <div class="row">
-            <form method="post" asp-action="CreateBrand" asp-controller="Brand" enctype="multipart/form-data">
+            <form method="post" asp-action="CreateSlider" asp-controller="SiteSetting" asp-area="Admin" enctype="multipart/form-data">
                 <div class="col-md-8">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            اطلاعات برند
+                            اطلاعات اسلایدر
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="form-group">
-                                <label>نام برند</label>
-                                <input asp-for="BrandName" class="form-control">
+                                <label>اولویت</label>
+                                <input type="number" asp-for="ImagepDisplayPrority" class="form-control">
                             </div>
-                            <span asp-validation-for="BrandName"></span>
+                            <span asp-validation-for="ImagepDisplayPrority"></span>
+                            <div class="form-group">
+                                <label>لینک مقصد</label>
+                                <input asp-for="Link" class="form-control">
+                            </div>
+                            <span asp-validation-for="Link"></span>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" asp-for="IsActive" />
+                                    فعال / غیر فعال
+                                </label>
+                            </div>
+                            <span asp-validation-for="IsActive"></span>
                             <input type="submit" value="ثبت اطلاعات" class="btn btn-success" />
                         </div>
                         <!-- /.panel-body -->
@@ -36,7 +48,7 @@
                 <div class="col-md-4">
                     <div class="card-box">
 
-                        <h4 class="header-title m-t-0 m-b-30">لوگو</h4>
+                        <h4 class="header-title m-t-0 m-b-30">تصوير </h4>
 
                         <div class="dropify-wrapper has-preview">
 
@@ -47,10 +59,10 @@
                             </div>
                             <div class="dropify-loader" style="display: none;"></div>
                             <div class="dropify-errors-container"><ul></ul></div>
-                            <input type="file" id="imgInp" name="brandLogo" class="dropify">
+                            <input type="file" id="imgInp" name="sliderImage" class="dropify">
                             <button type="button" class="dropify-clear">پاک کردن</button>
                             <div class="dropify-preview" style="display: block;">
-                                <span class="dropify-render"><img id="UserImage" src="/Images/defaults/logo.png"></span>
+                                <span class="dropify-render"><img id="Slider" src="/Images/defaults/logo.png"></span>
                                 <div class="dropify-infos">
                                     <div class="dropify-infos-inner">
 
@@ -75,10 +87,11 @@
         imgInp.onchange = evt => {
             const [file] = imgInp.files
             if (file) {
-                UserImage.src = URL.createObjectURL(file)
+                Slider.src = URL.createObjectURL(file)
             }
         }
     </script>
 }
+
 
 

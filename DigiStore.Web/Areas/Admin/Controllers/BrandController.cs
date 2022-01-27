@@ -47,6 +47,9 @@ namespace DigiStore.Web.Areas.Admin.Controllers
                     case CreateBrandResult.Error:
                         TempData[ErrorMessage] = "خطا در ثبت برند جدید";
                         break;
+                    case CreateBrandResult.NotIsImage:
+                        TempData[ErrorMessage] = "تصویر بارگذاری شده نامعتبر است";
+                        break;
                     case CreateBrandResult.Success:
                         TempData[SuccessMessage] = "برند جدید با موفقیت ثبت شد";
                         return RedirectToAction("BrandList", "Brand");

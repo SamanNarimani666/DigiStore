@@ -10,7 +10,9 @@ namespace DigiStore.Domain.Entities
         public int SliderId { get; set; }
         public string ImageName { get; set; }
         public string Link { get; set; }
-        public bool? IsActive { get; set; }
+        public byte? DisplayPrority { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsDelete { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid Rowguid { get; set; }
     }

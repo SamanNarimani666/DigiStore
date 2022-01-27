@@ -9,6 +9,7 @@ namespace DigiStore.Domain.IRepositories.ContactUs
     {
         Task AddContactUs(ContactU contactU);
         Task<FilterContactUsViewModel> FilterContactUs(FilterContactUsViewModel filterContactUs);
+        Task<ContactU> GetContactUById(int contactUId);
         Task Save();
     }
 }

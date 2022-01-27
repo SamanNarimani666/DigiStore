@@ -42,7 +42,7 @@ namespace DigiStore.Web.Controllers
         {
             return View();
         }
-        [HttpPost("contact-us")]
+        [HttpPost("contact-us"),ValidateAntiForgeryToken]
         public async Task<IActionResult> ContactUs(CreateContactUsViewModel contactUs)
         {
             if (ModelState.IsValid)

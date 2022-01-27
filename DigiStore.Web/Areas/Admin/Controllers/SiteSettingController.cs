@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.SiteSetting;
+using DigiStore.Domain.ViewModels.Slider;
+using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
 {
@@ -48,6 +50,46 @@ namespace DigiStore.Web.Areas.Admin.Controllers
                 }
             }
             return View(editSiteInformation);
+        }
+        #endregion
+
+        #region Slider
+        [HttpGet("list-slider")]
+        public async Task<IActionResult> ListSlider(FilterSliderViewModel filterSlider)
+        {
+            return View(await _siteService.FilterSlider(filterSlider));
+        }
+        #endregion
+
+        #region Create Slider
+        [HttpGet("create-slider")]
+        public IActionResult CreateSlider()
+        {
+            return View();
+        }
+        [HttpPost("create-slider")]
+        public async Task<IActionResult> CreateSlider(CreateSliderViewModel createSlider,IFormFile sliderImage)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _siteService.CreateSlider(createSlider, sliderImage);
+                switch (res)
+                {
+                    case CreateSliderResult.Error:
+                        TempData[ErrorMessage] = "خطا در ثبت اسلاید";
+                        break;
+                    case CreateSliderResult.DisplayProrityIsExist:
+                        TempData[WarningMessage] = "تصویری با این اولویت وجود دارد";
+                        break;
+                    case CreateSliderResult.ImageError:
+                        TempData[ErrorMessage] = "تصویر آپلود شده نامعتبر می باشد";
+                        break;
+                    case CreateSliderResult.Sucess:
+                        TempData[SuccessMessage] = "اسلایدر با موفقیت ثبت شد";
+                        return RedirectToAction("ListSlider", "SiteSetting");
+                }
+            }
+            return View();
         }
         #endregion
     }

@@ -9,9 +9,8 @@
     var mostVisitedProduct = ViewBag.MostVisitedProduct as List<Product>;
 }
 <!--    Start Main Slider -------------------->
-<cache expires-after="@TimeSpan.FromHours(3)">
-    @await Component.InvokeAsync("HomeSlider")
-</cache>
+@await Component.InvokeAsync("HomeSlider")
+
 <!--    End Main Slider ---------------------->
 <!--adplacement-------------------------------->
 <div class="col-lg-4 col-md-4 col-xs-12 pull-left">

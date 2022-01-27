@@ -19,7 +19,7 @@ namespace DigiStore.Domain.ViewModels.User
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [MinLength(11, ErrorMessage = "{0} نمی تواند کمتر از {1} کاراکتر باشد")]
-        [RegularExpression(@"09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}", ErrorMessage = "شماره تماس را درست وارد کنید")]
+        //[RegularExpression(@"09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}", ErrorMessage = "شماره تماس را درست وارد کنید")]
         public string Mobile { get; set; }
 
         [Display(Name = "کلمه عبور")]
@@ -34,6 +34,10 @@ namespace DigiStore.Domain.ViewModels.User
         [MinLength(8, ErrorMessage = "{0} نمی تواند كمتر از {1} کاراکتر باشد .")]
         [Compare("PassWord", ErrorMessage = "کلمه های عبور مغایرت دارند")]
         public string ConferimPassWord { get; set; }
+
+        [Display(Name = "فعال/غیر فعال")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public bool IsActive { get; set; }
     }
     public enum CreateUserResult
     {

@@ -1,0 +1,46 @@
+﻿@model DigiStore.Domain.ViewModels.Contacts.ContactusForAnsweViewModel
+@{
+    ViewData["Title"] = "پاسخ به تماس";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="col-sm-12">
+    <div class="bg-picture card-box">
+        <div class="profile-info-name">
+         
+            <div class="profile-info-detail">
+                <h2 class="m-t-0 m-b-0">نام ارسال کننده: @Model.FullName</h2>
+                <hr/>
+                <h3>عنوان: @Model.Subject</h3>
+                <hr/>
+                <h3>ایمیل : @Model.Email</h3>
+                <hr/>
+                <h4>IP: @Model.UserIp</h4>
+                <hr/>
+                <p>پیام : @Html.Raw(Model.Text)</p>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!--/ meta -->
+
+
+
+    <form method="post" class="card-box" asp-controller="ContactUs" asp-area="Admin" asp-action="AnswerContactUs">
+        <input type="hidden" asp-for="ContactUsId"/>
+        <span class="input-icon icon-right">
+            <textarea rows="2" asp-for="AnswerText" ckeditor="1" class="form-control" placeholder="پاسخ"></textarea>
+        </span>
+        <span asp-validation-for="AnswerText" class="text text-danger"></span>
+        <br/>
+        <button type="submit" class="btn btn-info btn-block"> ارسال</button>
+
+
+
+    </form>
+  
+
+
+</div>
+

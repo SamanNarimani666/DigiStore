@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.ViewModels.Contacts;
 using DigiStore.Domain.ViewModels.SiteSetting;
+using DigiStore.Domain.ViewModels.Slider;
+using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Application.Services.Interfaces
 {
@@ -15,6 +17,9 @@ namespace DigiStore.Application.Services.Interfaces
         Task<GetSiteInformation> GetDefaultSiteInformation();
         Task<EditSiteSettingResult> EditSiteSetting(GetSiteInformation editSiteInformation);
         Task<FilterContactUsViewModel> FilterContactUs(FilterContactUsViewModel filterContactUs);
-
+        Task<ContactusForAnsweViewModel> GetContactusForAnswe(int contactusId);
+        Task<AnswerContactusResult> AnswerContactUs(ContactusForAnsweViewModel Answer);
+        Task<FilterSliderViewModel> FilterSlider(FilterSliderViewModel filterSlider);
+        Task<CreateSliderResult> CreateSlider(CreateSliderViewModel createSlider,IFormFile sliderImage);
     }
 }

@@ -21,6 +21,8 @@ namespace DigiStore.Domain.ViewModels.Account
         Success,
         NotFound,
         NotActive,
-        UserIsBlock
+        UserIsBlock,
+        NotIsIamage,
+        Error
     }
 }

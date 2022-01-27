@@ -46,6 +46,13 @@ namespace DigiStore.Data.Repositories.ContactUs
         }
         #endregion
 
+        #region GetContactUById
+        public async Task<ContactU> GetContactUById(int contactUId)
+        {
+            return await _context.ContactUs.SingleOrDefaultAsync(p => p.ContactUsid == contactUId);
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {
