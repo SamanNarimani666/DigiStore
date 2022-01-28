@@ -709,6 +709,13 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region FilterForSiteSearch
+        public async Task<FilterProductViewModel> FilterForSiteSearch(FilterProductViewModel filterProduct)
+        {
+            return await _productRepository.FilterForSiteSearch(filterProduct);
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {

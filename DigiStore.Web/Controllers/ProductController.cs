@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DigiStore.Application.Extensions;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.FavoriteProductUser;
@@ -125,11 +126,27 @@ namespace DigiStore.Web.Controllers
 
         #region FilterProdutComment
         [HttpGet("filterProductComment/{productId}")]
-        public async Task<IActionResult> FilterProdutComment(int productId,FilterProductCommentViewModel filterProductComment)
+        public async Task<IActionResult> FilterProdutComment(int productId, FilterProductCommentViewModel filterProductComment)
         {
             filterProductComment.ProductId = productId;
             return View(await _productService.filterFilterProductComment(filterProductComment));
         }
+
+        #endregion
+
+        #region test
+        [HttpGet("test")]
+        public async Task<IActionResult> Test(FilterProductViewModel filterProduct)
+        {
+            filterProduct.SelectedPrductCategories= new List<int>(){1,2,3};
+            filterProduct.Name = "G";
+
+            var test = await _productService.FilterForSiteSearch(filterProduct);
+
+            await Task.Delay(4000);
+            return View();
+        }
+
 
         #endregion
     }

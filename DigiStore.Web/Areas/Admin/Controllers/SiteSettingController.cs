@@ -96,9 +96,9 @@ namespace DigiStore.Web.Areas.Admin.Controllers
 
         #region DeleteSlider
         [HttpPost]
-        public async Task<IActionResult> DeleteSlider(DeleteAndRestoreSliderViewModel deleteSlider)
+        public async Task<IActionResult> DeleteSlider(int sliderId)
         {
-            var res = await _siteService.DeleteSlider(deleteSlider);
+            var res = await _siteService.DeleteSlider(sliderId);
             if (res)
             {
                 TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت حذف شد";
@@ -114,9 +114,9 @@ namespace DigiStore.Web.Areas.Admin.Controllers
 
         #region RestoreSlider
         [HttpPost]
-        public async Task<IActionResult> RestoreSlider(DeleteAndRestoreSliderViewModel restoreSlider)
+        public async Task<IActionResult> RestoreSlider(int sliderId)
         {
-            var res = await _siteService.RestoreSlider(restoreSlider);
+            var res = await _siteService.RestoreSlider(sliderId);
             if (res)
             {
                 TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت بازگردانی شد";

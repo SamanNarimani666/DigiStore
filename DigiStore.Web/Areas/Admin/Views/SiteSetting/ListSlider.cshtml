@@ -89,13 +89,18 @@
                                             @if (!item.IsDelete)
                                             {
                                                 <td>
-
-                                                    <partial name="_DeleteSliderPartial" model="@(new DeleteAndRestoreSliderViewModel(){SliderId = item.SliderId})" />
+                                                    <form id="deleteSlider" asp-controller="SiteSetting" asp-area="Admin" asp-action="DeleteSlider">
+                                                        <input type="hidden" name="sliderId" value="@item.SliderId"/>
+                                                        <button type="button" onclick="DeleteSlider()" class="btn btn-danger btn-sm" >حذف اسلایدر</button>
+                                                    </form>
                                                 </td>
                                             }else
                                             {
                                                 <td>
-                                                    <partial name="_RestoreSliderPartial" model="@(new DeleteAndRestoreSliderViewModel(){SliderId = item.SliderId})" />
+                                                    <form method="post" id="restoreSlider" asp-controller="SiteSetting" asp-area="Admin" asp-action="RestoreSlider">
+                                                        <input type="hidden" name="sliderId" value="@item.SliderId" />
+                                                        <button type="button" onclick="RestoreSlider()" class="btn btn-warning btn-sm">بازگردانی اسلایدر</button>
+                                                    </form>
 
                                                 </td>
                                             }

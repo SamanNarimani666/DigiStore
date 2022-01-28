@@ -28,22 +28,22 @@ namespace DigiStore.Application.Services.Interfaces
         Task<List<ProductGallery>> GetAllProductGallery(int productId);
         Task<Product> GetProductBySellerOwnerId(int productId, int userId);
         Task<List<ProductGallery>> GetAllProductGalleryForSellerpanel(int productId, int sellerId);
-        Task<CreateProductGalleryResult> CreateProductGallery(CreateProductGalleryViewModel createProductGallery,int productId,int sellerId, IFormFile ProductImage);
-        Task<EditOrDeleteProductGalleryViewModel> GetEditProductGalleryForEdit(int galleryId,int sellerId);
+        Task<CreateProductGalleryResult> CreateProductGallery(CreateProductGalleryViewModel createProductGallery, int productId, int sellerId, IFormFile ProductImage);
+        Task<EditOrDeleteProductGalleryViewModel> GetEditProductGalleryForEdit(int galleryId, int sellerId);
         Task<EditOrDeleteProductGalleryResult> EditProductGallery(EditOrDeleteProductGalleryViewModel editProductGallery, int galleryId, int sellerId, IFormFile ProductImage);
         Task<EditOrDeleteProductGalleryResult> DeleteProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGallery, int galleryId, int sellerId);
         Task<EditOrDeleteProductGalleryResult> ResotrProductGallery(EditOrDeleteProductGalleryViewModel deleteProductGallery, int galleryId, int sellerId);
         Task<ProductDetailViewModel> GetProductDetail(int productId);
-        Task<bool> AddProductVisited(int productId,string userIp,int? userId);
-        Task AddProductFeatures(int productId,List<CreateProductFeatureViewModel> createProductFeature);
+        Task<bool> AddProductVisited(int productId, string userIp, int? userId);
+        Task AddProductFeatures(int productId, List<CreateProductFeatureViewModel> createProductFeature);
         void RemoveAllProductFeatures(int productId);
         Task<FilterProductVisitedViewModel> GetLastProductVisited(FilterProductVisitedViewModel filterProductVisited);
         Task<List<Domain.Entities.Product>> GetPopularProduct(int take);
-        Task<bool> CreateIFavoriteProductUser(CreateIFavoriteProductUserViewModel createIFavoriteProductUser,int userId);
+        Task<bool> CreateIFavoriteProductUser(CreateIFavoriteProductUserViewModel createIFavoriteProductUser, int userId);
         Task<bool> IsExistThisProductInUserFavoritList(int productId, int userId);
         Task<FilterFavoritViewModel> GetFavoriteProductUserByUserId(FilterFavoritViewModel filterFavorit);
-        Task<bool> DeleteFavoritProduct(int favoritId,int productId,int userId);
-        Task<CreateProductCommnetResult> CreateProductCommnet(CreateProductCommnetViewModel createProductCommnet,int userId);
+        Task<bool> DeleteFavoritProduct(int favoritId, int productId, int userId);
+        Task<CreateProductCommnetResult> CreateProductCommnet(CreateProductCommnetViewModel createProductCommnet, int userId);
         Task<Product> GetProductByProductId(int productId);
         Task<FilterProductCommentViewModel> filterFilterProductComment(FilterProductCommentViewModel filterProductComment);
         Task<List<Domain.Entities.Product>> GetMostPopular(int take);
@@ -52,5 +52,7 @@ namespace DigiStore.Application.Services.Interfaces
         Task<ProductRatingViewModel> GetProductRatingByProductId(int productId);
         Task<List<Domain.Entities.Product>> GetAllActiveProductByCategoryId(int categoryId, int count);
         Task<ProductCategory> GetProductCategoryByCategoryId(int categoryId);
+        Task<FilterProductViewModel> FilterForSiteSearch(FilterProductViewModel filterProduct);
+
     }
 }

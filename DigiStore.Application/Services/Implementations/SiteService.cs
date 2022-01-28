@@ -202,9 +202,9 @@ namespace DigiStore.Application.Services.Implementations
         #endregion
 
         #region DeleteSlider
-        public async Task<bool> DeleteSlider(DeleteAndRestoreSliderViewModel deleteSlider)
+        public async Task<bool> DeleteSlider(int sliderId)
         {
-            var slider = await _siteSliderRepository.GetSliderBySliderId(deleteSlider.SliderId);
+            var slider = await _siteSliderRepository.GetSliderBySliderId(sliderId);
             if (slider == null) return false;
             try
             {
@@ -221,9 +221,9 @@ namespace DigiStore.Application.Services.Implementations
         #endregion
 
         #region RestoreSlider
-        public async Task<bool> RestoreSlider(DeleteAndRestoreSliderViewModel restoreSlider)
+        public async Task<bool> RestoreSlider(int sliderId)
         {
-            var slider = await _siteSliderRepository.GetSliderBySliderId(restoreSlider.SliderId);
+            var slider = await _siteSliderRepository.GetSliderBySliderId(sliderId);
             if (slider == null) return false;
             try
             {

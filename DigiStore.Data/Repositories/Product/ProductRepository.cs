@@ -40,7 +40,7 @@ namespace DigiStore.Data.Repositories.Product
                     product = product.Where(s => !s.IsActive && s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted);
                     break;
                 case FilterProductState.Accepted:
-                    product = product.Where(s =>s.IsActive &&s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted);
+                    product = product.Where(s => s.IsActive && s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted);
                     break;
                 case FilterProductState.Rejected:
                     product = product.Where(s => s.ProductAcceptanceState == (byte)ProductAcceptanceState.Rejected);
@@ -51,13 +51,13 @@ namespace DigiStore.Data.Repositories.Product
             }
             #endregion
 
-            var selected = _context.ProductSelectedCategories.Include(p => p.ProductCategory).Select(p=>p.ProductCategoryId).ToList();
+            var selected = _context.ProductSelectedCategories.Include(p => p.ProductCategory).Select(p => p.ProductCategoryId).ToList();
             #region filter
             if (!string.IsNullOrEmpty(filterProduct.Name))
                 product = product.Where(p => EF.Functions.Like(p.Name, ($"%{filterProduct.Name}%")));
             if (filterProduct.SellerId != null && filterProduct.SellerId != 0)
                 product = product.Where(p => p.SellerId == filterProduct.SellerId.Value);
-            if (filterProduct.CategoryId!=0)
+            if (filterProduct.CategoryId != 0)
                 product = product.Where(s =>
                     s.ProductSelectedCategories.Any(f => f.ProductCategory.ProductCategoryId == filterProduct.CategoryId));
             if (filterProduct.Selectedbrands != 0)
@@ -138,11 +138,11 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<ProductDetailViewModel> GetProductDetail(int productId)
         {
             var product = await _context.Products.AsQueryable()
-                .Include(p=>p.ProductGalleries)
+                .Include(p => p.ProductGalleries)
                 .Include(p => p.Colors)
-                .Include(p=>p.ProductGalleries)
-                .Include(p=>p.ProductSelectedCategories)
-                .Include(p=>p.ProductFeatures)
+                .Include(p => p.ProductGalleries)
+                .Include(p => p.ProductSelectedCategories)
+                .Include(p => p.ProductFeatures)
                 .Include(p => p.Seller)
                 .Include(p => p.ProductSelectedCategories)
                 .ThenInclude(p => p.ProductCategory)
@@ -151,31 +151,31 @@ namespace DigiStore.Data.Repositories.Product
             var selectedCategotiesId = product.ProductSelectedCategories.Select(f => f.ProductCategoryId).ToList();
             return new ProductDetailViewModel()
             {
-                ProductId= product.ProductId,
+                ProductId = product.ProductId,
                 Title = product.Name,
                 ImageName = product.ImageName,
                 Price = product.Price,
                 ShortDescription = product.ShortDescription,
                 Description = product.Description,
-                ProductCategories = product.ProductSelectedCategories.Select(s=>s.ProductCategory).ToList(),
-                ProductGalleries = product.ProductGalleries.Where(p=>!p.IsDelete).ToList(),
-                ProductColors = product.Colors.Where(p=>!p.IsDelete).ToList(),
+                ProductCategories = product.ProductSelectedCategories.Select(s => s.ProductCategory).ToList(),
+                ProductGalleries = product.ProductGalleries.Where(p => !p.IsDelete).ToList(),
+                ProductColors = product.Colors.Where(p => !p.IsDelete).ToList(),
                 SellerId = product.SellerId,
                 Seller = product.Seller,
-                MainCategoryTitle=  _context.ProductSelectedCategories.Include(p=>p.ProductCategory)
-                    .Where(p => p.ProductId == productId && p.ProductCategory.ParentId == null).Select(p=>p.ProductCategory.Title).FirstOrDefault()
+                MainCategoryTitle = _context.ProductSelectedCategories.Include(p => p.ProductCategory)
+                    .Where(p => p.ProductId == productId && p.ProductCategory.ParentId == null).Select(p => p.ProductCategory.Title).FirstOrDefault()
                     ?.ToString(),
                 SubCategoryTitle = _context.ProductSelectedCategories.Include(p => p.ProductCategory)
                     .Where(p => p.ProductId == productId && p.ProductCategory.ParentId != null).Select(p => p.ProductCategory.Title).FirstOrDefault()
                     ?.ToString(),
                 MainCategoryId = _context.ProductSelectedCategories.Include(p => p.ProductCategory)
                     .Where(p => p.ProductId == productId && p.ProductCategory.ParentId == null).Select(p => p.ProductCategory.ProductCategoryId).FirstOrDefault(),
-                SubCategoryId =  _context.ProductSelectedCategories.Include(p => p.ProductCategory)
+                SubCategoryId = _context.ProductSelectedCategories.Include(p => p.ProductCategory)
                     .Where(p => p.ProductId == productId && p.ProductCategory.ParentId != null).Select(p => p.ProductCategory.ProductCategoryId).FirstOrDefault(),
                 ProductFeatures = product.ProductFeatures.ToList(),
                 RelatedProducts = await _context.Products.AsQueryable()
-                    .Include(s=>s.ProductSelectedCategories)
-                    .Where(s=>s.ProductSelectedCategories.Any(f=>selectedCategotiesId.Contains(f.ProductCategoryId))&& s.ProductId!=productId&& s.ProductAcceptanceState==(byte)ProductAcceptanceState.Accepted).ToListAsync()
+                    .Include(s => s.ProductSelectedCategories)
+                    .Where(s => s.ProductSelectedCategories.Any(f => selectedCategotiesId.Contains(f.ProductCategoryId)) && s.ProductId != productId && s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted).ToListAsync()
             };
         }
         #endregion
@@ -183,7 +183,7 @@ namespace DigiStore.Data.Repositories.Product
         #region FilterProductsForSellerByPorductName
         public async Task<List<Domain.Entities.Product>> FilterProductsForSellerByPorductName(int selleId, string productName)
         {
-            return await _context.Products.AsQueryable().Where(p=>p.SellerId==selleId&& EF.Functions.Like(p.Name, $"%{productName}%")).ToListAsync();
+            return await _context.Products.AsQueryable().Where(p => p.SellerId == selleId && EF.Functions.Like(p.Name, $"%{productName}%")).ToListAsync();
         }
         #endregion
 
@@ -191,8 +191,8 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<List<Domain.Entities.Product>> GetPopularProduct(int take)
         {
             return await _context.Products.Include(p => p.SalesOrderDetails)
-                .Where(p=>p.SalesOrderDetails.Any()&& p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
-                .OrderByDescending(d => d.SalesOrderDetails.Sum(c=>c.OrderQty))
+                .Where(p => p.SalesOrderDetails.Any() && p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
+                .OrderByDescending(d => d.SalesOrderDetails.Sum(c => c.OrderQty))
                 .Take(take)
                 .ToListAsync();
         }
@@ -201,9 +201,9 @@ namespace DigiStore.Data.Repositories.Product
         #region GetMostPopular
         public async Task<List<Domain.Entities.Product>> GetMostPopular(int take)
         {
-            return await _context.Products.Include(p=>p.FavoriteProductUsers)
-                .Where(p=>p.FavoriteProductUsers.Any()&&p.IsActive&&p.ProductAcceptanceState==(byte)ProductAcceptanceState.Accepted)
-                .OrderByDescending(f=>f.FavoriteProductUsers.Count)
+            return await _context.Products.Include(p => p.FavoriteProductUsers)
+                .Where(p => p.FavoriteProductUsers.Any() && p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
+                .OrderByDescending(f => f.FavoriteProductUsers.Count)
                 .Take(take)
                 .ToListAsync();
         }
@@ -212,7 +212,7 @@ namespace DigiStore.Data.Repositories.Product
         #region RecommendedproductsForUser
         public async Task<List<Domain.Entities.Product>> RecommendedproductsForUser(int take, int userId)
         {
-           
+
             var getLastProductVisitedByUser = await _context.ProductVisiteds.OrderByDescending(p => p.ModifiedDate)
                 .FirstOrDefaultAsync(p => p.UserId == userId);
 
@@ -227,16 +227,16 @@ namespace DigiStore.Data.Repositories.Product
             return await _context.Products.AsQueryable()
                 .Include(s => s.ProductSelectedCategories)
                 .Where(s => s.ProductSelectedCategories.Any(f => selectedCategotiesId.Contains(f.ProductCategoryId)) &&
-                      s.IsActive&&s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted).ToListAsync();
+                      s.IsActive && s.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted).ToListAsync();
         }
         #endregion
 
         #region TheMostVisitedProducts
         public async Task<List<Domain.Entities.Product>> TheMostVisitedProducts(int take)
         {
-            return await _context.Products.Include(p=>p.ProductVisiteds)
-                .Where(p=>p.ProductVisiteds.Any()&& p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
-                .OrderByDescending(p=>p.ProductVisiteds.Count)
+            return await _context.Products.Include(p => p.ProductVisiteds)
+                .Where(p => p.ProductVisiteds.Any() && p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
+                .OrderByDescending(p => p.ProductVisiteds.Count)
                 .Take(take)
                 .ToListAsync();
         }
@@ -247,12 +247,67 @@ namespace DigiStore.Data.Repositories.Product
         {
             return await _context.ProductSelectedCategories.AsQueryable()
                 .Include(p => p.Product)
-                .Where(p => p.ProductCategoryId == categoryId && p.Product.IsActive&& p.Product.ProductAcceptanceState==(byte)ProductAcceptanceState.Accepted)
-                .OrderByDescending(s=>s.ModifiedDate)
-                .Distinct()                
+                .Where(p => p.ProductCategoryId == categoryId && p.Product.IsActive && p.Product.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
+                .OrderByDescending(s => s.ModifiedDate)
+                .Distinct()
                 .Select(s => s.Product).Distinct()
                 .Take(count)
                 .ToListAsync();
+        }
+        #endregion
+
+        #region FilterForSiteSearch
+        public async Task<FilterProductViewModel> FilterForSiteSearch(FilterProductViewModel filterProduct)
+        {
+            var query =
+                @"SELECT   PP.[Name] ,PP.Price  ,PP.ProductId FROM Production.Product AS PP INNER JOIN Production.ProductSelectedCategory AS PSC ON PP.ProductId=PSC.ProductId WHERE PP.ProductAcceptanceState=1 AND PP.IsActive=1 AND IsDelete=0 ";
+
+            if(!string.IsNullOrEmpty(filterProduct.Name))
+            {
+                query += $"AND PP.[Name] LIKE N'%{filterProduct.Name}%'";
+            }
+
+            if (filterProduct.Selectedbrands != 0)
+            {
+                query += $"AND  PP.BrandId={filterProduct.Selectedbrands}";
+            }
+
+            if (filterProduct.SelectedPrductCategories != null && filterProduct.SelectedPrductCategories.Any())
+            {
+                query += "AND ";
+
+                if (filterProduct.SelectedPrductCategories.Count == 1)
+                {
+                    query += $"PSC.ProductCategoryId={filterProduct.SelectedPrductCategories.First()}";
+                }
+                else
+                {
+                    query += "( ";
+                    int iteration = 0;
+                    foreach (var category in filterProduct.SelectedPrductCategories)
+                    {
+                        iteration++;
+                        if (iteration < filterProduct.SelectedPrductCategories.Count)
+                        {
+                            query += $"PSC.ProductCategoryId={category} OR ";
+
+                        }
+                        else
+                        {
+                            query += $"PSC.ProductCategoryId={category} ";
+
+                        }
+                    }
+                    query += " )";
+
+                }
+            }
+
+            query += "GROUP BY PP.[Name] ,PP.Price  ,PP.ProductId";
+
+           var test= query;
+          await Task.Delay(2000);
+            return null;
         }
         #endregion
 
