@@ -18,6 +18,7 @@ namespace DigiStore.Domain.ViewModels.Product
         Error,
         NotForUserProduct,
         ImageIsNull,
+        DisplayProrityIsExist,
         GalleryNotFound
     }
 }

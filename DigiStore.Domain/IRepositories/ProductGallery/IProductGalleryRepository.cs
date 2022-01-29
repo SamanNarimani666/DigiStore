@@ -11,6 +11,8 @@ namespace DigiStore.Domain.IRepositories.ProductGallery
         Task<Entities.ProductGallery> GetProductGalleryByGalleryIdAndSellerId(int glleryId, int sellerId);
         Task AddProductGallery(Entities.ProductGallery productGallery);
         void EditProductGallery(Entities.ProductGallery productGallery);
+        Task<bool> CheackProductGalleryDisplayPrority(byte displayPrority,int productId);
+        Task<bool> CheackProductGalleryDisplayProrityForEdit(int galleryId,byte displayPrority,int productId);
         Task Save();
     }
 }

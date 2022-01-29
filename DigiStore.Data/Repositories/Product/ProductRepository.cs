@@ -58,7 +58,6 @@ namespace DigiStore.Data.Repositories.Product
             }
             #endregion
 
-            var selected = _context.ProductSelectedCategories.Include(p => p.ProductCategory).Select(p => p.ProductCategoryId).ToList();
             #region filter
             if (!string.IsNullOrEmpty(filterProduct.Name))
                 product = product.Where(p => EF.Functions.Like(p.Name, ($"%{filterProduct.Name}%")));
@@ -165,10 +164,11 @@ namespace DigiStore.Data.Repositories.Product
                 ShortDescription = product.ShortDescription,
                 Description = product.Description,
                 ProductCategories = product.ProductSelectedCategories.Select(s => s.ProductCategory).ToList(),
-                ProductGalleries = product.ProductGalleries.Where(p => !p.IsDelete).ToList(),
+                ProductGalleries = product.ProductGalleries.Where(p => !p.IsDelete).OrderBy(p=>p.DisplayPrority.Value).ToList(),
                 ProductColors = product.Colors.Where(p => !p.IsDelete).ToList(),
                 SellerId = product.SellerId,
                 Seller = product.Seller,
+                CreateDate = product.CreatedDate,
                 MainCategoryTitle = _context.ProductSelectedCategories.Include(p => p.ProductCategory)
                     .Where(p => p.ProductId == productId && p.ProductCategory.ParentId == null).Select(p => p.ProductCategory.Title).FirstOrDefault()
                     ?.ToString(),
@@ -267,8 +267,9 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<FilterProductViewModel> FilterForSiteSearch(FilterProductViewModel filterProduct)
         {
             var query =
-                @"SELECT   PP.[Name] ,PP.Price ,PP.ImageName,PP.ProductId,PP.SellerId,PP.CreatedDate,SS.StoreName FROM Production.Product AS PP INNER JOIN Store.Seller AS SS ON PP.SellerId=SS.SellerId INNER JOIN Production.ProductSelectedCategory AS PSC ON PP.ProductId=PSC.ProductId WHERE PP.ProductAcceptanceState=1 AND PP.IsActive=1 AND PP.IsDelete=0 ";
+                @"SELECT   PP.[Name] ,PP.Price ,PP.ImageName,PP.ProductId,PP.SellerId,PP.CreatedDate,SS.StoreName FROM Production.Product AS PP INNER JOIN Store.Seller AS SS ON PP.SellerId=SS.SellerId LEFT JOIN Production.ProductSelectedCategory AS PSC ON PP.ProductId=PSC.ProductId WHERE PP.ProductAcceptanceState=1 AND PP.IsActive=1 AND PP.IsDelete=0 ";
 
+            #region Filter
             if (!string.IsNullOrEmpty(filterProduct.Name))
             {
                 query += $"AND PP.[Name] LIKE N'%{filterProduct.Name}%'";
@@ -334,16 +335,20 @@ namespace DigiStore.Data.Repositories.Product
 
                 }
             }
+            #endregion
 
+            #region Group By
             query += "GROUP BY PP.[Name] ,PP.Price ,PP.ImageName ,PP.ProductId,PP.SellerId,PP.CreatedDate,SS.StoreName  ";
+            #endregion
 
+            #region Order 
             switch (filterProduct.FilterProductOrderBy)
             {
                 case FilterProductOrderBy.Create_Date_Asc:
-                    query += "ORDER BY  PP.CreatedDate DESC";
+                    query += "ORDER BY  PP.CreatedDate ASC";
                     break;
                 case FilterProductOrderBy.Create_Date_Desc:
-                    query += "ORDER BY  PP.CreatedDate ASC";
+                    query += "ORDER BY  PP.CreatedDate DESC";
                     break;
                 case FilterProductOrderBy.Price_Asc:
                     query += "ORDER BY  PP.Price ASC";
@@ -352,15 +357,18 @@ namespace DigiStore.Data.Repositories.Product
                     query += "ORDER BY  PP.Price DESC";
                     break;
             }
+            #endregion
 
-            var product = await db.QueryAsync<Domain.Entities.Product,Domain.Entities.Seller, Domain.Entities.Product>(query,(e,c)=>
+            #region Joing
+            var product = await db.QueryAsync<Domain.Entities.Product, Domain.Entities.Seller, Domain.Entities.Product>(query, (e, c) =>
             {
                 e.Seller = c;
                 return e;
-            },splitOn: "SellerId");
+            }, splitOn: "SellerId");
+            #endregion
 
             #region paging
-            var pager = Pager.Build(filterProduct.PageId,  product.Count(), filterProduct.TakeEntity,
+            var pager = Pager.Build(filterProduct.PageId, product.Count(), filterProduct.TakeEntity,
                 filterProduct.HowManyShowPageAfterAndBefore);
             var allProduct = product.Paging(pager).ToList();
             return filterProduct.SetPaging(pager).SetProduct(allProduct);

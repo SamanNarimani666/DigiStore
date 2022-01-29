@@ -28,11 +28,12 @@ namespace DigiStore.Domain.ViewModels.Product
         [Range(1, 100, ErrorMessage = "دصد تخفیف باید در بازه 1 تا 100 باشد")]
         public int SiteProfile { get; set; }
 
+        [Display(Name = "برند")]
+        public int? BradnId { get; set; }
 
         [Display(Name = "فعال / غیرفعال")]
         public bool IsActive { get; set; }
-        [Display(Name = "برند")]
-        public int? BradnId { get; set; }
+   
         public List<CreateProductColorViewModel> ProductColors { get; set; }
         public List<int> SelectedCategories { get; set; }
         public List<CreateProductFeatureViewModel> ProductFeature { get; set; }

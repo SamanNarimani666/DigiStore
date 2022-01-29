@@ -89,13 +89,14 @@
                                             @if (!item.IsDelete)
                                             {
                                                 <td>
-                                                    <a  class="btn btn-danger btn-sm"  asp-controller="SiteSetting" asp-area="Admin" asp-action="DeleteSlider" asp-route-sliderId="@item.SliderId">حذف تصویر</a>
+                                                    <a ajax-url-buttons="@item.SliderId" class="btn btn-danger btn-sm" asp-controller="SiteSetting" asp-area="Admin" asp-action="DeleteSlider" asp-route-sliderId="@item.SliderId">حذف تصویر</a>
 
                                                 </td>
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <td>
-                                                    <a class="btn btn-warning btn-sm"  asp-controller="SiteSetting" asp-area="Admin" asp-action="RestoreSlider" asp-route-sliderId="@item.SliderId">بازگردانی تصویر</a>
+                                                    <a ajax-url-buttons="@item.SliderId" class="btn btn-warning btn-sm" asp-controller="SiteSetting" asp-area="Admin" asp-action="RestoreSlider" asp-route-sliderId="@item.SliderId">بازگردانی تصویر</a>
                                                 </td>
                                             }
                                         </tr>
@@ -125,3 +126,36 @@
     </div>
 </div>
 
+
+@section Scripts
+{
+    <script>
+        $('[ajax-url-buttons]').on('click', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            var itemId = $(this).attr('ajax-url-button');
+            swal({
+                title: 'اخطار',
+                text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "بله",
+                cancelButtonText: "خیر",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((result) => {
+                if (result.value) {
+                    $.get(url).then(result => {
+                        if (result.status === 'Success') {
+                            ShowMessage('موفقیت', result.message);
+                            open_waiting();
+                        }
+                    });
+                } else if (result.dismiss === swal.DismissReason.cancel) {
+                    swal('اعلام', 'عملیات لغو شد', 'error');
+                }
+            });
+        });
+    </script>
+}

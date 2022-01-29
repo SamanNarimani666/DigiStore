@@ -31,7 +31,7 @@ namespace DigiStore.Data.Repositories.Role
         #region filterRoles
         public async Task<FilterRoleViewModel> filterRoles(FilterRoleViewModel filterRole)
         {
-            var query =  _context.Roles.AsQueryable();
+            var query =  _context.Roles.Where(p=>!p.IsDelete).AsQueryable();
             if (!string.IsNullOrEmpty(filterRole.RoleTitle))
             {
                 query = query.Where(p => EF.Functions.Like(p.RoleTitle,$"%{filterRole.RoleTitle}%"));

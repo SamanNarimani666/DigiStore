@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels;
 using DigiStore.Domain.ViewModels.Roles;
+using DigiStore.Web.Http;
 using DigiStore.Web.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
@@ -91,6 +93,30 @@ namespace DigiStore.Web.Areas.Admin.Controllers
             return View(role);
         }
 
+        #endregion
+
+        #region Remove Role
+        [HttpGet("remove-role/{roleId}")]
+        public async Task<IActionResult> RemoveRole(int roleId)
+        {
+            var res = await _permissionService.DeleteRole(roleId);
+            if (res)
+            {
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Success,
+                    "نقش انتخاب شده با موفقیت حذف شد",
+                    null
+                );
+            }
+            else
+            {
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Danger,
+                    "خطا در حذف نقش",
+                    null
+                );
+            }
+        }
         #endregion
     }
 }

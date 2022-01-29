@@ -11,340 +11,341 @@
     var selectedBrands = ViewBag.SelectedBrands as List<int>;
 }
 
-<form asp-controller="Product" asp-action="ProductSearch" asp-area="" method="get" id="filter-form">
-    <input type="hidden" asp-for="PageId" />
+<form asp-controller="Product" asp-action="ProductSearch" asp-area="" method="get" id="filter-forms">
+<input type="hidden" asp-for="PageId"/>
+@(ViewBag.PageId = Model.PageId)
+<div class="col-12">
+    <div class="header-filters">
+        <div class="remodal-search-advanced" id="modal-search" style="display: none;">
+            <nav class="remodal-page-layout">
 
-    <div class="col-12">
-        <div class="header-filters">
-            <div class="remodal-search-advanced" id="modal-search" style="display: none;">
-                <nav class="remodal-page-layout">
+
+                <div class="remodal-page-main">
+                    <div class="remodal-page-content">
+                        <div class="filter">
+                            <div class="toggle-box">
+                                <div class="toggle-box-active">
+                                    <ul>
+                                        <li class="has-sub">
+                                            <a href="#">دسته‌بندی ها</a>
+                                            @if (procutCategories != null && procutCategories.Any())
+                                            {
 
 
-                    <div class="remodal-page-main">
-                        <div class="remodal-page-content">
+                                                <ul class="catalog-list">
+                                                    @foreach (var mainCategory in procutCategories.Where(p => p.ParentId == null))
+                                                    {
+                                                        <li>
+                                                            <a href="#" class="catalog-link"><i class="fa fa-angle-left"></i>@mainCategory.Title</a>
+                                                            @if (procutCategories.Any(p => p.ParentId == mainCategory.ProductCategoryId))
+                                                            {
+                                                                @foreach (var submainCategory in procutCategories.Where(p => p.ParentId == mainCategory.ProductCategoryId))
+                                                                 {
+                                                                     <div class="show-more">
+                                                                         <span class="catalog-cat-item"><i class="fa fa-angle-down"></i>@submainCategory.Title</span>
+
+                                                                         @if (procutCategories.Any(p => p.ParentId == submainCategory.ProductCategoryId))
+                                                                         {
+                                                                             <ul class="catalog-list">
+                                                                                 @foreach (var subSubmainCategory in procutCategories.Where(p => p.ParentId == submainCategory.ProductCategoryId))
+                                                                                 {
+                                                                                     <li>
+                                                                                         <a href="ProductSearch?SelectedPrductCategories=@subSubmainCategory.ProductCategoryId" class="catalog-link">
+                                                                                             @subSubmainCategory.Title
+                                                                                         </a>
+                                                                                     </li>
+
+                                                                                 }
+                                                                             </ul>
+                                                                         }
+                                                                     </div>
+                                                                 }
+                                                            }
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        @if (brandProducts != null && brandProducts.Any())
+                        {
                             <div class="filter">
                                 <div class="toggle-box">
                                     <div class="toggle-box-active">
                                         <ul>
                                             <li class="has-sub">
-                                                <a href="#">دسته‌بندی نتایج</a>
-                                                @if (procutCategories != null && procutCategories.Any())
-                                                {
+                                                <p>برند</p>
+                                                <ul>
+                                                    @foreach (var brands in brandProducts)
+                                                    {
+                                                        <li>
+                                                            <a href="#" class="filter-label">
+                                                                <div class="form-auth-row">
+                                                                    <label for="remember" class="ui-checkbox">
+                                                                        <input type="radio" onchange="changefilter()" value="@brands.BrandId" name="login" id="remember">
+                                                                        <span class="ui-checkbox-check"></span>
+                                                                    </label>
+                                                                    <label for="remember" class="remember-me">@brands.BrandName</label>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                    }
 
-
-                                                    <ul class="catalog-list">
-                                                        @foreach (var mainCategory in procutCategories.Where(p => p.ParentId == null))
-                                                        {
-                                                            <li>
-                                                                <a href="#" class="catalog-link"><i class="fa fa-angle-left"></i>@mainCategory.Title</a>
-                                                                @if (procutCategories.Any(p => p.ParentId == mainCategory.ProductCategoryId))
-                                                                {
-                                                                    @foreach (var submainCategory in procutCategories.Where(p => p.ParentId == mainCategory.ProductCategoryId))
-                                                                    {
-                                                                        <div class="show-more">
-                                                                            <span class="catalog-cat-item"><i class="fa fa-angle-down"></i>@submainCategory.Title</span>
-
-                                                                            @if (procutCategories.Any(p => p.ParentId == submainCategory.ProductCategoryId))
-                                                                            {
-                                                                                <ul class="catalog-list">
-                                                                                    @foreach (var subSubmainCategory in procutCategories.Where(p => p.ParentId == submainCategory.ProductCategoryId))
-                                                                                    {
-                                                                                        <li>
-                                                                                            <a href="ProductSearch?CategoryId=@subSubmainCategory.ProductCategoryId" class="catalog-link">
-                                                                                                @subSubmainCategory.Title
-                                                                                            </a>
-                                                                                        </li>
-
-                                                                                    }
-                                                                                </ul>
-                                                                            }
-                                                                        </div>
-                                                                    }
-                                                                }
-                                                            </li>
-                                                        }
-                                                    </ul>
-                                                }
+                                                </ul>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                            @if (brandProducts != null && brandProducts.Any())
-                            {
-                                <div class="filter">
-                                    <div class="toggle-box">
-                                        <div class="toggle-box-active">
-                                            <ul>
-                                                <li class="has-sub">
-                                                    <p>برند</p>
-                                                    <ul>
-                                                        @foreach (var brands in brandProducts)
-                                                        {
-                                                            <li>
-                                                                <a href="#" class="filter-label">
-                                                                    <div class="form-auth-row">
-                                                                        <label for="remember" class="ui-checkbox">
-                                                                            <input type="radio" onchange="changeFilter()" value="@brands.BrandId" name="login" id="remember">
-                                                                            <span class="ui-checkbox-check"></span>
-                                                                        </label>
-                                                                        <label for="remember" class="remember-me">@brands.BrandName</label>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                        }
+                        }
 
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-xs-12 float-right sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
-
-        <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none;">
-            <div class="sidebar-wrapper search-sidebar">
-                <div class="box-sidebar">
-                    <button class="btn btn-light btn-box-sidebar" type="button">دسته‌بندی ها</button>
-                    <div class="catalog">
-                        @if (procutCategories != null && procutCategories.Any())
-                        {
-                            if (selecteCategory != null && selecteCategory.Any())
-                            {
-                                <span><a asp-controller="Product" asp-action="ProductSearch" asp-route-Category="" asp-area="" class="btn btn-block btn-light">نمایش همه</a></span>
-                                <ul class="catalog-list ">
-                                    @foreach (var mainCategory in procutCategories.Where(p => p.ParentId == null))
-                                    {
-                                        <li>
-                                            <span><a href="#" class="catalog-link" category_dropdown_button="@mainCategory.ProductCategoryId"><i class="fa fa-angle-left"></i>@mainCategory.Title</a></span>
-                                            @if (procutCategories.Any(p => p.ParentId == mainCategory.ProductCategoryId))
-                                            {
-                                                @foreach (var submainCategory in procutCategories.Where(p => p.ParentId == mainCategory.ProductCategoryId))
-                                                {
-                                                    <ul class="catalog-list" category_dropdown_list="@submainCategory.ParentId">
-                                                        <div class="show-more">
-                                                        <li>
-                                                            <a class="filter-label">
-                                                                <div class="form-auth-row">
-                                                                    <label class="ui-checkbox">
-                                                                        <input type="checkbox" name="SelectedPrductCategories" @((selecteCategory.Any(s => s == submainCategory.ProductCategoryId) ? "checked" : "")) value="@submainCategory.ProductCategoryId">
-                                                                        <span class="ui-checkbox-check"></span>
-                                                                    </label>
-                                                                    <label class="remember-me">@submainCategory.Title</label>
-                                                                </div>
-                                                            </a>
-                                                        </li>
-                                                        @if (procutCategories.Any(p => p.ParentId == submainCategory.ProductCategoryId))
-                                                        {
-                                                            <ul class="catalog-list m-4">
-                                                                @foreach (var subSubmainCategory in procutCategories.Where(p => p.ParentId == submainCategory.ProductCategoryId))
-                                                                {
-
-                                                                    <li>
-                                                                        <a class="filter-label">
-                                                                            <div class="form-auth-row">
-                                                                                <label class="ui-checkbox">
-                                                                                    <input type="checkbox" name="SelectedPrductCategories" @((selecteCategory.Any(s => s == subSubmainCategory.ProductCategoryId) ? "checked" : "")) value="@subSubmainCategory.ProductCategoryId">
-                                                                                    <span class="ui-checkbox-check"></span>
-                                                                                </label>
-                                                                                <label class="remember-me">@subSubmainCategory.Title</label>
-                                                                            </div>
-                                                                        </a>
-                                                                    </li>
-                                                                }
-                                                            </ul>
-                                                        }
-
-                                        </div>
-                                        </ul>
-                                    }
-
-                                            }
-
-                                            </li>
-                                        }
-
-                                    </ul>
-                                }
-                                else
-                                {
-
-
-                                    <span><a asp-controller="Product" asp-action="ProductSearch" asp-route-Category="" asp-area="" class="btn btn-block btn-light">نمایش همه</a></span>
-                                    <ul class="catalog-list ">
-                                        @foreach (var mainCategory in procutCategories.Where(p => p.ParentId == null))
-                                        {
-                                            <li>
-                                                <span><a href="#" class="catalog-link" category_dropdown_button="@mainCategory.ProductCategoryId"><i class="fa fa-angle-left"></i>@mainCategory.Title</a></span>
-                                                @if (procutCategories.Any(p => p.ParentId == mainCategory.ProductCategoryId))
-                                                {
-                                                    @foreach (var submainCategory in procutCategories.Where(p => p.ParentId == mainCategory.ProductCategoryId))
-                                                    {
-                                                        <ul class="catalog-list" category_dropdown_list="@submainCategory.ParentId">
-                                                            <div class="show-more">
-                                                            <li>
-                                                                <a class="filter-label">
-                                                                    <div class="form-auth-row">
-                                                                        <label class="ui-checkbox">
-                                                                            <input type="checkbox" name="SelectedPrductCategories" value="@submainCategory.ProductCategoryId">
-                                                                            <span class="ui-checkbox-check"></span>
-                                                                        </label>
-                                                                        <label class="remember-me">@submainCategory.Title</label>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            @if (procutCategories.Any(p => p.ParentId == submainCategory.ProductCategoryId))
-                                                            {
-                                                                <ul class="catalog-list m-4">
-                                                                    @foreach (var subSubmainCategory in procutCategories.Where(p => p.ParentId == submainCategory.ProductCategoryId))
-                                                                    {
-
-                                                                        <li>
-                                                                            <a class="filter-label">
-                                                                                <div class="form-auth-row">
-                                                                                    <label class="ui-checkbox">
-                                                                                        <input type="checkbox" name="SelectedPrductCategories" value="@subSubmainCategory.ProductCategoryId">
-                                                                                        <span class="ui-checkbox-check"></span>
-                                                                                    </label>
-                                                                                    <label class="remember-me">@subSubmainCategory.Title</label>
-                                                                                </div>
-                                                                            </a>
-                                                                        </li>
-                                                                    }
-                                                                </ul>
-                                                            }
-
-                                            </div>
-                                            </ul>
-                                        }
-
-                                                }
-
-                                                </li>
-                                            }
-
-                                        </ul>
-                                    }
-                                }
-                        <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
                     </div>
                 </div>
-                @if (ViewBag.SearchName != null && ViewBag.SearchName != "")
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="col-lg-3 col-md-4 col-xs-12 float-right sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+<div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none;">
+<div class="sidebar-wrapper search-sidebar">
+<div class="box-sidebar">
+    @if (ViewBag.SearchName != null && ViewBag.SearchName != "")
+    {
+        <div class="box-sidebar">
+            <button class="btn btn-light btn-box-sidebar" type="button">
+                جستجو محصول:
+            </button>
+
+            <input type="text" class="input-sidebar" value="@ViewBag.SearchName" name="Name" placeholder="نام محصول  مورد نظر را بنویسید…">
+
+            <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
+
+        </div>
+    }
+    else
+    {
+        <div class="box-sidebar">
+            <button class="btn btn-light btn-box-sidebar" type="button">
+                جستجو محصول:
+            </button>
+
+            <input type="text" class="input-sidebar" name="Name" placeholder="نام محصول  مورد نظر را بنویسید…">
+
+            <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
+
+        </div>
+    }
+    <button class="btn btn-light btn-box-sidebar" type="button">دسته‌بندی ها</button>
+    <div class="catalog">
+        @if (procutCategories != null && procutCategories.Any())
+        {
+            if (selecteCategory != null && selecteCategory.Any())
+            {
+                <span><a asp-controller="Product" asp-action="ProductSearch" asp-route-Category="" asp-area="" class="btn btn-block btn-light">نمایش همه</a></span>
+                <ul class="catalog-list ">
+                    @foreach (var mainCategory in procutCategories.Where(p => p.ParentId == null))
+                    {
+                        <li>
+                            <span><a href="#" class="catalog-link" category_dropdown_button="@mainCategory.ProductCategoryId"><i class="fa fa-angle-left"></i>@mainCategory.Title</a></span>
+                            @if (procutCategories.Any(p => p.ParentId == mainCategory.ProductCategoryId))
+                            {
+                                @foreach (var submainCategory in procutCategories.Where(p => p.ParentId == mainCategory.ProductCategoryId))
+                                 {
+                                     <ul class="catalog-list" category_dropdown_list="@submainCategory.ParentId">
+                                         <div class="show-more">
+                                             <li>
+                                                 <a class="filter-label">
+                                                     <div class="form-auth-row">
+                                                         <label class="ui-checkbox">
+                                                             <input type="checkbox" onchange="changefilter()" name="SelectedPrductCategories" @((selecteCategory.Any(s => s == submainCategory.ProductCategoryId) ? "checked" : "")) value="@submainCategory.ProductCategoryId">
+                                                             <span class="ui-checkbox-check"></span>
+                                                         </label>
+                                                         <label class="remember-me">@submainCategory.Title</label>
+                                                     </div>
+                                                 </a>
+                                             </li>
+                                             @if (procutCategories.Any(p => p.ParentId == submainCategory.ProductCategoryId))
+                                             {
+                                                 <ul class="catalog-list m-4">
+                                                     @foreach (var subSubmainCategory in procutCategories.Where(p => p.ParentId == submainCategory.ProductCategoryId))
+                                                     {
+
+                                                         <li>
+                                                             <a class="filter-label">
+                                                                 <div class="form-auth-row">
+                                                                     <label class="ui-checkbox">
+                                                                         <input type="checkbox" onchange="changefilter()" name="SelectedPrductCategories" @((selecteCategory.Any(s => s == subSubmainCategory.ProductCategoryId) ? "checked" : "")) value="@subSubmainCategory.ProductCategoryId">
+                                                                         <span class="ui-checkbox-check"></span>
+                                                                     </label>
+                                                                     <label class="remember-me">@subSubmainCategory.Title</label>
+                                                                 </div>
+                                                             </a>
+                                                         </li>
+                                                     }
+                                                 </ul>
+                                             }
+
+                                         </div>
+                                     </ul>
+                                 }
+
+                            }
+
+                        </li>
+                    }
+
+                </ul>
+            }
+            else
+            {
+
+
+                <span><a asp-controller="Product" asp-action="ProductSearch" asp-route-Category="" asp-area="" class="btn btn-block btn-light">نمایش همه</a></span>
+                <ul class="catalog-list ">
+                    @foreach (var mainCategory in procutCategories.Where(p => p.ParentId == null))
+                    {
+                        <li>
+                            <span><a href="#" class="catalog-link" category_dropdown_button="@mainCategory.ProductCategoryId"><i class="fa fa-angle-left"></i>@mainCategory.Title</a></span>
+                            @if (procutCategories.Any(p => p.ParentId == mainCategory.ProductCategoryId))
+                            {
+                                @foreach (var submainCategory in procutCategories.Where(p => p.ParentId == mainCategory.ProductCategoryId))
+                                 {
+                                     <ul class="catalog-list" category_dropdown_list="@submainCategory.ParentId">
+                                         <div class="show-more">
+                                             <li>
+                                                 <a class="filter-label">
+                                                     <div class="form-auth-row">
+                                                         <label class="ui-checkbox">
+                                                             <input type="checkbox" onchange="changefilter()" name="SelectedPrductCategories" value="@submainCategory.ProductCategoryId">
+                                                             <span class="ui-checkbox-check"></span>
+                                                         </label>
+                                                         <label class="remember-me">@submainCategory.Title</label>
+                                                     </div>
+                                                 </a>
+                                             </li>
+                                             @if (procutCategories.Any(p => p.ParentId == submainCategory.ProductCategoryId))
+                                             {
+                                                 <ul class="catalog-list m-4">
+                                                     @foreach (var subSubmainCategory in procutCategories.Where(p => p.ParentId == submainCategory.ProductCategoryId))
+                                                     {
+
+                                                         <li>
+                                                             <a class="filter-label">
+                                                                 <div class="form-auth-row">
+                                                                     <label class="ui-checkbox">
+                                                                         <input type="checkbox" onchange="changefilter()" name="SelectedPrductCategories" value="@subSubmainCategory.ProductCategoryId">
+                                                                         <span class="ui-checkbox-check"></span>
+                                                                     </label>
+                                                                     <label class="remember-me">@subSubmainCategory.Title</label>
+                                                                 </div>
+                                                             </a>
+                                                         </li>
+                                                     }
+                                                 </ul>
+                                             }
+
+                                         </div>
+                                     </ul>
+                                 }
+
+                            }
+
+                        </li>
+                    }
+
+                </ul>
+            }
+        }
+
+    </div>
+</div>
+
+
+<div class="box-sidebar">
+    <button class="btn btn-light btn-box-sidebar" type="button" data-toggle="collapse" data-target="#collapseExampleSeller2" aria-expanded="false" aria-controls="collapseExampleSeller">
+        <i class="fa fa-chevron-down arrow"></i>مرتب سازی بر اساس ...
+    </button>
+    <div class="collapse show" id="collapseExampleSeller2">
+        <div class="catalog">
+
+
+            <select id="orderFilter" class="form-group" style="width: 100%;" id="orderItem" name="FilterProductOrderBy" aria-label=".form-select-sm example" asp-for="FilterProductOrderBy">
+                @foreach (var item in Html.GetEnumSelectList<FilterProductOrderBy>())
                 {
-                    <div class="box-sidebar">
-                        <button class="btn btn-light btn-box-sidebar" type="button">
-                            جستجو محصول:
-                        </button>
+                    <option class="form-control" value="@item.Value">@item.Text</option>
+                }
+            </select>
+            
 
-                        <input type="text" class="input-sidebar" value="@ViewBag.SearchName" asp-for="Name" placeholder="نام محصول  مورد نظر را بنویسید…">
+        </div>
+    </div>
 
-                        <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
+</div>
+<div class="box-sidebar">
+    <button class="btn btn-light btn-box-sidebar" type="button" data-toggle="collapse" data-target="#collapseExampleSeller" aria-expanded="false" aria-controls="collapseExampleSeller">
+        <i class="fa fa-chevron-down arrow"></i>برند
+    </button>
+    <div class="collapse show" id="collapseExampleSeller">
+        <div class="catalog">
 
-                    </div>
+            @if (brandProducts != null && brandProducts.Any())
+            {
+                if (selectedBrands != null && selectedBrands.Any())
+                {
+                    <ul>
+                        @foreach (var brands in brandProducts)
+                        {
+                            <li>
+                                <a class="filter-label">
+                                    <div class="form-auth-row">
+                                        <label class="ui-checkbox">
+                                            <input type="checkbox" onchange="changefilter()" name="Selectedbrand" @((selectedBrands.Any(s => s == brands.BrandId) ? "checked" : "")) value="@brands.BrandId">
+                                            <span class="ui-checkbox-check"></span>
+                                        </label>
+                                        <label class="remember-me">@brands.BrandName</label>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
                 }
                 else
                 {
-                    <div class="box-sidebar">
-                        <button class="btn btn-light btn-box-sidebar" type="button">
-                            جستجو محصول:
-                        </button>
-
-                        <input type="text" class="input-sidebar" asp-for="Name" placeholder="نام محصول  مورد نظر را بنویسید…">
-
-                        <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
-
-                    </div>
+                    <ul>
+                        @foreach (var brands in brandProducts)
+                        {
+                            <li>
+                                <a class="filter-label">
+                                    <div class="form-auth-row">
+                                        <label class="ui-checkbox">
+                                            <input type="checkbox" onchange="changefilter()" name="Selectedbrand" value="@brands.BrandId">
+                                            <span class="ui-checkbox-check"></span>
+                                        </label>
+                                        <label class="remember-me">@brands.BrandName</label>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    </ul>
                 }
 
-                <div class="box-sidebar">
-                    <button class="btn btn-light btn-box-sidebar" type="button" data-toggle="collapse" data-target="#collapseExampleSeller2" aria-expanded="false" aria-controls="collapseExampleSeller">
-                        <i class="fa fa-chevron-down arrow"></i>مرتب سازی بر اساس ...
-                    </button>
-                    <div class="collapse show" id="collapseExampleSeller2">
-                        <div class="catalog">
+            }
+        </div>
+    </div>
+
+</div>
 
 
-                            <select class="form-group" style="width: 100%;" id="orderItem" name="FilterProductOrderBy" aria-label=".form-select-sm example" asp-for="FilterProductOrderBy">
-                                @foreach (var item in Html.GetEnumSelectList<FilterProductOrderBy>())
-                                {
-                                    <option class="form-control" value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                            <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">مرتب سازی</button>
+</div>
+</div>
+</div>
 
-                        </div>
-                    </div>
-
-                </div>
-                <div class="box-sidebar">
-                    <button class="btn btn-light btn-box-sidebar" type="button" data-toggle="collapse" data-target="#collapseExampleSeller" aria-expanded="false" aria-controls="collapseExampleSeller">
-                        <i class="fa fa-chevron-down arrow"></i>برند
-                    </button>
-                    <div class="collapse show" id="collapseExampleSeller">
-                        <div class="catalog">
-
-                            @if (brandProducts != null && brandProducts.Any())
-                            {
-                                if (selectedBrands != null && selectedBrands.Any())
-                                {
-                                    <ul>
-                                        @foreach (var brands in brandProducts)
-                                        {
-                                            <li>
-                                                <a class="filter-label">
-                                                    <div class="form-auth-row">
-                                                        <label class="ui-checkbox">
-                                                            <input type="checkbox"  name="Selectedbrand" @((selectedBrands.Any(s => s == brands.BrandId) ? "checked" : "")) value="@brands.BrandId">
-                                                            <span class="ui-checkbox-check"></span>
-                                                        </label>
-                                                        <label class="remember-me">@brands.BrandName</label>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        }
-                                    </ul>
-
-                                }
-                                else
-                                {
-                                    <ul>
-                                        @foreach (var brands in brandProducts)
-                                        {
-                                            <li>
-                                                <a class="filter-label">
-                                                    <div class="form-auth-row">
-                                                        <label class="ui-checkbox">
-                                                            <input type="checkbox" name="Selectedbrand"  value="@brands.BrandId">
-                                                            <span class="ui-checkbox-check"></span>
-                                                        </label>
-                                                        <label class="remember-me">@brands.BrandName</label>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        }
-                                    </ul>
-                                }
-
-                            }
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-search-sidebar btn btn-block m-1 btn-danger">جستجو</button>
-
-                </div>
-
-
-            </div>
-            </div>
-            </div>
-
+</form>
             <div class="col-lg-9 col-md-8 col-xs-12 pull-left">
                 <div class="js-products">
                     <div class="listing-counter"> @($"{Model.GetCurrentPagingStatus()} \t تعداد کالا\t{Model.AllEntitiesCount}")</div>
@@ -404,20 +405,23 @@
                         <div class="pager">
                             <ul class="page-item">
 
-                                @if (Model.StartPage < Model.PageId)
-                                {
-                                    <li class="btn"><a href="/ProductSearch?pageid=@(Model.PageId - 1)">«</a></li>
-                                }
-                                @for (int i = Model.StartPage; i <= Model.EndPage; i++)
-                                {
-                                    <li class="pagination-item"><a href="/ProductSearch?pageid=@(i)" class="@(Model.PageId == i ? "pager-item-active" : "")">@i</a></li>
-                                }
+                                <div class="pager">
+                                    <ul class="page-item">
+                                        @if (Model.StartPage < Model.PageId)
+                                        {
+                                            <li class="btn"><a onclick="FillPageId(@(Model.PageId - 1))">«</a></li>
+                                        }
 
-                                @if (Model.EndPage > Model.PageId)
-                                {
-                                    <li class="btn"><a class="btn" href="/ProductSearch?pageid=@(Model.PageId + 1)">»</a></li>
-                                }
-
+                                        @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                                        {
+                                            <li class="pagination-item"  onclick="FillPageId(@i)"><a onclick="FillPageId(@i)" style="cursor: pointer" class="@(Model.PageId == i ? "pager-item-active" : " ")" >@i</a></li>
+                                        }
+                                        @if (Model.EndPage > Model.PageId)
+                                        {
+                                            <li class="btn" ><a class="btn"  onclick="FillPageId(@(Model.PageId + 1))">»</a></li>
+                                        }
+                                    </ul>
+                                </div>
 
                             </ul>
                         </div>
@@ -425,11 +429,25 @@
                     </div>
                 </div>
             </div>
-        </form>
+       
 
         @section Scripts
 {
             <script>
+                $('#orderFilter').on('change',
+                    function () {
+                        $("#filter-forms").submit();
+                    });
+               
+
+                function changefilter() {
+                        $("#filter-forms").submit();
+                }
+                function FillPageId(pageId) {
+                    console.log(pageId);
+                    $("#PageId").val(pageId);
+                    $("#filter-forms").submit();
+                }
 
                 var flag = true;
                 if (flag == false) {

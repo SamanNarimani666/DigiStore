@@ -18,5 +18,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<List<Domain.Entities.Permission>> GetAllPermission();
         List<int> RoleSelectedPermission(int roleId);
         bool ChckePermission(int permissionId, string userName);
+        Task<bool> DeleteRole(int roleId);
     }
 }

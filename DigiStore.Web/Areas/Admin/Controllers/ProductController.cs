@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
-using DigiStore.Domain.ViewModels.Common;
 using DigiStore.Domain.ViewModels.Product;
 using DigiStore.Web.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -68,5 +67,17 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         }
 
         #endregion
+
+        #region ProductDetial
+        [HttpGet("product-detial/{productId}")]
+        public async Task<IActionResult> ProductDetilas(int productId)
+        {
+            var product = await _productService.GetProductDetail(productId);
+            if (product == null) return NoContent();
+            return View(product);
+        }
+        #endregion
+
+
     }
 }

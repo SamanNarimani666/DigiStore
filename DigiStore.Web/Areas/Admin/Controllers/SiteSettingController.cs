@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.SiteSetting;
 using DigiStore.Domain.ViewModels.Slider;
+using DigiStore.Web.Http;
 using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
@@ -102,13 +103,21 @@ namespace DigiStore.Web.Areas.Admin.Controllers
             if (res)
             {
                 TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت حذف شد";
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Success,
+                    "تصویر با موفقیت حذف شد",
+                    null
+                );
             }
             else
             {
-                TempData[ErrorMessage] = "خطا در حذف تصویر";
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Danger,
+                    "خطا در حذف تصویر",
+                    null
+                );
             }
 
-            return RedirectToAction("ListSlider", "SiteSetting");
         }
         #endregion
 
@@ -119,14 +128,21 @@ namespace DigiStore.Web.Areas.Admin.Controllers
             var res = await _siteService.RestoreSlider(sliderId);
             if (res)
             {
-                TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت بازگردانی شد";
+                TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت حذف شد";
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Success,
+                    "تصویر با موفقیت باز گردانده شد",
+                    null
+                );
             }
             else
             {
-                TempData[ErrorMessage] = "خطا در باز گردانی تصویر";
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Danger,
+                    "خطا در حذف بازگردانی تصویر",
+                    null
+                );
             }
-
-            return RedirectToAction("ListSlider", "SiteSetting");
         }
         #endregion
 

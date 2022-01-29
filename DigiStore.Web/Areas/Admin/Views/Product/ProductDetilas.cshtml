@@ -1,0 +1,141 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.Product.ProductDetailViewModel
+@{
+    ViewData["Title"] = "جزئیات محصول " + Model.Title;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        اطلاعات کاربر
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>نام محصول</label>
+                            <p>@Model.Title</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>قیمت</label>
+                            <p>@Model.Price.ToString("#,0") قیمت</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>فروشنده</label>
+                            <p>@Model.Seller.StoreName</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>توضیحات کوتاه</label>
+                            <p>@Model.ShortDescription</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>توضیحات کامل</label>
+                            <p>@Html.Raw(Model.Description)</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>تاریخ ثبت محصول</label>
+                            <p> @Model.CreateDate.ToStringShamsiDate() ساعت @Model.CreateDate.ToString("HH:mm")</p>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                            {
+                                <div class="col-lg-6">
+                                    <div class="card-box">
+                                        <h4 class="header-title m-t-0 m-b-30">ویژگی های محصول</h4>
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>نام ویژگی</th>
+                                                    <th>مقدار</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var featuters in Model.ProductFeatures)
+                                                {
+                                                    <tr>
+                                                        <td>@featuters.FeatureTitle</td>
+                                                        <td>@featuters.FeatureValue</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                            {
+                                <div class="col-lg-6">
+                                    <div class="card-box">
+                                        <h4 class="header-title m-t-0 m-b-30">رنگ های محصول</h4>
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th> رنگ</th>
+                                                    <th>ارزش افزوده</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var colors in Model.ProductColors)
+                                                {
+                                                    <tr>
+                                                        <td style="background-color:@colors.ColorCode; ">@colors.ColorCode</td>
+                                                        <td>@colors.Price</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.ProductGalleries != null && Model.ProductGalleries.Any())
+                            {
+                                <div class="col-lg-6">
+                                    <div class="card-box">
+                                        <h4 class="header-title m-t-0 m-b-30">گالری محصول</h4>
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th> اولویت نمایش</th>
+                                                    <th>تصویر</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var gallery in Model.ProductGalleries)
+                                                {
+                                                    <tr>
+                                                        <td>@gallery.DisplayPrority.Value</td>
+                                                        <td><img src="@(!string.IsNullOrEmpty(gallery.ImageName)?PathExtension.ProductGalleryThumb+gallery.ImageName:PathExtension.DefaultStoreLogo)"/></td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <div class="col-md-4">
+                <div class="card-box">
+
+                    <h4 class="header-title m-t-0 m-b-30">تصوير محصول</h4>
+                    <img class="img-fluid img-thumbnail " style="height: 100%; width: 100%;" src="@(!string.IsNullOrEmpty(Model.ImageName)?PathExtension.ProductImageOrigin+Model.ImageName:PathExtension.DefaultAvatar)" />
+                </div>
+            </div>
+        </div>
+       
+
+    </div>
+</div> <!-- container -->

@@ -83,12 +83,12 @@ $(document).ready(function () {
 
 $('#orderFilter').on('change',
     function () {
-        $("#filter-form").submit();
+        $("#filter-forms").submit();
     });
 function FillPageId(pageId) {
     console.log(pageId);
     $("#PageId").val(pageId);
-    $("#filter-form").submit();
+    $("#filter-forms").submit();
 }
 
 

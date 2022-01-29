@@ -46,7 +46,7 @@ namespace DigiStore.Data.Repositories.UserRole
         #region UserRolesId
         public async Task<List<Domain.Entities.UserRole>> UserRolesId(int userId)
         {
-            return await _context.UserRoles.Where(p=>p.UserId==userId).ToListAsync();
+            return await _context.UserRoles.Include(p=>p.Role).Where(p=>p.UserId==userId&&!p.Role.IsDelete).ToListAsync();
         }
         #endregion
 

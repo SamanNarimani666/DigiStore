@@ -49,7 +49,7 @@
                         </div>
                         @if (Model.ProductGalleries != null && Model.ProductGalleries.Any())
                         {
-                            foreach (var gallery in Model.ProductGalleries.OrderBy(g=>g.DisplayPrority.Value))
+                            foreach (var gallery in Model.ProductGalleries)
                             {
                                 <div class="owl-item active" style="width: 191px; margin-left: 10px;">
                                     <li class="item">

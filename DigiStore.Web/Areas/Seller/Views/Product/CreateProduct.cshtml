@@ -76,7 +76,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="ProductImage" id="imgInp" accept=".png,.jpeg" />
+                                            <input type="file" class="custom-file-input" name="ProductImage" id="imgInp"/>
                                             <label class="custom-file-label text-left" for="customFile">بار گذاری  تصویر محصول</label>
                                         </div>
                                     </div>
@@ -132,7 +132,7 @@
                                     }
                                 }
                                 <select asp-for="BradnId" class="form-control">
-                                    <option selected>نام برند محصول را انتخاب نمایید</option>
+                                    <option value="@null" selected> برند محصول را انتخاب نمایید</option>
                                     @foreach (var Brand in brands)
                                     {
                                         <option value="@Brand.BrandId">@Brand.BrandName</option>

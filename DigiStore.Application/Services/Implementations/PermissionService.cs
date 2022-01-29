@@ -158,6 +158,25 @@ namespace DigiStore.Application.Services.Implementations
         }
         #endregion
 
+        #region DeleteRole
+        public async Task<bool> DeleteRole(int roleId)
+        {
+            var role = await _roleRepository.GetRoleByRoleId(roleId);
+            if (role == null) return false;
+            try
+            {
+                role.IsDelete = true;
+                _roleRepository.EditRole(role);
+                await _roleRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
         #region Dispose
         public async ValueTask DisposeAsync()
         {

@@ -10,6 +10,7 @@
         Success,
         Erorr,
         NotFoundUser,
+        ImageIsNotValid,
         NotFoundProduct
     }
 }

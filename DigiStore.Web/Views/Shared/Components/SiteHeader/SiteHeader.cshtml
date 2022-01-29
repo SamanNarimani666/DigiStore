@@ -162,20 +162,20 @@
                                 {
 
                                     <li class="item-menu-2">
-                                        <a href="/ProductSearch?CategoryId=@category.ProductCategoryId" class="list-category-menu-2">
+                                        <a href="/ProductSearch?SelectedPrductCategories=@category.ProductCategoryId" class="list-category-menu-2">
                                             <i class="@category.IconName"></i>@category.Title
                                         </a>
                                         @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
                                         {
                                             <ul class="megamenu-level-3 row">
                                                 <li class="list-category">
-                                                    <a href="/ProductSearch?CategoryId=@category.ProductCategoryId" class="list-category-megamenu">همه دسته بندی های کالای @category.Title</a>
+                                                    <a href="/ProductSearch?SelectedPrductCategories=@category.ProductCategoryId" class="list-category-megamenu">همه دسته بندی های کالای @category.Title</a>
                                                 </li>
                                                 @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
                                                 {
 
                                                     <li class="item-megamenu-title">
-                                                        <a href="/ProductSearch?CategoryId=@subCategory.ProductCategoryId"
+                                                        <a href="/ProductSearch?SelectedPrductCategories=@subCategory.ProductCategoryId"
                                                            class="list-category-megamenu-3">
                                                             <span>
                                                                 @subCategory.Title<i class="fa fa-angle-left"></i>
@@ -188,7 +188,7 @@
                                                         {
 
                                                             <li class="item-megamenu-item">
-                                                                <a href="/ProductSearch?CategoryId=@subSubCategory.ProductCategoryId" class="list-category-megamenu-3">
+                                                                <a href="/ProductSearch?SelectedPrductCategories=@subSubCategory.ProductCategoryId" class="list-category-megamenu-3">
                                                                     @subSubCategory.Title
                                                                 </a>
                                                             </li>
@@ -247,20 +247,20 @@
                     {
 
                         <li class="has-sub">
-                            <a href="/ProductSearch?CategoryId=@category.ProductCategoryId">@category.Title</a>
+                            <a href="/ProductSearch?SelectedPrductCategories=@category.ProductCategoryId">@category.Title</a>
                             @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
                             {
                                 @foreach (var subCategory in categories.Where(p => p.ParentId == category.ProductCategoryId))
                                 {
                                     <ul>
                                         <li class="has-sub">
-                                            <a href="/ProductSearch?CategoryId=@subCategory.ProductCategoryId" class="category-level-2">@subCategory.Title</a>
+                                            <a href="/ProductSearch?SelectedPrductCategories=@subCategory.ProductCategoryId" class="category-level-2">@subCategory.Title</a>
                                             @if (categories.Any(p => p.ParentId == category.ProductCategoryId))
                                             {
                                                 <ul>
                                                     @foreach (var subSubCategory in categories.Where(p => p.ParentId == subCategory.ProductCategoryId))
                                                     {
-                                                        <li><a href="/ProductSearch?CategoryId=@subSubCategory.ProductCategoryId" class="category-level-3">@subSubCategory.Title</a></li>
+                                                        <li><a href="/ProductSearch?SelectedPrductCategories=@subSubCategory.ProductCategoryId" class="category-level-3">@subSubCategory.Title</a></li>
 
                                                     }
                                                 </ul>

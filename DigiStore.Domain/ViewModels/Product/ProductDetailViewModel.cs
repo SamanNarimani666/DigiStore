@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using DigiStore.Domain.Entities;
@@ -48,6 +49,7 @@ namespace DigiStore.Domain.ViewModels.Product
         public string SubCategoryTitle { get; set; }
         public int MainCategoryId { get; set; }
         public int SubCategoryId { get; set; }
+        public DateTime CreateDate { get; set; }
         
     }
 }

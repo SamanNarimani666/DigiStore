@@ -10,6 +10,7 @@ namespace DigiStore.Domain.ViewModels.Product
         public FilterProductViewModel()
         {
             FilterProductOrderBy = FilterProductOrderBy.Create_Date_Desc;
+
         }
         #endregion
 
@@ -45,6 +46,9 @@ namespace DigiStore.Domain.ViewModels.Product
         }
 
         #endregion
+
+        
+
     }
     public enum FilterProductState : byte
     {

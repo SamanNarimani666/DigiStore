@@ -22,7 +22,7 @@ namespace DigiStore.Data.Repositories.ProductGallery
         #region GetAllProductGallery
         public async Task<List<Domain.Entities.ProductGallery>> GetAllProductGallery(int productId)
         {
-            return await _context.ProductGalleries.Where(p => p.ProductId == productId&& p.IsDelete==false).ToListAsync();
+            return await _context.ProductGalleries.Where(p => p.ProductId == productId&& p.IsDelete==false).OrderBy(p=>p.DisplayPrority.Value).ToListAsync();
         }
         #endregion
 
@@ -31,7 +31,9 @@ namespace DigiStore.Data.Repositories.ProductGallery
         {
             return await _context.ProductGalleries
                 .Include(p => p.Product)
-                .Where(p => p.ProductId == productId &&  p.Product.SellerId == sellerId).ToListAsync();
+                .Where(p => p.ProductId == productId &&  p.Product.SellerId == sellerId)
+                .OrderBy(p=>p.DisplayPrority.Value)
+                .ToListAsync();
         }
         #endregion
 
@@ -58,6 +60,22 @@ namespace DigiStore.Data.Repositories.ProductGallery
         {
             productGallery.ModifiedDate=DateTime.Now;
             _context.ProductGalleries.Update(productGallery);
+        }
+        #endregion
+
+        #region CheackProductGalleryDisplayPrority
+        public async Task<bool> CheackProductGalleryDisplayPrority(byte displayPrority,int productId)
+        {
+            return await _context.ProductGalleries.AnyAsync(
+                p =>p.ProductId==productId&& p.DisplayPrority == displayPrority && !p.IsDelete);
+        }
+        #endregion
+
+        #region CheackProductGalleryDisplayPrority
+        public async Task<bool> CheackProductGalleryDisplayProrityForEdit(int galleryId, byte displayPrority, int productId)
+        {
+            return await _context.ProductGalleries.AnyAsync(
+                p =>p.ProductGalleryId!=galleryId&&p.ProductId==productId&& p.DisplayPrority.Value == displayPrority && !p.IsDelete);
         }
         #endregion
 

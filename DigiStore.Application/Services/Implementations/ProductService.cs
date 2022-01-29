@@ -197,10 +197,6 @@ namespace DigiStore.Application.Services.Implementations
             var mainProduct = await _productRepository.GetProductWithSellerById(editProduct.ProductId);
             if (mainProduct == null) return EditProductResult.NotFoundProduct;
             if (mainProduct.Seller.UserId != userId) return EditProductResult.NotFoundUser;
-            //Remove Color Product
-            RemoveAllProductSelectedColors(editProduct.ProductId);
-            //Add Product Color
-            await AddProductSelectedColors(editProduct.ProductId, editProduct.ProductColors);
             try
             {
                 mainProduct.Name = editProduct.Title;
@@ -213,16 +209,25 @@ namespace DigiStore.Application.Services.Implementations
                 mainProduct.ProductAcceptanceState = (byte)ProductAcceptanceState.UnderProgress;
                 if (ProductImage != null)
                 {
-                    var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(ProductImage.FileName);
-                    var res = ProductImage.AddImageToServer(imageName, PathExtension.ProductImageOriginServer, 100, 100, PathExtension.ProductImageThumbServer, mainProduct.ImageName);
-                    if (res)
+                    if (ProductImage.IsImage())
                     {
-                        mainProduct.ImageName = imageName;
+
+                        var imageName = Generators.Generators.GeneratorsUniqueCode() + Path.GetExtension(ProductImage.FileName);
+                        var res = ProductImage.AddImageToServer(imageName, PathExtension.ProductImageOriginServer, 100, 100, PathExtension.ProductImageThumbServer, mainProduct.ImageName);
+                        if (res)
+                        {
+                            mainProduct.ImageName = imageName;
+                        }
+                        else
+                        {
+                            return EditProductResult.ImageIsNotValid;
+                        }
+                    }
+                    else
+                    {
+                        return EditProductResult.ImageIsNotValid;
                     }
                 }
-
-
-
 
                 //Remove Product Selected Categoty
                 RemoveAllProductSelectedCategories(editProduct.ProductId);
@@ -247,8 +252,6 @@ namespace DigiStore.Application.Services.Implementations
             {
                 return EditProductResult.Erorr;
             }
-
-
         }
         #endregion
 
@@ -345,6 +348,8 @@ namespace DigiStore.Application.Services.Implementations
             var product = await _productRepository.GetProductById(productId);
             if (product == null) return CreateProductGalleryResult.ProductNotFound;
             if (product.SellerId != sellerId) return CreateProductGalleryResult.NotForUserProduct;
+            if (await _galleryRepository.CheackProductGalleryDisplayPrority(createProductGallery.DisplayPrority, productId))
+                return CreateProductGalleryResult.DisplayProrityIsExist;
             if (ProductImage == null || !ProductImage.IsImage()) return CreateProductGalleryResult.ImageIsNull;
             try
             {
@@ -390,6 +395,9 @@ namespace DigiStore.Application.Services.Implementations
         {
             var maingallery = await _galleryRepository.GetProductGalleryByGalleryIdAndSellerId(galleryId, sellerId);
             if (maingallery == null) return EditOrDeleteProductGalleryResult.GalleryNotFound;
+            if (await _galleryRepository.CheackProductGalleryDisplayProrityForEdit(galleryId, editProductGallery.DisplayPrority, maingallery.ProductId))
+                return EditOrDeleteProductGalleryResult.DisplayProrityIsExist;
+
             if (maingallery.Product.SellerId != sellerId) return EditOrDeleteProductGalleryResult.NotForUserProduct;
             try
             {

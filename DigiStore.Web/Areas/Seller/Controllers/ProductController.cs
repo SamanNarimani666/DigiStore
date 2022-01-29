@@ -83,7 +83,6 @@ namespace DigiStore.Web.Areas.Seller.Controllers
         [HttpPost("edit-product/{id}"), ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProduct(int id, EditProductViewModel editProduct, IFormFile ProductImage)
         {
-
             if (ModelState.IsValid)
             {
                 var res = await _productService.EditProduct(editProduct, User.GetUserId(), ProductImage);
@@ -96,7 +95,9 @@ namespace DigiStore.Web.Areas.Seller.Controllers
                     case EditProductResult.NotFoundProduct:
                         TempData[ErrorMessage] = "محصولی با این مشحصات یافت نشد";
                         break;
-
+                    case EditProductResult.ImageIsNotValid:
+                        TempData[WarningMessage] = "تصویر بارگذاری شده معتبر نمی باشد";
+                        break;
                     case EditProductResult.NotFoundUser:
                         TempData[ErrorMessage] = "فروشگاهی با این کاربر یافت نشد";
                         break;
@@ -149,6 +150,9 @@ namespace DigiStore.Web.Areas.Seller.Controllers
                     case CreateProductGalleryResult.ImageIsNull:
                         TempData[ErrorMessage] = "تصویر مربوطه را وارد نمایید";
                         break;
+                    case CreateProductGalleryResult.DisplayProrityIsExist:
+                        TempData[WarningMessage] = "تصویری با این اولویت وجود دارد";
+                        break;
                     case CreateProductGalleryResult.NotForUserProduct:
                         TempData[ErrorMessage] = "این محصول مربوط به فروشگاه شما نمی باشد";
                         break;
@@ -188,6 +192,9 @@ namespace DigiStore.Web.Areas.Seller.Controllers
                         break;
                     case EditOrDeleteProductGalleryResult.GalleryNotFound:
                         TempData[ErrorMessage] = "تصویر مورد نظر یافت نشد";
+                        break;
+                    case EditOrDeleteProductGalleryResult.DisplayProrityIsExist:
+                        TempData[WarningMessage] = "تصویری با این اولویت وجود دارد";
                         break;
                     case EditOrDeleteProductGalleryResult.NotForUserProduct:
                         TempData[ErrorMessage] = "این محصول مربوط به فروشگاه شما نمی باشد";
@@ -260,6 +267,5 @@ namespace DigiStore.Web.Areas.Seller.Controllers
             return RedirectToAction("GetProductGalleries", "Product", new { id = deleteProductGaller.ProductId });
         }
         #endregion
-
     }
 }

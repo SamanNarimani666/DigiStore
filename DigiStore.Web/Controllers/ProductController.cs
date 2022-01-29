@@ -37,6 +37,7 @@ namespace DigiStore.Web.Controllers
             ViewBag.SelectedCateGory = filterProduct.SelectedPrductCategories;
             ViewBag.SelectedBrands = filterProduct.Selectedbrand;
             ViewBag.SearchName = filterProduct.Name;
+            filterProduct.PageId=ViewBag.PageId!=null? ViewBag.PageId:1;
             return View(await _productService.FilterForSiteSearch(filterProduct));
         }
         #endregion
