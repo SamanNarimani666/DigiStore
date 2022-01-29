@@ -1,36 +1,37 @@
-﻿<div class="col-lg-3 col-md-4 col-xs-12">
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Seller.SellerInfoViewModel
+<div class="col-lg-3 col-md-4 col-xs-12">
     <div class="sidebar-wrapper">
         <div class="box-sidebar">
-            <div class="profile-box" style="border: none;">
-                <img src="/assets/images/profile/1.jpg" class="profile-box-img-banner" alt="profile">
-            </div>
-        </div>
-
-        <div class="box-sidebar">
-            <div class="profile-box">
-              
-
-                <div class="profile-box-content">
-                    <span class="profile-box-nameuser">@User.Identity.Name</span>
-                </div>
-
-                <a href="#" class="profile-box-row-arrow">
-                    <div class="profile-box-title">کیف پول</div>
-                    <div class="profile-box-price">
-                        <div class="wallet-amount">0</div>
-                        <div class="profile-box-currency">تومان</div>
-                        <i class="fa fa-angle-left"></i>
+            @if (Model != null)
+            {
+                <div class="profile-box">
+                    <div class="profile-box-avator">
+                        <img src="@(!string.IsNullOrEmpty(Model.SellerLogo)?PathExtension.UploadLogoThumb+ Model.SellerLogo:PathExtension.DefaultStoreLogo)" class="rounded-circle" alt="profile">
                     </div>
-                </a>
 
-            </div>
+                    <div class="profile-box-content">
+                        <span class="profile-box-nameuser">@User.Identity.Name</span>
+                        <span class="profile-box-phone">@Model.StoreName</span>
+                    </div>
+
+                    <a asp-controller="SellerWallet" asp-area="Seller" asp-action="Index" class="profile-box-row-arrow">
+                        <div class="profile-box-title">کیف پول</div>
+                        <div class="profile-box-price">
+                            <div class="wallet-amount">@Model.Wallet.ToString("#,0") </div>
+                            <div class="profile-box-currency">تومان</div>
+                            <i class="fa fa-angle-left"></i>
+                        </div>
+                    </a>
+
+                </div>
+            }
             <ul class="profile-menu-items">
                 <li><a asp-action="Index" asp-controller="Home" asp-area="Seller" class="profile-menu-url active-profile">داشبورد</a></li>
                 <li><a asp-action="AddTicket" asp-controller="Ticket" asp-area="UserPanel" class="profile-menu-url ">ثبت تیکت جدید</a></li>
                 <li><a asp-action="ListTicket" asp-controller="Ticket" asp-area="UserPanel" class="profile-menu-url ">لیست تیکت ها</a></li>
                 <li><a asp-action="Index" asp-controller="Product" asp-area="Seller" class="profile-menu-url ">مدیریت محصولات</a></li>
                 <li><a asp-action="CreateProduct" asp-controller="Product" asp-area="Seller" class="profile-menu-url ">افزودن محصولات</a></li>
-                <li><a asp-action="FilterDiscount" asp-controller="Discount" asp-area="Seller" class="profile-menu-url ">مدیریت تخفیفات</a></li>
                 <li><a asp-action="Index" asp-controller="SellerWallet" asp-area="Seller" class="profile-menu-url">کیف پول</a></li>
                 <li><a asp-action="Logout" asp-controller="Account" class="profile-menu-url"></a></li>
             </ul>

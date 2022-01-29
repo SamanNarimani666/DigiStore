@@ -5,6 +5,7 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.Entities;
 using DigiStore.Domain.Enums.Store;
 using DigiStore.Domain.IRepositories.Seller;
+using DigiStore.Domain.IRepositories.SellerWallet;
 using DigiStore.Domain.IRepositories.User;
 using DigiStore.Domain.ViewModels.Common;
 using DigiStore.Domain.ViewModels.Seller;
@@ -16,10 +17,12 @@ namespace DigiStore.Application.Services.Implementations
         #region Constructor
         private readonly ISellerRepository _sellerRepository;
         private readonly IUserRepository _userRepository;
-        public SellerService(ISellerRepository sellerRepository, IUserRepository userRepository)
+        private readonly ISellerWalletRepository _sellerWalletRepository;
+        public SellerService(ISellerRepository sellerRepository, IUserRepository userRepository, ISellerWalletRepository sellerWalletRepository)
         {
             _sellerRepository = sellerRepository;
             _userRepository = userRepository;
+            _sellerWalletRepository = sellerWalletRepository;
         }
         #endregion
 
@@ -146,6 +149,24 @@ namespace DigiStore.Application.Services.Implementations
         public async Task<bool> HasUserActiveSellerPanel(int userId)
         {
            return await _sellerRepository.HasUserActiveSellerPanel(userId);
+        }
+        #endregion
+
+        #region GetSellerInfoByUserId
+        public async Task<SellerInfoViewModel> GetSellerInfoByUserId(int userId)
+        {
+            var seller = await GetLastActiveSellerByUserId(userId);
+            if (seller == null) return null;
+            return new SellerInfoViewModel()
+            {
+                Email = seller.Email,
+                Address = seller.Address,
+                Description = seller.Descriptions,
+                SellerLogo = seller.Logo,
+                Phone = seller.Phone,
+                StoreName = seller.StoreName,
+                Wallet = await _sellerWalletRepository.GetSellerWalletValueBySellerId(seller.SellerId)
+            };
         }
         #endregion
 

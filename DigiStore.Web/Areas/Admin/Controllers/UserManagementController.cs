@@ -143,5 +143,17 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         }
 
         #endregion
+
+        #region ProductDetials
+
+        [HttpGet("user-details/{userId}")]
+        public async Task<IActionResult> UserDetials(int userId)
+        {
+            var user = await _userService.GetUserDetialByProductId(userId: userId);
+            if (user == null) return NoContent();
+            return View(user);
+        }
+
+        #endregion
     }
 }

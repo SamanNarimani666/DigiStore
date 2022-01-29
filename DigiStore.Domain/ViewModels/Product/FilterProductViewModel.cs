@@ -20,6 +20,7 @@ namespace DigiStore.Domain.ViewModels.Product
         public int Selectedbrands { get; set; }
         public List<Entities.Product> Products { get; set; }
         public List<int> SelectedPrductCategories { get; set; }
+        public List<int> Selectedbrand { get; set; }
         public FilterProductState FilterProductState { get; set; }
         public FilterProductOrderBy FilterProductOrderBy { get; set; }
         #region Methods

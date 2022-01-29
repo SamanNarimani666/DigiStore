@@ -232,7 +232,7 @@ namespace DigiStore.Application.Services.Implementations
                         return EditUserProfileResult.NotIsIamage;
                     }
                 }
-            
+
                 _userRepository.EditUser(user);
                 await _userRepository.Save();
                 return EditUserProfileResult.Success;
@@ -414,6 +414,25 @@ namespace DigiStore.Application.Services.Implementations
         public async Task<User> GetUserByUserId(int userId)
         {
             return await _userRepository.GetUserById(userId);
+        }
+        #endregion
+
+        #region GetUserDetialByProductId
+        public async Task<UserDetialViewModel> GetUserDetialByProductId(int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null) return null;
+            return new UserDetialViewModel()
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                IsActive = user.IsActive,
+                Mobile = user.Mobile,
+                IsBlock = user.IsBlock,
+                RegisterDate = user.CreateDate,
+                UserAvatar = user.UserAvatar,
+                FullName = user.FullName
+            };
         }
         #endregion
 

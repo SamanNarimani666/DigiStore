@@ -1,0 +1,110 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.User.UserDetialViewModel
+@{
+    ViewData["Title"] = "جزئیات کاربر" + @Model.UserName;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        اطلاعات کاربر
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>نام کاربری</label>
+                            <p>@Model.UserName</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>ایمیل</label>
+                            <p>@Model.Email</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>موبایل</label>
+                            <p>@Model.Mobile</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>نام و نام خانوادگی</label>
+                            <p>@(Model.FullName!=null?Model.FullName:"نام و نام خانوادگی وارد نشده است")</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>تاریخ عضویت</label>
+                            <p> @Model.RegisterDate.ToStringShamsiDate() ساعت @Model.RegisterDate.ToString("HH:mm")</p>
+                        </div>
+                        <hr />
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                وضعیت:
+                                @if (!Model.IsActive)
+                                {
+
+
+                                    <p class="text text-success">فعال</p>
+                                }
+                                else
+                                {
+                                    <p class="text text-danger">غیر فعال</p>
+
+                                }
+                            </label>
+                        </div>
+                        <hr />
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                وضعیت حذف :
+                                @if (!Model.IsDelete)
+                                {
+
+
+                                    <p class="text text-success">حذف شده</p>
+                                }
+                                else
+                                {
+                                    <p class="text text-danger">حذف نشده</p>
+
+                                }
+                            </label>
+                        </div>
+                        <hr/>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                وضعیت بلاک:
+                                @if (!Model.IsDelete)
+                                {
+
+                                    <p class="text text-success">بلاک شده</p>
+                                }
+                                else
+                                {
+                                    <p class="text text-danger">بلاک نشده</p>
+
+                                }
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-box">
+
+                    <h4 class="header-title m-t-0 m-b-30">تصوير پروفايل</h4>
+                    <img class="img-fluid img-thumbnail " style="height: 100%; width: 100%;" src="@(!string.IsNullOrEmpty(Model.UserAvatar)?PathExtension.UserAvatarOrigin+Model.UserAvatar:PathExtension.DefaultAvatar)" />
+                </div>
+            </div>
+
+        </div>
+    </div> <!-- container -->
+
+</div>
+

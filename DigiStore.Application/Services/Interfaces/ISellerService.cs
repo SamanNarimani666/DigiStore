@@ -16,5 +16,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<bool> RejectItem(RejectItemViewModel rejectItem);
         Task<Seller> GetLastActiveSellerByUserId(int userId);
         Task<bool> HasUserActiveSellerPanel(int userId);
+        Task<SellerInfoViewModel> GetSellerInfoByUserId(int userId);
     }
 }

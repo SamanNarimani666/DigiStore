@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
+using DigiStore.Domain.Enums.Store;
 using DigiStore.Domain.IRepositories.SellerWallet;
 using DigiStore.Domain.ViewModels.Paging;
 using DigiStore.Domain.ViewModels.SellerWallet;
@@ -55,6 +56,21 @@ namespace DigiStore.Data.Repositories.SellerWallet
         }
         #endregion
 
+        #region GetSellerWalletValueBySellerId
+        public async Task<int> GetSellerWalletValueBySellerId(int sellerId)
+        {
+            var enter = await _context.SellerWallets
+                .Where(w => w.SellerId == sellerId&&w.TransactionType.Value==(byte)TransactionType.Withdrawal)
+                .Select(w => w.Price.Value).ToListAsync();
+            var exit = await _context.SellerWallets
+                .Where(w => w.SellerId == sellerId && w.TransactionType.Value == (byte)TransactionType.Deposit)
+                .Select(w => w.Price.Value).ToListAsync();
+            return (enter.Sum() - exit.Sum());
+        }
+
+
+        #endregion
+
         #region Save
         public async Task Save()
         {
@@ -72,7 +88,5 @@ namespace DigiStore.Data.Repositories.SellerWallet
         }
         #endregion
 
-   
-      
     }
 }

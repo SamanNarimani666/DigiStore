@@ -47,7 +47,8 @@
                                     <br />
                                     @if (message.UserId == User.GetUserId())
                                     {
-                                        <partial name="_DeleteTicketMessage" model="@(new DeleteTicketViewModel() {TicketId = Model.Ticket.TicketId, TicketMessageId = message.TicketMessageId,UserId = User.GetUserId()})" />
+                                        <a ajax-url-buttons="@message.TicketMessageId" class="btn btn-danger btn-sm" asp-controller="Ticket" asp-area="Admin" asp-action="DeleteTicketMessage" asp-route-ticketId="@message.TicketId" asp-route-ticketMessageId="@message.TicketMessageId">حذف</a>
+
                                     }
                                 </div>
                             </div>
@@ -64,7 +65,10 @@
 @section Scripts
 {
     <script>
-        function RemoveTicket() {
+        $('[ajax-url-buttons]').on('click', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            var itemId = $(this).attr('ajax-url-button');
             swal({
                 title: 'اخطار',
                 text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
@@ -77,11 +81,16 @@
                 closeOnCancel: false
             }).then((result) => {
                 if (result.value) {
-                    $('#deleteticketMessageForAdminform').submit();
-                } else if (res.dismiss === swal.DismissReason.cancel) {
+                    $.post(url).then(result => {
+                        if (result.status === 'Success') {
+                            ShowMessage('موفقیت', result.message);
+                            open_waiting();
+                        }
+                    });
+                } else if (result.dismiss === swal.DismissReason.cancel) {
                     swal('اعلام', 'عملیات لغو شد', 'error');
                 }
             });
-        }
+        });
     </script>
 }

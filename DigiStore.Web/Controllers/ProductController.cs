@@ -34,9 +34,10 @@ namespace DigiStore.Web.Controllers
             filterProduct.FilterProductState = FilterProductState.Accepted;
             ViewBag.ProductCategories = await _productService.GetAllActiveProductCategory();
             ViewBag.ProductBrands = await _branadService.GetAllBrands();
-            filterProduct = await _productService.FilterProduct(filterProduct);
-
-            return View(filterProduct);
+            ViewBag.SelectedCateGory = filterProduct.SelectedPrductCategories;
+            ViewBag.SelectedBrands = filterProduct.Selectedbrand;
+            ViewBag.SearchName = filterProduct.Name;
+            return View(await _productService.FilterForSiteSearch(filterProduct));
         }
         #endregion
 
@@ -134,20 +135,5 @@ namespace DigiStore.Web.Controllers
 
         #endregion
 
-        #region test
-        [HttpGet("test")]
-        public async Task<IActionResult> Test(FilterProductViewModel filterProduct)
-        {
-            filterProduct.SelectedPrductCategories= new List<int>(){1,2,3};
-            filterProduct.Name = "G";
-
-            var test = await _productService.FilterForSiteSearch(filterProduct);
-
-            await Task.Delay(4000);
-            return View();
-        }
-
-
-        #endregion
     }
 }

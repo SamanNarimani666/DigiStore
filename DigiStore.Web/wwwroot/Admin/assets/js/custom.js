@@ -1,4 +1,21 @@
-﻿function ShowMessage(title, text, theme) {
+﻿function open_waiting(selector = 'body') {
+    $(selector).waitMe({
+        effect: 'facebook',
+        text: 'لطفا صبر کنید ...',
+        bg: 'rgba(255,255,255,0.7)',
+        color: '#000'
+    });
+    setTimeout(function () {
+        location.reload();
+    }, 3000);
+
+}
+
+function close_waiting(selector = 'body') {
+    $(selector).waitMe('hide');
+}
+
+function ShowMessage(title, text, theme) {
     window.createNotification({
         closeOnClick: true,
         displayCloseButton: false,
@@ -114,10 +131,9 @@ function OnSuccessRejectItem(res) {
           if (result.value) {
               if (res.status === 'Success') {
                   ShowMessage('موفقیت', res.message);
-                  console.log(data);
                   $('#ajax-url-item-' + res.data.Id).hide(1500);
                   $('.close').click();
-                  
+                  open_waiting();
               }
           } else if (res.dismiss === swal.DismissReason.cancel) {
               swal('اعلام', 'عملیات لغو شد', 'error');

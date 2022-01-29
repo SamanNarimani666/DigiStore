@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using DigiStore.Data.Context;
+using DigiStore.Domain.Entities;
 using DigiStore.Domain.Enums.Product;
 using DigiStore.Domain.IRepositories.Product;
 using DigiStore.Domain.ViewModels.Paging;
 using DigiStore.Domain.ViewModels.Product;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DigiStore.Data.Repositories.Product
 {
@@ -15,9 +20,11 @@ namespace DigiStore.Data.Repositories.Product
     {
         #region Constructor
         private readonly DigiStore_DBContext _context;
-        public ProductRepository(DigiStore_DBContext context)
+        private readonly IDbConnection db;
+        public ProductRepository(DigiStore_DBContext context, IConfiguration configuration)
         {
             _context = context;
+            this.db = new SqlConnection(configuration.GetConnectionString("DigiStoretConnectionStrings"));
         }
         #endregion
 
@@ -260,16 +267,41 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<FilterProductViewModel> FilterForSiteSearch(FilterProductViewModel filterProduct)
         {
             var query =
-                @"SELECT   PP.[Name] ,PP.Price  ,PP.ProductId FROM Production.Product AS PP INNER JOIN Production.ProductSelectedCategory AS PSC ON PP.ProductId=PSC.ProductId WHERE PP.ProductAcceptanceState=1 AND PP.IsActive=1 AND IsDelete=0 ";
+                @"SELECT   PP.[Name] ,PP.Price ,PP.ImageName,PP.ProductId,PP.SellerId,PP.CreatedDate,SS.StoreName FROM Production.Product AS PP INNER JOIN Store.Seller AS SS ON PP.SellerId=SS.SellerId INNER JOIN Production.ProductSelectedCategory AS PSC ON PP.ProductId=PSC.ProductId WHERE PP.ProductAcceptanceState=1 AND PP.IsActive=1 AND PP.IsDelete=0 ";
 
-            if(!string.IsNullOrEmpty(filterProduct.Name))
+            if (!string.IsNullOrEmpty(filterProduct.Name))
             {
                 query += $"AND PP.[Name] LIKE N'%{filterProduct.Name}%'";
             }
 
-            if (filterProduct.Selectedbrands != 0)
+            if (filterProduct.Selectedbrand != null && filterProduct.Selectedbrand.Any())
             {
-                query += $"AND  PP.BrandId={filterProduct.Selectedbrands}";
+                query += "AND ";
+                if (filterProduct.Selectedbrand.Count == 1)
+                {
+                    query += $"PP.BrandId={filterProduct.Selectedbrand.First()}";
+                }
+                else
+                {
+                    query += "( ";
+                    byte iteration = 0;
+                    foreach (var brands in filterProduct.Selectedbrand)
+                    {
+                        iteration++;
+                        if (iteration < filterProduct.Selectedbrand.Count)
+                        {
+                            query += $"PP.BrandId={brands} OR ";
+
+                        }
+                        else
+                        {
+                            query += $"PP.BrandId={brands} ";
+
+                        }
+                    }
+
+                    query += " )";
+                }
             }
 
             if (filterProduct.SelectedPrductCategories != null && filterProduct.SelectedPrductCategories.Any())
@@ -283,7 +315,7 @@ namespace DigiStore.Data.Repositories.Product
                 else
                 {
                     query += "( ";
-                    int iteration = 0;
+                    byte iteration = 0;
                     foreach (var category in filterProduct.SelectedPrductCategories)
                     {
                         iteration++;
@@ -303,11 +335,37 @@ namespace DigiStore.Data.Repositories.Product
                 }
             }
 
-            query += "GROUP BY PP.[Name] ,PP.Price  ,PP.ProductId";
+            query += "GROUP BY PP.[Name] ,PP.Price ,PP.ImageName ,PP.ProductId,PP.SellerId,PP.CreatedDate,SS.StoreName  ";
 
-           var test= query;
-          await Task.Delay(2000);
-            return null;
+            switch (filterProduct.FilterProductOrderBy)
+            {
+                case FilterProductOrderBy.Create_Date_Asc:
+                    query += "ORDER BY  PP.CreatedDate DESC";
+                    break;
+                case FilterProductOrderBy.Create_Date_Desc:
+                    query += "ORDER BY  PP.CreatedDate ASC";
+                    break;
+                case FilterProductOrderBy.Price_Asc:
+                    query += "ORDER BY  PP.Price ASC";
+                    break;
+                case FilterProductOrderBy.Price_Desc:
+                    query += "ORDER BY  PP.Price DESC";
+                    break;
+            }
+
+            var product = await db.QueryAsync<Domain.Entities.Product,Domain.Entities.Seller, Domain.Entities.Product>(query,(e,c)=>
+            {
+                e.Seller = c;
+                return e;
+            },splitOn: "SellerId");
+
+            #region paging
+            var pager = Pager.Build(filterProduct.PageId,  product.Count(), filterProduct.TakeEntity,
+                filterProduct.HowManyShowPageAfterAndBefore);
+            var allProduct = product.Paging(pager).ToList();
+            return filterProduct.SetPaging(pager).SetProduct(allProduct);
+
+            #endregion
         }
         #endregion
 

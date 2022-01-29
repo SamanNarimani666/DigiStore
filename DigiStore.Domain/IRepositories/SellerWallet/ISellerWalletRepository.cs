@@ -8,6 +8,7 @@ namespace DigiStore.Domain.IRepositories.SellerWallet
     {
         Task AddSellerWallet(Entities.SellerWallet  sellerWallet);
         Task<FilterSellerWalletViewModel> FilterSellerWallet(FilterSellerWalletViewModel filterSellerWallet);
+        Task<int> GetSellerWalletValueBySellerId(int sellerId);
         Task Save();
     }
 }

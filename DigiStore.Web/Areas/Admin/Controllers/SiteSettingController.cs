@@ -95,7 +95,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region DeleteSlider
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> DeleteSlider(int sliderId)
         {
             var res = await _siteService.DeleteSlider(sliderId);
@@ -113,7 +113,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region RestoreSlider
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> RestoreSlider(int sliderId)
         {
             var res = await _siteService.RestoreSlider(sliderId);

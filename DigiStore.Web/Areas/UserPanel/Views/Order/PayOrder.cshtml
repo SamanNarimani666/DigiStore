@@ -141,10 +141,12 @@
                         </div>
                         <div class="checkout-to-shipping-sticky">
                             <a asp-controller="Order" asp-action="PayUserOrderPrice" asp-area="UserPanel" class="selenium-next-step-shipping">پرداخت نهایی</a>
+                            <a asp-controller="Order" asp-action="UserOpenOrder" asp-area="UserPanel" class="btn btn-dark m-3">انصراف</a>
+
                             <div class="checkout-to-shipping-price-report">
                                 <p>مبلغ قابل پرداخت</p>
                                 <div class="cart-item-product-price">
-                                   @totalPrice.ToString("#,0")
+                                    @totalPrice.ToString("#,0")
                                     <span>تومان</span>
                                 </div>
                             </div>

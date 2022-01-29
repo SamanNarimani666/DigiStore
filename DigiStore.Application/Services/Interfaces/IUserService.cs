@@ -32,5 +32,6 @@ namespace DigiStore.Application.Services.Interfaces
         Task<EditUserForAdminViewModel> UserInfoForEdit(int userId);
         Task<EditUserResult> EditUserForAdmin(EditUserForAdminViewModel editUser, List<int> rolesId, IFormFile userAvatar);
         Task<User> GetUserByUserId(int userId);
+        Task<UserDetialViewModel> GetUserDetialByProductId(int userId);
     }
 }

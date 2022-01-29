@@ -62,7 +62,7 @@
                                 <tbody>
                                     @foreach (var item in Model.Sliders)
                                     {
-                                        <tr id="ajax-url-item-@item.SliderId">
+                                        <tr>
                                             <td><img src="@(PathExtension.SliderImageThumb+item.ImageName)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
                                             <td>@item.Link</td>
                                             <td>
@@ -89,19 +89,13 @@
                                             @if (!item.IsDelete)
                                             {
                                                 <td>
-                                                    <form id="deleteSlider" asp-controller="SiteSetting" asp-area="Admin" asp-action="DeleteSlider">
-                                                        <input type="hidden" name="sliderId" value="@item.SliderId"/>
-                                                        <button type="button" onclick="DeleteSlider()" class="btn btn-danger btn-sm" >حذف اسلایدر</button>
-                                                    </form>
+                                                    <a  class="btn btn-danger btn-sm"  asp-controller="SiteSetting" asp-area="Admin" asp-action="DeleteSlider" asp-route-sliderId="@item.SliderId">حذف تصویر</a>
+
                                                 </td>
                                             }else
                                             {
                                                 <td>
-                                                    <form method="post" id="restoreSlider" asp-controller="SiteSetting" asp-area="Admin" asp-action="RestoreSlider">
-                                                        <input type="hidden" name="sliderId" value="@item.SliderId" />
-                                                        <button type="button" onclick="RestoreSlider()" class="btn btn-warning btn-sm">بازگردانی اسلایدر</button>
-                                                    </form>
-
+                                                    <a class="btn btn-warning btn-sm"  asp-controller="SiteSetting" asp-area="Admin" asp-action="RestoreSlider" asp-route-sliderId="@item.SliderId">بازگردانی تصویر</a>
                                                 </td>
                                             }
                                         </tr>
@@ -131,49 +125,3 @@
     </div>
 </div>
 
-@section Scripts
-{
-    <script>
-        function DeleteSlider() {
-            swal({
-                title: 'اخطار',
-                text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: "btn-danger",
-                confirmButtonText: "بله",
-                cancelButtonText: "خیر",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            }).then((result) => {
-                if (result.value) {
-                    $('#deleteSlider').submit();
-                } else if (res.dismiss === swal.DismissReason.cancel) {
-                    swal('اعلام', 'عملیات لغو شد', 'error');
-                }
-            });
-        }
-        function RestoreSlider() {
-            swal({
-                title: 'اخطار',
-                text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: "btn-danger",
-                confirmButtonText: "بله",
-                cancelButtonText: "خیر",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            }).then((result) => {
-                if (result.value) {
-                    $('#restoreSlider').submit();
-                } else if (res.dismiss === swal.DismissReason.cancel) {
-                    swal('اعلام', 'عملیات لغو شد', 'error');
-                }
-            });
-        }
-    </script>
-
-
-
-}

@@ -124,7 +124,7 @@ namespace DigiStore.Application.Services.Implementations
                         ProductPrice = s.Product.Price,
                         ProductTitle = s.Product.Name,
                         ProductImageName = s.Product.ImageName,
-                        DiscountPercentage = s.Product.ProductDiscounts.OrderByDescending(p => p.ModifiedDate).FirstOrDefault(p => p.ExpierDate > DateTime.Now && p.DiscountNumber - p.ProductDiscountUses.Count >= 0)?.Percentage
+                        DiscountPercentage = s.Product.ProductDiscounts.OrderByDescending(p => p.ModifiedDate).FirstOrDefault(p => p.ExpierDate > DateTime.Now && (p.DiscountNumber.Value - p.ProductDiscountUses.Count >= 0))?.Percentage
                     };
                 }).ToList()
             };

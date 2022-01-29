@@ -158,9 +158,10 @@
                                             </td>
 
                                         }
-                                        <td>
-                                            <a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="EditUser" asp-area="Admin" asp-route-userId="@item.UserId">ویرایش کاربر</a>
-                                        </td>
+                                    <td>
+                                        <a class="btn btn-info btn-sm" asp-controller="UserManagement" asp-action="UserDetials" asp-area="Admin" asp-route-userId="@item.UserId">جزئیات کاربر</a>
+                                        <a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="EditUser" asp-area="Admin" asp-route-userId="@item.UserId">ویرایش کاربر</a>
+                                    </td>
                                     </tr>
 
                                 }

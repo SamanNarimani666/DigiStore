@@ -58,7 +58,7 @@ namespace DigiStore.Data.Repositories.ProductDiscount
             return await _context.ProductDiscounts.Include(p => p.ProductDiscountUses)
                 .OrderByDescending(p=>p.ModifiedDate)
                 .FirstOrDefaultAsync(p =>
-                    p.ProductId == productId && p.DiscountNumber.Value - p.ProductDiscountUses.Count > 0);
+                    p.ProductId == productId && (p.DiscountNumber) - p.ProductDiscountUses.Count > 0);
 
         }
         #endregion

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Ticket;
+using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -97,32 +98,55 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         #endregion
 
         #region DeleteTicketMessage
-        [HttpPost("delete-ticketMessage")]
-        public async Task<IActionResult> DeleteTicketMessage(DeleteTicketViewModel deleteTicket)
+        [HttpPost("delete-ticketMessage/{ticketId}/{ticketMessageId}")]
+        public async Task<IActionResult> DeleteTicketMessage(int ticketId,int ticketMessageId)
         {
+            var deleteTicketMessage = new DeleteTicketViewModel()
+            {
+                TicketId = ticketId,
+                TicketMessageId = ticketMessageId
+            };
             if (ModelState.IsValid)
             {
-                var res = await _ticketService.DeleteTicket(deleteTicket, User.GetUserId());
+               
+                var res = await _ticketService.DeleteTicket(deleteTicketMessage, User.GetUserId());
                 switch (res)
                 {
                     case DeleteTicketResult.Error:
-                        TempData[ErrorMessage] = "خطا در حذف پیام تیکت";
-                        break;
+                        return JsonResponseStatus.SendStatus(
+                            JsonResponseStatusType.Danger,
+                            "خطا در حذف پیام تیکت",
+                            null
+                        );
                     case DeleteTicketResult.NotFoundTicket:
-                        TempData[ErrorMessage] = "تیکتی با این مشخصات یافت نشد";
-                        break;
+                        return JsonResponseStatus.SendStatus(
+                            JsonResponseStatusType.Danger,
+                            "تیکتی با این مشخصات یافت نشد",
+                            null
+                        );
                     case DeleteTicketResult.NotFoundTicketMessage:
                         TempData[ErrorMessage] = "پیامی یافت نشد";
-                        break;
+                        return JsonResponseStatus.SendStatus(
+                            JsonResponseStatusType.Danger,
+                            "پیامی یافت نشد",
+                            null
+                        );
                     case DeleteTicketResult.NotFoundUser:
-                        TempData[ErrorMessage] = "عدم دسترسی در صورت تکرار  حساب کاربری شما بلک خواهد شد";
-                        break;
+                        return JsonResponseStatus.SendStatus(
+                            JsonResponseStatusType.Danger,
+                            "عدم دسترسی در صورت تکرار  حساب کاربری شما بلک خواهد شد",
+                            null
+                        );
                     case DeleteTicketResult.Success:
                         TempData[SuccessMessage] = "تیکت با موفقیت قبت شد";
-                       break;
+                        return JsonResponseStatus.SendStatus(
+                            JsonResponseStatusType.Success,
+                            "پیام مورد نظر با موفقیت ثبت حذف شد",
+                            null
+                        );
                 }
             }
-            return RedirectToAction("TicketDetail", "Ticket", new { area = "UserPanel", ticketId = deleteTicket.TicketId });
+            return RedirectToAction("TicketDetail", "Ticket", new { area = "UserPanel", ticketId = ticketId });
         }
         #endregion
     }

@@ -123,7 +123,6 @@
                             <td>
                                 <a asp-controller="Product" asp-action="EditProduct" asp-area="Seller" asp-route-id="@item.ProductId" class="btn btn-sm btn-warning">ویرایش محصول</a>
                                 <a asp-controller="Product" asp-action="GetProductGalleries" asp-area="Seller" asp-route-id="@item.ProductId" class="btn btn-sm btn-info">گالری تصاویر محصول</a>
-                                <a asp-controller="Discount" asp-action="CreateProductDiscount" asp-area="Seller" asp-route-productId="@item.ProductId" class="btn btn-sm btn-danger m-4">ایجاد تخفیف </a>
                             </td>
                             </tr>
 
@@ -131,7 +130,24 @@
                     </tbody>
 
                 </table>
-                <partial name="_PagingPartial" model="@Model.GetCurrentPaging()" />
+                <div class="pager">
+                    <ul class="page-item">
+                        @if (Model.StartPage < Model.PageId)
+                        {
+                            <li class="btn"><a href="/Seller/Products-list?pageid=@(Model.PageId - 1)">«</a></li>
+                        }
+
+                        @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                        {
+                            <li class="pagination-item"  onclick="FillPageId(@i)"><a href="/Seller/Products-list?pageid=@i" onclick="FillPageId(@i)" style="cursor: pointer" class="@(Model.PageId == i ? "pager-item-active" : " ")" >@i</a></li>
+                        }
+                        @if (Model.EndPage > Model.PageId)
+                        {
+                            <li class="btn" ><a class="btn"  href="/Seller/Products-list?pageid=@(Model.PageId + 1)">»</a></li>
+                        }
+                    </ul>
+                </div>
+
             }
             else
             {
