@@ -431,7 +431,8 @@ namespace DigiStore.Application.Services.Implementations
                 IsBlock = user.IsBlock,
                 RegisterDate = user.CreateDate,
                 UserAvatar = user.UserAvatar,
-                FullName = user.FullName
+                FullName = user.FullName,
+                IsDelete = user.IsDelete
             };
         }
         #endregion

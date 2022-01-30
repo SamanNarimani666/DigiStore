@@ -13,13 +13,10 @@
 
 <form asp-controller="Product" asp-action="ProductSearch" asp-area="" method="get" id="filter-forms">
 <input type="hidden" asp-for="PageId"/>
-@(ViewBag.PageId = Model.PageId)
 <div class="col-12">
     <div class="header-filters">
         <div class="remodal-search-advanced" id="modal-search" style="display: none;">
             <nav class="remodal-page-layout">
-
-
                 <div class="remodal-page-main">
                     <div class="remodal-page-content">
                         <div class="filter">

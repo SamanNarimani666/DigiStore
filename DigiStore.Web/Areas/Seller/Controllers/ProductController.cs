@@ -259,7 +259,7 @@ namespace DigiStore.Web.Areas.Seller.Controllers
                         TempData[ErrorMessage] = "این محصول مربوط به فروشگاه شما نمی باشد";
                         break;
                     case EditOrDeleteProductGalleryResult.Success:
-                        TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت حذف شد";
+                        TempData[SuccessMessage] = "تصویر مورد نظر با موفقیت بازگردانی شد";
                         return RedirectToAction("GetProductGalleries", "Product", new { id = deleteProductGaller.ProductId });
 
                 }

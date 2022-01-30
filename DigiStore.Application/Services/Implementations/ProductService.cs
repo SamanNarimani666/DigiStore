@@ -18,6 +18,7 @@ using DigiStore.Domain.IRepositories.ProductGallery;
 using DigiStore.Domain.IRepositories.ProductRating;
 using DigiStore.Domain.IRepositories.ProductVisited;
 using DigiStore.Domain.IRepositories.SelectedProductCategory;
+using DigiStore.Domain.ViewModels.Category;
 using DigiStore.Domain.ViewModels.FavoriteProductUser;
 using DigiStore.Domain.ViewModels.Product;
 using DigiStore.Domain.ViewModels.ProductComment;
@@ -721,6 +722,106 @@ namespace DigiStore.Application.Services.Implementations
         public async Task<FilterProductViewModel> FilterForSiteSearch(FilterProductViewModel filterProduct)
         {
             return await _productRepository.FilterForSiteSearch(filterProduct);
+        }
+        #endregion
+
+        #region CategoryInfoForEdit
+        public async Task<EditCategoryViewModel> CategoryInfoForEdit(int categoryId)
+        {
+            var category = await _productCategoryRepository.GetProductCategoryByCategoryId(categoryId);
+            if (category == null) return null;
+            return new EditCategoryViewModel()
+            {
+                CategoryId = categoryId,
+                ParentId = category.ParentId,
+                CategoryIcon = category.IconName,
+                CategoryTitle = category.Title
+            };
+        }
+        #endregion
+
+        #region EditProductCategory
+        public async Task<EditCategoryResult> EditProductCategory(EditCategoryViewModel editCategory)
+        {
+            var category = await _productCategoryRepository.GetProductCategoryByCategoryId(editCategory.CategoryId);
+            if (category == null) return EditCategoryResult.NotFound;
+            try
+            {
+                category.Title = editCategory.CategoryTitle;
+                category.IconName = editCategory.CategoryIcon;
+                _productCategoryRepository.EditCategory(category);
+                await _productCategoryRepository.Save();
+                return EditCategoryResult.Success;
+            }
+            catch
+            {
+                return EditCategoryResult.Error;
+            }
+        }
+        #endregion
+
+        #region CreateCategoryProduct
+        public async Task<CreateCategoryResult> CreateCategoryProduct(CreateCategoryViewModel createCategory)
+        {
+            var newCategory= new ProductCategory()
+            {
+                Title = createCategory.CategoryTitle,
+                IconName = createCategory.CategoryIcon,
+                UrlName = createCategory.CategoryTitle,
+                IsActive = true
+            };
+            try
+            {
+                await _productCategoryRepository.AddCategory(newCategory);
+                await _productCategoryRepository.Save();
+                return CreateCategoryResult.Success;
+            }
+            catch
+            {
+                return CreateCategoryResult.Error;
+            }
+        }
+        #endregion
+
+        #region CreateSubCategoryProduct
+        public async Task<CreateCategoryResult> CreateSubCategoryProduct(CreateSubCategoryViewModel createSubCategory)
+        {
+            var newCategory = new ProductCategory()
+            {
+                Title = createSubCategory.CategoryTitle,
+                ParentId = createSubCategory.ParentId,
+                UrlName = createSubCategory.CategoryTitle,
+                IsActive = true
+            };
+            try
+            {
+                await _productCategoryRepository.AddCategory(newCategory);
+                await _productCategoryRepository.Save();
+                return CreateCategoryResult.Success;
+            }
+            catch
+            {
+                return CreateCategoryResult.Error;
+            }
+        }
+        #endregion
+
+        #region DeleteProductCategory
+        public async Task<bool> DeleteProductCategory(int categoryId)
+        {
+            var category = await _productCategoryRepository.GetProductCategoryByCategoryId(categoryId);
+            if (category == null) return false;
+            try
+            {
+                category.IsDelete = true;
+                _productCategoryRepository.EditCategory(category);
+                await _productCategoryRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
         #endregion
 

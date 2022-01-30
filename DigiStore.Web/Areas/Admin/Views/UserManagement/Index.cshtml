@@ -64,7 +64,7 @@
                         }
 
                     </div>
-                    <hr/>
+                    <hr />
                     <div class="control-group">
                         @foreach (var item in Html.GetEnumSelectList<UserState>())
                         {
@@ -112,65 +112,65 @@
                             <table class="table table-hover">
 
                                 <thead>
-                                <tr>
+                                    <tr>
 
-                                    <th>تصویر</th>
-                                    <th>نام کاربری</th>
-                                    <th>ایمیل</th>
-                                    <th>موبایل</th>
-                                    <th>نام کامل</th>
-                                    <th>وضعیت</th>
-                                    <th>عملیات</th>
-                                </tr>
+                                        <th>تصویر</th>
+                                        <th>نام کاربری</th>
+                                        <th>ایمیل</th>
+                                        <th>موبایل</th>
+                                        <th>نام کامل</th>
+                                        <th>وضعیت</th>
+                                        <th>عملیات</th>
+                                    </tr>
                                 </thead>
 
                                 <tbody>
-                                @foreach (var item in Model.Users)
-                                {
-                                    <tr>
-                                        <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar) ? PathExtension.UserAvatarThumb + item.UserAvatar : PathExtension.DefaultAvatarThum)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
-                                        <td>@item.UserName</td>
-                                        <td>@item.Email</td>
-                                        <td>@item.Mobile</td>
-                                        <td>@(item.FullName != null ? item.FullName : " ")</td>
-                                        @if (item.IsDelete)
-                                        {
+                                    @foreach (var item in Model.Users)
+                                    {
+                                        <tr>
+                                            <td><img src="@(!string.IsNullOrEmpty(item.UserAvatar) ? PathExtension.UserAvatarThumb + item.UserAvatar : PathExtension.DefaultAvatarThum)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                            <td>@item.UserName</td>
+                                            <td>@item.Email</td>
+                                            <td>@item.Mobile</td>
+                                            <td>@(item.FullName != null ? item.FullName : " ")</td>
+                                            @if (item.IsDelete)
+                                            {
 
 
-                                            <td class="danger">حذف شده</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="success">حذف نشده</td>
-                                        }
-                                        @if (item.IsDelete)
-                                        {
+                                                <td class="danger">حذف شده</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="success">حذف نشده</td>
+                                            }
+                                            @if (item.IsDelete)
+                                            {
 
 
+                                                <td>
+                                                    <partial name="_RestoreUserViewModel" model="@(new DeleteAndRestoreUserViewModel(){UserId = item.UserId})" />
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <partial name="_DeleteUserPartial" model="@(new DeleteAndRestoreUserViewModel(){UserId = item.UserId})" />
+                                                </td>
+
+                                            }
                                             <td>
-                                                <partial name="_RestoreUserViewModel" model="@(new DeleteAndRestoreUserViewModel(){UserId = item.UserId})" />
+                                                <a class="btn btn-info btn-sm" asp-controller="UserManagement" asp-action="UserDetials" asp-area="Admin" asp-route-userId="@item.UserId">جزئیات کاربر</a>
+                                                <a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="EditUser" asp-area="Admin" asp-route-userId="@item.UserId">ویرایش کاربر</a>
                                             </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                <partial name="_DeleteUserPartial" model="@(new DeleteAndRestoreUserViewModel(){UserId = item.UserId})" />
-                                            </td>
+                                        </tr>
 
-                                        }
-                                    <td>
-                                        <a class="btn btn-info btn-sm" asp-controller="UserManagement" asp-action="UserDetials" asp-area="Admin" asp-route-userId="@item.UserId">جزئیات کاربر</a>
-                                        <a class="btn btn-warning btn-sm" asp-controller="UserManagement" asp-action="EditUser" asp-area="Admin" asp-route-userId="@item.UserId">ویرایش کاربر</a>
-                                    </td>
-                                    </tr>
-
-                                }
+                                    }
                                 </tbody>
                             </table>
                         }
                         else
                         {
-                            <partial name="_NotFoundItem"/>
+                            <partial name="_NotFoundItem" />
                         }
                     </div>
                 </div>
@@ -191,8 +191,33 @@
 
 @section Scripts
 {
+    <script>
+        function RemoveUser(id) {
+            swal({
+                title: 'اخطار', text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+                type: "warning", showCancelButton: true, confirmButtonClass: "btn-danger",
+                confirmButtonText: "بله", cancelButtonText: "خیر", closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((result) => {
+                if (result.value)
+                { $('#deleteuser-'+id).submit(); }
+                else if (res.dismiss === swal.DismissReason.cancel)
+                { swal('اعلام', 'عملیات لغو شد', 'error'); }
+            });
+        }
+        function RestoreUser(id) {
+            swal({
+                title: 'اخطار', text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+                type: "warning", showCancelButton: true, confirmButtonClass: "btn-danger",
+                confirmButtonText: "بله", cancelButtonText: "خیر", closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((result) => {
+                if (result.value) { $('#userrestore-' + id).submit();
+                }
+                else if (res.dismiss === swal.DismissReason.cancel) { swal('اعلام', 'عملیات لغو شد', 'error'); }
+            });
+        }
+    </script>
     <partial name="_ValidationScriptsPartial" />
-
-
 }
 

@@ -157,7 +157,7 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
                         break;
                     case CreateOrderInforamtionResult.Success:
                         TempData[SuccessMessage] = "اطلاعات گیرنده با موفقیت ثبت شده ";
-                        TempData[InfoMessage] = "کاربر گرامی اکنون شما می توانید سفارش خد را نهایی کنید";
+                        TempData[InfoMessage] = "کاربر گرامی اکنون شما می توانید سفارش خود را نهایی کنید";
                         return RedirectToAction("PayOrder");
                 }
             }

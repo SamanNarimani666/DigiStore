@@ -1,0 +1,25 @@
+﻿@model DigiStore.Domain.ViewModels.Category.EditCategoryViewModel
+<h1>@Model.CategoryTitle</h1>
+<form method="post" asp-controller="Product" asp-area="Admin" asp-action="EditCategory">
+    <input type="hidden" asp-for="CategoryId" />
+    <div class="form-group">
+        <label>عنوان دسته</label>
+        <input asp-for="CategoryTitle" class="form-control">
+    </div>
+    <span asp-validation-for="CategoryTitle" class="text text-danger"></span>
+
+    @if (Model.ParentId == null || Model.ParentId == 0)
+    {
+        <div class="form-group">
+            <label>ایکون دسته</label>
+            <input asp-for="CategoryIcon" class="form-control">
+        </div>
+    }
+    <button type="submit" class="btn btn-danger">ویرایش دسته </button>
+
+</form>
+
+
+
+
+<partial name="_ValidationScriptsPartial" />

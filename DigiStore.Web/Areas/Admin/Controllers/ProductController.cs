@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
+using DigiStore.Domain.ViewModels.Category;
 using DigiStore.Domain.ViewModels.Product;
 using DigiStore.Web.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -59,8 +60,8 @@ namespace DigiStore.Web.Areas.Admin.Controllers
                     return RedirectToAction("Index");
 
                 }
-                    TempData[SuccessMessage] = "محصولی با این مشخصات";
-                    return RedirectToAction("Index");
+                TempData[SuccessMessage] = "محصولی با این مشخصات";
+                return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
 
@@ -78,6 +79,114 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         }
         #endregion
 
+        #region ProductCategory
 
+        [HttpGet("product-category")]
+        public async Task<IActionResult> ProductCategory()
+        {
+            return View(await _productService.GetAllActiveProductCategory());
+        }
+        #endregion
+
+        #region EditCategory
+        [HttpGet("edit-category/{categoryId}")]
+        public async Task<IActionResult> EditCategory(int categoryId)
+        {
+            return PartialView(await _productService.CategoryInfoForEdit(categoryId));
+        }
+        [HttpPost("edit-category/{categoryId}")]
+        public async Task<IActionResult> EditCategory(int categoryId, EditCategoryViewModel editCategory)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _productService.EditProductCategory(editCategory);
+                switch (res)
+                {
+                    case EditCategoryResult.Error:
+                        TempData[ErrorMessage] = "خطا در ویرایش اطلاعات";
+                        return RedirectToAction("ProductCategory");
+                    case EditCategoryResult.NotFound:
+                        TempData[ErrorMessage] = "دسته ایی با این مشخصات یافت نشد";
+                        return RedirectToAction("ProductCategory");
+                    case EditCategoryResult.Success:
+                        TempData[SuccessMessage] = "دسته با موفقیت ویرایش شد";
+                        return RedirectToAction("ProductCategory");
+                }
+            }
+            return PartialView(await _productService.CategoryInfoForEdit(categoryId));
+        }
+
+        #endregion
+
+        #region CreateCategory
+        [HttpGet("create-category")]
+        public IActionResult CreateCategory()
+        {
+            return PartialView();
+        }
+        [HttpPost("create-category")]
+        public async Task<IActionResult> CreateCategory(CreateCategoryViewModel createCategory)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _productService.CreateCategoryProduct(createCategory);
+                switch (res)
+                {
+                    case CreateCategoryResult.Error:
+                        TempData[ErrorMessage] = "خطا در ثبت اطلاعات";
+                        return RedirectToAction("ProductCategory");
+                    case CreateCategoryResult.Success:
+                        TempData[SuccessMessage] = "دسته با موفقیت ثبت شد";
+                        return RedirectToAction("ProductCategory");
+                }
+            }
+            return PartialView(createCategory);
+        }
+        #endregion
+
+        #region CreateSubCategory
+        [HttpGet("create-subcategory/{parentId}")]
+        public async Task<IActionResult> CreateSubCategory(int parentId)
+        {
+            ViewBag.ParenTitle = await _productService.GetProductCategoryByCategoryId(parentId);
+            return PartialView(new CreateSubCategoryViewModel(){ParentId = parentId});
+        }
+        [HttpPost("create-subcategory/{parentId}")]
+        public async Task<IActionResult> CreateSubCategory(int parentId, CreateSubCategoryViewModel createSubCategory)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _productService.CreateSubCategoryProduct(createSubCategory);
+                switch (res)
+                {
+                    case CreateCategoryResult.Error:
+                        TempData[ErrorMessage] = "خطا در ثبت اطلاعات";
+                        return RedirectToAction("ProductCategory");
+                    case CreateCategoryResult.Success:
+                        TempData[SuccessMessage] = "زیر دسته با موفقیت ثبت شد";
+                        return RedirectToAction("ProductCategory");
+                }
+            }
+            return PartialView(createSubCategory);
+        }
+        #endregion
+
+        #region DeleteCategory
+        [HttpGet("deleteCategory/{categoryId}")]
+        public async Task<IActionResult> DeleteCategory(int categoryId)
+        {
+            var res = await _productService.DeleteProductCategory(categoryId);
+            if (res)
+            {
+                return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, "دسته مورد نظر با موفقیت حذف شد", null);
+
+            }
+            else
+            {
+                return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger, "خطا در حذف دسته", null);
+
+            }
+        }
+        #endregion
     }
 }

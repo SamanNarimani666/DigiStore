@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DigiStore.Web.Areas.Admin.ViewComponents
 {
+    #region AdminUserInformation
     public class AdminUserInformation : ViewComponent
     {
         private readonly IUserService _userService;
@@ -19,6 +20,9 @@ namespace DigiStore.Web.Areas.Admin.ViewComponents
             return View("AdminUserInformation",await _userService.GetInformationUserForSidebarById(User.GetUserId()));
         }
     }
+    #endregion
+
+    #region SidebarMenu
     public class SidebarMenu : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync()
@@ -26,4 +30,5 @@ namespace DigiStore.Web.Areas.Admin.ViewComponents
             return View("SidebarMenu");
         }
     }
+    #endregion
 }

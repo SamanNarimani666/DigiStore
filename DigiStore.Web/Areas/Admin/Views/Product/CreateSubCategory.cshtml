@@ -1,0 +1,21 @@
+﻿@using DigiStore.Domain.Entities
+@model DigiStore.Domain.ViewModels.Category.CreateSubCategoryViewModel
+@{
+    var parentTitle = ViewBag.ParenTitle as ProductCategory;
+}
+<h1>برای  ایجاد  زیر دسته جدید @parentTitle.Title</h1>
+<form method="post" asp-controller="Product" asp-area="Admin" asp-action="CreateSubCategory">
+    <input type="hidden" asp-for="ParentId"/>
+    <div class="form-group">
+        <label>عنوان دسته</label>
+        <input asp-for="CategoryTitle" class="form-control">
+    </div>
+    <span asp-validation-for="CategoryTitle" class="text text-danger"></span>
+    <br/>
+    <button type="submit" class="btn btn-danger">ایجاد زیر دسته جدید</button>
+</form>
+
+
+
+
+<partial name="_ValidationScriptsPartial" />

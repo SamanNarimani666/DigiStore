@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
@@ -46,6 +47,28 @@ namespace DigiStore.Data.Repositories.Category
         public async Task<ProductCategory> GetProductCategoryByCategoryId(int categoryId)
         {
             return await _context.ProductCategories.SingleOrDefaultAsync(p => p.ProductCategoryId == categoryId);
+        }
+        #endregion
+
+        #region EditCategory
+        public void EditCategory(ProductCategory productCategory)
+        {
+            productCategory.ModifiedDate=DateTime.Now;
+            _context.ProductCategories.Update(productCategory);
+        }
+        #endregion
+
+        #region AddCategory
+        public async Task AddCategory(ProductCategory productCategory)
+        {
+            await _context.ProductCategories.AddAsync(productCategory);
+        }
+        #endregion
+
+        #region Save
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
         }
         #endregion
 

@@ -45,7 +45,7 @@
                         <div class="form-check">
                             <label class="form-check-label">
                                 وضعیت:
-                                @if (!Model.IsActive)
+                                @if (Model.IsActive)
                                 {
 
 
@@ -62,15 +62,13 @@
                         <div class="form-check">
                             <label class="form-check-label">
                                 وضعیت حذف :
-                                @if (!Model.IsDelete)
+                                @if (Model.IsDelete)
                                 {
-
-
-                                    <p class="text text-success">حذف شده</p>
+                                    <p class="text text-danger">حذف شده</p>
                                 }
-                                else
+                                else if (Model.IsDelete == false)
                                 {
-                                    <p class="text text-danger">حذف نشده</p>
+                                    <p class="text text-success">حذف نشده</p>
 
                                 }
                             </label>
@@ -79,14 +77,14 @@
                         <div class="form-check">
                             <label class="form-check-label">
                                 وضعیت بلاک:
-                                @if (!Model.IsDelete)
+                                @if (Model.IsBlock)
                                 {
 
-                                    <p class="text text-success">بلاک شده</p>
+                                    <p class="text text-danger">بلاک شده</p>
                                 }
-                                else
+                                else if (Model.IsBlock==false)
                                 {
-                                    <p class="text text-danger">بلاک نشده</p>
+                                    <p class="text text-success">بلاک نشده</p>
 
                                 }
                             </label>

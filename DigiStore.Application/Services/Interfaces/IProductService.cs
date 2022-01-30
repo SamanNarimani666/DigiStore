@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DigiStore.Domain.Entities;
+using DigiStore.Domain.ViewModels.Category;
 using DigiStore.Domain.ViewModels.FavoriteProductUser;
 using DigiStore.Domain.ViewModels.Product;
 using DigiStore.Domain.ViewModels.ProductComment;
@@ -53,6 +54,11 @@ namespace DigiStore.Application.Services.Interfaces
         Task<List<Domain.Entities.Product>> GetAllActiveProductByCategoryId(int categoryId, int count);
         Task<ProductCategory> GetProductCategoryByCategoryId(int categoryId);
         Task<FilterProductViewModel> FilterForSiteSearch(FilterProductViewModel filterProduct);
+        Task<EditCategoryViewModel> CategoryInfoForEdit(int categoryId);
+        Task<EditCategoryResult> EditProductCategory(EditCategoryViewModel editCategory);
+        Task<CreateCategoryResult> CreateCategoryProduct(CreateCategoryViewModel createCategory);
+        Task<CreateCategoryResult> CreateSubCategoryProduct(CreateSubCategoryViewModel createSubCategory);
+        Task<bool> DeleteProductCategory(int categoryId);
 
     }
 }

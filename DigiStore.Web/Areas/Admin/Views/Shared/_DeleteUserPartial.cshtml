@@ -1,5 +1,5 @@
 ﻿@model DigiStore.Domain.ViewModels.User.DeleteAndRestoreUserViewModel
-<form method="post" asp-controller="UserManagement" asp-action="DeleteUser" asp-area="Admin">
+<form method="post" id="deleteuser-@Model.UserId" asp-controller="UserManagement" asp-action="DeleteUser" asp-area="Admin">
     <input type="hidden" asp-for="@Model.UserId" />
-    <button type="submit" class="btn btn-sm btn-danger">حذف کاربر</button>
+    <button type="button" onclick="RemoveUser(@Model.UserId)" class="btn btn-sm btn-danger">حذف کاربر</button>
 </form>

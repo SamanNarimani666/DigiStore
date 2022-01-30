@@ -1,0 +1,165 @@
+﻿@model List<DigiStore.Domain.Entities.ProductCategory>
+@{
+    ViewData["Title"] = "دسته بندی محصولات";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card-box">
+            <h4 class="header-title m-t-0 m-b-30">دسته بندی محصولات</h4>
+            <button type="button" onclick="CreateCategory()" class="btn btn-success">ایجاد دسته جدید</button>
+            <hr/>
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-bordered m-0">
+
+                    <thead>
+                        <tr>
+                            <th>نام دسته</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var maincCategorry in Model.Where(p => p.ParentId == null))
+                        {
+                            <tr>
+                                <td>
+                                    <p>
+                                        @maincCategorry.Title
+                                        <button type="button" onclick="CreateSubCategory(@maincCategorry.ProductCategoryId)" class="btn btn-sm btn-success">ایجاد زیر دسته</button>
+                                        <button type="button" onclick="EditCategory(@maincCategorry.ProductCategoryId)" class="btn btn-sm btn-warning">ویرایش دسته</button>
+                                        <a ajax-url-buttons="@maincCategorry.ProductCategoryId" asp-controller="Product" asp-area="Admin" asp-action="DeleteCategory" asp-route-categoryId="@maincCategorry.ProductCategoryId" class="btn btn-sm btn-danger">حذف دسته</a>
+
+                                    </p>
+                                    <br />
+                                    @if (Model.Any(p => p.ParentId == maincCategorry.ProductCategoryId))
+                                    {
+                                        <ul style="background-color: antiquewhite">
+                                            @foreach (var subCategorry in Model.Where(p => p.ParentId == maincCategorry.ProductCategoryId))
+                                            {
+                                                <li>
+                                                    @subCategorry.Title
+                                                    <button type="button" onclick="CreateSubCategory(@subCategorry.ProductCategoryId)" class="btn btn-sm btn-success">ایجاد زیر دسته</button>
+                                                    <button type="button" onclick="EditCategory(@subCategorry.ProductCategoryId)"  class="btn btn-sm btn-warning">ویرایش زیر دسته</button>
+                                                    <a ajax-url-buttons="@subCategorry.ProductCategoryId" asp-controller="Product" asp-area="Admin" asp-action="DeleteCategory" asp-route-categoryId="@subCategorry.ProductCategoryId" class="btn btn-sm btn-danger">حذف دسته</a>
+
+                                                </li>
+                                                <br />
+                                                @if (Model.Any(p => p.ParentId == subCategorry.ProductCategoryId))
+                                                {
+                                                    <ul style="background-color: gainsboro">
+                                                        @foreach (var subSubCategorry in Model.Where(p => p.ParentId == subCategorry.ProductCategoryId))
+                                                        {
+                                                            <li>
+                                                                @subSubCategorry.Title
+                                                                <button type="button" onclick="EditCategory(@subSubCategorry.ProductCategoryId)" class="btn btn-sm btn-warning">ویرایش زیر  زیر دسته</button>
+                                                                <a ajax-url-buttons="@subSubCategorry.ProductCategoryId" asp-controller="Product" asp-area="Admin" asp-action="DeleteCategory" asp-route-categoryId="@subSubCategorry.ProductCategoryId" class="btn btn-sm btn-danger">حذف دسته</a>
+
+                                                            </li>
+                                                            <hr />
+                                                        }
+                                                    </ul>
+                                                }
+
+                                            }
+                                        </ul>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <partial name="_NotFoundItem" />
+            }
+
+        </div>
+    </div><!-- end col -->
+</div>
+<div id="modal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div id="modalbody" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+@section Scripts
+{
+    <script>
+        function EditCategory(id) {
+            $.ajax({
+                url: "/Product/edit-category/" + id,
+                type: "Get"
+            }).done(function (result) {
+                $("#modal").modal('show');
+                document.querySelector("#myModalLabel").innerHTML = "ویرایش دسته بندی";
+                $("#modalbody").html(result);
+
+            });
+        }
+        function CreateCategory() {
+            $.ajax({
+                url: "/Product/create-category/",
+                type: "Get"
+            }).done(function (result) {
+                $("#modal").modal('show');
+                document.querySelector("#myModalLabel").innerHTML = "ایجاد دسته جدید";
+
+                $("#modalbody").html(result);
+            });
+        }
+        function CreateSubCategory(id) {
+            $.ajax({
+                url: "/Product/create-subcategory/"+id,
+                type: "Get"
+            }).done(function (result) {
+                $("#modal").modal('show');
+                document.querySelector("#myModalLabel").innerHTML = "ایجاد زیر دسته جدید";
+                $("#modalbody").html(result);
+            });
+        }
+      
+            $('[ajax-url-buttons]').on('click', function (e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                var itemId = $(this).attr('ajax-url-button');
+                swal({
+                    title: 'اخطار',
+                    text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "بله",
+                    cancelButtonText: "خیر",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }).then((result) => {
+                    if (result.value) {
+                        $.get(url).then(result => {
+                            if (result.status === 'Success') {
+                                ShowMessage('موفقیت', result.message);
+                                open_waiting();
+                            }
+                        });
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
+                        swal('اعلام', 'عملیات لغو شد', 'error');
+                    }
+                });
+            });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}
