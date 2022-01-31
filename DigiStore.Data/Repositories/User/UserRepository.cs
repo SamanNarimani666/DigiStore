@@ -161,6 +161,20 @@ namespace DigiStore.Data.Repositories.User
         }
         #endregion
 
+        #region NumberOfUsers
+        public async Task<int> NumberOfUsers()
+        {
+            return await _context.Users.CountAsync();
+        }
+        #endregion
+
+        #region NumberOfAllUser
+        public async Task<int> NumberOfAllActiveUser()
+        {
+            return await _context.Users.Where(p =>p.IsActive).CountAsync();
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using DigiStore.Domain.ViewModels.Product;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DigiStore.Domain.ViewModels.Product;
 
 namespace DigiStore.Domain.IRepositories.Product
 {
@@ -23,8 +23,8 @@ namespace DigiStore.Domain.IRepositories.Product
         Task<Entities.Product> TheMostProductVisited();
         Task<Entities.Product> TheBestSellingProduct();
         Task<Entities.Product> TheBestPopularProduct();
-
-
+        Task<int> NumberOfActiveproduct();
+        Task<int> NumberAllProducts();
         Task Save();
     }
 }

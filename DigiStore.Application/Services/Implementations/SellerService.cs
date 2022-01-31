@@ -165,6 +165,7 @@ namespace DigiStore.Application.Services.Implementations
                 SellerLogo = seller.Logo,
                 Phone = seller.Phone,
                 StoreName = seller.StoreName,
+                RequstDate = seller.CreatedDate,
                 Wallet = await _sellerWalletRepository.GetSellerWalletValueBySellerId(seller.SellerId)
             };
         }

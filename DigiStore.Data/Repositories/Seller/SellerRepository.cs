@@ -116,6 +116,14 @@ namespace DigiStore.Data.Repositories.Seller
         }
         #endregion
 
+        #region NumberOfActiveSeller
+        public async Task<int> NumberOfActiveSeller()
+        {
+            return await _context.Sellers.Where(s => s.StoreaceptanceState == (byte) StoreAcceptanceState.Accepted)
+                .CountAsync();
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {

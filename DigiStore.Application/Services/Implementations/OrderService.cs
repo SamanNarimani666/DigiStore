@@ -249,6 +249,7 @@ namespace DigiStore.Application.Services.Implementations
             openOrder.IsPaiy = true;
             openOrder.TracingCode = Convert.ToString(trackingCode);
             openOrder.ModifiedDate = DateTime.Now;
+            openOrder.PaymentDate = DateTime.Now;
             _orderHeaderRepository.UpdateSalesOrderHeader(openOrder);
             await _orderHeaderRepository.Save();
 

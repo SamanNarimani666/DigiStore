@@ -129,6 +129,7 @@ namespace DigiStore.IOC
             services.AddScoped<IProductDiscountService, ProductDiscountService>();
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<ISiteService, SiteService>();
+            services.AddScoped<IReportService, ReportService>();
             #endregion
         }
     }

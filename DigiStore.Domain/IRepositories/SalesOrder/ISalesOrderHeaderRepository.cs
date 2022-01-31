@@ -12,6 +12,7 @@ namespace DigiStore.Domain.IRepositories.SalesOrder
         Task<bool> IsOpenSalesOrderHeaderByUser(int userId);
         void UpdateSalesOrderHeader(SalesOrderHeader orderHeader);
         Task<FilterOrderViewModel> FilterOrder(FilterOrderViewModel filterOrder);
+        Task<int> TotalPurchaseToday();
         Task Save();
     }
 }

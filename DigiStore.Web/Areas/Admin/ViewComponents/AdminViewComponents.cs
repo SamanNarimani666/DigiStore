@@ -50,7 +50,7 @@ namespace DigiStore.Web.Areas.Admin.ViewComponents
         {
             var filter = new FilterProductViewModel()
             {
-                FilterProductState = FilterProductState.Active,
+                FilterProductState = FilterProductState.Accepted,
                 FilterProductOrderBy = FilterProductOrderBy.Create_Date_Desc,
                 TakeEntity = 10
             };
@@ -64,16 +64,17 @@ namespace DigiStore.Web.Areas.Admin.ViewComponents
     public class ProductReport : ViewComponent
     {
         #region Constructor
-        private readonly IProductService _productService;
-        public ProductReport(IProductService productService)
+
+        private readonly IReportService _reportService;
+        public ProductReport(IReportService reportService)
         {
-            _productService = productService;
+            _reportService = reportService;
         }
         #endregion
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View("ProductReport", await _productService.ProductReport());
+            return View("ProductReport", await _reportService.ProductReport());
         }
     }
     #endregion
@@ -99,4 +100,23 @@ namespace DigiStore.Web.Areas.Admin.ViewComponents
     }
     #endregion
 
+    #region HeaderReportAdmin
+    public class ReportHeaderAdmin : ViewComponent
+    {
+        #region Constructor
+        private readonly IReportService _reportService;
+
+        public ReportHeaderAdmin(IReportService reportService)
+        {
+            _reportService = reportService;
+        }
+
+        #endregion
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            return View("ReportHeaderAdmin",await _reportService.ReportForAdminpanel());
+        }
+    }
+    #endregion
 }

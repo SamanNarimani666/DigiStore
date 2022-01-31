@@ -144,7 +144,6 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<ProductDetailViewModel> GetProductDetail(int productId)
         {
             var product = await _context.Products.AsQueryable()
-                .Include(p => p.ProductGalleries)
                 .Include(p => p.Colors)
                 .Include(p => p.ProductGalleries)
                 .Include(p => p.ProductSelectedCategories)
@@ -391,7 +390,7 @@ namespace DigiStore.Data.Repositories.Product
         public async Task<Domain.Entities.Product> TheBestSellingProduct()
         {
             return await _context.Products.Include(p => p.SalesOrderDetails).Include(p => p.Seller)
-                .Where(p => p.SalesOrderDetails.Any() && p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
+                .Where(p => p.SalesOrderDetails.Any())
                 .OrderByDescending(d => d.SalesOrderDetails.Sum(c => c.OrderQty))
                 .FirstOrDefaultAsync();
         }
@@ -404,6 +403,22 @@ namespace DigiStore.Data.Repositories.Product
                 .Where(p => p.FavoriteProductUsers.Any() && p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
                 .OrderByDescending(f => f.FavoriteProductUsers.Count)
                 .FirstOrDefaultAsync();
+        }
+        #endregion
+
+        #region NumberOfActiveproduct
+        public async Task<int> NumberOfActiveproduct()
+        {
+            return await _context.Products
+                .Where(p => !p.IsDelete &&p.IsActive&& p.ProductAcceptanceState == (byte) ProductAcceptanceState.Accepted)
+                .CountAsync();
+        }
+        #endregion
+
+        #region NumberAllProducts
+        public async Task<int> NumberAllProducts()
+        {
+            return await _context.Products.CountAsync();
         }
         #endregion
 

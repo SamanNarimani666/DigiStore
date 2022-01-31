@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DigiStore.Data.Context;
 using DigiStore.Domain.Entities;
@@ -74,6 +75,13 @@ namespace DigiStore.Data.Repositories.SalesOrder
             var allProduct = query.Paging(pager).ToList();
             return filterOrder.SetPaging(pager).SetOrder(allProduct);
             #endregion
+        }
+        #endregion
+
+        #region TotalPurchaseToday
+        public async Task<int> TotalPurchaseToday()
+        {
+            return await _context.SalesOrderHeaders.Where(p => p.PaymentDate.Value.Day == DateTime.Now.Day&&p.IsPaiy).SumAsync(p => p.OrderSum);
         }
         #endregion
 

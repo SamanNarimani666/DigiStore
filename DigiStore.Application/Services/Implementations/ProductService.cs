@@ -826,18 +826,6 @@ namespace DigiStore.Application.Services.Implementations
 
         #endregion
 
-        #region ProductReport
-        public async Task<ProductReportViewModel> ProductReport()
-        {
-            return new ProductReportViewModel()
-            {
-                TheBestPopularProduct = await _productRepository.TheBestPopularProduct(),
-                TheBestSellingProduct = await _productRepository.TheBestSellingProduct(),
-                TheMostProductVisited = await _productRepository.TheMostProductVisited()
-            };
-        }
-        #endregion
-
         #region Dispose
         public async ValueTask DisposeAsync()
         {

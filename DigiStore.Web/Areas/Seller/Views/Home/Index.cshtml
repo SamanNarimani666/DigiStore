@@ -1,7 +1,40 @@
-﻿@{
+﻿@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.Seller.SellerInfoViewModel
+@{
     Layout = "_Layout";
     ViewData["Title"] = "پنل فروشندگی";
 }
 
 
 @await Component.InvokeAsync("SellerSidebar")
+
+<div class="col-lg-9 col-xs-9 pull-right">
+    <div class="headline-profile">
+        <span>اطلاعات شخصی</span>
+    </div>
+    <div class="profile-stats mt-3">
+        <div class="profile-stats-row">
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span> نام فروشگاه :</span>@Model.StoreName</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>پست الکترونیک :</span>@Model.Email</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>شماره تلفن  :</span>@Model.Phone</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>تاریخ در خواست :</span>@Model.RequstDate.ToShamsiDate()</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
