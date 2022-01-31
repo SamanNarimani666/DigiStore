@@ -1,0 +1,50 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Domain.Enums.Product
+@model DigiStore.Domain.ViewModels.Product.FilterProductViewModel
+<div class="col-lg-8">
+    <div class="card-box">
+        <h4 class="header-title m-t-0 m-b-30">   تعدادی از محصولات فعال سایت <a asp-controller="Product" asp-area="Admin" asp-action="Index" class="btn btn-sm btn-info">مشاهده و مدیریت همه محصولات</a></h4>
+
+        <div class="table-responsive">
+            @if (Model.Products != null && Model.Products.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>تصویر محصول  </th>
+                            <th>نام محصول</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr id="ajax-url-item-@item.ProductId">
+                                <td><img src="@(!string.IsNullOrEmpty(item.ImageName)?PathExtension.ProductImageThumb+item.ImageName:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                <td>@item.Name</td>
+                                @if (item.ProductAcceptanceState != null)
+                                {
+
+                                    ProductAcceptanceState acceptanceState = (ProductAcceptanceState)item.ProductAcceptanceState.Value;
+                                    <td>@acceptanceState.GetDisplayName()</td>
+                                }
+                                <td>
+                                    <a asp-controller="Product" asp-action="ProductDetilas" asp-area="Admin" asp-route-productId="@item.ProductId" class="btn btn-info btn-sm">جزئیات محصول</a>
+                                </td>
+                            </tr>
+
+                        }
+
+
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <partial name="_NotFoundItem" />
+            }
+        </div>
+    </div>
+</div><!-- end col -->

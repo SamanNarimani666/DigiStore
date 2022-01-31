@@ -117,7 +117,7 @@ namespace DigiStore.Application.Services.Implementations
         {
             var seller = await _sellerRepository.GetSellerById(sellerId);
             if (seller == null) return false;
-            seller.StoreaceptanceState = (byte) StoreAcceptanceState.Accepted;
+            seller.StoreaceptanceState = (byte)StoreAcceptanceState.Accepted;
             seller.StoreAceptanceStateDescription = "اطلاعات پنل فروشگاهی شما با موفقیت تایید شده است";
             _sellerRepository.EditSeller(seller);
             await _sellerRepository.Save();
@@ -131,10 +131,10 @@ namespace DigiStore.Application.Services.Implementations
             var seller = await _sellerRepository.GetSellerById(rejectItem.Id);
             if (seller == null) return false;
             seller.StoreAceptanceStateDescription = rejectItem.RejectMessage;
-            seller.StoreaceptanceState = (byte) StoreAcceptanceState.Rejected;
-             _sellerRepository.EditSeller(seller);
-             await _sellerRepository.Save();
-             return true;
+            seller.StoreaceptanceState = (byte)StoreAcceptanceState.Rejected;
+            _sellerRepository.EditSeller(seller);
+            await _sellerRepository.Save();
+            return true;
         }
         #endregion
 
@@ -148,7 +148,7 @@ namespace DigiStore.Application.Services.Implementations
         #region HasUserActiveSellerPanel
         public async Task<bool> HasUserActiveSellerPanel(int userId)
         {
-           return await _sellerRepository.HasUserActiveSellerPanel(userId);
+            return await _sellerRepository.HasUserActiveSellerPanel(userId);
         }
         #endregion
 
@@ -166,6 +166,26 @@ namespace DigiStore.Application.Services.Implementations
                 Phone = seller.Phone,
                 StoreName = seller.StoreName,
                 Wallet = await _sellerWalletRepository.GetSellerWalletValueBySellerId(seller.SellerId)
+            };
+        }
+        #endregion
+
+        #region SellerDetailsBySellerId
+        public async Task<SellerDetialViewModel> SellerDetailsBySellerId(int sellerId)
+        {
+            var seller = await _sellerRepository.GetSellerById(sellerId);
+            if (seller == null) return null;
+            return new SellerDetialViewModel()
+            {
+                StoreName = seller.StoreName,
+                Address = seller.Address,
+                Descriptions = seller.Descriptions,
+                Email = seller.Email,
+                Logo = seller.Logo,
+                Phone = seller.Phone,
+                UserName = seller.User.UserName,
+                UserEmail = seller.User.Email,
+                RequstDate = seller.CreatedDate
             };
         }
         #endregion

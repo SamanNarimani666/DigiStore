@@ -1,0 +1,57 @@
+﻿@using DigiStore.Application.Extensions
+@model DigiStore.Domain.ViewModels.Product.ProductReportViewModel
+@if (Model != null)
+{
+    <div class="row">
+        @if (Model.TheBestSellingProduct != null)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card-box widget-user">
+                    <div>
+                        <img src="@(PathExtension.ProductImageThumb+Model.TheBestSellingProduct.ImageName)" class="img-responsive img-thumbnail" alt="user">
+                        <div class="wid-u-info">
+                            <h4 class="m-t-0 m-b-5 font-600">پر فروش ترین محصول</h4>
+                            <h4 class="m-t-0 m-b-5 font-600">@Model.TheBestSellingProduct.Name</h4>
+                            <p class="text-muted m-b-5 font-13">قیمت واحد : @Model.TheBestSellingProduct.Price.ToString("#,0")</p>
+                            <small class="text-warning"><b>فروشنده : @Model.TheBestSellingProduct.Seller.StoreName</b></small>
+                            <small class="text-success"><b>تعداد فروش : @Model.TheBestSellingProduct.SalesOrderDetails.Sum(o=>o.OrderQty)</b></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.TheBestPopularProduct != null)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card-box widget-user">
+                    <div>
+                        <img src="@(PathExtension.ProductImageThumb + Model.TheBestPopularProduct.ImageName)" class="img-responsive img-thumbnail" alt="user">
+                        <div class="wid-u-info">
+                            <h4 class="m-t-0 m-b-5 font-600">محبوب ترین محصول</h4>
+                            <h4 class="m-t-0 m-b-5 font-600">@Model.TheBestPopularProduct.Name</h4>
+                            <p class="text-muted m-b-5 font-13">قیمت واحد : @Model.TheBestPopularProduct.Price.ToString("#,0")</p>
+                            <small class="text-warning"><b>فروشنده : @Model.TheBestPopularProduct.Seller.StoreName</b></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.TheMostProductVisited != null)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card-box widget-user">
+                    <div>
+                        <img src="@(PathExtension.ProductImageThumb + Model.TheMostProductVisited.ImageName)" class="img-responsive img-thumbnail" alt="user">
+                        <div class="wid-u-info">
+                            <h4 class="m-t-0 m-b-5 font-600">پر باز دید ترین محصول</h4>
+                            <h4 class="m-t-0 m-b-5 font-600">@Model.TheMostProductVisited.Name</h4>
+                            <p class="text-muted m-b-5 font-13">قیمت واحد : @Model.TheMostProductVisited.Price.ToString("#,0")</p>
+                            <small class="text-warning"><b>فروشنده : @Model.TheMostProductVisited.Seller.StoreName</b></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

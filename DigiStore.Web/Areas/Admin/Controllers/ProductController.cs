@@ -2,6 +2,7 @@
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Category;
 using DigiStore.Domain.ViewModels.Product;
+using DigiStore.Domain.ViewModels.ProductComment;
 using DigiStore.Web.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -149,7 +150,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         public async Task<IActionResult> CreateSubCategory(int parentId)
         {
             ViewBag.ParenTitle = await _productService.GetProductCategoryByCategoryId(parentId);
-            return PartialView(new CreateSubCategoryViewModel(){ParentId = parentId});
+            return PartialView(new CreateSubCategoryViewModel() { ParentId = parentId });
         }
         [HttpPost("create-subcategory/{parentId}")]
         public async Task<IActionResult> CreateSubCategory(int parentId, CreateSubCategoryViewModel createSubCategory)
@@ -186,6 +187,22 @@ namespace DigiStore.Web.Areas.Admin.Controllers
                 return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger, "خطا در حذف دسته", null);
 
             }
+        }
+        #endregion
+
+        #region ProductComments
+
+        [HttpGet("product-comment/{productId}")]
+        public async Task<IActionResult> ProductComments(int productId, FilterProductCommentViewModel filterProductComments)
+        {
+            ViewBag.Product = await _productService.GetProductByProductId(productId);
+            if (ViewBag.Product == null) return NoContent();
+
+            filterProductComments.ProductId = productId;
+            filterProductComments.OrderBydate = OrderBydate.Desc_Date;
+            var producrComment = await _productService.filterFilterProductComment(filterProductComments);
+            if (producrComment == null) return NoContent();
+            return View(producrComment);
         }
         #endregion
     }

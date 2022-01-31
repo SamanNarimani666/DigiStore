@@ -9,7 +9,7 @@
 
     @for (int i = Model.StartPage; i <= Model.EndPage; i++)
     {
-        <li class="@(Model.PageId == i ? "active":"")"><a class="btn" onclick="FillPageId(@i)">@i<span class="sr-only">(current)</span></a></li>
+        <li style="cursor: grab;" class="@(Model.PageId == i ? "active":"")" style="cursor: grab;"><a class="btn" style="cursor: grab;" onclick="FillPageId(@i)">@i<span class="sr-only">(current)</span></a></li>
     }
 
     @if (Model.EndPage > Model.PageId)

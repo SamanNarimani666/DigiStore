@@ -1,0 +1,24 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.User.FilterUserViewModel
+<div class="col-lg-4">
+    <div class="card-box">
+        <h4 class="header-title m-t-0 m-b-30">آخرین کاربران عضو شده در سایت</h4>
+        @if (Model.Users.Any() && Model.Users != null)
+        {
+            <div class="inbox-widget nicescroll" style="height: 315px;">
+                @foreach (var item in Model.Users)
+                {
+                    <a asp-controller="UserManagement" asp-area="Admin" asp-action="UserDetials" asp-route-userId="@item.UserId">
+                        <div class="inbox-item">
+                            <div class="inbox-item-img"><img src="@(!string.IsNullOrEmpty(item.UserAvatar)?PathExtension.UserAvatarThumb+item.UserAvatar:PathExtension.DefaultAvatarThum)" class="img-circle" alt=""></div>
+                            <p class="inbox-item-author">@item.UserName</p>
+                            <p class="inbox-item-text">@item.Email</p>
+                            <p class="inbox-item-date"> @item.CreateDate.ToStringShamsiDate() ساعت @item.CreateDate.ToString("HH:mm")</p>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</div>

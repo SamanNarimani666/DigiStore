@@ -87,7 +87,7 @@ namespace DigiStore.Data.Repositories.Seller
         #region GetSellerById
         public async Task<Domain.Entities.Seller> GetSellerById(int sellerId)
         {
-            return await _context.Sellers.FirstOrDefaultAsync(s => s.SellerId == sellerId);
+            return await _context.Sellers.Include(p=>p.User).FirstOrDefaultAsync(s => s.SellerId == sellerId);
         }
         #endregion
 

@@ -185,10 +185,6 @@
                                 <span> @Model.GetTotalPrice().ToString("#,0") تومان</span>
                             </li>
                             <li>
-                                <span>تخغیف</span>
-                                <span>@Model.GetTotalDiscounts().ToString("#,0") تومان</span>
-                            </li>
-                            <li>
                                 <span>مبلغ قابل پرداخت</span>
                                 <span>             @((Model.GetTotalPrice() - Model.GetTotalDiscounts()).ToString("#,0")) تومان</span>
                             </li>

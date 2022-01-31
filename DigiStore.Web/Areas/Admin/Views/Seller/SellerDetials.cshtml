@@ -1,0 +1,77 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@model DigiStore.Domain.ViewModels.Seller.SellerDetialViewModel
+@{
+    ViewData["Title"] = "اطلاعات فروشگاه" + Model.StoreName;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="content">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        اطلاعات فروشگاه
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>نام فروشگاه</label>
+                            <p>@Model.StoreName</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label> ایمیل فروشگاه</label>
+                            <p>@Model.Email</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>شماره تماس ثابت </label>
+                            <p>@(!string.IsNullOrEmpty(Model.Phone)?Model.Phone:"تلفن ثابت وارد نشده است")</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>توضیحات فروشنده</label>
+                            <p>@(Html.Raw(Model.Descriptions))</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>آدرس</label>
+                            <p>@Model.Address</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>نام کاربری فروشنده:</label>
+                            <p>@Model.UserName</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>ایمیل فروشنده:</label>
+                            <p>@Model.Email</p>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>تاریخ در خواست:</label>
+                            <p> @Model.RequstDate.ToStringShamsiDate() ساعت @Model.RequstDate.ToString("HH:mm")</p>
+                        </div>
+                        <hr />
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-box">
+
+                    <h4 class="header-title m-t-0 m-b-30">تصوير پروفايل</h4>
+                    <img class="img-fluid img-thumbnail " style="height: 100%; width: 100%;" src="@(!string.IsNullOrEmpty(Model.Logo)?PathExtension.UploadLogo+Model.Logo:PathExtension.DefaultStoreLogo)" />
+                </div>
+            </div>
+
+        </div>
+    </div> <!-- container -->
+
+</div>
+

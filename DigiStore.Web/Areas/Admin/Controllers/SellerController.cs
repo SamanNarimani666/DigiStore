@@ -69,5 +69,15 @@ namespace DigiStore.Web.Areas.Admin.Controllers
             );
         }
         #endregion
+
+        #region SellerDetials
+        [HttpGet("seller-detials")]
+        public async Task<IActionResult> SellerDetials(int sellerId)
+        {
+            var seller = await _sellerService.SellerDetailsBySellerId(sellerId);
+            if (seller == null) return NotFound();
+            return View(seller);
+        }
+        #endregion
     }
 }

@@ -20,6 +20,11 @@ namespace DigiStore.Domain.IRepositories.Product
         Task<List<Entities.Product>> TheMostVisitedProducts(int take);
         Task<List<Entities.Product>> GetAllActiveProductByCategoryId(int categoryId, int count);
         Task<FilterProductViewModel> FilterForSiteSearch(FilterProductViewModel filterProduct);
+        Task<Entities.Product> TheMostProductVisited();
+        Task<Entities.Product> TheBestSellingProduct();
+        Task<Entities.Product> TheBestPopularProduct();
+
+
         Task Save();
     }
 }

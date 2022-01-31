@@ -111,29 +111,33 @@
                                 <tbody>
                                     @foreach (var item in Model.Sellers)
                                     {
-                                        <tr id="ajax-url-item-@item.SellerId">
-                                            <td><img src="@(!string.IsNullOrEmpty(item.Logo)?PathExtension.UploadLogoThumb+item.Logo:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
-                                            <td>@item.StoreName</td>
-                                            <td>@item.Email</td>
-                                            <td>@item.Phone</td>
-                                            <th><a href="/Files/Store/SellerDocument/@item.StoreDoucument">مدارک</a></th>
-                                            @{
-                                                StoreAcceptanceState storeAcceptanceState = (StoreAcceptanceState)item.StoreaceptanceState;
-                                                <td>@storeAcceptanceState.GetDisplayName()</td>
-                                            }
-                                            @if (item.StoreaceptanceState != (byte)StoreAcceptanceState.Accepted)
-                                            {
-                                                <td>
-                                                    <a ajax-url-button="@item.SellerId" class="btn btn-success btn-sm" asp-action="AcceptSellerRequest" asp-controller="Seller" asp-area="Admin" asp-route-id="@item.SellerId">تایید فروشگاه</a>
+                                    <tr id="ajax-url-item-@item.SellerId">
+                                        <td><img src="@(!string.IsNullOrEmpty(item.Logo)?PathExtension.UploadLogoThumb+item.Logo:PathExtension.DefaultStoreLogo)" class="img-fluid img-thumbnail" alt="در حال بارگذاری" /></td>
+                                        <td>@item.StoreName</td>
+                                        <td>@item.Email</td>
+                                        <td>@item.Phone</td>
+                                        <th><a href="/Files/Store/SellerDocument/@item.StoreDoucument">مدارک</a></th>
+                                        @{
+                                            StoreAcceptanceState storeAcceptanceState = (StoreAcceptanceState)item.StoreaceptanceState;
+                                            <td>@storeAcceptanceState.GetDisplayName()</td>
+                                        }
+                                    <td>
+                                        @if (item.StoreaceptanceState != (byte)StoreAcceptanceState.Accepted)
+                                        {
 
-                                                </td>
-                                            }
-                                            @if (item.StoreaceptanceState != (byte)StoreAcceptanceState.Rejected)
-                                            {
-                                                <td>
-                                                    <a class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target=".reject-modal-@item.SellerId">عدم تایید فروشگاه</a>
-                                                </td>
-                                            }
+                                            <a ajax-url-button="@item.SellerId" class="btn btn-success btn-sm" asp-action="AcceptSellerRequest" asp-controller="Seller" asp-area="Admin" asp-route-id="@item.SellerId">تایید فروشگاه</a>
+
+
+                                        }
+                                        @if (item.StoreaceptanceState != (byte)StoreAcceptanceState.Rejected)
+                                        {
+
+                                            <a class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target=".reject-modal-@item.SellerId">عدم تایید فروشگاه</a>
+
+                                        }
+                                            <a  class="btn btn-info btn-sm" asp-action="SellerDetials" asp-controller="Seller" asp-area="Admin" asp-route-sellerId="@item.SellerId">اطلاعات فروشگاه</a>
+
+                                    </td>
                                         </tr>
 
                                     }

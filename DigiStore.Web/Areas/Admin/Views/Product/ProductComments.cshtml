@@ -1,0 +1,56 @@
+﻿@using DigiStore.Application.Extensions
+@using DigiStore.Application.Utils
+@using DigiStore.Domain.Entities
+@model DigiStore.Domain.ViewModels.ProductComment.FilterProductCommentViewModel
+@{
+    ViewData["Title"] = "نطرات محصول";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var product = ViewBag.Product as Product;
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card-box table-responsive">
+            <h4 class="header-title m-t-0 m-b-30">نظرات محصول @(product != null? product.Name:" ")</h4>
+            <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (Model.ProductComments != null && Model.ProductComments.Any())
+                        {
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>پروفایل</th>
+                                    <th>نام کاربری</th>
+                                    <th>عنوان</th>
+                                    <th>نظر</th>
+                                    <th>تاریخ</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var item in Model.ProductComments)
+                                {
+                                    <tr>
+                                        <td><img src="@(!string.IsNullOrEmpty(item.User.UserAvatar)?PathExtension.UserAvatarThumb + item.User.UserAvatar:PathExtension.DefaultAvatarThum)"  class="img-fluid img-thumbnail"  alt="در حال بارگذاری"/></td>
+                                        <td>@item.User.UserName</td>
+                                        <td>@item.Title</td>
+                                        <td>
+                                            @Html.Raw(item.Comment)
+                                        </td>
+                                        <td>@item.CreateDate.ToStringShamsiDate()</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <partial name="_NotFoundItem"/>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div><!-- end col -->
+
+
+    </div>
+</div>

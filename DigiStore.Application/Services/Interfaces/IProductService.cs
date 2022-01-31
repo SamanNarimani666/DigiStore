@@ -59,6 +59,7 @@ namespace DigiStore.Application.Services.Interfaces
         Task<CreateCategoryResult> CreateCategoryProduct(CreateCategoryViewModel createCategory);
         Task<CreateCategoryResult> CreateSubCategoryProduct(CreateSubCategoryViewModel createSubCategory);
         Task<bool> DeleteProductCategory(int categoryId);
+        Task<ProductReportViewModel> ProductReport();
 
     }
 }

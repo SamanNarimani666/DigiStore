@@ -24,8 +24,8 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb px-0">
                             <li class="breadcrumb-item"><a>فروشگاه اینترنتی @Model.Seller.StoreName</a></li>
-                            <li class="breadcrumb-item"><a href="/ProductSearch?CategoryId=@Model.MainCategoryId">@Model.MainCategoryTitle</a></li>
-                            <li class="breadcrumb-item"><a href="/ProductSearch?CategoryId=@Model.SubCategoryId">@Model.SubCategoryTitle</a></li>
+                            <li class="breadcrumb-item"><a href="/ProductSearch?SelectedPrductCategories=@Model.MainCategoryId">@Model.MainCategoryTitle</a></li>
+                            <li class="breadcrumb-item"><a href="/ProductSearch?SelectedPrductCategories=@Model.SubCategoryId">@Model.SubCategoryTitle</a></li>
                         </ol>
                     </nav>
                     <div class="product-ext-links">
@@ -80,13 +80,13 @@
                                         <div class="product-directory">
                                             <ul class="mb-0">
                                                 <li>
-                                                    <a href="/ProductSearch?CategoryId=@Model.MainCategoryId" class="link-border">@Model.MainCategoryTitle</a>
+                                                    <a href="/ProductSearch?SelectedPrductCategories=@Model.MainCategoryId" class="link-border">@Model.MainCategoryTitle</a>
                                                 </li>
                                                 <li>
                                                     <span>/</span>
                                                 </li>
                                                 <li>
-                                                    <a href="/ProductSearch?CategoryId=@Model.SubCategoryId" class="link-border">@Model.SubCategoryTitle</a>
+                                                    <a href="/ProductSearch?SelectedPrductCategories=@Model.SubCategoryId" class="link-border">@Model.SubCategoryTitle</a>
                                                 </li>
                                             </ul>
                                             <h1 class="product-title">

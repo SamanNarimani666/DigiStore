@@ -377,6 +377,36 @@ namespace DigiStore.Data.Repositories.Product
         }
         #endregion
 
+        #region TheMostProductVisited
+        public async Task<Domain.Entities.Product> TheMostProductVisited()
+        {
+            return await _context.Products.Include(p => p.ProductVisiteds).Include(p=>p.Seller)
+                .Where(p => p.ProductVisiteds.Any() && p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
+                .OrderByDescending(p => p.ProductVisiteds.Count)
+                .FirstOrDefaultAsync();
+        }
+        #endregion
+
+        #region TheBestSellingProduct
+        public async Task<Domain.Entities.Product> TheBestSellingProduct()
+        {
+            return await _context.Products.Include(p => p.SalesOrderDetails).Include(p => p.Seller)
+                .Where(p => p.SalesOrderDetails.Any() && p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
+                .OrderByDescending(d => d.SalesOrderDetails.Sum(c => c.OrderQty))
+                .FirstOrDefaultAsync();
+        }
+        #endregion
+
+        #region TheBestPopularProduct
+        public async Task<Domain.Entities.Product> TheBestPopularProduct()
+        {
+            return await _context.Products.Include(p => p.FavoriteProductUsers).Include(p => p.Seller)
+                .Where(p => p.FavoriteProductUsers.Any() && p.IsActive && p.ProductAcceptanceState == (byte)ProductAcceptanceState.Accepted)
+                .OrderByDescending(f => f.FavoriteProductUsers.Count)
+                .FirstOrDefaultAsync();
+        }
+        #endregion
+
         #region Save
         public async Task Save()
         {

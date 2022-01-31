@@ -43,7 +43,7 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
-            <form style="padding: 20px;" asp-controller="Product" asp-action="Index" id="filter-form" asp-area="Seller" method="get">
+            <form style="padding: 20px;" asp-controller="Product" asp-action="Index" id="filter-form-Sellers" asp-area="Seller" method="get">
                 <input type="hidden" asp-for="PageId" />
                 <div class="form-group">
                     <label>نام محصول</label>
@@ -132,19 +132,25 @@
                 </table>
                 <div class="pager">
                     <ul class="page-item">
-                        @if (Model.StartPage < Model.PageId)
-                        {
-                            <li class="btn"><a href="/Seller/Products-list?pageid=@(Model.PageId - 1)">«</a></li>
-                        }
 
-                        @for (int i = Model.StartPage; i <= Model.EndPage; i++)
-                        {
-                            <li class="pagination-item"  onclick="FillPageId(@i)"><a href="/Seller/Products-list?pageid=@i" onclick="FillPageId(@i)" style="cursor: pointer" class="@(Model.PageId == i ? "pager-item-active" : " ")" >@i</a></li>
-                        }
-                        @if (Model.EndPage > Model.PageId)
-                        {
-                            <li class="btn" ><a class="btn"  href="/Seller/Products-list?pageid=@(Model.PageId + 1)">»</a></li>
-                        }
+                        <div class="pager">
+                            <ul class="page-item">
+                                @if (Model.StartPage < Model.PageId)
+                                {
+                                    <li class="btn"><a onclick="FillPageIdSeller(@(Model.PageId - 1))">«</a></li>
+                                }
+
+                                @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                                {
+                                    <li class="pagination-item"  onclick="FillPageIdSeller(@i)"><a onclick="FillPageId(@i)" style="cursor: pointer" class="@(Model.PageId == i ? "pager-item-active" : " ")" >@i</a></li>
+                                }
+                                @if (Model.EndPage > Model.PageId)
+                                {
+                                    <li class="btn" ><a class="btn"  onclick="FillPageIdSeller(@(Model.PageId + 1))">»</a></li>
+                                }
+                            </ul>
+                        </div>
+
                     </ul>
                 </div>
 
@@ -158,5 +164,12 @@
 </div>
 
 
-
-
+@section Scripts
+{
+    <script>
+        function FillPageIdSeller(pageId) {
+            $("#PageId").val(pageId);
+            $("#filter-form-Sellers").submit();
+        }
+    </script>
+}

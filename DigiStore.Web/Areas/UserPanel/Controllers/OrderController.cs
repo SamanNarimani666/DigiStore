@@ -177,14 +177,12 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         #endregion
 
         #region FilterOrder
-
         [HttpGet("order-list")]
         public async Task<IActionResult> FilterOrder(FilterOrderViewModel filterOrder)
         {
             filterOrder.UserId = User.GetUserId();
             return View(await _orderService.FilterOrder(filterOrder));
         }
-
         #endregion
     }
 }
