@@ -185,6 +185,10 @@ namespace DigiStore.Application.Services.Implementations
                     {
                         newSlider.ImageName = imageName;
                     }
+                    else
+                    {
+                        return CreateSliderResult.ImageError;
+                    }
                 }
                 else
                 {

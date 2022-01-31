@@ -7,6 +7,7 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Ticket;
 using DigiStore.Web.Http;
 using DigiStore.Web.PresentationExtensions;
+using DigiStore.Web.Security;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
 {
@@ -23,6 +24,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region filterTicket
+        [PermissionChecker(31)]
         public async Task<IActionResult> filterTicket(FilterTicketViewModel filterTicket)
         {
             filterTicket.OrderBy = FilterTicketOrder.CreateDate_DES;
@@ -32,6 +34,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region TicketDetails
+        [PermissionChecker(33)]
         [HttpGet("tickets/{ticketId}/{userId}")]
         public async Task<IActionResult> TicketDetail(int ticketId,int userId)
         {
@@ -43,6 +46,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region answer ticket
+        [PermissionChecker(32)]
         [HttpPost("answer-ticket"), ValidateAntiForgeryToken]
         public async Task<IActionResult> AnswerTicket(AnswerTicketViewModel answer)
         {
@@ -123,6 +127,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region AcceptSellerRequest
+        [PermissionChecker(34)]
         public async Task<IActionResult> ClosedTheTicket(int ticketId)
         {
             var result = await _ticketService.ClosedTheTicket(ticketId);

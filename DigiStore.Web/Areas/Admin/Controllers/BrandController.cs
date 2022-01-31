@@ -21,7 +21,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region BrandList
-        [PermissionChecker(11)]
+        [PermissionChecker(16)]
         [HttpGet("brand-list")]
         public async Task<IActionResult> BrandList(FilterBrandViewModel filterBrand)
        {
@@ -30,7 +30,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region CreateBrand
-        [PermissionChecker(12)]
+        [PermissionChecker(17)]
         [HttpGet("create-brands")]
         public  IActionResult CreateBrand()
         {
@@ -60,7 +60,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region EditBrand
-        [PermissionChecker(13)]
+        [PermissionChecker(18)]
         [HttpGet("edit-brand/{brandId}")]
         public async Task<IActionResult> EditBrand(int brandId)
         {
@@ -94,6 +94,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region DeleteBrand
+        [PermissionChecker(19)]
         public async Task<IActionResult> RemoveBrand(int brandId)
         {
             var res = await _branadService.DeleteBrand(brandId);
@@ -114,6 +115,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region RestoreBrand
+        [PermissionChecker(20)]
         public async Task<IActionResult> RestoreBrand(int brandId)
         {
             var res = await _branadService.RestoreBrand(brandId);

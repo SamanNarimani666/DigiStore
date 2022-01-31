@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.Contacts;
+using DigiStore.Web.Security;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
 {
@@ -16,6 +17,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region list-Contact-us
+        [PermissionChecker(42)]
         [HttpGet("list-Contact-us")]
         public async Task<IActionResult> Index(FilterContactUsViewModel filterContactUs)
         {
@@ -24,6 +26,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region Answer Contact Us
+        [PermissionChecker(43)]
         [HttpGet("answer-contactus/{contactusId}")]
         public async Task<IActionResult> AnswerContactUs(int contactusId)
         {

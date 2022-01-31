@@ -4,6 +4,7 @@ using DigiStore.Domain.ViewModels.Category;
 using DigiStore.Domain.ViewModels.Product;
 using DigiStore.Domain.ViewModels.ProductComment;
 using DigiStore.Web.Http;
+using DigiStore.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -22,6 +23,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region ProductList
+        [PermissionChecker(26)]
         [HttpGet("ProductList")]
         public async Task<IActionResult> Index(FilterProductViewModel filterProduct)
         {
@@ -31,6 +33,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region Accept Product
+        [PermissionChecker(27)]
         public async Task<IActionResult> AcceptSellerProduct(int id)
         {
             var result = await _productService.AcceptSellerProduct(id);
@@ -44,6 +47,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region reject Seller Product
+        [PermissionChecker(28)]
         [HttpGet("RejectSellerProduct/{id}")]
         public async Task<IActionResult> RejectSellerProduct(int id)
         {
@@ -71,6 +75,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region ProductDetial
+        [PermissionChecker(29)]
         [HttpGet("product-detial/{productId}")]
         public async Task<IActionResult> ProductDetilas(int productId)
         {
@@ -81,6 +86,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region ProductCategory
+        [PermissionChecker(21)]
 
         [HttpGet("product-category")]
         public async Task<IActionResult> ProductCategory()
@@ -90,6 +96,8 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region EditCategory
+        [PermissionChecker(24)]
+
         [HttpGet("edit-category/{categoryId}")]
         public async Task<IActionResult> EditCategory(int categoryId)
         {
@@ -120,6 +128,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region CreateCategory
+        [PermissionChecker(22)]
         [HttpGet("create-category")]
         public IActionResult CreateCategory()
         {
@@ -146,6 +155,8 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region CreateSubCategory
+        [PermissionChecker(23)]
+
         [HttpGet("create-subcategory/{parentId}")]
         public async Task<IActionResult> CreateSubCategory(int parentId)
         {
@@ -173,6 +184,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region DeleteCategory
+        [PermissionChecker(25)]
         [HttpGet("deleteCategory/{categoryId}")]
         public async Task<IActionResult> DeleteCategory(int categoryId)
         {
@@ -191,6 +203,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region ProductComments
+        [PermissionChecker(30)]
 
         [HttpGet("product-comment/{productId}")]
         public async Task<IActionResult> ProductComments(int productId, FilterProductCommentViewModel filterProductComments)

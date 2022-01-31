@@ -23,7 +23,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region FilterRole
-        [PermissionChecker(5)]
+        [PermissionChecker(12)]
         public async Task<IActionResult> FilterRole(FilterRoleViewModel filterRole)
         {
             return View(await _permissionService.filterRoles(filterRole));
@@ -31,7 +31,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion#
 
         #region CreateRole
-        [PermissionChecker(6)]
+        [PermissionChecker(13)]
         [HttpGet("create-role")]
         public async Task<IActionResult> CreateRole()
         {
@@ -60,7 +60,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region Edit Role
-        [PermissionChecker(7)]
+        [PermissionChecker(15)]
         [HttpGet("edit-role/{roleId}")]
         public async Task<IActionResult> EditRole(int roleId)
         {
@@ -96,6 +96,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region Remove Role
+        [PermissionChecker(14)]
         [HttpGet("remove-role/{roleId}")]
         public async Task<IActionResult> RemoveRole(int roleId)
         {

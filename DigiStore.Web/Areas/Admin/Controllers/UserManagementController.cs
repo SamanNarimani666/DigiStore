@@ -24,7 +24,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region FilterUser
-        [PermissionChecker(1)]
+        [PermissionChecker(6)]
         public async Task<IActionResult> Index(FilterUserViewModel filterUser)
         {
             return View(await _userService.FilterUser(filterUser));
@@ -32,7 +32,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region DeleteUser
-        [PermissionChecker(4)]
+        [PermissionChecker(10)]
         [HttpPost]
         public async Task<IActionResult> DeleteUser(DeleteAndRestoreUserViewModel deleteAndRestoreUser)
         {
@@ -51,7 +51,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region RestoreteUser
-        [PermissionChecker(15)]
+        [PermissionChecker(11)]
         [HttpPost]
         public async Task<IActionResult> RestoreteUser(DeleteAndRestoreUserViewModel deleteAndRestoreUser)
         {
@@ -69,7 +69,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region Create User
-        [PermissionChecker(2)]
+        [PermissionChecker(8)]
         [HttpGet("create-user")]
         public async Task<IActionResult> CreateUser()
         {
@@ -109,7 +109,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region EditUser
-        [PermissionChecker(3)]
+        [PermissionChecker(9)]
 
         [HttpGet("edit-user/{userId}")]
         public async Task<IActionResult> EditUser(int userId)
@@ -144,8 +144,8 @@ namespace DigiStore.Web.Areas.Admin.Controllers
 
         #endregion
 
-        #region ProductDetials
-
+        #region UserDetials
+        [PermissionChecker(7)]
         [HttpGet("user-details/{userId}")]
         public async Task<IActionResult> UserDetials(int userId)
         {

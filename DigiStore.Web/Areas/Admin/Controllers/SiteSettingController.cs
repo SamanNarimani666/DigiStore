@@ -4,6 +4,7 @@ using DigiStore.Application.Services.Interfaces;
 using DigiStore.Domain.ViewModels.SiteSetting;
 using DigiStore.Domain.ViewModels.Slider;
 using DigiStore.Web.Http;
+using DigiStore.Web.Security;
 using Microsoft.AspNetCore.Http;
 
 namespace DigiStore.Web.Areas.Admin.Controllers
@@ -19,6 +20,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region SiteInformation
+        [PermissionChecker(35)]
         public async Task<IActionResult> SiteInformation()
         {
             return View(await _siteService.GetDefaultSiteInformation());
@@ -26,6 +28,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region EditSiteSetting
+        [PermissionChecker(36)]
         [HttpGet("EditSiteSetting")]
         public async Task<IActionResult> EditSiteSetting()
         {
@@ -55,6 +58,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region Slider
+        [PermissionChecker(37)]
         [HttpGet("list-slider")]
         public async Task<IActionResult> ListSlider(FilterSliderViewModel filterSlider)
         {
@@ -63,6 +67,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region Create Slider
+        [PermissionChecker(38)]
         [HttpGet("create-slider")]
         public IActionResult CreateSlider()
         {
@@ -96,6 +101,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region DeleteSlider
+        [PermissionChecker(40)]
         [HttpGet]
         public async Task<IActionResult> DeleteSlider(int sliderId)
         {
@@ -122,6 +128,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region RestoreSlider
+        [PermissionChecker(41)]
         [HttpGet]
         public async Task<IActionResult> RestoreSlider(int sliderId)
         {
@@ -147,6 +154,7 @@ namespace DigiStore.Web.Areas.Admin.Controllers
         #endregion
 
         #region EditSlider
+        [PermissionChecker(39)]
         [HttpGet("edit-slider/{sliderId}")]
         public async Task<IActionResult> EditSlider(int sliderId)
         {
