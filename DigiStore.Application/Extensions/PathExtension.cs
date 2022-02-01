@@ -5,7 +5,7 @@ namespace DigiStore.Application.Extensions
     public static class PathExtension
     {
         #region SiteUrl
-        public static string SiteUrl = "http://samannarimani.ir";
+        public static string SiteUrl = "https://www.samannarimani.ir";
         #endregion
 
         #region UploadImage

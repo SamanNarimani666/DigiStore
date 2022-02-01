@@ -21,7 +21,7 @@ namespace DigiStore.Domain.ViewModels.Account
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [MinLength(11, ErrorMessage = "{0} نمی تواند کمتر از {1} کاراکتر باشد")]
-        [RegularExpression(@"09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}", ErrorMessage = "شماره تماس را درست وارد کنید")]
+        //[RegularExpression(@"09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}", ErrorMessage = "شماره تماس را درست وارد کنید")]
         public string Mobile { get; set; }
 
         [Display(Name = "کلمه عبور")]

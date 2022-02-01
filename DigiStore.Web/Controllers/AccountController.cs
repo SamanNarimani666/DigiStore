@@ -100,10 +100,10 @@ namespace DigiStore.Web.Controllers
         [HttpPost("Login"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel login, string ReturnUrl)
         {
-            //if (!await _captchaValidator.IsCaptchaPassedAsync(login.Captcha))
-            //{
-            //    TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
-            //}
+            if (!await _captchaValidator.IsCaptchaPassedAsync(login.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
+            }
             if (ModelState.IsValid)
             {
                 var res = await _userService.LoginUser(login);

@@ -64,7 +64,7 @@ namespace DigiStore.Web.Areas.UserPanel.Controllers
         public async Task<IActionResult> PayUserOrderPrice()
         {
             var openOrderAmount = await _orderService.GetTotalOrderPriceForPayment(User.GetUserId());
-            string callbackUrl = PathExtension.SiteUrl + Url.RouteUrl("ZarinPalPaymentResult");
+            string callbackUrl = "https://www.samannarimani.ir" + Url.RouteUrl("ZarinPalPaymentResult");
 
             string redirectUrl = "";
             var status = _paymentSerivce.CreatePaymentRequest(null, openOrderAmount, "پرداخت سبد خرید", callbackUrl, ref redirectUrl);
