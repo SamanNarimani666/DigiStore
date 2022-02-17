@@ -20,7 +20,7 @@ namespace DigiStore.Application.Senders
             SmtpServer.Port = 587;
             SmtpServer.EnableSsl = true;
 
-            SmtpServer.Credentials = new System.Net.NetworkCredential("Samannarimani666@yahoo.com", "nbeleeafnffaeejc");
+            SmtpServer.Credentials = new System.Net.NetworkCredential("Samannarimani666@yahoo.com","******");
             SmtpServer.Send(mail);
             return true;
         }
